@@ -69,7 +69,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">579</span>
+            <span class="post-count">576</span>
         </span>
     </span>
 
@@ -120,19 +120,19 @@
 <p>​                                             即 $\lambda_1 + \lambda_2 + \lambda_3 - \lambda_4 - \lambda5 = 0​$ </p>
 <p>​                                             $\lambda_i\geq 0 ,i=1,2,3,4,5​$</p>
 <p>将  $\lambda_5 = \lambda_1 + \lambda_2 + \lambda_3 - \lambda_4​$ 带入目标函数并记为</p>
-<p>​            $S(\lambda_1,\lambda_2,\lambda_3,\lambda_4) = 2\lambda_1^2+\lambda_2^2+\frac{1}{2}\lambda_3^2+\lambda_4^2+2\lambda_1\lambda_2 - 2\lambda_1\lambda_4 + \lambda_2\lambda_3 + \lambda_3\lambda_4 -2\lambda_1 - 2\lambda_2 - 2\lambda_3 $</p>
+<p>​            $S(\lambda_1,\lambda_2,\lambda_3,\lambda_4) = 2\lambda_1^2+\lambda_2^2+\frac{1}{2}\lambda_3^2+\lambda_4^2+2\lambda_1\lambda_2 - \\ 2\lambda_1\lambda_4 + \lambda_2\lambda_3 + \lambda_3\lambda_4 -2\lambda_1 - 2\lambda_2 - 2\lambda_3 ​$</p>
 <p>对$\lambda_1,\lambda_2,\lambda_3,\lambda_4​$求偏导数，并令为0:</p>
 <p>​                                       <script type="math/tex">\frac{\partial S}{\partial \lambda_1} = 4\lambda_1 + 2\lambda_2 - 2\lambda_4 - 2  = 0​</script></p>
 <p>​                                        <script type="math/tex">\frac{\partial S}{\partial \lambda_2} = 2\lambda_1 + 2\lambda_2 + \lambda_3 - 2  = 0​</script></p>
 <p>​                                        <script type="math/tex">\frac{\partial S}{\partial \lambda_3} = \lambda_2 + \lambda_3 + \lambda_4 - 2  = 0</script></p>
 <p>​                    <script type="math/tex">\frac{\partial S}{\partial \lambda_4} = -2\lambda_1 + \lambda_3 + 2\lambda_4  = 0</script></p>
 <p>令系数矩阵为A,增广矩阵分别为</p>
-<p>​                      <script type="math/tex">A = \left[\begin{array} {rrrr}4 & 2 & 0 & -2 \\ 2 & 2 & 1 & 0 \\ 0 & 1 & 1 & 1\\ -2 & 0 & 1 & 2\end{array}\right]，\overline{A} = \left[\begin{array} {cccr|r}4 & 2 & 0 & -2 & 2\\ 2 & 2 & 1 & 0 & 2 \\ 0 & 1 & 1 & 1 & 2\\ -2 & 0 & 1 & 2 & 0\end{array}\right] ​</script></p>
+<p>​                      <script type="math/tex">A = \left[\begin{array} {rrrr}4 & 2 & 0 & -2 \\ 2 & 2 & 1 & 0 \\ 0 & 1 & 1 & 1\\ -2 & 0 & 1 & 2\end{array}\right]，\\ \overline{A} = \left[\begin{array} {cccr|r}4 & 2 & 0 & -2 & 2\\ 2 & 2 & 1 & 0 & 2 \\ 0 & 1 & 1 & 1 & 2\\ -2 & 0 & 1 & 2 & 0\end{array}\right]</script></p>
 <p>因为A与增广矩阵$\overline{A}​$的秩不相同，故线性方程组无解，则满足约束条件的最小值在边界取得</p>
 <p>当$\lambda_3 = 0​$ 时，S 在 $\lambda_1 = \lambda_4 = 1, \lambda_2 = \lambda_3 = 0​$取最小，$\lambda_5 = \lambda_1 + \lambda_2 + \lambda_3 - \lambda_4 = 0 ​$</p>
 <p>计算得 </p>
 <p>​                           $w^* = \sum\limits_{i=1}^5\lambda_iy_ix_i = (-1, 2)​$</p>
-<p>​                            $b^* = y_j - \sum\limits_{i=1}^5\lambda_iy_ix_i^Tx_j  =1 - (5-4) =0​$</p>
+<p>​                            $b^* = y_j - \sum\limits_{i=1}^5\lambda_iy_ix_i^Tx_j  = -2$</p>
 <p>因此分离超平面为 $-x^{(1)} + 2x^{(2)} -2= 0$</p>
 <p>分类决策函数为   $f(x) = sign(-x^{(1)} + 2x^{(2)} -2)$</p>
 <p>支持向量为 $x_1 =(1,2)^T x_4 = (2,1)^T ​$</p>
