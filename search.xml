@@ -38,12 +38,9 @@
 <p><img src="/2020/04/18/PUBG-JNG/18.jpg" alt></p>
 <p><img src="/2020/04/18/PUBG-JNG/19.jpg" alt></p>
 ]]></content>
-      <categories>
-        <category>娱乐</category>
-      </categories>
       <tags>
-        <tag>和平精英</tag>
         <tag>JNG</tag>
+        <tag>game-for-peace</tag>
       </tags>
   </entry>
   <entry>
@@ -57,7 +54,8 @@
 <p>Witness me in github.io</p>
 ]]></content>
       <tags>
-        <tag>闲来写写</tag>
+        <tag>英文</tag>
+        <tag>essay</tag>
       </tags>
   </entry>
   <entry>
@@ -77,11 +75,11 @@
 <p>​                                           $\min\limits_{\lambda} \frac{1}{2}\sum\limits_{i=1}^5\sum\limits_{j=1}^5\lambda_i\lambda_jy_iy_jx_i^Tx_j - \sum\limits_{i=1}^5\lambda_i​$</p>
 <p>​                                             <script type="math/tex">s.t. \sum\limits_{i=1}^5 \lambda_iy_i = 0 ​</script></p>
 <p>​                                             即 $\lambda_1 + \lambda_2 + \lambda_3 - \lambda_4 - \lambda5 = 0​$ </p>
-<p>​                                             $\lambda_i\geq 0 ,i=1,2,3,4,5​$</p>
+<p>​                                             $\lambda_i\geq 0 ,i=1,2,3,4,5$</p>
 <p>将  $\lambda_5 = \lambda_1 + \lambda_2 + \lambda_3 - \lambda_4​$ 带入目标函数并记为</p>
-<p>​            $S(\lambda_1,\lambda_2,\lambda_3,\lambda_4) = 2\lambda_1^2+\lambda_2^2+\frac{1}{2}\lambda_3^2+\lambda_4^2+2\lambda_1\lambda_2 - \\ 2\lambda_1\lambda_4 + \lambda_2\lambda_3 + \lambda_3\lambda_4 -2\lambda_1 - 2\lambda_2 - 2\lambda_3 ​$</p>
+<p>​            $S(\lambda_1,\lambda_2,\lambda_3,\lambda_4) = 2\lambda_1^2+\lambda_2^2+\frac{1}{2}\lambda_3^2+\lambda_4^2+2\lambda_1\lambda_2 - \\ 2\lambda_1\lambda_4 + \lambda_2\lambda_3 + \lambda_3\lambda_4 -2\lambda_1 - 2\lambda_2 - 2\lambda_3 $</p>
 <p>对$\lambda_1,\lambda_2,\lambda_3,\lambda_4​$求偏导数，并令为0:</p>
-<p>​                                       <script type="math/tex">\frac{\partial S}{\partial \lambda_1} = 4\lambda_1 + 2\lambda_2 - 2\lambda_4 - 2  = 0​</script></p>
+<p>​                                       <script type="math/tex">\frac{\partial S}{\partial \lambda_1} = 4\lambda_1 + 2\lambda_2 - 2\lambda_4 - 2  = 0</script></p>
 <p>​                                        <script type="math/tex">\frac{\partial S}{\partial \lambda_2} = 2\lambda_1 + 2\lambda_2 + \lambda_3 - 2  = 0​</script></p>
 <p>​                                        <script type="math/tex">\frac{\partial S}{\partial \lambda_3} = \lambda_2 + \lambda_3 + \lambda_4 - 2  = 0</script></p>
 <p>​                    <script type="math/tex">\frac{\partial S}{\partial \lambda_4} = -2\lambda_1 + \lambda_3 + 2\lambda_4  = 0</script></p>
@@ -91,11 +89,11 @@
 <p>当$\lambda_3 = 0​$ 时，S 在 $\lambda_1 = \lambda_4 = 1, \lambda_2 = \lambda_3 = 0​$取最小，$\lambda_5 = \lambda_1 + \lambda_2 + \lambda_3 - \lambda_4 = 0 ​$</p>
 <p>计算得 </p>
 <p>​                           $w^* = \sum\limits_{i=1}^5\lambda_iy_ix_i = (-1, 2)​$</p>
-<p>​                            $b^* = y_j - \sum\limits_{i=1}^5\lambda_iy_ix_i^Tx_j  = -2​$</p>
-<p>因此分离超平面为 $-x^{(1)} + 2x^{(2)} -2= 0​$</p>
+<p>​                            $b^* = y_j - \sum\limits_{i=1}^5\lambda_iy_ix_i^Tx_j  = -2$</p>
+<p>因此分离超平面为 $-x^{(1)} + 2x^{(2)} -2= 0$</p>
 <p>分类决策函数为   $f(x) = sign(-x^{(1)} + 2x^{(2)} -2)$</p>
 <h4 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h4><p><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/9.jpg" width="500px" height="500px"></p>
-<p>5个坐标点为$x_1 = (1,2)^T,x_2 = (2,3)^T, x_3 = (3,3)^T, x_4 = (2,1)^T, x_5 = (3,2)^T​$</p>
+<p>5个坐标点为$x_1 = (1,2)^T,x_2 = (2,3)^T, x_3 = (3,3)^T, x_4 = (2,1)^T, x_5 = (3,2)^T$</p>
 </li>
 </ul>
 <p>构造约束最优化问题：</p>
@@ -106,7 +104,8 @@
 <p>  分类决策函数为   $f(x) = sign(-x^{(1)} + 2x^{(2)} -2)$</p>
 ]]></content>
       <tags>
-        <tag>机器学习</tag>
+        <tag>homework</tag>
+        <tag>Machine Learning</tag>
       </tags>
   </entry>
   <entry>
@@ -163,7 +162,7 @@
 <p><a href="https://www.zhihu.com/question/366627317/answer/1151278214" target="_blank" rel="noopener">原文链接</a></p>
 ]]></content>
       <tags>
-        <tag>学术</tag>
+        <tag>essay</tag>
       </tags>
   </entry>
   <entry>
@@ -178,7 +177,7 @@
 <p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-6.jpg" width="500px" height="400px"></p>
 ]]></content>
       <tags>
-        <tag>照片</tag>
+        <tag>picture</tag>
       </tags>
   </entry>
   <entry>
@@ -199,12 +198,51 @@
 <h4 id="学习效率不高怎么破"><a href="#学习效率不高怎么破" class="headerlink" title="学习效率不高怎么破"></a>学习效率不高怎么破</h4><p>​       因人而异，这位同学说，自己在实验室效率非常高，几乎没人能打扰到他，坐在那里，一坐下去，就非常投入。拿我个人反面案例来说，我感觉其实他这是一种闭环奖励机制，因为专心研究得到了能弥补个人孤独感、暂时的失落感的成就感，让自己更加愿意在科研上投入更多精力，同时自己投入的精力得到了更多的良性反馈，这是推动个人前进的不竭动力。期望自己能在未来科研的道路上端正态度，提高效率，稳步提升自我。</p>
 <p>​       上周末跟同学交流之后的收获差不多就这些了，记录下来，往后的日子里，朝着这个目标前进！</p>
 ]]></content>
-      <categories>
-        <category>hide</category>
-      </categories>
       <tags>
         <tag>学长指路</tag>
-        <tag>闲来写写</tag>
+        <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
+    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
+    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
+<ul>
+<li><strong>Active Monitoring（Synchronous）</strong></li>
+</ul>
+<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
+<ul>
+<li><strong>Passive Monitoring （Asynchronous）</strong></li>
+</ul>
+<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>虚拟化安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
+    <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
+    <content><![CDATA[<ul>
+<li>研究背景</li>
+<li>解决问题</li>
+<li>解决方法与步骤</li>
+<li>试验评价</li>
+<li>相关工作</li>
+</ul>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>SIGMOD</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>数据库</tag>
       </tags>
   </entry>
 </search>
