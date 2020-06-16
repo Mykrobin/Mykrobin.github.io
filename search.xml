@@ -102,78 +102,6 @@
       </tags>
   </entry>
   <entry>
-    <title>The first blog</title>
-    <url>/2020/04/18/The-first-blog/</url>
-    <content><![CDATA[<h3 id="The-first-bolg"><a href="#The-first-bolg" class="headerlink" title="The first bolg"></a>The first bolg</h3><p>Hello，this is my first bolg of github.io.</p>
-<p>I tried for about 12 hours to set up this simple website, right now, the author(me) still feel awsome.</p>
-<p>I have written some technology blogs in <a href="https://www.cnblogs.com/Robin5/" target="_blank" rel="noopener">Robin5</a>.</p>
-<p>Seize the time and face the bright future！</p>
-<p>I will work harder and harder!</p>
-<p>Witness me in github.io</p>
-]]></content>
-      <tags>
-        <tag>英文</tag>
-        <tag>essay</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Ununtu18源码安装Xen4.11</title>
-    <url>/2020/05/22/Ununtu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/</url>
-    <content><![CDATA[<p>在部署Xen的时候采用的是Ubuntu18.04(英文版) + Xen4.11</p>
-<p>由于安装Ubuntu后，使用国外的源比较慢，修改为国内源，这样速度快很多。</p>
-<h3 id="Ubuntu换源"><a href="#Ubuntu换源" class="headerlink" title="Ubuntu换源"></a>Ubuntu换源</h3><p>我采用的是修改阿里源为Ubuntu18.04的源</p>
-<p><strong>备份 sources.list</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cp &#x2F;etc&#x2F;apt&#x2F;sources.list &#x2F;etc&#x2F;apt&#x2F;sources.list.bak</span><br></pre></td></tr></table></figure>
-<p><strong>添加阿里源</strong></p>
-<p>在<strong>/etc/apt/sources.list</strong>文件前添加如下条目</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-security main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-updates main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-proposed main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-backports main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-security main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-updates main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-proposed main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure>
-<p><strong>更新源</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br></pre></td></tr></table></figure>
-<h3 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h3><p><strong>For Ubuntu 18.04:</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apt-get install build-essential</span><br><span class="line">apt-get install bcc bin86 gawk bridge-utils iproute2 libcurl4 libcurl4-openssl-dev bzip2 module-init-tools transfig tgif</span><br><span class="line">apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial</span><br><span class="line">apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev libjpeg-dev</span><br><span class="line">apt-get install libnl-route-3-200 libnl-3-dev libnl-cli-3-dev libnl-genl-3-dev libnl-route-3-dev</span><br><span class="line">apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev</span><br><span class="line">apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc</span><br><span class="line"> </span><br><span class="line">apt-get install libc6-dev-i386</span><br><span class="line">apt-get install lzma lzma-dev liblzma-dev</span><br><span class="line">apt-get install libsystemd-dev</span><br></pre></td></tr></table></figure>
-<h3 id="下载Xen4-11源码"><a href="#下载Xen4-11源码" class="headerlink" title="下载Xen4.11源码"></a>下载Xen4.11源码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;xenbits.xen.org&#x2F;xen.git</span><br><span class="line">cd xen</span><br><span class="line">git checkout origin&#x2F;stable-4.11</span><br></pre></td></tr></table></figure>
-<p>或者</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone -b stable-4.11 git:&#x2F;&#x2F;xenbits.xen.org&#x2F;xen.git</span><br></pre></td></tr></table></figure>
-<h3 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h3><p>解压之后进入Xen目录下</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.&#x2F;configure --enable-systemd</span><br><span class="line">make dist &#x2F;&#x2F; 也可以使用 make world(same like make clean &amp;&amp; make dist).</span><br><span class="line">mkae install</span><br></pre></td></tr></table></figure>
-<p>上两步make过程会等很久(使用 make dist -j8 可以加速，开启8个线程操作)</p>
-<p><strong>可能会遇到的问题</strong></p>
-<p>如果遇到error信息如下，预编译器不识别<strong>sizeof</strong> 函数导致</p>
-<p><img src="/2020/05/22/Ununtu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/1.png" alt></p>
-<p>解决方法：</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BITS_PER_LONG           (sizeof (unsigned long) * BITS_PER_BYTE)</span></span><br><span class="line">改成</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BITS_PER_LONG           (__SIZEOF_LONG__ * BITS_PER_BYTE)</span></span><br></pre></td></tr></table></figure>
-<p>解决完问题后，重复安装过程。</p>
-<h3 id="Post-Install"><a href="#Post-Install" class="headerlink" title="Post-Install"></a>Post-Install</h3><p><strong>Reload dynamic libraries:</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;sbin&#x2F;ldconfig</span><br></pre></td></tr></table></figure>
-<h3 id="Grube-Settings"><a href="#Grube-Settings" class="headerlink" title="Grube-Settings"></a>Grube-Settings</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir -p &#x2F;etc&#x2F;default&#x2F;grub.d</span><br></pre></td></tr></table></figure>
-<p><strong>Create /etc/default/grub.d/xen.cfg:</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gedit &#x2F;etc&#x2F;default&#x2F;grub.d&#x2F;xen.cfg</span><br></pre></td></tr></table></figure>
-<p><strong>在打开的文本中添加下面内容</strong></p>
-<p>Be careful! The last settings depends on your system-language! </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GRUB_DISABLE_OS_PROBER&#x3D;true</span><br><span class="line">GRUB_CMDLINE_XEN_DEFAULT&#x3D;&quot;dom0_mem&#x3D;2560M,max:2560M&quot;</span><br><span class="line">GRUB_DEFAULT&#x3D;&quot;Ubuntu GNU&#x2F;Linux, with Xen-Hypervisor&quot;</span><br></pre></td></tr></table></figure>
-<p><strong>Update grub:</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">update-grub</span><br></pre></td></tr></table></figure>
-<p><strong>删除xendomains</strong></p>
-<p>当前版本有一个小bug，需要删除一个xendomains文件</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rm &#x2F;etc&#x2F;init.d&#x2F;xendomains</span><br></pre></td></tr></table></figure>
-<h3 id="安装-xen-tools"><a href="#安装-xen-tools" class="headerlink" title="安装 xen-tools"></a>安装 xen-tools</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apt install lvm2 debootstrap libconfig-inifiles-perl libdata-validate-domain-perl libdata-validate-ip-perl libdata-validate-uri-perl libfile-slurp-perl libfile-which-perl libsort-versions-perl libterm-ui-perl libtext-template-perl openssh-client perl debian-archive-keyring rinse libtest-notabs-perl</span><br></pre></td></tr></table></figure>
-<h4 id="Download-and-make"><a href="#Download-and-make" class="headerlink" title="Download and make"></a>Download and make</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;xen-tools&#x2F;xen-tools.git</span><br><span class="line">cd xen-tools</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
-<h3 id="开启xen-services"><a href="#开启xen-services" class="headerlink" title="开启xen services"></a>开启xen services</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl enable xen-qemu-dom0-disk-backend.service</span><br><span class="line">systemctl enable xen-init-dom0.service</span><br><span class="line">systemctl enable xenconsoled.service</span><br><span class="line">systemctl enable xenstored.service</span><br><span class="line">systemctl enable xendomains.service</span><br><span class="line">systemctl enable xen-watchdog.service</span><br></pre></td></tr></table></figure>
-<h3 id="Reboot"><a href="#Reboot" class="headerlink" title="Reboot"></a>Reboot</h3><p>重启选择带有xen-hypervisor 4.11 启动</p>
-<p><strong>安装成功与否测试</strong></p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">xentop</span><br></pre></td></tr></table></figure>
-<p>如果出现下图的domain0则说明安装成功</p>
-<p><img src="/2020/05/22/Ununtu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/2.jpg" alt></p>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="www.baudi.com">Build Xen for ubuntu</a></p>
-<p>[2] <a href="https://wiki.xenproject.org/wiki/Compiling_Xen_From_Source" target="_blank" rel="noopener">Compiling Xen From Source</a></p>
-<p>[3] <a href="https://www.linuxidc.com/Linux/2018-08/153709.htm" target="_blank" rel="noopener">Ubuntu 18.04修改默认源为国内源</a></p>
-<p>[4] <a href="https://blog.csdn.net/FJDJFKDJFKDJFKD/article/details/105982709" target="_blank" rel="noopener">qemu 安装  error</a></p>
-]]></content>
-      <tags>
-        <tag>虚拟机</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PUBG JNG</title>
     <url>/2020/04/18/PUBG-JNG/</url>
     <content><![CDATA[<h3 id="JNG战队发展历程回顾"><a href="#JNG战队发展历程回顾" class="headerlink" title="JNG战队发展历程回顾"></a>JNG战队发展历程回顾</h3><h4 id="JNG初次相遇"><a href="#JNG初次相遇" class="headerlink" title="JNG初次相遇"></a>JNG初次相遇</h4><p>很久很久以前，这支战队的几个骚年游荡在这样一个空旷的平原上</p>
@@ -273,6 +201,78 @@
       </tags>
   </entry>
   <entry>
+    <title>The first blog</title>
+    <url>/2020/04/18/The-first-blog/</url>
+    <content><![CDATA[<h3 id="The-first-bolg"><a href="#The-first-bolg" class="headerlink" title="The first bolg"></a>The first bolg</h3><p>Hello，this is my first bolg of github.io.</p>
+<p>I tried for about 12 hours to set up this simple website, right now, the author(me) still feel awsome.</p>
+<p>I have written some technology blogs in <a href="https://www.cnblogs.com/Robin5/" target="_blank" rel="noopener">Robin5</a>.</p>
+<p>Seize the time and face the bright future！</p>
+<p>I will work harder and harder!</p>
+<p>Witness me in github.io</p>
+]]></content>
+      <tags>
+        <tag>英文</tag>
+        <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ununtu18源码安装Xen4.11</title>
+    <url>/2020/05/22/Ununtu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/</url>
+    <content><![CDATA[<p>在部署Xen的时候采用的是Ubuntu18.04(英文版) + Xen4.11</p>
+<p>由于安装Ubuntu后，使用国外的源比较慢，修改为国内源，这样速度快很多。</p>
+<h3 id="Ubuntu换源"><a href="#Ubuntu换源" class="headerlink" title="Ubuntu换源"></a>Ubuntu换源</h3><p>我采用的是修改阿里源为Ubuntu18.04的源</p>
+<p><strong>备份 sources.list</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cp &#x2F;etc&#x2F;apt&#x2F;sources.list &#x2F;etc&#x2F;apt&#x2F;sources.list.bak</span><br></pre></td></tr></table></figure>
+<p><strong>添加阿里源</strong></p>
+<p>在<strong>/etc/apt/sources.list</strong>文件前添加如下条目</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-security main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-updates main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-proposed main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-backports main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-security main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-updates main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-proposed main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure>
+<p><strong>更新源</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br></pre></td></tr></table></figure>
+<h3 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h3><p><strong>For Ubuntu 18.04:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apt-get install build-essential</span><br><span class="line">apt-get install bcc bin86 gawk bridge-utils iproute2 libcurl4 libcurl4-openssl-dev bzip2 module-init-tools transfig tgif</span><br><span class="line">apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial</span><br><span class="line">apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev libjpeg-dev</span><br><span class="line">apt-get install libnl-route-3-200 libnl-3-dev libnl-cli-3-dev libnl-genl-3-dev libnl-route-3-dev</span><br><span class="line">apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev</span><br><span class="line">apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc</span><br><span class="line"> </span><br><span class="line">apt-get install libc6-dev-i386</span><br><span class="line">apt-get install lzma lzma-dev liblzma-dev</span><br><span class="line">apt-get install libsystemd-dev</span><br></pre></td></tr></table></figure>
+<h3 id="下载Xen4-11源码"><a href="#下载Xen4-11源码" class="headerlink" title="下载Xen4.11源码"></a>下载Xen4.11源码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;xenbits.xen.org&#x2F;xen.git</span><br><span class="line">cd xen</span><br><span class="line">git checkout origin&#x2F;stable-4.11</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone -b stable-4.11 git:&#x2F;&#x2F;xenbits.xen.org&#x2F;xen.git</span><br></pre></td></tr></table></figure>
+<h3 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h3><p>解压之后进入Xen目录下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.&#x2F;configure --enable-systemd</span><br><span class="line">make dist &#x2F;&#x2F; 也可以使用 make world(same like make clean &amp;&amp; make dist).</span><br><span class="line">mkae install</span><br></pre></td></tr></table></figure>
+<p>上两步make过程会等很久(使用 make dist -j8 可以加速，开启8个线程操作)</p>
+<p><strong>可能会遇到的问题</strong></p>
+<p>如果遇到error信息如下，预编译器不识别<strong>sizeof</strong> 函数导致</p>
+<p><img src="/2020/05/22/Ununtu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/1.png" alt></p>
+<p>解决方法：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BITS_PER_LONG           (sizeof (unsigned long) * BITS_PER_BYTE)</span></span><br><span class="line">改成</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BITS_PER_LONG           (__SIZEOF_LONG__ * BITS_PER_BYTE)</span></span><br></pre></td></tr></table></figure>
+<p>解决完问题后，重复安装过程。</p>
+<h3 id="Post-Install"><a href="#Post-Install" class="headerlink" title="Post-Install"></a>Post-Install</h3><p><strong>Reload dynamic libraries:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;sbin&#x2F;ldconfig</span><br></pre></td></tr></table></figure>
+<h3 id="Grube-Settings"><a href="#Grube-Settings" class="headerlink" title="Grube-Settings"></a>Grube-Settings</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir -p &#x2F;etc&#x2F;default&#x2F;grub.d</span><br></pre></td></tr></table></figure>
+<p><strong>Create /etc/default/grub.d/xen.cfg:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gedit &#x2F;etc&#x2F;default&#x2F;grub.d&#x2F;xen.cfg</span><br></pre></td></tr></table></figure>
+<p><strong>在打开的文本中添加下面内容</strong></p>
+<p>Be careful! The last settings depends on your system-language! </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GRUB_DISABLE_OS_PROBER&#x3D;true</span><br><span class="line">GRUB_CMDLINE_XEN_DEFAULT&#x3D;&quot;dom0_mem&#x3D;2560M,max:2560M&quot;</span><br><span class="line">GRUB_DEFAULT&#x3D;&quot;Ubuntu GNU&#x2F;Linux, with Xen-Hypervisor&quot;</span><br></pre></td></tr></table></figure>
+<p><strong>Update grub:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">update-grub</span><br></pre></td></tr></table></figure>
+<p><strong>删除xendomains</strong></p>
+<p>当前版本有一个小bug，需要删除一个xendomains文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rm &#x2F;etc&#x2F;init.d&#x2F;xendomains</span><br></pre></td></tr></table></figure>
+<h3 id="安装-xen-tools"><a href="#安装-xen-tools" class="headerlink" title="安装 xen-tools"></a>安装 xen-tools</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apt install lvm2 debootstrap libconfig-inifiles-perl libdata-validate-domain-perl libdata-validate-ip-perl libdata-validate-uri-perl libfile-slurp-perl libfile-which-perl libsort-versions-perl libterm-ui-perl libtext-template-perl openssh-client perl debian-archive-keyring rinse libtest-notabs-perl</span><br></pre></td></tr></table></figure>
+<h4 id="Download-and-make"><a href="#Download-and-make" class="headerlink" title="Download and make"></a>Download and make</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;xen-tools&#x2F;xen-tools.git</span><br><span class="line">cd xen-tools</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<h3 id="开启xen-services"><a href="#开启xen-services" class="headerlink" title="开启xen services"></a>开启xen services</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl enable xen-qemu-dom0-disk-backend.service</span><br><span class="line">systemctl enable xen-init-dom0.service</span><br><span class="line">systemctl enable xenconsoled.service</span><br><span class="line">systemctl enable xenstored.service</span><br><span class="line">systemctl enable xendomains.service</span><br><span class="line">systemctl enable xen-watchdog.service</span><br></pre></td></tr></table></figure>
+<h3 id="Reboot"><a href="#Reboot" class="headerlink" title="Reboot"></a>Reboot</h3><p>重启选择带有xen-hypervisor 4.11 启动</p>
+<p><strong>安装成功与否测试</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">xentop</span><br></pre></td></tr></table></figure>
+<p>如果出现下图的domain0则说明安装成功</p>
+<p><img src="/2020/05/22/Ununtu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/2.jpg" alt></p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="www.baudi.com">Build Xen for ubuntu</a></p>
+<p>[2] <a href="https://wiki.xenproject.org/wiki/Compiling_Xen_From_Source" target="_blank" rel="noopener">Compiling Xen From Source</a></p>
+<p>[3] <a href="https://www.linuxidc.com/Linux/2018-08/153709.htm" target="_blank" rel="noopener">Ubuntu 18.04修改默认源为国内源</a></p>
+<p>[4] <a href="https://blog.csdn.net/FJDJFKDJFKDJFKD/article/details/105982709" target="_blank" rel="noopener">qemu 安装  error</a></p>
+]]></content>
+      <tags>
+        <tag>虚拟机</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>RAMBleed Reading Bits in Memory Without Accessing Them</title>
     <url>/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/</url>
     <content><![CDATA[<div class="table-container">
@@ -336,7 +336,7 @@
 </ol>
 <p>&emsp;后面的，B，C，D都这样，而释放内存时，则会把相邻的块一步一步地合并起来（合并也必需按分裂的逆操作进行合并）。</p>
 <p>&emsp;&emsp;论文<a href="http://export.arxiv.org/pdf/1511.08756" target="_blank" rel="noopener">DRAMA</a>中提到只要获得了物理上连续的$2MiB$空间，采用反向工程即可获取低22位物理空间地址。</p>
-<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片13.png" width="600px" height="450px"></p>
+<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片13.jpg" width="600px" height="450px"></p>
 <p>&emsp;&emsp;基于Linux内存的伙伴分配算法，分配空间大小为$4KiB*2^N$，此处取$N = 10$,即分配$4MiB$空间，并将此 $4MiB$ 物理空间分裂为两个 $2MiB$ 的物理空间，通过$MMap$系统调用，消耗掉前面低于$2MiB$的存储空间，最后剩余的空间一定是一个连续的 $2MiB$ 的物理空间。</p>
 <h3 id="内存风水逆转"><a href="#内存风水逆转" class="headerlink" title="内存风水逆转"></a>内存风水逆转</h3><p>&emsp;&emsp;针对Rowhammer的内存位置限制，有人开发出一种名为 <a href="https://www.usenix.org/system/files/conference/usenixsecurity16/sec16_paper_razavi.pdf" target="_blank" rel="noopener">Flip Feng Shui</a>（风水翻转）的攻击技术，这本质上也是Rowhammer。这种攻击就是篡改deduplication操作——deduplication在云端主机中应用得很常见，这种技术可让两个或者更多虚拟主机共享特定的数据块，起到节约内存资源的作用。</p>
 <p>&emsp;&emsp;Flip Feng Shui在<strong>物理内存</strong>上做手脚，可致加密密钥和其他敏感数据存储到<strong>内存特定的位置</strong>——这些位置就很容易受Rowhammer的影响了。所以才叫风水翻转，就是让数据在内存中的“风水”位置变更好，Rowhammer攻击变得更可靠。</p>
@@ -362,56 +362,6 @@
         <tag>论文解读</tag>
         <tag>System Security</tag>
         <tag>Rowhammer attack</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>求最大间隔分离超平面</title>
-    <url>/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/</url>
-    <content><![CDATA[<p>在利用向量机进行最大间隔分离超平面和分类决策函数的求解时，解题过程如下</p>
-<h3 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h3><h4 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h4><p><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/1.png" width="500px" height="500px"></p>
-<p><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/2.png" width="500px" height="500px"></p>
-<p><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/3.png" width="500px" height="500px"></p>
-<p>​                            <img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/4.png" width="500px" height="500px"><br><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/5.png" width="500px" height="500px"><br><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/6.png" width="500px" height="500px"><br><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/7.png" width="500px" height="500px"><br>以本次作业为例：<br><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/8.png" alt></p>
-<ul>
-<li><p>Q: 已知正例点$x_1=(1,2)^T，x_2=(2,3)^T，x_3=(3,3)^T$，负例点$x_4=(2,1)^T，x_5=(3,2)^T$，试求最大间隔分离超平面和分类决策函数，并找出哪些点是支持向量</p>
-</li>
-<li><p>解： $x_1=(1,2)^T，x_2=(2,3)^T，x_3=(3,3)^T​$,负例点  $x_4=(2,1)^T，x_5=(3,2)^T​$<br>​        $y_1=y_2=y_3=1,y_4=y_5=-1​$</p>
-<p>计算目标函数得：</p>
-<script type="math/tex; mode=display">\sum\limits_{i=1}^5\sum\limits_{j=1}^5\lambda_i\lambda_jy_iy_jx_i^Tx_j \\ = 5\lambda_1^2 + 13\lambda_2^2 + 18\lambda_3^2 + 5\lambda_4^2 + 13\lambda_5^2 + 16\lambda_1\lambda_2 + 18\lambda_1\lambda_3 - 8 \lambda_1\lambda_4 - \\14\lambda_1\lambda_5 + 30\lambda_2\lambda_3 - 14\lambda_2\lambda_4 - 24\lambda_2\lambda_5 - 18\lambda_3\lambda_4 - 30\lambda_3\lambda_5 + 16\lambda_4\lambda_5​</script><p>构造并求解约束最优化问题</p>
-<p>​                                           $\min\limits_{\lambda} \frac{1}{2}\sum\limits_{i=1}^5\sum\limits_{j=1}^5\lambda_i\lambda_jy_iy_jx_i^Tx_j - \sum\limits_{i=1}^5\lambda_i​$</p>
-<p>​                                             <script type="math/tex">s.t. \sum\limits_{i=1}^5 \lambda_iy_i = 0 ​</script></p>
-<p>​                                             即 $\lambda_1 + \lambda_2 + \lambda_3 - \lambda_4 - \lambda5 = 0​$ </p>
-<p>​                                             $\lambda_i\geq 0 ,i=1,2,3,4,5$</p>
-<p>将  $\lambda_5 = \lambda_1 + \lambda_2 + \lambda_3 - \lambda_4​$ 带入目标函数并记为</p>
-<p>​            $S(\lambda_1,\lambda_2,\lambda_3,\lambda_4) = 2\lambda_1^2+\lambda_2^2+\frac{1}{2}\lambda_3^2+\lambda_4^2+2\lambda_1\lambda_2 - \\ 2\lambda_1\lambda_4 + \lambda_2\lambda_3 + \lambda_3\lambda_4 -2\lambda_1 - 2\lambda_2 - 2\lambda_3 $</p>
-<p>对$\lambda_1,\lambda_2,\lambda_3,\lambda_4​$求偏导数，并令为0:</p>
-<p>​                                       <script type="math/tex">\frac{\partial S}{\partial \lambda_1} = 4\lambda_1 + 2\lambda_2 - 2\lambda_4 - 2  = 0</script></p>
-<p>​                                        <script type="math/tex">\frac{\partial S}{\partial \lambda_2} = 2\lambda_1 + 2\lambda_2 + \lambda_3 - 2  = 0​</script></p>
-<p>​                                        <script type="math/tex">\frac{\partial S}{\partial \lambda_3} = \lambda_2 + \lambda_3 + \lambda_4 - 2  = 0</script></p>
-<p>​                    <script type="math/tex">\frac{\partial S}{\partial \lambda_4} = -2\lambda_1 + \lambda_3 + 2\lambda_4  = 0</script></p>
-<p>令系数矩阵为A,增广矩阵分别为</p>
-<p>​                      <script type="math/tex">A = \left[\begin{array} {rrrr}4 & 2 & 0 & -2 \\ 2 & 2 & 1 & 0 \\ 0 & 1 & 1 & 1\\ -2 & 0 & 1 & 2\end{array}\right]，\\ \overline{A} = \left[\begin{array} {cccr|r}4 & 2 & 0 & -2 & 2\\ 2 & 2 & 1 & 0 & 2 \\ 0 & 1 & 1 & 1 & 2\\ -2 & 0 & 1 & 2 & 0\end{array}\right]</script></p>
-<p>因为A与增广矩阵$\overline{A}​$的秩不相同，故线性方程组无解，则满足约束条件的最小值在边界取得</p>
-<p>当$\lambda_3 = 0​$ 时，S 在 $\lambda_1 = \lambda_4 = 1, \lambda_2 = \lambda_3 = 0​$取最小，$\lambda_5 = \lambda_1 + \lambda_2 + \lambda_3 - \lambda_4 = 0 ​$</p>
-<p>计算得 </p>
-<p>​                           $w^* = \sum\limits_{i=1}^5\lambda_iy_ix_i = (-1, 2)​$</p>
-<p>​                            $b^* = y_j - \sum\limits_{i=1}^5\lambda_iy_ix_i^Tx_j  = -2$</p>
-<p>因此分离超平面为 $-x^{(1)} + 2x^{(2)} -2= 0$</p>
-<p>分类决策函数为   $f(x) = sign(-x^{(1)} + 2x^{(2)} -2)$</p>
-<h4 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h4><p><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/9.jpg" width="500px" height="500px"></p>
-<p>5个坐标点为$x_1 = (1,2)^T,x_2 = (2,3)^T, x_3 = (3,3)^T, x_4 = (2,1)^T, x_5 = (3,2)^T$</p>
-</li>
-</ul>
-<p>构造约束最优化问题：</p>
-<script type="math/tex; mode=display">\min\limits_{w,b} \frac{1}{2}(w_1^2 + w_2^2)​</script><p>$\left. \begin{matrix} w_1 + 2w_2 + b \geq 1 \\ 2w_1 + 3w_2 + b \geq 1 \\ 3w_1 + 3w_2 + b \geq 1 \\ -2w_1 - w_2 - b \geq 1 \\ -3w_1 - 2w_2 - b \geq 1 \end{matrix} \right\}  \Rightarrow \left. \begin{matrix} w_1 \leq -1 \\ w_2 \geq 2 \end{matrix} \right\} \Rightarrow w^*= (-1,2)^T 处取得最小值​$</p>
-<p>带入$w_1 = -1和w_2=2​$得</p>
-<p>$\left\{ \begin{matrix} 3 + b \geq 1 \\ 4 + b \geq 1 \\ 3 + b \geq 1 \\  -b \geq 1 \\ -1 - b \geq 1 \end{matrix} \right. \Rightarrow \left\{ \begin{matrix} b \geq -2 \\ b \leq -2\end{matrix}\right. \Rightarrow b = -2$</p>
-<p> 因此分离超平面为 $-x^{(1)} + 2x^{(2)} -2= 0​$</p>
-<p>  分类决策函数为   $f(x) = sign(-x^{(1)} + 2x^{(2)} -2)$</p>
-]]></content>
-      <tags>
-        <tag>homework</tag>
-        <tag>Machine Learning</tag>
       </tags>
   </entry>
   <entry>
@@ -484,6 +434,56 @@
 ]]></content>
       <tags>
         <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>求最大间隔分离超平面</title>
+    <url>/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/</url>
+    <content><![CDATA[<p>在利用向量机进行最大间隔分离超平面和分类决策函数的求解时，解题过程如下</p>
+<h3 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h3><h4 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h4><p><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/1.png" width="500px" height="500px"></p>
+<p><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/2.png" width="500px" height="500px"></p>
+<p><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/3.png" width="500px" height="500px"></p>
+<p>​                            <img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/4.png" width="500px" height="500px"><br><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/5.png" width="500px" height="500px"><br><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/6.png" width="500px" height="500px"><br><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/7.png" width="500px" height="500px"><br>以本次作业为例：<br><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/8.png" alt></p>
+<ul>
+<li><p>Q: 已知正例点$x_1=(1,2)^T，x_2=(2,3)^T，x_3=(3,3)^T$，负例点$x_4=(2,1)^T，x_5=(3,2)^T$，试求最大间隔分离超平面和分类决策函数，并找出哪些点是支持向量</p>
+</li>
+<li><p>解： $x_1=(1,2)^T，x_2=(2,3)^T，x_3=(3,3)^T​$,负例点  $x_4=(2,1)^T，x_5=(3,2)^T​$<br>​        $y_1=y_2=y_3=1,y_4=y_5=-1​$</p>
+<p>计算目标函数得：</p>
+<script type="math/tex; mode=display">\sum\limits_{i=1}^5\sum\limits_{j=1}^5\lambda_i\lambda_jy_iy_jx_i^Tx_j \\ = 5\lambda_1^2 + 13\lambda_2^2 + 18\lambda_3^2 + 5\lambda_4^2 + 13\lambda_5^2 + 16\lambda_1\lambda_2 + 18\lambda_1\lambda_3 - 8 \lambda_1\lambda_4 - \\14\lambda_1\lambda_5 + 30\lambda_2\lambda_3 - 14\lambda_2\lambda_4 - 24\lambda_2\lambda_5 - 18\lambda_3\lambda_4 - 30\lambda_3\lambda_5 + 16\lambda_4\lambda_5​</script><p>构造并求解约束最优化问题</p>
+<p>​                                           $\min\limits_{\lambda} \frac{1}{2}\sum\limits_{i=1}^5\sum\limits_{j=1}^5\lambda_i\lambda_jy_iy_jx_i^Tx_j - \sum\limits_{i=1}^5\lambda_i​$</p>
+<p>​                                             <script type="math/tex">s.t. \sum\limits_{i=1}^5 \lambda_iy_i = 0 ​</script></p>
+<p>​                                             即 $\lambda_1 + \lambda_2 + \lambda_3 - \lambda_4 - \lambda5 = 0​$ </p>
+<p>​                                             $\lambda_i\geq 0 ,i=1,2,3,4,5$</p>
+<p>将  $\lambda_5 = \lambda_1 + \lambda_2 + \lambda_3 - \lambda_4​$ 带入目标函数并记为</p>
+<p>​            $S(\lambda_1,\lambda_2,\lambda_3,\lambda_4) = 2\lambda_1^2+\lambda_2^2+\frac{1}{2}\lambda_3^2+\lambda_4^2+2\lambda_1\lambda_2 - \\ 2\lambda_1\lambda_4 + \lambda_2\lambda_3 + \lambda_3\lambda_4 -2\lambda_1 - 2\lambda_2 - 2\lambda_3 $</p>
+<p>对$\lambda_1,\lambda_2,\lambda_3,\lambda_4​$求偏导数，并令为0:</p>
+<p>​                                       <script type="math/tex">\frac{\partial S}{\partial \lambda_1} = 4\lambda_1 + 2\lambda_2 - 2\lambda_4 - 2  = 0</script></p>
+<p>​                                        <script type="math/tex">\frac{\partial S}{\partial \lambda_2} = 2\lambda_1 + 2\lambda_2 + \lambda_3 - 2  = 0​</script></p>
+<p>​                                        <script type="math/tex">\frac{\partial S}{\partial \lambda_3} = \lambda_2 + \lambda_3 + \lambda_4 - 2  = 0</script></p>
+<p>​                    <script type="math/tex">\frac{\partial S}{\partial \lambda_4} = -2\lambda_1 + \lambda_3 + 2\lambda_4  = 0</script></p>
+<p>令系数矩阵为A,增广矩阵分别为</p>
+<p>​                      <script type="math/tex">A = \left[\begin{array} {rrrr}4 & 2 & 0 & -2 \\ 2 & 2 & 1 & 0 \\ 0 & 1 & 1 & 1\\ -2 & 0 & 1 & 2\end{array}\right]，\\ \overline{A} = \left[\begin{array} {cccr|r}4 & 2 & 0 & -2 & 2\\ 2 & 2 & 1 & 0 & 2 \\ 0 & 1 & 1 & 1 & 2\\ -2 & 0 & 1 & 2 & 0\end{array}\right]</script></p>
+<p>因为A与增广矩阵$\overline{A}​$的秩不相同，故线性方程组无解，则满足约束条件的最小值在边界取得</p>
+<p>当$\lambda_3 = 0​$ 时，S 在 $\lambda_1 = \lambda_4 = 1, \lambda_2 = \lambda_3 = 0​$取最小，$\lambda_5 = \lambda_1 + \lambda_2 + \lambda_3 - \lambda_4 = 0 ​$</p>
+<p>计算得 </p>
+<p>​                           $w^* = \sum\limits_{i=1}^5\lambda_iy_ix_i = (-1, 2)​$</p>
+<p>​                            $b^* = y_j - \sum\limits_{i=1}^5\lambda_iy_ix_i^Tx_j  = -2$</p>
+<p>因此分离超平面为 $-x^{(1)} + 2x^{(2)} -2= 0$</p>
+<p>分类决策函数为   $f(x) = sign(-x^{(1)} + 2x^{(2)} -2)$</p>
+<h4 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h4><p><img src="/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/9.jpg" width="500px" height="500px"></p>
+<p>5个坐标点为$x_1 = (1,2)^T,x_2 = (2,3)^T, x_3 = (3,3)^T, x_4 = (2,1)^T, x_5 = (3,2)^T$</p>
+</li>
+</ul>
+<p>构造约束最优化问题：</p>
+<script type="math/tex; mode=display">\min\limits_{w,b} \frac{1}{2}(w_1^2 + w_2^2)​</script><p>$\left. \begin{matrix} w_1 + 2w_2 + b \geq 1 \\ 2w_1 + 3w_2 + b \geq 1 \\ 3w_1 + 3w_2 + b \geq 1 \\ -2w_1 - w_2 - b \geq 1 \\ -3w_1 - 2w_2 - b \geq 1 \end{matrix} \right\}  \Rightarrow \left. \begin{matrix} w_1 \leq -1 \\ w_2 \geq 2 \end{matrix} \right\} \Rightarrow w^*= (-1,2)^T 处取得最小值​$</p>
+<p>带入$w_1 = -1和w_2=2​$得</p>
+<p>$\left\{ \begin{matrix} 3 + b \geq 1 \\ 4 + b \geq 1 \\ 3 + b \geq 1 \\  -b \geq 1 \\ -1 - b \geq 1 \end{matrix} \right. \Rightarrow \left\{ \begin{matrix} b \geq -2 \\ b \leq -2\end{matrix}\right. \Rightarrow b = -2$</p>
+<p> 因此分离超平面为 $-x^{(1)} + 2x^{(2)} -2= 0​$</p>
+<p>  分类决策函数为   $f(x) = sign(-x^{(1)} + 2x^{(2)} -2)$</p>
+]]></content>
+      <tags>
+        <tag>homework</tag>
+        <tag>Machine Learning</tag>
       </tags>
   </entry>
 </search>
