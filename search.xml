@@ -72,13 +72,63 @@
   <entry>
     <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
     <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
-    <content><![CDATA[<ul>
-<li>研究背景</li>
-<li>解决问题</li>
-<li>解决方法与步骤</li>
-<li>试验评价</li>
-<li>相关工作</li>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://dl.acm.org/doi/epdf/10.1145/3035918.3056101" target="_blank" rel="noopener">Aurora</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Amazon</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">分布式数据库</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">数据库</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">致力于构建一个分布式数据库</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li><p>研究背景</p>
+</li>
+<li><p>解决问题</p>
+</li>
+<li><p>解决方法与步骤</p>
+</li>
+<li><p>试验评价</p>
+</li>
+<li><p>相关工作</p>
+<hr>
+<h3 id="研究背景-为什么出现Aurora？"><a href="#研究背景-为什么出现Aurora？" class="headerlink" title="研究背景 为什么出现Aurora？"></a>研究背景 为什么出现Aurora？</h3></li>
 </ul>
+<p>&emsp; &emsp; Aurora是亚马逊云服务AWS中的关系型数据库服务，主要面向OLTP场景。 <strong>Aurora</strong>基本设计理念是在云上环境下，数据库的最大瓶颈不再是计算或者存储资源，而是网络，因此基于一套存储计算分离架构，将日志处理下推到分布式存储层，通过架构上的优化来解决网络瓶颈。 </p>
+<p>&emsp; &emsp; 在云上环境下，存储计算分离作为解决系统弹性和伸缩性的方案越来越普遍。广义来说，任何数据库，底下文件系统挂一个分布式存储，即可以认为做到了存储计算分离。通过存储计算分离，可以透明添加存储节点，剔除故障节点，进行故障切换，扩展存储空间等。在这个背景下，IO不再成为数据库的瓶颈，因为IO压力可以打散在多个存储节点上，反而是<strong>网络成为瓶颈</strong>，因为数据库实例与所有存储节点的交互都需要通过网络，尤其是为了提升数据库性能，数据库实例与存储节点可能是并行交互的，这进一步加重了网络压力。</p>
+<p>&emsp; &emsp; 传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。比如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。另外一个我们熟悉场景是事务提交操作(IO写操作)，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。 <strong>传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的。</strong></p>
+<p>&emsp; &emsp; 本文介绍的Aurora是一个云上环境全新的数据库服务可以很好的解决上述传统数据库遇到的问题。 <strong>它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。</strong> Aurora体系下的数据库实例仍然包含了大部分核心功能，比如查询处理，事务，锁，缓存管理，访问接口和undo日志管理等；但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
+<h3 id="Aurora的系统架构"><a href="#Aurora的系统架构" class="headerlink" title="Aurora的系统架构"></a>Aurora的系统架构</h3><h3 id="存储系统的设计"><a href="#存储系统的设计" class="headerlink" title="存储系统的设计"></a>存储系统的设计</h3><h3 id="故障恢复"><a href="#故障恢复" class="headerlink" title="故障恢复"></a>故障恢复</h3><h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>&emsp; &emsp;Aurora诞生的原因是在弹性伸缩的云环境下，传统的高吞吐<strong>OLTP</strong>数据库既不能保证可用性，又不能保证持久性。 <strong>Aurora</strong>的关键点在于将传统数据库中的存储与计算分离，具体而言，将日志部分下推到一个独立的分布式存储服务层。由于这种分离架构下，所有IO操作都是通过网络，网络将成为最大的瓶颈，因此Aurora集中精力优化网络以便提高系统吞吐能力。Aurora依靠Quorum模型，在性能影响可控的前提下，解决云环境下的各种异常错误。在Aurora中，日志处理技术减少了I/O写放大，异步提交协议避免了同步等待，同时分离的存储服务层还避免了离线故障恢复和检查点操作。</p>
+<p>&emsp; &emsp;Aurora相对于传统数据库有三大优势，首先，底层数据库存储是一个分布式存储服务，可以轻松应对故障；其次，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
 ]]></content>
       <categories>
         <category>paper</category>
@@ -92,7 +142,44 @@
   <entry>
     <title>SP&#39;15 Last-Level Cache Side-Channel Attacks are Practical</title>
     <url>/2020/05/18/SP-15-Last-Level-Cache-Side-Channel-Attacks-are-Practical/</url>
-    <content><![CDATA[<p><a href="https://mykrobin.github.io/files/docs/CSCA-004-SP2015.pdf" target="_blank" rel="noopener">Last Level Cache Side Channel Attacks are Practical</a></p>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://mykrobin.github.io/files/docs/CSCA-004-SP2015.pdf" target="_blank" rel="noopener">Last Level Cache Side Channel Attacks are Practical</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Department of Electrical Engineering, Princeton University</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">side channel attacks</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">security cross VM</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文详细地讲解了跨虚拟机的侧信道攻击</td>
+</tr>
+</tbody>
+</table>
+</div>
 ]]></content>
       <categories>
         <category>paper</category>
@@ -248,6 +335,155 @@
 ]]></content>
       <tags>
         <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Ununtu18源码安装Xen4.11</title>
+    <url>/2020/05/22/Ununtu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/</url>
+    <content><![CDATA[<p>在部署Xen的时候采用的是Ubuntu18.04(英文版) + Xen4.11</p>
+<p>由于安装Ubuntu后，使用国外的源比较慢，修改为国内源，这样速度快很多。</p>
+<h3 id="Ubuntu换源"><a href="#Ubuntu换源" class="headerlink" title="Ubuntu换源"></a>Ubuntu换源</h3><p>我采用的是修改阿里源为Ubuntu18.04的源</p>
+<p><strong>备份 sources.list</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cp &#x2F;etc&#x2F;apt&#x2F;sources.list &#x2F;etc&#x2F;apt&#x2F;sources.list.bak</span><br></pre></td></tr></table></figure>
+<p><strong>添加阿里源</strong></p>
+<p>在<strong>/etc/apt/sources.list</strong>文件前添加如下条目</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-security main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-updates main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-proposed main restricted universe multiverse</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-backports main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-security main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-updates main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-proposed main restricted universe multiverse</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;ubuntu&#x2F; bionic-backports main restricted universe multiverse</span><br></pre></td></tr></table></figure>
+<p><strong>更新源</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br></pre></td></tr></table></figure>
+<h3 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h3><p><strong>For Ubuntu 18.04:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apt-get install build-essential</span><br><span class="line">apt-get install bcc bin86 gawk bridge-utils iproute2 libcurl4 libcurl4-openssl-dev bzip2 module-init-tools transfig tgif</span><br><span class="line">apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial</span><br><span class="line">apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev libjpeg-dev</span><br><span class="line">apt-get install libnl-route-3-200 libnl-3-dev libnl-cli-3-dev libnl-genl-3-dev libnl-route-3-dev</span><br><span class="line">apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev</span><br><span class="line">apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc</span><br><span class="line"> </span><br><span class="line">apt-get install libc6-dev-i386</span><br><span class="line">apt-get install lzma lzma-dev liblzma-dev</span><br><span class="line">apt-get install libsystemd-dev</span><br></pre></td></tr></table></figure>
+<h3 id="下载Xen4-11源码"><a href="#下载Xen4-11源码" class="headerlink" title="下载Xen4.11源码"></a>下载Xen4.11源码</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;xenbits.xen.org&#x2F;xen.git</span><br><span class="line">cd xen</span><br><span class="line">git checkout origin&#x2F;stable-4.11</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone -b stable-4.11 git:&#x2F;&#x2F;xenbits.xen.org&#x2F;xen.git</span><br></pre></td></tr></table></figure>
+<h3 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h3><p>解压之后进入Xen目录下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.&#x2F;configure --enable-systemd</span><br><span class="line">make dist &#x2F;&#x2F; 也可以使用 make world(same like make clean &amp;&amp; make dist).</span><br><span class="line">mkae install</span><br></pre></td></tr></table></figure>
+<p>上两步make过程会等很久(使用 make dist -j8 可以加速，开启8个线程操作)</p>
+<p><strong>可能会遇到的问题</strong></p>
+<p>如果遇到error信息如下，预编译器不识别<strong>sizeof</strong> 函数导致</p>
+<p><img src="/2020/05/22/Ununtu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/1.png" alt></p>
+<p>解决方法：</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BITS_PER_LONG           (sizeof (unsigned long) * BITS_PER_BYTE)</span></span><br><span class="line">改成</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BITS_PER_LONG           (__SIZEOF_LONG__ * BITS_PER_BYTE)</span></span><br></pre></td></tr></table></figure>
+<p>解决完问题后，重复安装过程。</p>
+<h3 id="Post-Install"><a href="#Post-Install" class="headerlink" title="Post-Install"></a>Post-Install</h3><p><strong>Reload dynamic libraries:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&#x2F;sbin&#x2F;ldconfig</span><br></pre></td></tr></table></figure>
+<h3 id="Grube-Settings"><a href="#Grube-Settings" class="headerlink" title="Grube-Settings"></a>Grube-Settings</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mkdir -p &#x2F;etc&#x2F;default&#x2F;grub.d</span><br></pre></td></tr></table></figure>
+<p><strong>Create /etc/default/grub.d/xen.cfg:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">gedit &#x2F;etc&#x2F;default&#x2F;grub.d&#x2F;xen.cfg</span><br></pre></td></tr></table></figure>
+<p><strong>在打开的文本中添加下面内容</strong></p>
+<p>Be careful! The last settings depends on your system-language! </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">GRUB_DISABLE_OS_PROBER&#x3D;true</span><br><span class="line">GRUB_CMDLINE_XEN_DEFAULT&#x3D;&quot;dom0_mem&#x3D;2560M,max:2560M&quot;</span><br><span class="line">GRUB_DEFAULT&#x3D;&quot;Ubuntu GNU&#x2F;Linux, with Xen-Hypervisor&quot;</span><br></pre></td></tr></table></figure>
+<p><strong>Update grub:</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">update-grub</span><br></pre></td></tr></table></figure>
+<p><strong>删除xendomains</strong></p>
+<p>当前版本有一个小bug，需要删除一个xendomains文件</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">rm &#x2F;etc&#x2F;init.d&#x2F;xendomains</span><br></pre></td></tr></table></figure>
+<h3 id="安装-xen-tools"><a href="#安装-xen-tools" class="headerlink" title="安装 xen-tools"></a>安装 xen-tools</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apt install lvm2 debootstrap libconfig-inifiles-perl libdata-validate-domain-perl libdata-validate-ip-perl libdata-validate-uri-perl libfile-slurp-perl libfile-which-perl libsort-versions-perl libterm-ui-perl libtext-template-perl openssh-client perl debian-archive-keyring rinse libtest-notabs-perl</span><br></pre></td></tr></table></figure>
+<h4 id="Download-and-make"><a href="#Download-and-make" class="headerlink" title="Download and make"></a>Download and make</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;xen-tools&#x2F;xen-tools.git</span><br><span class="line">cd xen-tools</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<h3 id="开启xen-services"><a href="#开启xen-services" class="headerlink" title="开启xen services"></a>开启xen services</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">systemctl enable xen-qemu-dom0-disk-backend.service</span><br><span class="line">systemctl enable xen-init-dom0.service</span><br><span class="line">systemctl enable xenconsoled.service</span><br><span class="line">systemctl enable xenstored.service</span><br><span class="line">systemctl enable xendomains.service</span><br><span class="line">systemctl enable xen-watchdog.service</span><br></pre></td></tr></table></figure>
+<h3 id="Reboot"><a href="#Reboot" class="headerlink" title="Reboot"></a>Reboot</h3><p>重启选择带有xen-hypervisor 4.11 启动</p>
+<p><strong>安装成功与否测试</strong></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">xentop</span><br></pre></td></tr></table></figure>
+<p>如果出现下图的domain0则说明安装成功</p>
+<p><img src="/2020/05/22/Ununtu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/2.jpg" alt></p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="www.baudi.com">Build Xen for ubuntu</a></p>
+<p>[2] <a href="https://wiki.xenproject.org/wiki/Compiling_Xen_From_Source" target="_blank" rel="noopener">Compiling Xen From Source</a></p>
+<p>[3] <a href="https://www.linuxidc.com/Linux/2018-08/153709.htm" target="_blank" rel="noopener">Ubuntu 18.04修改默认源为国内源</a></p>
+<p>[4] <a href="https://blog.csdn.net/FJDJFKDJFKDJFKD/article/details/105982709" target="_blank" rel="noopener">qemu 安装  error</a></p>
+]]></content>
+      <tags>
+        <tag>虚拟机</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RAMBleed Reading Bits in Memory Without Accessing Them</title>
+    <url>/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://rambleed.com/docs/20190603-rambleed-web.pdf" target="_blank" rel="noopener">RAMBleed Reading Bits in Memory Without Accessing Them</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">University of Michigan;Graz University of Technology;University of Adelaide and Data61</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">Rowhammer attack,Bit Flips</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">Microarchitecture attacks</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文利用DRAM中临位的比特反转(bit flips)所得到的信息，推断出内存中的数据项，并依次读取目标信息。</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">扩展信息</td>
+<td style="text-align:center"><a href="https://rambleed.com/" target="_blank" rel="noopener">RAMBleed</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Rowhammer-Attack"><a href="#Rowhammer-Attack" class="headerlink" title="Rowhammer Attack"></a>Rowhammer Attack</h3><p>&emsp;&emsp;Rowhammer比特翻转攻击是指利用临近内存单元之间电子的互相影响，在足够多的访问次数后让某个单元的值从1变成0，反之亦然。这种攻击可以在不访问目标内存区域的前提下使其产生数据错误。 这次的攻击与操作系统和软件无关，纯粹是硬件上的漏洞导致的。</p>
+<p>&emsp;&emsp;这是个特别针对Memory的攻击技术，但不是缓冲区破坏或溢出攻击。一般的计算机Memory介质中，每个存储单元（晶体管+电容器）存放1bit数据，这个比特位要么是0，要么是1——存储单元中充满电子表示1，清空表示0。内存就是由上亿这样的存储单元构成的，数据也因此得以存储。</p>
+<p>&emsp;&emsp;不过电容器会泄露，一个电容器充满电子后，只需要几毫秒就会泄露殆尽。这就要求CPU（内存控制器）对电容进行充电，让“1”这个值能够保持住。整个过程是由内存控制器先读取电容器中的值，然后再把数据写回去。这种刷新操作，每秒会执行几千次。</p>
+<p>&emsp;&emsp;内存容量正在大幅度上涨，所以存储比特位的电容器也就越来越小，排列越来越近。要防止相邻的电容之间相互干扰，难度也就变得更大。如果能够快速、反复访问一排电容，相邻行的电容更容易产生干扰错误和所谓的“比特位翻转”，也就是0变成1。</p>
+<p>&emsp;&emsp;其实正常的数据读写一般是不会发生比特位翻转的，可是如果对某些行进行<strong>反复读写</strong>，问题就有可能产生。2014年卡内基梅陇大学的研究人员层发表过一篇论文，题为《无访问情况下的内存比特位翻转——DRAM干扰行错误的试验研究》，其本质是通过机器码指令CLFUSH或Cache Line Flush，强制进行这种比特位的读取和更新。据说利用这种方式，可引起大量比特位翻转。</p>
+<p>&emsp;&emsp;利用比特位翻转，很多事情都可以做，比如说执行未经授权的代码。这就是所谓的Rowhammer。这是一种颠覆人类对安全认知的攻击技术，软件层面几乎解决无望。先前已经有研究人员演示，如何用Rowhammer来进行提权，以及打破安全沙盒。</p>
+<p>&emsp;&emsp;不过看原理就知道，这种攻击实在有够理想化，存在诸多不确定性，因为攻击者根本无法精准控制比特位如何翻转。比如说，这种攻击对数据所在的内存位置首先就有要求，这样才能实施内存翻转：但敏感数据存储在这些位置的几率可能并不算高。</p>
+<h3 id="RAMBleed概况"><a href="#RAMBleed概况" class="headerlink" title="RAMBleed概况"></a>RAMBleed概况</h3><p>&emsp;&emsp;该攻击<strong>基于位翻转漏洞Rowhammer</strong>，可绕过ECC机制，允许黑客使用普通用户权限从OpenSSH服务器中提取签名密钥。黑客通过观察Rowhammer引发的位翻转，<strong>可推断出附近DRAM行中的值，</strong>进而读取其它进程中的物理内存。</p>
+<h3 id="获取物理地址"><a href="#获取物理地址" class="headerlink" title="获取物理地址"></a>获取物理地址</h3><p>&emsp;&emsp;该攻击的重点是获取到虚拟地址到物理地址之间的映射。</p>
+<h4 id="伙伴算法"><a href="#伙伴算法" class="headerlink" title="伙伴算法"></a>伙伴算法</h4><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/buddy-memory-allocation.jpg" width="500px" height="300px"></p>
+<p>首先我们假设我们一个内存块有1024K，当我们需要给A分配70K内存的时候，</p>
+<ol>
+<li>我们发现1024K的一半大于70K，然后我们就把1024K的内存分成两半，一半512K。</li>
+<li>然后我们发现512K的一半仍然大于70K，于是我们再把512K的内存再分成两半，一半是128K。</li>
+<li>此时，我们发现128K的一半小于70K，于是我们就分配为A分配128K的内存。</li>
+</ol>
+<p>&emsp;后面的，B，C，D都这样，而释放内存时，则会把相邻的块一步一步地合并起来（合并也必需按分裂的逆操作进行合并）。</p>
+<p>&emsp;&emsp;论文<a href="http://export.arxiv.org/pdf/1511.08756" target="_blank" rel="noopener">DRAMA</a>中提到只要获得了物理上连续的$2MiB$空间，采用反向工程即可获取低22位物理空间地址。</p>
+<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片13.png" width="600px" height="450px"></p>
+<p>&emsp;&emsp;基于Linux内存的伙伴分配算法，分配空间大小为$4KiB*2^N$，此处取$N = 10$,即分配$4MiB$空间，并将此 $4MiB$ 物理空间分裂为两个 $2MiB$ 的物理空间，通过$MMap$系统调用，消耗掉前面低于$2MiB$的存储空间，最后剩余的空间一定是一个连续的 $2MiB$ 的物理空间。</p>
+<h3 id="内存风水逆转"><a href="#内存风水逆转" class="headerlink" title="内存风水逆转"></a>内存风水逆转</h3><p>&emsp;&emsp;针对Rowhammer的内存位置限制，有人开发出一种名为 <a href="https://www.usenix.org/system/files/conference/usenixsecurity16/sec16_paper_razavi.pdf" target="_blank" rel="noopener">Flip Feng Shui</a>（风水翻转）的攻击技术，这本质上也是Rowhammer。这种攻击就是篡改deduplication操作——deduplication在云端主机中应用得很常见，这种技术可让两个或者更多虚拟主机共享特定的数据块，起到节约内存资源的作用。</p>
+<p>&emsp;&emsp;Flip Feng Shui在<strong>物理内存</strong>上做手脚，可致加密密钥和其他敏感数据存储到<strong>内存特定的位置</strong>——这些位置就很容易受Rowhammer的影响了。所以才叫风水翻转，就是让数据在内存中的“风水”位置变更好，Rowhammer攻击变得更可靠。</p>
+<h3 id="RAMBleed攻击"><a href="#RAMBleed攻击" class="headerlink" title="RAMBleed攻击"></a>RAMBleed攻击</h3><h4 id="比特翻转"><a href="#比特翻转" class="headerlink" title="比特翻转"></a>比特翻转</h4><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片11.png" width="600px" height="450px"></p>
+<p>&emsp;&emsp;本文提到，在$Row1$与$Row3$加载相同的目标内容，并对其进行锤击操作，即Rowhammer攻击，则会使得$Row2$中对应的比特位发生比特翻转。经过试验证明，当$Row3-Row2-Row1$ 存储内容为$0-1-0$时，此时在Rowhammer攻击下很有可能发生比特翻转，而当$Row3-Row2-Row1$ 存储内容为$1-1-1$时，此时在Rowhammer攻击下发生比特翻转的可能性很小，因此，基于两种概率大小的不同，可以判断出目标信息中存储的绝大多数信息内容。其中$Row2$中存储的是已知内容。</p>
+<h4 id="Frame-Feng-Shui"><a href="#Frame-Feng-Shui" class="headerlink" title="Frame Feng Shui"></a>Frame Feng Shui</h4><p>&emsp;&emsp;上文提到，Feng Shui可以将目标信息加载到指定的存储空间中。如下图所示，红色部分存储目标信息，$A0,A1,A2$ 存储攻击者内容，因此根据比特翻转是否发生，则<strong>很有可能</strong>推断出指定比特位存储的信息。</p>
+<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片17.png" width="600px" height="450px"></p>
+<h4 id="RAMBleed-on-ECC-Memory"><a href="#RAMBleed-on-ECC-Memory" class="headerlink" title="RAMBleed on ECC Memory"></a>RAMBleed on ECC Memory</h4><p>&emsp;&emsp;ECC Memory指的是Error-Correcting Code Memory，DRAM的纠错机制。</p>
+<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片21.png" width="600px" height="450px"></p>
+<p>&emsp;&emsp;在<a href="https://www.computer.org/csdl/pds/api/csdl/proceedings/download-article/19skfwyNp5e/pdf?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjc2RsX2FwaSIsImF1ZCI6ImNzZGxfYXBpX2Rvd25sb2FkX3Rva2VuIiwic3ViIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImVtYWlsIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImV4cCI6MTU5MjMxODY5OX0.uN4RLcw4bjEbBeqINhfDoXY7dyJM2-GWgE90zZJt2y4" target="_blank" rel="noopener">ECCPloit</a>这篇论文中指出，比特纠错所产生的时间延迟是十分明显的，这种情况下可根据纠错产生的时间延迟判断是否发生了比特翻转。</p>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片19.png" width="600px" height="450px"></p>
+<p>&emsp;&emsp;相对来说，采用了ECC纠错的方式，获取到的结果更可信，而没有采取比特纠错方式获取的结果是在一定程度上可信的。本文通过实验测得，通过Feng Shui方式，成功将目标信息加载到指定存储位置也是有一定概率的，文中提到这个概率在83%， 通过Rowhammer攻击获取到比特翻转成功的概率为82%，因此，最终获取到目标信息的量在68%。由于此攻击针对的是秘钥信息，获取的秘钥信息量在27%以上，就可成功破解，因此，68%的信息量足以支持对秘钥的破译。综上，此方式是行得通的。</p>
+<p>&emsp;&emsp;本文的目的，旨在阐述这种攻击方式的行之有效，因此并未对其产生的额外代价、时间成本考虑在内。</p>
+<p>&emsp;&emsp;研究人员已向英特尔、AMD、OpenSSH、微软、苹果和红帽通报了调查结果，本论文发表在2020年5月举行的第41届IEEE安全和隐私研讨会。</p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://blog.csdn.net/wojiuguowei/article/details/79377228" target="_blank" rel="noopener">伙伴分配器的一个极简实现</a></p>
+<p>[2] <a href="https://www.freebuf.com/column/133871.html" target="_blank" rel="noopener">神乎其神的Rowhammer</a></p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>System Security</tag>
+        <tag>Rowhammer attack</tag>
       </tags>
   </entry>
 </search>

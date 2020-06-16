@@ -76,7 +76,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">23</span>
+            <span class="post-count">1.3k</span>
         </span>
     </span>
 
@@ -85,7 +85,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">1 min</span>
+            <span class="post-count">4 min</span>
         </span>
     </span>
 </div>
@@ -96,6 +96,8 @@
 
     
     
+    <div class="tocbot"></div>
+
 
 
 
@@ -108,13 +110,63 @@
       
 
       
-      <ul>
-<li>研究背景</li>
-<li>解决问题</li>
-<li>解决方法与步骤</li>
-<li>试验评价</li>
-<li>相关工作</li>
+      <div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://dl.acm.org/doi/epdf/10.1145/3035918.3056101" target="_blank" rel="noopener">Aurora</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Amazon</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">分布式数据库</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">数据库</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">致力于构建一个分布式数据库</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li><p>研究背景</p>
+</li>
+<li><p>解决问题</p>
+</li>
+<li><p>解决方法与步骤</p>
+</li>
+<li><p>试验评价</p>
+</li>
+<li><p>相关工作</p>
+<hr>
+<h3 id="研究背景-为什么出现Aurora？"><a href="#研究背景-为什么出现Aurora？" class="headerlink" title="研究背景 为什么出现Aurora？"></a>研究背景 为什么出现Aurora？</h3></li>
 </ul>
+<p>&emsp; &emsp; Aurora是亚马逊云服务AWS中的关系型数据库服务，主要面向OLTP场景。 <strong>Aurora</strong>基本设计理念是在云上环境下，数据库的最大瓶颈不再是计算或者存储资源，而是网络，因此基于一套存储计算分离架构，将日志处理下推到分布式存储层，通过架构上的优化来解决网络瓶颈。 </p>
+<p>&emsp; &emsp; 在云上环境下，存储计算分离作为解决系统弹性和伸缩性的方案越来越普遍。广义来说，任何数据库，底下文件系统挂一个分布式存储，即可以认为做到了存储计算分离。通过存储计算分离，可以透明添加存储节点，剔除故障节点，进行故障切换，扩展存储空间等。在这个背景下，IO不再成为数据库的瓶颈，因为IO压力可以打散在多个存储节点上，反而是<strong>网络成为瓶颈</strong>，因为数据库实例与所有存储节点的交互都需要通过网络，尤其是为了提升数据库性能，数据库实例与存储节点可能是并行交互的，这进一步加重了网络压力。</p>
+<p>&emsp; &emsp; 传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。比如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。另外一个我们熟悉场景是事务提交操作(IO写操作)，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。 <strong>传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的。</strong></p>
+<p>&emsp; &emsp; 本文介绍的Aurora是一个云上环境全新的数据库服务可以很好的解决上述传统数据库遇到的问题。 <strong>它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。</strong> Aurora体系下的数据库实例仍然包含了大部分核心功能，比如查询处理，事务，锁，缓存管理，访问接口和undo日志管理等；但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
+<h3 id="Aurora的系统架构"><a href="#Aurora的系统架构" class="headerlink" title="Aurora的系统架构"></a>Aurora的系统架构</h3><h3 id="存储系统的设计"><a href="#存储系统的设计" class="headerlink" title="存储系统的设计"></a>存储系统的设计</h3><h3 id="故障恢复"><a href="#故障恢复" class="headerlink" title="故障恢复"></a>故障恢复</h3><h3 id="性能"><a href="#性能" class="headerlink" title="性能"></a>性能</h3><h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>&emsp; &emsp;Aurora诞生的原因是在弹性伸缩的云环境下，传统的高吞吐<strong>OLTP</strong>数据库既不能保证可用性，又不能保证持久性。 <strong>Aurora</strong>的关键点在于将传统数据库中的存储与计算分离，具体而言，将日志部分下推到一个独立的分布式存储服务层。由于这种分离架构下，所有IO操作都是通过网络，网络将成为最大的瓶颈，因此Aurora集中精力优化网络以便提高系统吞吐能力。Aurora依靠Quorum模型，在性能影响可控的前提下，解决云环境下的各种异常错误。在Aurora中，日志处理技术减少了I/O写放大，异步提交协议避免了同步等待，同时分离的存储服务层还避免了离线故障恢复和检查点操作。</p>
+<p>&emsp; &emsp;Aurora相对于传统数据库有三大优势，首先，底层数据库存储是一个分布式存储服务，可以轻松应对故障；其次，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
 
       
       <!-- reward -->
