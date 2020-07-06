@@ -9,7 +9,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    RAMBleed Reading Bits in Memory Without Accessing Them |  MYKRobin&#39;S BLOG
+    Dancing with Wolves |  MYKRobin&#39;S BLOG
   </title>
   <meta name="generator" content="hexo-theme-ayer">
   
@@ -44,7 +44,7 @@
   <div id="app">
     <main class="content on">
       <section class="outer">
-  <article id="post-RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them" class="article article-type-post" itemscope
+  <article id="post-Dancing-with-Wolves" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -52,7 +52,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  RAMBleed Reading Bits in Memory Without Accessing Them
+  Dancing with Wolves
 </h1>
  
 
@@ -61,12 +61,12 @@
 
     
     <div class="article-meta">
-      <a href="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/" class="article-date">
-  <time datetime="2020-06-15T10:36:03.000Z" itemprop="datePublished">2020-06-15</time>
+      <a href="/2020/06/27/Dancing-with-Wolves/" class="article-date">
+  <time datetime="2020-06-27T06:54:29.000Z" itemprop="datePublished">2020-06-27</time>
 </a>
       
   <div class="article-category">
-    <a class="article-category-link" href="/categories/paper/">paper</a> / <a class="article-category-link" href="/categories/paper/Security-and-Privacy/">Security and Privacy</a>
+    <a class="article-category-link" href="/categories/paper/">paper</a> / <a class="article-category-link" href="/categories/paper/VEE/">VEE</a>
   </div>
 
       
@@ -76,7 +76,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">2.1k</span>
+            <span class="post-count">1.7k</span>
         </span>
     </span>
 
@@ -85,7 +85,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">7 min</span>
+            <span class="post-count">6 min</span>
         </span>
     </span>
 </div>
@@ -123,72 +123,90 @@
 <tr>
 <td style="text-align:center">1</td>
 <td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://rambleed.com/docs/20190603-rambleed-web.pdf" target="_blank" rel="noopener">RAMBleed Reading Bits in Memory Without Accessing Them</a></td>
+<td style="text-align:center"><a href="https://dl.acm.org/doi/pdf/10.1145/3050748.3050750" target="_blank" rel="noopener">Dancing with wolves</a></td>
 </tr>
 <tr>
 <td style="text-align:center">2</td>
 <td style="text-align:center">作者信息</td>
-<td style="text-align:center">University of Michigan;Graz University of Technology;University of Adelaide and Data61</td>
+<td style="text-align:center">Liang Deng,Nanjing University</td>
 </tr>
 <tr>
 <td style="text-align:center">3</td>
 <td style="text-align:center">核心内容</td>
-<td style="text-align:center">Rowhammer attack,Bit Flips</td>
+<td style="text-align:center">对非可信的VMM进行事件监测</td>
 </tr>
 <tr>
 <td style="text-align:center">4</td>
 <td style="text-align:center">研究领域</td>
-<td style="text-align:center">Microarchitecture attacks</td>
+<td style="text-align:center">检测</td>
 </tr>
 <tr>
 <td style="text-align:center">5</td>
 <td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文利用DRAM中临位的比特反转(bit flips)所得到的信息，推断出内存中的数据项，并依次读取目标信息。</td>
-</tr>
-<tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">扩展信息</td>
-<td style="text-align:center"><a href="https://rambleed.com/" target="_blank" rel="noopener">RAMBleed</a></td>
+<td style="text-align:center">通过ASR与IPR技术，ED-monitor可以及时、频繁地对VMM的监测</td>
 </tr>
 </tbody>
 </table>
 </div>
-<h3 id="Rowhammer-Attack"><a href="#Rowhammer-Attack" class="headerlink" title="Rowhammer Attack"></a>Rowhammer Attack</h3><p>&emsp;&emsp;Rowhammer比特翻转攻击是指利用临近内存单元之间电子的互相影响，在足够多的访问次数后让某个单元的值从1变成0，反之亦然。这种攻击可以在不访问目标内存区域的前提下使其产生数据错误。 这次的攻击与操作系统和软件无关，纯粹是硬件上的漏洞导致的。</p>
-<p>&emsp;&emsp;这是个特别针对Memory的攻击技术，但不是缓冲区破坏或溢出攻击。一般的计算机Memory介质中，每个存储单元（晶体管+电容器）存放1bit数据，这个比特位要么是0，要么是1——存储单元中充满电子表示1，清空表示0。内存就是由上亿这样的存储单元构成的，数据也因此得以存储。</p>
-<p>&emsp;&emsp;不过电容器会泄露，一个电容器充满电子后，只需要几毫秒就会泄露殆尽。这就要求CPU（内存控制器）对电容进行充电，让“1”这个值能够保持住。整个过程是由内存控制器先读取电容器中的值，然后再把数据写回去。这种刷新操作，每秒会执行几千次。</p>
-<p>&emsp;&emsp;内存容量正在大幅度上涨，所以存储比特位的电容器也就越来越小，排列越来越近。要防止相邻的电容之间相互干扰，难度也就变得更大。如果能够快速、反复访问一排电容，相邻行的电容更容易产生干扰错误和所谓的“比特位翻转”，也就是0变成1。</p>
-<p>&emsp;&emsp;其实正常的数据读写一般是不会发生比特位翻转的，可是如果对某些行进行<strong>反复读写</strong>，问题就有可能产生。2014年卡内基梅陇大学的研究人员层发表过一篇论文，题为《无访问情况下的内存比特位翻转——DRAM干扰行错误的试验研究》，其本质是通过机器码指令CLFUSH或Cache Line Flush，强制进行这种比特位的读取和更新。据说利用这种方式，可引起大量比特位翻转。</p>
-<p>&emsp;&emsp;利用比特位翻转，很多事情都可以做，比如说执行未经授权的代码。这就是所谓的Rowhammer。这是一种颠覆人类对安全认知的攻击技术，软件层面几乎解决无望。先前已经有研究人员演示，如何用Rowhammer来进行提权，以及打破安全沙盒。</p>
-<p>&emsp;&emsp;不过看原理就知道，这种攻击实在有够理想化，存在诸多不确定性，因为攻击者根本无法精准控制比特位如何翻转。比如说，这种攻击对数据所在的内存位置首先就有要求，这样才能实施内存翻转：但敏感数据存储在这些位置的几率可能并不算高。</p>
-<h3 id="RAMBleed概况"><a href="#RAMBleed概况" class="headerlink" title="RAMBleed概况"></a>RAMBleed概况</h3><p>&emsp;&emsp;该攻击<strong>基于位翻转漏洞Rowhammer</strong>，可绕过ECC机制，允许黑客使用普通用户权限从OpenSSH服务器中提取签名密钥。黑客通过观察Rowhammer引发的位翻转，<strong>可推断出附近DRAM行中的值，</strong>进而读取其它进程中的物理内存。</p>
-<h3 id="获取物理地址"><a href="#获取物理地址" class="headerlink" title="获取物理地址"></a>获取物理地址</h3><p>&emsp;&emsp;该攻击的重点是获取到虚拟地址到物理地址之间的映射。</p>
-<h4 id="伙伴算法"><a href="#伙伴算法" class="headerlink" title="伙伴算法"></a>伙伴算法</h4><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/buddy-memory-allocation.jpg" width="500px" height="300px"></p>
-<p>首先我们假设我们一个内存块有1024K，当我们需要给A分配70K内存的时候，</p>
+<h3 id="Catalog"><a href="#Catalog" class="headerlink" title="Catalog"></a>Catalog</h3><p>[TOC]</p>
+<h3 id="main-idea"><a href="#main-idea" class="headerlink" title="main idea"></a>main idea</h3><p>&emsp;&emsp;VMM的执行权限最高，一旦VMM受到威胁，那么其所处的整个云环境都会受到威胁。因此本文目标是对云计算中非可信的VMM实时攻击进行事件驱动监控。为了保证VMM事件监控的可靠性，需要保证monitor自身的可靠。在具体实现过程中，将VMM的特权级指令清空，并转移到monitor执行。通过IPR实现对VMM特权级指令的拦截，通过ASR技术防止VMM篡改hook函数位置和VMM自身的代码。</p>
+<p>&emsp;&emsp;Q: 为什么要提供事件监测？</p>
+<p>&emsp;&emsp;A: 因为对于瞬时攻击而言，仅通过轮询的方式对VMM进行完整性监测，很难捕捉到攻击的踪迹，但是基于事件的方式则可以对攻击所触发的事件进行拦截。</p>
+<p>本文是国家自然基金项目支持，代码并未开源。</p>
+<h3 id="ED-monitor"><a href="#ED-monitor" class="headerlink" title="ED-monitor"></a>ED-monitor</h3><p>&emsp;&emsp;实现事件监控对monitor的要求：monitor与VMM具有相同的执行权限（避免了不同权限之间转换带来的性能损失），monitor需要及时频繁地被调用。</p>
+<p>&emsp;&emsp;读到这里，感觉再往下深入就是解决几个问题：</p>
 <ol>
-<li>我们发现1024K的一半大于70K，然后我们就把1024K的内存分成两半，一半512K。</li>
-<li>然后我们发现512K的一半仍然大于70K，于是我们再把512K的内存再分成两半，一半是128K。</li>
-<li>此时，我们发现128K的一半小于70K，于是我们就分配为A分配128K的内存。</li>
+<li><p>如何实现ASR？</p>
+</li>
+<li><p>如何实现IPR？</p>
+</li>
+<li><p>如何触发monitor？</p>
+<p>当需要在VMM中调用特权级指令的时候，会对monitor进行调用。</p>
+</li>
+<li><p>如何保证monitor的完整性？</p>
+<p>分为monitor memory完整性、控制流完整性和定制VMM调用monitor接口实现。</p>
+</li>
+<li><p>如何保证VMM不对自身hook函数的篡改？对hypervisor所有事件添加hook？</p>
+<p>采用W+X mapping policy对code hook的保护；</p>
+<p>使用SPT保护data hook.</p>
+</li>
+<li><p>安全性分析？</p>
+<p>几种保护机制可以满足安全的需求。可以实现对特权级指令的拦截、对其验证、防止对monitor的篡改，从而保证了monitor的完整性。IPR与ASR可以实现对原型的保护。</p>
+</li>
+<li><p>原型实现？</p>
+</li>
 </ol>
-<p>&emsp;后面的，B，C，D都这样，而释放内存时，则会把相邻的块一步一步地合并起来（合并也必需按分裂的逆操作进行合并）。</p>
-<p>&emsp;&emsp;论文<a href="http://export.arxiv.org/pdf/1511.08756" target="_blank" rel="noopener">DRAMA</a>中提到只要获得了物理上连续的$2MiB$空间，采用反向工程即可获取低22位物理空间地址。</p>
-<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片13.jpg" width="600px" height="450px"></p>
-<p>&emsp;&emsp;基于Linux内存的伙伴分配算法，分配空间大小为$4KiB*2^N$，此处取$N = 10$,即分配$4MiB$空间，并将此 $4MiB$ 物理空间分裂为两个 $2MiB$ 的物理空间，通过$MMap$系统调用，消耗掉前面低于$2MiB$的存储空间，最后剩余的空间一定是一个连续的 $2MiB$ 的物理空间。</p>
-<h3 id="内存风水逆转"><a href="#内存风水逆转" class="headerlink" title="内存风水逆转"></a>内存风水逆转</h3><p>&emsp;&emsp;针对Rowhammer的内存位置限制，有人开发出一种名为 <a href="https://www.usenix.org/system/files/conference/usenixsecurity16/sec16_paper_razavi.pdf" target="_blank" rel="noopener">Flip Feng Shui</a>（风水翻转）的攻击技术，这本质上也是Rowhammer。这种攻击就是篡改deduplication操作——deduplication在云端主机中应用得很常见，这种技术可让两个或者更多虚拟主机共享特定的数据块，起到节约内存资源的作用。</p>
-<p>&emsp;&emsp;Flip Feng Shui在<strong>物理内存</strong>上做手脚，可致加密密钥和其他敏感数据存储到<strong>内存特定的位置</strong>——这些位置就很容易受Rowhammer的影响了。所以才叫风水翻转，就是让数据在内存中的“风水”位置变更好，Rowhammer攻击变得更可靠。</p>
-<h3 id="RAMBleed攻击"><a href="#RAMBleed攻击" class="headerlink" title="RAMBleed攻击"></a>RAMBleed攻击</h3><h4 id="比特翻转"><a href="#比特翻转" class="headerlink" title="比特翻转"></a>比特翻转</h4><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片11.jpg" width="600px" height="450px"></p>
-<p>&emsp;&emsp;本文提到，在$Row1$与$Row3$加载相同的目标内容，并对其进行锤击操作，即Rowhammer攻击，则会使得$Row2$中对应的比特位发生比特翻转。经过试验证明，当$Row3-Row2-Row1$ 存储内容为$0-1-0$时，此时在Rowhammer攻击下很有可能发生比特翻转，而当$Row3-Row2-Row1$ 存储内容为$1-1-1$时，此时在Rowhammer攻击下发生比特翻转的可能性很小，因此，基于两种概率大小的不同，可以判断出目标信息中存储的绝大多数信息内容。其中$Row2$中存储的是已知内容。</p>
-<h4 id="Frame-Feng-Shui"><a href="#Frame-Feng-Shui" class="headerlink" title="Frame Feng Shui"></a>Frame Feng Shui</h4><p>&emsp;&emsp;上文提到，Feng Shui可以将目标信息加载到指定的存储空间中。如下图所示，红色部分存储目标信息，$A0,A1,A2$ 存储攻击者内容，因此根据比特翻转是否发生，则<strong>很有可能</strong>推断出指定比特位存储的信息。</p>
-<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片17.jpg" width="600px" height="450px"></p>
-<h4 id="RAMBleed-on-ECC-Memory"><a href="#RAMBleed-on-ECC-Memory" class="headerlink" title="RAMBleed on ECC Memory"></a>RAMBleed on ECC Memory</h4><p>&emsp;&emsp;ECC Memory指的是Error-Correcting Code Memory，DRAM的纠错机制。</p>
-<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片21.jpg" width="600px" height="450px"></p>
-<p>&emsp;&emsp;在<a href="https://www.computer.org/csdl/pds/api/csdl/proceedings/download-article/19skfwyNp5e/pdf?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjc2RsX2FwaSIsImF1ZCI6ImNzZGxfYXBpX2Rvd25sb2FkX3Rva2VuIiwic3ViIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImVtYWlsIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImV4cCI6MTU5MjMxODY5OX0.uN4RLcw4bjEbBeqINhfDoXY7dyJM2-GWgE90zZJt2y4" target="_blank" rel="noopener">ECCPloit</a>这篇论文中指出，比特纠错所产生的时间延迟是十分明显的，这种情况下可根据纠错产生的时间延迟判断是否发生了比特翻转。</p>
-<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片19.jpg" width="600px" height="450px"></p>
-<p>&emsp;&emsp;相对来说，采用了ECC纠错的方式，获取到的结果更可信，而没有采取比特纠错方式获取的结果是在一定程度上可信的。本文通过实验测得，通过Feng Shui方式，成功将目标信息加载到指定存储位置也是有一定概率的，文中提到这个概率在83%， 通过Rowhammer攻击获取到比特翻转成功的概率为82%，因此，最终获取到目标信息的量在68%。由于此攻击针对的是秘钥信息，获取的秘钥信息量在27%以上，就可成功破解，因此，68%的信息量足以支持对秘钥的破译。综上，此方式是行得通的。</p>
-<p>&emsp;&emsp;本文的目的，旨在阐述这种攻击方式的行之有效，因此并未对其产生的额外代价、时间成本考虑在内。</p>
-<p>&emsp;&emsp;研究人员已向英特尔、AMD、OpenSSH、微软、苹果和红帽通报了调查结果，本论文发表在2020年5月举行的第41届IEEE安全和隐私研讨会。</p>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://blog.csdn.net/wojiuguowei/article/details/79377228" target="_blank" rel="noopener">伙伴分配器的一个极简实现</a></p>
-<p>[2] <a href="https://www.freebuf.com/column/133871.html" target="_blank" rel="noopener">神乎其神的Rowhammer</a></p>
-
+<h3 id="0-Abstract"><a href="#0-Abstract" class="headerlink" title="0 Abstract"></a>0 Abstract</h3><p>高风险漏洞可能会使VMMS完全受损</p>
+<p>（这里提出的目的是说明在非信任环境中进行检测是十分必要的）</p>
+<p>VMM拥有最高执行权限，如果它被攻击的话，将会威胁整个环境，因此对VMM进行检测是必要的。</p>
+<p>main idea: 对云计算中非可信的VMM进行事件监控，不需要比VMM更高的特权级别也不需要特殊硬件的支持。</p>
+<h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h3><p>监控器应与VMM 处于相同的特权级别，并且在之间的转换上不能产生大量的时间代价</p>
+<p>且为了实现通过监控器就能捕获VMM的事件，需要保证监控器本身的完整性以及能够获取到VMM的事件，此时认为VMM是处于非可信状态的。</p>
+<p>Q: SMM不能读取MMU的配置，所以不适格作为事件驱动器的实现，也就是事件驱动监控器必须要获得MMU的配置？</p>
+<p>Q：这种基于事件驱动的监控，与时间依赖的关系？</p>
+<p>瞬时攻击能不能进行？</p>
+<p>本意：如果及时并且频繁的调用该监控器，那么就可以阻止瞬时攻击？</p>
+<p>当事件被触发就可以调用monitor，从而对VMM进行保护？</p>
+<p>当VMM访问监控器数据的时候，将会及时地调用监控程序进行完整性评估</p>
+<h3 id="2-Overview"><a href="#2-Overview" class="headerlink" title="2 Overview"></a>2 Overview</h3><h4 id="2-1-Threat-model"><a href="#2-1-Threat-model" class="headerlink" title="2.1 Threat model"></a>2.1 Threat model</h4><p>&emsp;&emsp;认为威胁来自于VMM，VMM拥有最高的执行权限，而且能够获取到内存或者磁盘中任意数据。如果VMM受到攻击的话，则攻击者具备VMM的权限，威胁整个机器。不考虑硬件威胁，开机过程也受信任。</p>
+<h4 id="2-2-Eventdriven-VMM-Monitoring"><a href="#2-2-Eventdriven-VMM-Monitoring" class="headerlink" title="2.2 Eventdriven VMM Monitoring"></a>2.2 Eventdriven VMM Monitoring</h4><p>hook 函数</p>
+<p>做什么的？</p>
+<p>钩子函数是置于VMM中的触发函数，目的是捕获指定的VMM事件行为，当产生这些行为的时候，VMM会运行钩子函数，从而激发对VMM完整性的检测。</p>
+<p>钩子函数通常如何设置？</p>
+<p>这些钩子函数可以是插入VMM代码中任意位置的代码挂钩（跳转指令），调用表内的数据挂钩或任何其他可以传输控制流的技术。</p>
+<h4 id="2-3-Placing-the-Monitor-in-the-Same-World"><a href="#2-3-Placing-the-Monitor-in-the-Same-World" class="headerlink" title="2.3 Placing the Monitor in the Same World"></a>2.3 Placing the Monitor in the Same World</h4><h4 id="2-4-Requirements-and-Challenges"><a href="#2-4-Requirements-and-Challenges" class="headerlink" title="2.4 Requirements and Challenges"></a>2.4 Requirements and Challenges</h4><p>保证ED-monitor 是受信任的，即保证monitor自身的完整性，该monitor不能被VMM篡改</p>
+<ol>
+<li><p>内存、控制流、入口</p>
+</li>
+<li><p>hook 函数的位置不应该别VMM篡改（这个如何实现？）【因为VMM有 最高执行权限】</p>
+</li>
+</ol>
+<h4 id="2-5-Our-Approach-Multual-Protection"><a href="#2-5-Our-Approach-Multual-Protection" class="headerlink" title="2.5 Our Approach: Multual-Protection"></a>2.5 Our Approach: Multual-Protection</h4><p>Q:这里写的比较简略，地址空间随机化如何能保证code和data？但VMM具备了最高执行权限，会有效果吗？（应用级别攻击）</p>
+<p>下文提到，VMM的权限可以获取到随机化后的monitor的remap，因此目前的ASR对事件的监控可能是无效的。本文的想法是限制VMM的特权指令，并让monitor代替执行最高权限。（这样VMM中进行最高权限的操作将会被monitor捕获）</p>
+<p>本文的解决方法是：同时使用ASR和本文提出的IPR（基于工具的指令限制）方法，IPR通过ASR保证对VMM最高权限操作的拦截与验证，同时ASR基于IPR减轻部分威胁（来自于谁的威胁？）</p>
+<p>ASR：这种技术主要是对进程的表、堆、主程序代码、静态数据段、共享库等所在的地址进行随机化。如果某些代码的位置固定，那么一份攻击成功的话，就可以应用到其他机器继续进行攻击。因此ASR技术可以降低攻击成功的概率，并且使得攻击难以移植。</p>
+<p>另：一种技术叫做ALSR，Address space layout randomization，地址空间布局随机化</p>
+<h3 id="3-Design-of-Mutual-Protection"><a href="#3-Design-of-Mutual-Protection" class="headerlink" title="3 Design of Mutual-Protection"></a>3 Design of Mutual-Protection</h3><h4 id="3-1-Instrumentation-based-Privilege-Restriction"><a href="#3-1-Instrumentation-based-Privilege-Restriction" class="headerlink" title="3.1 Instrumentation-based Privilege Restriction"></a>3.1 Instrumentation-based Privilege Restriction</h4><h5 id="3-1-1-Interception-of-Privileged-Instruction-Execution"><a href="#3-1-1-Interception-of-Privileged-Instruction-Execution" class="headerlink" title="3.1.1 Interception of Privileged Instruction Execution"></a>3.1.1 Interception of Privileged Instruction Execution</h5><h5 id="3-1-2-Interception-of-MMU-Configuration"><a href="#3-1-2-Interception-of-MMU-Configuration" class="headerlink" title="3.1.2 Interception of MMU Configuration"></a>3.1.2 Interception of MMU Configuration</h5><h5 id="3-1-3-Interception-of-Interrupt-and-Exception-Handling"><a href="#3-1-3-Interception-of-Interrupt-and-Exception-Handling" class="headerlink" title="3.1.3 Interception of Interrupt and Exception Handling"></a>3.1.3 Interception of Interrupt and Exception Handling</h5><h5 id="3-1-4-Interception-of-IOMMU-Configuration"><a href="#3-1-4-Interception-of-IOMMU-Configuration" class="headerlink" title="3.1.4 Interception of IOMMU Configuration"></a>3.1.4 Interception of IOMMU Configuration</h5><h5 id="3-1-5-Interception-of-Hardware-Virtualization-Configuration"><a href="#3-1-5-Interception-of-Hardware-Virtualization-Configuration" class="headerlink" title="3.1.5 Interception of Hardware Virtualization Configuration"></a>3.1.5 Interception of Hardware Virtualization Configuration</h5><h4 id="3-2-Address-Space-Randomization"><a href="#3-2-Address-Space-Randomization" class="headerlink" title="3.2 Address Space Randomization"></a>3.2 Address Space Randomization</h4><h5 id="3-2-1-Possible-Attacks"><a href="#3-2-1-Possible-Attacks" class="headerlink" title="3.2.1 Possible Attacks"></a>3.2.1 Possible Attacks</h5><h5 id="3-2-2-Preventing-ASR-bypass-Attacks"><a href="#3-2-2-Preventing-ASR-bypass-Attacks" class="headerlink" title="3.2.2 Preventing ASR-bypass Attacks"></a>3.2.2 Preventing ASR-bypass Attacks</h5><h5 id="3-2-3-Preventing-Software-level-Information-Leaks"><a href="#3-2-3-Preventing-Software-level-Information-Leaks" class="headerlink" title="3.2.3 Preventing Software-level Information Leaks"></a>3.2.3 Preventing Software-level Information Leaks</h5><h5 id="3-2-4-Preventing-Hardware-level-Information-Leaks"><a href="#3-2-4-Preventing-Hardware-level-Information-Leaks" class="headerlink" title="3.2.4 Preventing Hardware-level Information Leaks"></a>3.2.4 Preventing Hardware-level Information Leaks</h5><h5 id="3-2-5-Preventing-Brute-force-Attacks"><a href="#3-2-5-Preventing-Brute-force-Attacks" class="headerlink" title="3.2.5 Preventing Brute-force Attacks"></a>3.2.5 Preventing Brute-force Attacks</h5><h5 id="3-2-6-Probabilistic-Protection"><a href="#3-2-6-Probabilistic-Protection" class="headerlink" title="3.2.6 Probabilistic Protection"></a>3.2.6 Probabilistic Protection</h5><h3 id="4-Trusted-Event-driven-VMM-Monitoring"><a href="#4-Trusted-Event-driven-VMM-Monitoring" class="headerlink" title="4 Trusted Event-driven VMM Monitoring"></a>4 Trusted Event-driven VMM Monitoring</h3><h4 id="4-1-Protection-of-Hook-Placement"><a href="#4-1-Protection-of-Hook-Placement" class="headerlink" title="4.1 Protection of Hook Placement"></a>4.1 Protection of Hook Placement</h4><h4 id="4-2-Assurance-of-ED-monitor’s-Integrity"><a href="#4-2-Assurance-of-ED-monitor’s-Integrity" class="headerlink" title="4.2 Assurance of ED-monitor’s Integrity"></a>4.2 Assurance of ED-monitor’s Integrity</h4><h4 id="4-3-ED-monitor-API"><a href="#4-3-ED-monitor-API" class="headerlink" title="4.3 ED-monitor API"></a>4.3 ED-monitor API</h4><h3 id="5-Prototype-Implementation"><a href="#5-Prototype-Implementation" class="headerlink" title="5 Prototype Implementation"></a>5 Prototype Implementation</h3><h4 id="5-1-Offline-Code-Instrumentation"><a href="#5-1-Offline-Code-Instrumentation" class="headerlink" title="5.1 Offline Code Instrumentation"></a>5.1 Offline Code Instrumentation</h4><h4 id="5-2-Initialization-Phase"><a href="#5-2-Initialization-Phase" class="headerlink" title="5.2 Initialization Phase"></a>5.2 Initialization Phase</h4><h4 id="5-3-Paravirtualization-Interface"><a href="#5-3-Paravirtualization-Interface" class="headerlink" title="5.3 Paravirtualization Interface"></a>5.3 Paravirtualization Interface</h4><h4 id="5-4-Loadable-Kernel-Modules"><a href="#5-4-Loadable-Kernel-Modules" class="headerlink" title="5.4 Loadable Kernel Modules"></a>5.4 Loadable Kernel Modules</h4><h3 id="6-Security-Analysis"><a href="#6-Security-Analysis" class="headerlink" title="6 Security Analysis"></a>6 Security Analysis</h3><h4 id="6-1-Subverting-IPR"><a href="#6-1-Subverting-IPR" class="headerlink" title="6.1 Subverting IPR"></a>6.1 Subverting IPR</h4><h5 id="6-1-1-Bypassing-the-Interception"><a href="#6-1-1-Bypassing-the-Interception" class="headerlink" title="6.1.1 Bypassing the Interception"></a>6.1.1 Bypassing the Interception</h5><h5 id="6-1-2-Subvertiong-the-Validation"><a href="#6-1-2-Subvertiong-the-Validation" class="headerlink" title="6.1.2 Subvertiong the Validation"></a>6.1.2 Subvertiong the Validation</h5><h4 id="6-2-Subverting-ASR"><a href="#6-2-Subverting-ASR" class="headerlink" title="6.2 Subverting ASR"></a>6.2 Subverting ASR</h4><h3 id="7-Performance-Evaluation"><a href="#7-Performance-Evaluation" class="headerlink" title="7 Performance Evaluation"></a>7 Performance Evaluation</h3><h4 id="7-1-Mutual-protection-Overhead"><a href="#7-1-Mutual-protection-Overhead" class="headerlink" title="7.1 Mutual-protection Overhead"></a>7.1 Mutual-protection Overhead</h4><h4 id="7-2-Monitoring-Overhead"><a href="#7-2-Monitoring-Overhead" class="headerlink" title="7.2 Monitoring Overhead"></a>7.2 Monitoring Overhead</h4><h5 id="7-2-1-ED-monitor-Innvocation-Overhead"><a href="#7-2-1-ED-monitor-Innvocation-Overhead" class="headerlink" title="7.2.1 ED-monitor Innvocation Overhead"></a>7.2.1 ED-monitor Innvocation Overhead</h5><h5 id="7-2-2-Overhead-of-VMM-Data-Integrity-Monitorning"><a href="#7-2-2-Overhead-of-VMM-Data-Integrity-Monitorning" class="headerlink" title="7.2.2 Overhead of VMM Data Integrity Monitorning"></a>7.2.2 Overhead of VMM Data Integrity Monitorning</h5><h3 id="8-Other-Related-Work"><a href="#8-Other-Related-Work" class="headerlink" title="8 Other Related Work"></a>8 Other Related Work</h3><h4 id="8-1-Isolation"><a href="#8-1-Isolation" class="headerlink" title="8.1 Isolation"></a>8.1 Isolation</h4><h4 id="8-2-TCB-Reduction-and-Privilege-Restriction"><a href="#8-2-TCB-Reduction-and-Privilege-Restriction" class="headerlink" title="8.2 TCB Reduction and Privilege Restriction"></a>8.2 TCB Reduction and Privilege Restriction</h4><h4 id="8-3-VM-monitoring"><a href="#8-3-VM-monitoring" class="headerlink" title="8.3 VM monitoring"></a>8.3 VM monitoring</h4><h4 id="8-4-Side-channel-attacks"><a href="#8-4-Side-channel-attacks" class="headerlink" title="8.4 Side-channel attacks"></a>8.4 Side-channel attacks</h4><h3 id="9-Conclusion"><a href="#9-Conclusion" class="headerlink" title="9 Conclusion"></a>9 Conclusion</h3>
       
       <!-- reward -->
       
@@ -252,14 +270,14 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ykma.gitee.io/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ykma.gitee.io/2020/06/27/Dancing-with-Wolves/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Rowhammer-attack/" rel="tag">Rowhammer attack</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/System-Security/" rel="tag">System Security</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" rel="tag">论文解读</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Detection/" rel="tag">Detection</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Event-driven/" rel="tag">Event-driven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/System-Security/" rel="tag">System Security</a></li></ul>
 
 
     </footer>
@@ -270,19 +288,10 @@
   
   <nav class="article-nav">
     
-      <a href="/2020/06/27/Dancing-with-Wolves/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            Dancing with Wolves
-          
-        </div>
-      </a>
     
-    
-      <a href="/2020/05/22/Ununtu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/" class="article-nav-link">
+      <a href="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">Ununtu18源码安装Xen4.11</div>
+        <div class="article-nav-title">RAMBleed Reading Bits in Memory Without Accessing Them</div>
       </a>
     
   </nav>
