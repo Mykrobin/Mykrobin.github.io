@@ -518,7 +518,7 @@
 <p>上两步make过程会等很久(使用 make dist -j8 可以加速，开启8个线程操作)</p>
 <p><strong>可能会遇到的问题</strong></p>
 <p>如果遇到error信息如下，预编译器不识别<strong>sizeof</strong> 函数导致</p>
-<p><img src="/2020/05/22/Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/1.png" alt></p>
+<p><img src="/2020/05/22/Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/1.png" width="500px" height="300px"></p>
 <p>解决方法：</p>
 <figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BITS_PER_LONG           (sizeof (unsigned long) * BITS_PER_BYTE)</span></span><br><span class="line">改成</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BITS_PER_LONG           (__SIZEOF_LONG__ * BITS_PER_BYTE)</span></span><br></pre></td></tr></table></figure>
 <p>解决完问题后，重复安装过程。</p>
@@ -542,7 +542,7 @@
 <p><strong>安装成功与否测试</strong></p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">xentop</span><br></pre></td></tr></table></figure>
 <p>如果出现下图的domain0则说明安装成功</p>
-<p><img src="/2020/05/22/Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/2.jpg" alt></p>
+<p><img src="/2020/05/22/Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/2.jpg" width="500px" height="100px"></p>
 <h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="www.baudi.com">Build Xen for ubuntu</a></p>
 <p>[2] <a href="https://wiki.xenproject.org/wiki/Compiling_Xen_From_Source" target="_blank" rel="noopener">Compiling Xen From Source</a></p>
 <p>[3] <a href="https://www.linuxidc.com/Linux/2018-08/153709.htm" target="_blank" rel="noopener">Ubuntu 18.04修改默认源为国内源</a></p>
@@ -781,6 +781,34 @@
 ]]></content>
       <tags>
         <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器部署Debian9+Xen4.11记录</title>
+    <url>/2020/07/17/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2Debian9-Xen4-11%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h3 id="服务器网络部署"><a href="#服务器网络部署" class="headerlink" title="服务器网络部署"></a>服务器网络部署</h3><h3 id="换源"><a href="#换源" class="headerlink" title="换源"></a>换源</h3><p>这里使用合适的国内源，进行挂载</p>
+<p>清华源</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;help&#x2F;debian&#x2F;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">apt update &amp;&amp; apt upgrade</span><br></pre></td></tr></table></figure>
+<h3 id="部署Xen4-11"><a href="#部署Xen4-11" class="headerlink" title="部署Xen4.11"></a>部署Xen4.11</h3><h4 id="配置依赖环境"><a href="#配置依赖环境" class="headerlink" title="配置依赖环境"></a>配置依赖环境</h4><p>install the <em>build-essential</em> package:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># apt-get install build-essential</span><br></pre></td></tr></table></figure>
+<p>install these additional debs:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># apt-get install bcc bin86 gawk bridge-utils iproute libcurl3 libcurl4-openssl-dev bzip2 transfig tgif </span><br><span class="line"># apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial</span><br><span class="line"># apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev </span><br><span class="line"># apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev</span><br><span class="line"># apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc</span><br></pre></td></tr></table></figure>
+<p>under Debian :</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># apt-get build-dep xen</span><br></pre></td></tr></table></figure>
+<p>failed to install (不安装的话，暂时没啥影响)</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># apt-get module-init-tools libjpeg62-dev</span><br></pre></td></tr></table></figure>
+<h4 id="下载Xen"><a href="#下载Xen" class="headerlink" title="下载Xen"></a>下载Xen</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;xenbits.xen.org&#x2F;xen.git</span><br></pre></td></tr></table></figure>
+<p>or </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">git clone -b stable-4.11 git:&#x2F;&#x2F;xenbits.xen.org&#x2F;xen.git</span><br></pre></td></tr></table></figure>
+<h4 id="安装Xen"><a href="#安装Xen" class="headerlink" title="安装Xen"></a>安装Xen</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">cd xen</span><br><span class="line">.&#x2F;configure</span><br><span class="line">make xen -j8</span><br><span class="line">make tools -j8</span><br><span class="line">make install-xen</span><br><span class="line">make install-tools</span><br><span class="line"># dpkg-divert --divert &#x2F;etc&#x2F;grub.d&#x2F;08_linux_xen --rename &#x2F;etc&#x2F;grub.d&#x2F;20_linux_xen (这句没执行)</span><br></pre></td></tr></table></figure>
+<h3 id="开启服务"><a href="#开启服务" class="headerlink" title="开启服务"></a>开启服务</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">sudo service xendomains start</span><br><span class="line">sudo service xencommons start or restart</span><br><span class="line">sudo update-rc.d xencommons defaults 19 18</span><br><span class="line">sudo update-rc.d xendomains defaults 21 20</span><br><span class="line">ldconfig</span><br></pre></td></tr></table></figure>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">xl list</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>服务器</tag>
+        <tag>Linux</tag>
+        <tag>Debian</tag>
       </tags>
   </entry>
 </search>

@@ -126,7 +126,7 @@
 <p>上两步make过程会等很久(使用 make dist -j8 可以加速，开启8个线程操作)</p>
 <p><strong>可能会遇到的问题</strong></p>
 <p>如果遇到error信息如下，预编译器不识别<strong>sizeof</strong> 函数导致</p>
-<p><img src="/2020/05/22/Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/1.png" alt></p>
+<p><img src="/2020/05/22/Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/1.png" width="500px" height="300px"></p>
 <p>解决方法：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BITS_PER_LONG           (sizeof (unsigned long) * BITS_PER_BYTE)</span></span><br><span class="line">改成</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BITS_PER_LONG           (__SIZEOF_LONG__ * BITS_PER_BYTE)</span></span><br></pre></td></tr></table></figure>
 <p>解决完问题后，重复安装过程。</p>
@@ -150,7 +150,7 @@
 <p><strong>安装成功与否测试</strong></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xentop</span><br></pre></td></tr></table></figure>
 <p>如果出现下图的domain0则说明安装成功</p>
-<p><img src="/2020/05/22/Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/2.jpg" alt></p>
+<p><img src="/2020/05/22/Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/2.jpg" width="500px" height="100px"></p>
 <h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="www.baudi.com">Build Xen for ubuntu</a></p>
 <p>[2] <a href="https://wiki.xenproject.org/wiki/Compiling_Xen_From_Source" target="_blank" rel="noopener">Compiling Xen From Source</a></p>
 <p>[3] <a href="https://www.linuxidc.com/Linux/2018-08/153709.htm" target="_blank" rel="noopener">Ubuntu 18.04修改默认源为国内源</a></p>
