@@ -9,7 +9,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    服务器部署Debian9+Xen4.11记录 |  MYKRobin&#39;S BLOG
+    Add a new Hypercall |  MYKRobin&#39;S BLOG
   </title>
   <meta name="generator" content="hexo-theme-ayer">
   
@@ -44,7 +44,7 @@
   <div id="app">
     <main class="content on">
       <section class="outer">
-  <article id="post-服务器部署Debian9-Xen4-11记录" class="article article-type-post" itemscope
+  <article id="post-Add-a-new-Hypercall" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -52,7 +52,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  服务器部署Debian9+Xen4.11记录
+  Add a new Hypercall
 </h1>
  
 
@@ -61,8 +61,8 @@
 
     
     <div class="article-meta">
-      <a href="/2020/07/17/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2Debian9-Xen4-11%E8%AE%B0%E5%BD%95/" class="article-date">
-  <time datetime="2020-07-17T02:11:25.000Z" itemprop="datePublished">2020-07-17</time>
+      <a href="/2020/07/19/Add-a-new-Hypercall/" class="article-date">
+  <time datetime="2020-07-19T01:17:57.000Z" itemprop="datePublished">2020-07-19</time>
 </a>
       
       
@@ -72,7 +72,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">826</span>
+            <span class="post-count">541</span>
         </span>
     </span>
 
@@ -81,7 +81,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">3 min</span>
+            <span class="post-count">2 min</span>
         </span>
     </span>
 </div>
@@ -106,47 +106,50 @@
       
 
       
-      <h3 id="服务器网络部署"><a href="#服务器网络部署" class="headerlink" title="服务器网络部署"></a>服务器网络部署</h3><p>目前遇到的这个问题可能不是普遍试用，但是在操作过程中的确遇到过。</p>
-<h4 id="网络接口设置"><a href="#网络接口设置" class="headerlink" title="网络接口设置"></a>网络接口设置</h4><p>目前，该服务器预设网络接口4个，但是，仔细查验后发现，只有一个网络接口连接了网线，因此如果没有恰当的设置后，会出现机器ping 不通网络的问题。</p>
-<p><strong>解决方法</strong></p>
-<p>在安装系统过程中，记录下四个网口的名称，如果安装完系统后，ping网关不成功的话，说明网口设置有问题，需要修改，否则不需要。</p>
-<p>网口配置文件 /etc/network/interfaces</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># The primary network interface</span><br><span class="line">allow-hotplug XXXX</span><br><span class="line">iface XXXX inet static</span><br></pre></td></tr></table></figure>
-<p>上述的XXXX为目标网口名称，更改为接入网线的口即可</p>
-<p>重启，ping网关，如果ping通，则OK</p>
-<h4 id="Ping-www-baidu-com"><a href="#Ping-www-baidu-com" class="headerlink" title="Ping www.baidu.com"></a>Ping www.baidu.com</h4><p>测试ping www.baidu.com失败</p>
-<p>可能是网关设置问题, /etc/resolv.conf</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">添加 namesever 8.8.8.8</span><br></pre></td></tr></table></figure>
-<p>修改完，再测试下，ok</p>
-<h3 id="换源"><a href="#换源" class="headerlink" title="换源"></a>换源</h3><p>这里使用合适的国内源，进行挂载</p>
-<p>清华源</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;help&#x2F;debian&#x2F;</span><br></pre></td></tr></table></figure>
-<p>修改 /etc/apt/sources.list  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch-updates main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch-backports main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch-backports main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian-security&#x2F; stretch&#x2F;updates main non-free</span><br><span class="line">contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian-security&#x2F; stretch&#x2F;updates main non-free</span><br><span class="line">contrib</span><br></pre></td></tr></table></figure>
-<p>更新操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update &amp;&amp; apt upgrade</span><br></pre></td></tr></table></figure>
-<h3 id="部署Xen4-11"><a href="#部署Xen4-11" class="headerlink" title="部署Xen4.11"></a>部署Xen4.11</h3><h4 id="配置依赖环境"><a href="#配置依赖环境" class="headerlink" title="配置依赖环境"></a>配置依赖环境</h4><p>install the <em>build-essential</em> package:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># apt-get install build-essential</span><br></pre></td></tr></table></figure>
-<p>install these additional debs:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># apt-get install bcc bin86 gawk bridge-utils iproute libcurl3 libcurl4-openssl-dev bzip2 transfig tgif </span><br><span class="line"># apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial</span><br><span class="line"># apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev </span><br><span class="line"># apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev</span><br><span class="line"># apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc</span><br></pre></td></tr></table></figure>
-<p>under Debian :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># apt-get build-dep xen</span><br></pre></td></tr></table></figure>
-<p>failed to install (不安装的话，暂时没啥影响)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># apt-get module-init-tools libjpeg62-dev</span><br></pre></td></tr></table></figure>
-<h4 id="下载Xen"><a href="#下载Xen" class="headerlink" title="下载Xen"></a>下载Xen</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;xenbits.xen.org&#x2F;xen.git</span><br></pre></td></tr></table></figure>
-<p>or </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone -b stable-4.11 git:&#x2F;&#x2F;xenbits.xen.org&#x2F;xen.git</span><br></pre></td></tr></table></figure>
-<h4 id="安装Xen"><a href="#安装Xen" class="headerlink" title="安装Xen"></a>安装Xen</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cd xen</span><br><span class="line">.&#x2F;configure</span><br><span class="line">make xen -j8</span><br><span class="line">make tools -j8</span><br><span class="line">make install-xen</span><br><span class="line">make install-tools</span><br><span class="line"># dpkg-divert --divert &#x2F;etc&#x2F;grub.d&#x2F;08_linux_xen --rename &#x2F;etc&#x2F;grub.d&#x2F;20_linux_xen (这句没执行)</span><br></pre></td></tr></table></figure>
-<p>更新grub (此时重启电脑会出现 xen hypervisor 信息)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">update-grub</span><br></pre></td></tr></table></figure>
-<p>此时，开机时应当记录下机器默认的开机顺序，方便后续设置系统重启进入带有hypervisor的系统</p>
-<h3 id="开启服务"><a href="#开启服务" class="headerlink" title="开启服务"></a>开启服务</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">sudo service xendomains start</span><br><span class="line">sudo service xencommons start or restart</span><br><span class="line">sudo update-rc.d xencommons defaults 19 18</span><br><span class="line">sudo update-rc.d xendomains defaults 21 20</span><br><span class="line">ldconfig</span><br></pre></td></tr></table></figure>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xl list</span><br></pre></td></tr></table></figure>
-<h3 id="再次设置-grub"><a href="#再次设置-grub" class="headerlink" title="再次设置 grub"></a>再次设置 grub</h3><p>根据首次重启后开机顺序，确定xen hypervisor的启动序号 n</p>
-<p>注意，序号从0开始计数，记录从上到下应当为0,1,2，$\cdots$</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">进入 &#x2F;etc&#x2F;default&#x2F;grub 文件</span><br><span class="line">更改 GRUB_DEFAULT &#x3D; x 为 GRUB_DEFAULT &#x3D; n</span><br><span class="line">更新内容</span><br><span class="line">update-grub</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
-<hr>
-<p>此文档记录了在集群上部署xen的方法，目的是为后面的分布式检测做准备。</p>
+      <p>当前使用的xen版本为Xen-4.11</p>
+<h3 id="修改Xen文件"><a href="#修改Xen文件" class="headerlink" title="修改Xen文件"></a>修改Xen文件</h3><p>在Xen-4.11中，仅对hypercall.c hypercall.h文件进行修改即可实现用户添加hypercall</p>
+<p>当前xen源码的顶级目录为Xen</p>
+<h4 id="修改xen-h"><a href="#修改xen-h" class="headerlink" title="修改xen.h"></a>修改xen.h</h4><p>目标文件位置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Xen&#x2F;xen&#x2F;include&#x2F;public&#x2F;xen.h</span><br></pre></td></tr></table></figure>
+<p>39号调用是给用户预留的，可以使用自己的hypercall替换掉预定义hypercall</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">  <span class="meta">#<span class="meta-keyword">define</span> __HYPERVISOR_tmem_op                 38</span></span><br><span class="line">+ <span class="meta">#<span class="meta-keyword">define</span> __HYPERVISOR_Alice_op                39</span></span><br></pre></td></tr></table></figure>
+<h4 id="修改hypercall-h"><a href="#修改hypercall-h" class="headerlink" title="修改hypercall.h"></a>修改hypercall.h</h4><p>目标文件位置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Xen&#x2F;xen&#x2F;include&#x2F;xen&#x2F;hypercall.h</span><br></pre></td></tr></table></figure>
+<p>添加内容</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">+ <span class="keyword">extern</span> <span class="keyword">int</span></span><br><span class="line">  do_Alice_op(<span class="keyword">void</span>);</span><br></pre></td></tr></table></figure>
+<h4 id="修改hypercall-c"><a href="#修改hypercall-c" class="headerlink" title="修改hypercall.c"></a>修改hypercall.c</h4><p>目标文件位置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Xen&#x2F;xen&#x2F;arch&#x2F;x86&#x2F;pv&#x2F;hypercall.c</span><br></pre></td></tr></table></figure>
+<p>添加内容</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">  COMPAT_CALL(callback_op),</span><br><span class="line">+ HYPERCALL(Alice_op),</span><br></pre></td></tr></table></figure>
+<p>目标文件位置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Xen&#x2F;xen&#x2F;arch&#x2F;x86&#x2F;hypercall.c</span><br></pre></td></tr></table></figure>
+<p>添加内容</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">  ARGS(arcg_1, <span class="number">1</span>),</span><br><span class="line">+ ARGS(Alice_op, <span class="number">0</span>), <span class="comment">// 这里0 对应do_Alice_op(void) 函数中参数个数</span></span><br></pre></td></tr></table></figure>
+<h4 id="函数实现"><a href="#函数实现" class="headerlink" title="函数实现"></a>函数实现</h4><p>hypercal如果是共用功能的话，可以放在 Xen/xen/common 下的函数中实现</p>
+<p>为了打印输出方便，测试函数放在了mm.c中实现</p>
+<p>目标文件位置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Xen&#x2F;xen&#x2F;arch&#x2F;x86&#x2F;mm.c</span><br></pre></td></tr></table></figure>
+<p>添加内容</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">+ <span class="function"><span class="keyword">int</span> <span class="title">do_Alice_op</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function">  </span>&#123;</span><br><span class="line">  	printk(<span class="string">"Alice Hypercall!\n"</span>);</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="重新编译xen"><a href="#重新编译xen" class="headerlink" title="重新编译xen"></a>重新编译xen</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">make xen -j8</span><br><span class="line">make tools -j8</span><br><span class="line">make install-xen</span><br><span class="line">make install-tools</span><br><span class="line">update-grub</span><br><span class="line">reboot</span><br></pre></td></tr></table></figure>
+<p>重启之后测试下添加的hypercall能不能正常被调用</p>
+<p>采用privcmd工具实现</p>
+<p><strong>编写privcmd.c文件</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/ioctl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;linux/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fcntl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;xenctrl.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;xen/sys/privcmd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> fd, ret;</span><br><span class="line">        <span class="keyword">char</span> * message;</span><br><span class="line">        <span class="keyword">privcmd_hypercall_t</span> alice_op=&#123;</span><br><span class="line">                __HYPERVISOR_Alice_op,</span><br><span class="line">                &#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>&#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        fd = <span class="built_in">open</span>(<span class="string">"/proc/xen/privcmd"</span>, O_RDWR);</span><br><span class="line">        <span class="keyword">if</span>(fd&lt;<span class="number">0</span>)&#123;</span><br><span class="line">                perror(<span class="string">"can't open /proc/xen/privcmd"</span>);</span><br><span class="line">                <span class="built_in">exit</span>(<span class="number">1</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">"privcmd's fd = %d\n"</span>, fd);</span><br><span class="line">        &#125;</span><br><span class="line">        ret = ioctl(fd, IOCTL_PRIVCMD_HYPERCALL, &amp;alice_op);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"ret = %d\n"</span>, ret);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gcc -o test privcmd.c</span><br></pre></td></tr></table></figure>
+<p>执行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;test</span><br></pre></td></tr></table></figure>
+<p>输出结果</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">privcmd&#39;s fd &#x3D; 3</span><br><span class="line">ret &#x3D; 0</span><br></pre></td></tr></table></figure>
+<p>注：如果ioctl()函数返回值为-1，说明出错</p>
+<p>查看日志信息</p>
+<p>命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xl dm</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(XEN) Bogus DMIBAR 0xfed18001 on 0000:00:00.0</span><br><span class="line">(XEN) Alice Hypercall!</span><br></pre></td></tr></table></figure>
+<p>当看到自定义输出的信息时，说明此hypercall调用正常！</p>
+<p>现在，按照此方法就可以调用hypecall了~</p>
 
       
       <!-- reward -->
@@ -211,14 +214,14 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ykma.gitee.io/2020/07/17/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2Debian9-Xen4-11%E8%AE%B0%E5%BD%95/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ykma.gitee.io/2020/07/19/Add-a-new-Hypercall/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Debian/" rel="tag">Debian</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8/" rel="tag">服务器</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hypervisor/" rel="tag">Hypervisor</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Virtualization/" rel="tag">Virtualization</a></li></ul>
 
 
     </footer>
@@ -229,19 +232,10 @@
   
   <nav class="article-nav">
     
-      <a href="/2020/07/17/Attacks-Directories-Not-Caches/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            Attacks Directories, Not Caches
-          
-        </div>
-      </a>
     
-    
-      <a href="/2020/07/16/%E6%9C%AC%E7%A7%91%E6%AF%95%E4%B8%9A%E6%B8%B8%E8%AE%B0/" class="article-nav-link">
+      <a href="/2020/07/18/RADAR/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">本科毕业游记</div>
+        <div class="article-nav-title">RADAR</div>
       </a>
     
   </nav>
