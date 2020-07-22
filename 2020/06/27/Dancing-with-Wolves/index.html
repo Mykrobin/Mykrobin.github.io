@@ -148,8 +148,7 @@
 </tbody>
 </table>
 </div>
-<h3 id="Catalog"><a href="#Catalog" class="headerlink" title="Catalog"></a>Catalog</h3><p>[TOC]</p>
-<h3 id="main-idea"><a href="#main-idea" class="headerlink" title="main idea"></a>main idea</h3><p>&emsp;&emsp;VMM的执行权限最高，一旦VMM受到威胁，那么其所处的整个云环境都会受到威胁。因此本文目标是对云计算中非可信的VMM实时攻击进行事件驱动监控。为了保证VMM事件监控的可靠性，需要保证monitor自身的可靠。在具体实现过程中，将VMM的特权级指令清空，并转移到monitor执行。通过IPR实现对VMM特权级指令的拦截，通过ASR技术防止VMM篡改hook函数位置和VMM自身的代码。</p>
+<h3 id="Catalog"><a href="#Catalog" class="headerlink" title="Catalog"></a>Catalog</h3><h3 id="main-idea"><a href="#main-idea" class="headerlink" title="main idea"></a>main idea</h3><p>&emsp;&emsp;VMM的执行权限最高，一旦VMM受到威胁，那么其所处的整个云环境都会受到威胁。因此本文目标是对云计算中非可信的VMM实时攻击进行事件驱动监控。为了保证VMM事件监控的可靠性，需要保证monitor自身的可靠。在具体实现过程中，将VMM的特权级指令清空，并转移到monitor执行。通过IPR实现对VMM特权级指令的拦截，通过ASR技术防止VMM篡改hook函数位置和VMM自身的代码。</p>
 <p>&emsp;&emsp;Q: 为什么要提供事件监测？</p>
 <p>&emsp;&emsp;A: 因为对于瞬时攻击而言，仅通过轮询的方式对VMM进行完整性监测，很难捕捉到攻击的踪迹，但是基于事件的方式则可以对攻击所触发的事件进行拦截。</p>
 <p>本文是国家自然基金项目支持，代码并未开源。</p>
