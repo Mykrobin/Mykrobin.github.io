@@ -9,7 +9,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    Dancing with Wolves |  MYKRobin&#39;S BLOG
+    TimeCrypt |  MYKRobin&#39;S BLOG
   </title>
   <meta name="generator" content="hexo-theme-ayer">
   
@@ -44,7 +44,7 @@
   <div id="app">
     <main class="content on">
       <section class="outer">
-  <article id="post-Dancing-with-Wolves" class="article article-type-post" itemscope
+  <article id="post-TimeCrypt" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -52,7 +52,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  Dancing with Wolves
+  TimeCrypt
 </h1>
  
 
@@ -61,12 +61,12 @@
 
     
     <div class="article-meta">
-      <a href="/2020/06/27/Dancing-with-Wolves/" class="article-date">
-  <time datetime="2020-06-27T06:54:29.000Z" itemprop="datePublished">2020-06-27</time>
+      <a href="/2020/07/22/TimeCrypt/" class="article-date">
+  <time datetime="2020-07-22T02:52:17.000Z" itemprop="datePublished">2020-07-22</time>
 </a>
       
   <div class="article-category">
-    <a class="article-category-link" href="/categories/paper/">paper</a> / <a class="article-category-link" href="/categories/paper/VEE/">VEE</a>
+    <a class="article-category-link" href="/categories/paper/">paper</a> / <a class="article-category-link" href="/categories/paper/NSDI/">NSDI</a>
   </div>
 
       
@@ -76,7 +76,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">1.7k</span>
+            <span class="post-count">3.4k</span>
         </span>
     </span>
 
@@ -85,7 +85,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">6 min</span>
+            <span class="post-count">11 min</span>
         </span>
     </span>
 </div>
@@ -114,98 +114,122 @@
 <table>
 <thead>
 <tr>
-<th style="text-align:center">序号</th>
+<th>序号</th>
 <th style="text-align:center">属性</th>
 <th style="text-align:center">内容</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">1</td>
+<td>1</td>
 <td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://dl.acm.org/doi/pdf/10.1145/3050748.3050750" target="_blank" rel="noopener">Dancing with wolves</a></td>
+<td style="text-align:center"><a href="https://www.usenix.org/system/files/nsdi20-paper-burkhalter.pdf" target="_blank" rel="noopener">TimeCrypt</a></td>
 </tr>
 <tr>
-<td style="text-align:center">2</td>
+<td>2</td>
 <td style="text-align:center">作者信息</td>
-<td style="text-align:center">Liang Deng,Nanjing University</td>
+<td style="text-align:center">1. <a href="https://people.inf.ethz.ch/burlukas/" target="_blank" rel="noopener">Lukas Burkhalter</a> Distributed Systems Group at ETH Zurich 苏黎世联邦理工学院分布式系统组研究助理；2. Sylvia Ratnasamy  Berkeley associate professor；3. Anwar Hithnawi is a researcher at the NetSys Lab at UC Berkeley, USA；4. Hossein Shafagh is a researcher at the Distributed Systems Group at ETH Zurich.</td>
 </tr>
 <tr>
-<td style="text-align:center">3</td>
+<td>3</td>
 <td style="text-align:center">核心内容</td>
-<td style="text-align:center">对非可信的VMM进行事件监测</td>
+<td style="text-align:center">时间序列流数据加密，用户访问控制</td>
 </tr>
 <tr>
-<td style="text-align:center">4</td>
+<td>4</td>
 <td style="text-align:center">研究领域</td>
-<td style="text-align:center">检测</td>
+<td style="text-align:center">同态加密，密码学，时间序列</td>
 </tr>
 <tr>
-<td style="text-align:center">5</td>
+<td>5</td>
 <td style="text-align:center">全文总览</td>
-<td style="text-align:center">通过ASR与IPR技术，ED-monitor可以及时、频繁地对VMM的监测</td>
+<td style="text-align:center">本文目的是构建一个对时间序列数据更细粒度的访问控制策略，可以实现数据的端到端共享，数据所有者可以对访问权限加以约束。</td>
+</tr>
+<tr>
+<td>6</td>
+<td style="text-align:center">补充介绍</td>
+<td style="text-align:center"><a href="https://timecrypt.io/" target="_blank" rel="noopener">https://timecrypt.io/</a></td>
+</tr>
+<tr>
+<td>7</td>
+<td style="text-align:center">开源代码</td>
+<td style="text-align:center"><a href="https://github.com/TimeCrypt/timecrypt" target="_blank" rel="noopener">https://github.com/TimeCrypt/timecrypt</a></td>
 </tr>
 </tbody>
 </table>
 </div>
-<h3 id="Catalog"><a href="#Catalog" class="headerlink" title="Catalog"></a>Catalog</h3><h3 id="main-idea"><a href="#main-idea" class="headerlink" title="main idea"></a>main idea</h3><p>&emsp;&emsp;VMM的执行权限最高，一旦VMM受到威胁，那么其所处的整个云环境都会受到威胁。因此本文目标是对云计算中非可信的VMM实时攻击进行事件驱动监控。为了保证VMM事件监控的可靠性，需要保证monitor自身的可靠。在具体实现过程中，将VMM的特权级指令清空，并转移到monitor执行。通过IPR实现对VMM特权级指令的拦截，通过ASR技术防止VMM篡改hook函数位置和VMM自身的代码。</p>
-<p>&emsp;&emsp;Q: 为什么要提供事件监测？</p>
-<p>&emsp;&emsp;A: 因为对于瞬时攻击而言，仅通过轮询的方式对VMM进行完整性监测，很难捕捉到攻击的踪迹，但是基于事件的方式则可以对攻击所触发的事件进行拦截。</p>
-<p>本文是国家自然基金项目支持，代码并未开源。</p>
-<h3 id="ED-monitor"><a href="#ED-monitor" class="headerlink" title="ED-monitor"></a>ED-monitor</h3><p>&emsp;&emsp;实现事件监控对monitor的要求：monitor与VMM具有相同的执行权限（避免了不同权限之间转换带来的性能损失），monitor需要及时频繁地被调用。</p>
-<p>&emsp;&emsp;读到这里，感觉再往下深入就是解决几个问题：</p>
-<ol>
-<li><p>如何实现ASR？</p>
+<h3 id="研究背景"><a href="#研究背景" class="headerlink" title="研究背景"></a>研究背景</h3><p>&emsp; &emsp; 许多的设备都可以在云端存储一些时间序列信息，在云环境中，许多的服务都可以获取到这些时间序列信息，这是对用户隐私的一种侵犯。而且随着物联网的到来，更加速了这些数据的生成。目前，人们提高了对隐私数据的重视程度，致力于保护这些数据的机密性。</p>
+<h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>本文是发表在NSDI‘20的一篇文章，目的是构建一个针对时序数据加密并且能够进行访问控制的系统。数据的加密与解密过程都存在与客户端，因此发送给服务器端（云平台）的数据都默认是加密的，数据加密防止了云平台对用户传输数据的窥探。</p>
+<h3 id="Background-Time-Series-Data"><a href="#Background-Time-Series-Data" class="headerlink" title="Background-Time Series Data"></a>Background-Time Series Data</h3><ol>
+<li><p>时间序列数据应用广泛：个人健康、农业、交通运输和智慧城市等</p>
 </li>
-<li><p>如何实现IPR？</p>
+<li><p>时间序列数据特征：</p>
+<p>a.只追加，产生频率高，存储占用多 </p>
+<p>b.高吞吐、需要可扩展 </p>
+<p>c.查询通常是基于时间范围考虑，满足用户在不同的时间粒度进行查询</p>
 </li>
-<li><p>如何触发monitor？</p>
-<p>当需要在VMM中调用特权级指令的时候，会对monitor进行调用。</p>
-</li>
-<li><p>如何保证monitor的完整性？</p>
-<p>分为monitor memory完整性、控制流完整性和定制VMM调用monitor接口实现。</p>
-</li>
-<li><p>如何保证VMM不对自身hook函数的篡改？对hypervisor所有事件添加hook？</p>
-<p>采用W+X mapping policy对code hook的保护；</p>
-<p>使用SPT保护data hook.</p>
-</li>
-<li><p>安全性分析？</p>
-<p>几种保护机制可以满足安全的需求。可以实现对特权级指令的拦截、对其验证、防止对monitor的篡改，从而保证了monitor的完整性。IPR与ASR可以实现对原型的保护。</p>
-</li>
-<li><p>原型实现？</p>
+<li><p>对时间序列数据的操作：</p>
+<p>a.查询通常用于汇总、统计 </p>
+<p>b.通常这些时间数据由机器产生且是大量连续的，数据价值随着时间的推移递减，一般最近的数据要比较早的数据价值高，因此要对较早的数据进行聚合操作。</p>
 </li>
 </ol>
-<h3 id="0-Abstract"><a href="#0-Abstract" class="headerlink" title="0 Abstract"></a>0 Abstract</h3><p>高风险漏洞可能会使VMMS完全受损</p>
-<p>（这里提出的目的是说明在非信任环境中进行检测是十分必要的）</p>
-<p>VMM拥有最高执行权限，如果它被攻击的话，将会威胁整个环境，因此对VMM进行检测是必要的。</p>
-<p>main idea: 对云计算中非可信的VMM进行事件监控，不需要比VMM更高的特权级别也不需要特殊硬件的支持。</p>
-<h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h3><p>监控器应与VMM 处于相同的特权级别，并且在之间的转换上不能产生大量的时间代价</p>
-<p>且为了实现通过监控器就能捕获VMM的事件，需要保证监控器本身的完整性以及能够获取到VMM的事件，此时认为VMM是处于非可信状态的。</p>
-<p>Q: SMM不能读取MMU的配置，所以不适格作为事件驱动器的实现，也就是事件驱动监控器必须要获得MMU的配置？</p>
-<p>Q：这种基于事件驱动的监控，与时间依赖的关系？</p>
-<p>瞬时攻击能不能进行？</p>
-<p>本意：如果及时并且频繁的调用该监控器，那么就可以阻止瞬时攻击？</p>
-<p>当事件被触发就可以调用monitor，从而对VMM进行保护？</p>
-<p>当VMM访问监控器数据的时候，将会及时地调用监控程序进行完整性评估</p>
-<h3 id="2-Overview"><a href="#2-Overview" class="headerlink" title="2 Overview"></a>2 Overview</h3><h4 id="2-1-Threat-model"><a href="#2-1-Threat-model" class="headerlink" title="2.1 Threat model"></a>2.1 Threat model</h4><p>&emsp;&emsp;认为威胁来自于VMM，VMM拥有最高的执行权限，而且能够获取到内存或者磁盘中任意数据。如果VMM受到攻击的话，则攻击者具备VMM的权限，威胁整个机器。不考虑硬件威胁，开机过程也受信任。</p>
-<h4 id="2-2-Eventdriven-VMM-Monitoring"><a href="#2-2-Eventdriven-VMM-Monitoring" class="headerlink" title="2.2 Eventdriven VMM Monitoring"></a>2.2 Eventdriven VMM Monitoring</h4><p>hook 函数</p>
-<p>做什么的？</p>
-<p>钩子函数是置于VMM中的触发函数，目的是捕获指定的VMM事件行为，当产生这些行为的时候，VMM会运行钩子函数，从而激发对VMM完整性的检测。</p>
-<p>钩子函数通常如何设置？</p>
-<p>这些钩子函数可以是插入VMM代码中任意位置的代码挂钩（跳转指令），调用表内的数据挂钩或任何其他可以传输控制流的技术。</p>
-<h4 id="2-3-Placing-the-Monitor-in-the-Same-World"><a href="#2-3-Placing-the-Monitor-in-the-Same-World" class="headerlink" title="2.3 Placing the Monitor in the Same World"></a>2.3 Placing the Monitor in the Same World</h4><h4 id="2-4-Requirements-and-Challenges"><a href="#2-4-Requirements-and-Challenges" class="headerlink" title="2.4 Requirements and Challenges"></a>2.4 Requirements and Challenges</h4><p>保证ED-monitor 是受信任的，即保证monitor自身的完整性，该monitor不能被VMM篡改</p>
-<ol>
-<li><p>内存、控制流、入口</p>
-</li>
-<li><p>hook 函数的位置不应该别VMM篡改（这个如何实现？）【因为VMM有 最高执行权限】</p>
-</li>
-</ol>
-<h4 id="2-5-Our-Approach-Multual-Protection"><a href="#2-5-Our-Approach-Multual-Protection" class="headerlink" title="2.5 Our Approach: Multual-Protection"></a>2.5 Our Approach: Multual-Protection</h4><p>Q:这里写的比较简略，地址空间随机化如何能保证code和data？但VMM具备了最高执行权限，会有效果吗？（应用级别攻击）</p>
-<p>下文提到，VMM的权限可以获取到随机化后的monitor的remap，因此目前的ASR对事件的监控可能是无效的。本文的想法是限制VMM的特权指令，并让monitor代替执行最高权限。（这样VMM中进行最高权限的操作将会被monitor捕获）</p>
-<p>本文的解决方法是：同时使用ASR和本文提出的IPR（基于工具的指令限制）方法，IPR通过ASR保证对VMM最高权限操作的拦截与验证，同时ASR基于IPR减轻部分威胁（来自于谁的威胁？）</p>
-<p>ASR：这种技术主要是对进程的表、堆、主程序代码、静态数据段、共享库等所在的地址进行随机化。如果某些代码的位置固定，那么一份攻击成功的话，就可以应用到其他机器继续进行攻击。因此ASR技术可以降低攻击成功的概率，并且使得攻击难以移植。</p>
-<p>另：一种技术叫做ALSR，Address space layout randomization，地址空间布局随机化</p>
-<h3 id="3-Design-of-Mutual-Protection"><a href="#3-Design-of-Mutual-Protection" class="headerlink" title="3 Design of Mutual-Protection"></a>3 Design of Mutual-Protection</h3><h4 id="3-1-Instrumentation-based-Privilege-Restriction"><a href="#3-1-Instrumentation-based-Privilege-Restriction" class="headerlink" title="3.1 Instrumentation-based Privilege Restriction"></a>3.1 Instrumentation-based Privilege Restriction</h4><h5 id="3-1-1-Interception-of-Privileged-Instruction-Execution"><a href="#3-1-1-Interception-of-Privileged-Instruction-Execution" class="headerlink" title="3.1.1 Interception of Privileged Instruction Execution"></a>3.1.1 Interception of Privileged Instruction Execution</h5><h5 id="3-1-2-Interception-of-MMU-Configuration"><a href="#3-1-2-Interception-of-MMU-Configuration" class="headerlink" title="3.1.2 Interception of MMU Configuration"></a>3.1.2 Interception of MMU Configuration</h5><h5 id="3-1-3-Interception-of-Interrupt-and-Exception-Handling"><a href="#3-1-3-Interception-of-Interrupt-and-Exception-Handling" class="headerlink" title="3.1.3 Interception of Interrupt and Exception Handling"></a>3.1.3 Interception of Interrupt and Exception Handling</h5><h5 id="3-1-4-Interception-of-IOMMU-Configuration"><a href="#3-1-4-Interception-of-IOMMU-Configuration" class="headerlink" title="3.1.4 Interception of IOMMU Configuration"></a>3.1.4 Interception of IOMMU Configuration</h5><h5 id="3-1-5-Interception-of-Hardware-Virtualization-Configuration"><a href="#3-1-5-Interception-of-Hardware-Virtualization-Configuration" class="headerlink" title="3.1.5 Interception of Hardware Virtualization Configuration"></a>3.1.5 Interception of Hardware Virtualization Configuration</h5><h4 id="3-2-Address-Space-Randomization"><a href="#3-2-Address-Space-Randomization" class="headerlink" title="3.2 Address Space Randomization"></a>3.2 Address Space Randomization</h4><h5 id="3-2-1-Possible-Attacks"><a href="#3-2-1-Possible-Attacks" class="headerlink" title="3.2.1 Possible Attacks"></a>3.2.1 Possible Attacks</h5><h5 id="3-2-2-Preventing-ASR-bypass-Attacks"><a href="#3-2-2-Preventing-ASR-bypass-Attacks" class="headerlink" title="3.2.2 Preventing ASR-bypass Attacks"></a>3.2.2 Preventing ASR-bypass Attacks</h5><h5 id="3-2-3-Preventing-Software-level-Information-Leaks"><a href="#3-2-3-Preventing-Software-level-Information-Leaks" class="headerlink" title="3.2.3 Preventing Software-level Information Leaks"></a>3.2.3 Preventing Software-level Information Leaks</h5><h5 id="3-2-4-Preventing-Hardware-level-Information-Leaks"><a href="#3-2-4-Preventing-Hardware-level-Information-Leaks" class="headerlink" title="3.2.4 Preventing Hardware-level Information Leaks"></a>3.2.4 Preventing Hardware-level Information Leaks</h5><h5 id="3-2-5-Preventing-Brute-force-Attacks"><a href="#3-2-5-Preventing-Brute-force-Attacks" class="headerlink" title="3.2.5 Preventing Brute-force Attacks"></a>3.2.5 Preventing Brute-force Attacks</h5><h5 id="3-2-6-Probabilistic-Protection"><a href="#3-2-6-Probabilistic-Protection" class="headerlink" title="3.2.6 Probabilistic Protection"></a>3.2.6 Probabilistic Protection</h5><h3 id="4-Trusted-Event-driven-VMM-Monitoring"><a href="#4-Trusted-Event-driven-VMM-Monitoring" class="headerlink" title="4 Trusted Event-driven VMM Monitoring"></a>4 Trusted Event-driven VMM Monitoring</h3><h4 id="4-1-Protection-of-Hook-Placement"><a href="#4-1-Protection-of-Hook-Placement" class="headerlink" title="4.1 Protection of Hook Placement"></a>4.1 Protection of Hook Placement</h4><h4 id="4-2-Assurance-of-ED-monitor’s-Integrity"><a href="#4-2-Assurance-of-ED-monitor’s-Integrity" class="headerlink" title="4.2 Assurance of ED-monitor’s Integrity"></a>4.2 Assurance of ED-monitor’s Integrity</h4><h4 id="4-3-ED-monitor-API"><a href="#4-3-ED-monitor-API" class="headerlink" title="4.3 ED-monitor API"></a>4.3 ED-monitor API</h4><h3 id="5-Prototype-Implementation"><a href="#5-Prototype-Implementation" class="headerlink" title="5 Prototype Implementation"></a>5 Prototype Implementation</h3><h4 id="5-1-Offline-Code-Instrumentation"><a href="#5-1-Offline-Code-Instrumentation" class="headerlink" title="5.1 Offline Code Instrumentation"></a>5.1 Offline Code Instrumentation</h4><h4 id="5-2-Initialization-Phase"><a href="#5-2-Initialization-Phase" class="headerlink" title="5.2 Initialization Phase"></a>5.2 Initialization Phase</h4><h4 id="5-3-Paravirtualization-Interface"><a href="#5-3-Paravirtualization-Interface" class="headerlink" title="5.3 Paravirtualization Interface"></a>5.3 Paravirtualization Interface</h4><h4 id="5-4-Loadable-Kernel-Modules"><a href="#5-4-Loadable-Kernel-Modules" class="headerlink" title="5.4 Loadable Kernel Modules"></a>5.4 Loadable Kernel Modules</h4><h3 id="6-Security-Analysis"><a href="#6-Security-Analysis" class="headerlink" title="6 Security Analysis"></a>6 Security Analysis</h3><h4 id="6-1-Subverting-IPR"><a href="#6-1-Subverting-IPR" class="headerlink" title="6.1 Subverting IPR"></a>6.1 Subverting IPR</h4><h5 id="6-1-1-Bypassing-the-Interception"><a href="#6-1-1-Bypassing-the-Interception" class="headerlink" title="6.1.1 Bypassing the Interception"></a>6.1.1 Bypassing the Interception</h5><h5 id="6-1-2-Subvertiong-the-Validation"><a href="#6-1-2-Subvertiong-the-Validation" class="headerlink" title="6.1.2 Subvertiong the Validation"></a>6.1.2 Subvertiong the Validation</h5><h4 id="6-2-Subverting-ASR"><a href="#6-2-Subverting-ASR" class="headerlink" title="6.2 Subverting ASR"></a>6.2 Subverting ASR</h4><h3 id="7-Performance-Evaluation"><a href="#7-Performance-Evaluation" class="headerlink" title="7 Performance Evaluation"></a>7 Performance Evaluation</h3><h4 id="7-1-Mutual-protection-Overhead"><a href="#7-1-Mutual-protection-Overhead" class="headerlink" title="7.1 Mutual-protection Overhead"></a>7.1 Mutual-protection Overhead</h4><h4 id="7-2-Monitoring-Overhead"><a href="#7-2-Monitoring-Overhead" class="headerlink" title="7.2 Monitoring Overhead"></a>7.2 Monitoring Overhead</h4><h5 id="7-2-1-ED-monitor-Innvocation-Overhead"><a href="#7-2-1-ED-monitor-Innvocation-Overhead" class="headerlink" title="7.2.1 ED-monitor Innvocation Overhead"></a>7.2.1 ED-monitor Innvocation Overhead</h5><h5 id="7-2-2-Overhead-of-VMM-Data-Integrity-Monitorning"><a href="#7-2-2-Overhead-of-VMM-Data-Integrity-Monitorning" class="headerlink" title="7.2.2 Overhead of VMM Data Integrity Monitorning"></a>7.2.2 Overhead of VMM Data Integrity Monitorning</h5><h3 id="8-Other-Related-Work"><a href="#8-Other-Related-Work" class="headerlink" title="8 Other Related Work"></a>8 Other Related Work</h3><h4 id="8-1-Isolation"><a href="#8-1-Isolation" class="headerlink" title="8.1 Isolation"></a>8.1 Isolation</h4><h4 id="8-2-TCB-Reduction-and-Privilege-Restriction"><a href="#8-2-TCB-Reduction-and-Privilege-Restriction" class="headerlink" title="8.2 TCB Reduction and Privilege Restriction"></a>8.2 TCB Reduction and Privilege Restriction</h4><h4 id="8-3-VM-monitoring"><a href="#8-3-VM-monitoring" class="headerlink" title="8.3 VM monitoring"></a>8.3 VM monitoring</h4><h4 id="8-4-Side-channel-attacks"><a href="#8-4-Side-channel-attacks" class="headerlink" title="8.4 Side-channel attacks"></a>8.4 Side-channel attacks</h4><h3 id="9-Conclusion"><a href="#9-Conclusion" class="headerlink" title="9 Conclusion"></a>9 Conclusion</h3>
+<h3 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h3><p>&emsp; 许多的设备都可以在云端存储一些时间序列信息，在云环境中，许多的服务都可以获取到这些时间序列信息，这是对用户隐私的一种侵犯。而且随着物联网的到来，更加速了这些数据的生成。目前，人们提高了对隐私数据的重视程度，致力于保护这些数据的机密性。</p>
+<h3 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h3><p>数据端到端的加密通常：不信任云供应商的安全性，因此在客户端对数据进行加密，传输密文到云中进行存储，客户端读取数据时进行解密。</p>
+<p>刚提到的是时间序列数据产生频率很高，数据量很大，它所需要的高吞吐低延时的查询，在对数据加密之后可以实现吗？</p>
+<h3 id="Challenge"><a href="#Challenge" class="headerlink" title="Challenge"></a>Challenge</h3><p>为了达到这个目的，本文面临的挑战是：数据的可扩展性以及与用户的交互性。</p>
+<p>当前的时序数据库所提供的仅仅是数据追加操作以及在指定时间范围内的查询操作。因为对数据加密的代价是比较高的，所以为了满足挑战1，要在数据加密的同时对时序数据库大量数据进行高吞吐的写入，以及对指定时间的数据查询。</p>
+<p>另一个挑战是安全共享</p>
+<p>拿个人的健康数据举例子，个人的医生可能想看到个人每小时的平均心率数据，运动时可能想看下运动过程每分钟的平均心率，这就需要个人的数据以不同的时间间隔共享给指定的用户，同时在云端的存储是加密的。这就要求有选择的共享个人时序数据。</p>
+<h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><p>宏观来看TimeCrypt有两个角色，一个是Client端，一个是Server端，后者是非可信的，仅仅用于存储以及索引数据。</p>
+<p>其中Client可以分为Data Producer和 Data Consumer，后者需要从前者得到访问权限才可以对数据在指定范文内以指定的时间间隔进行解密。</p>
+<p>在这个系统中，将时序数据库中的分块压缩和数据序列化等操作放在了Client端，这样更改之后server端仅仅对加密的数据进行存储以及满足Client Consumer查询操作。Writer（Producer）这个角色以最小的时间间隔将收集到的数据打包源源不断的发送给Server端。</p>
+<h3 id="Writing-Stream"><a href="#Writing-Stream" class="headerlink" title="Writing Stream"></a>Writing Stream</h3><p>细节部分可以看到Writer（Producer）以最小的时间间隔将收集到的数据打包源源不断的发送给Server端。</p>
+<p>因为对时间序列数据的操作中提到过，对这种数据进行的查询通常是统计学上的一些操作，比如取平均值、加和、计数等等。因此在Client中首先对数据在基本单位时间内进行初步的计算，并将这些计算的结果打包发送给Server端进行存储。那么，如何满足不同时间间隔的查询呢？本文将不同的时间间隔命名为分辨率，在不同分辨率的查询结果是不同时间间隔的统计结果。</p>
+<p>作者就想：能不能在Server端对这些数据进行一步聚合操作，就直接等价于对明文数据进行了一步聚合操作呢？</p>
+<p>上文提到，他们18年就是在同态加密上做的一个工作。因此，他们是有这个技术积累的。同态加密就是一种加密形式，在密文上的计算解密后与明文上的执行一致。这样可以不危及数据隐私，同时对数据进行计算。但是呢，目前的同态加密手段基本都是非对称的加密，这种加密虽然保证了数据的安全性，但是代价是十分昂贵的。比如对8bytes数据进行加密<sup><a href="#fn_describe" id="reffn_describe">describe</a></sup>，产生的密文是明文的96倍，两段明文加密的代价是1028倍，这显然不适合于源源不断产生的大量的时序数据。因此需要对该方法进行改进，使得能满足对时序数据的加密与查询需求。</p>
+<h3 id="Goals"><a href="#Goals" class="headerlink" title="Goals"></a>Goals</h3><p>作者分析了很多现存的时序数据库的访问控制策略，这些访问控制粒度很粗糙，只是在数据库接口设置控制机制，要么用户可以访问全部数据，要么拒绝访问。</p>
+<p>但是考虑到，医生想查看患者每小时的心率数据、健身教练想查看每分钟的心率数据这些情形，需要一个很细粒度的访问策略，同时对数据进行保护。</p>
+<p>本文的目标是：将之前时序数据库中对数据的分享机制进行访问控制，实现更细粒度的访问。</p>
+<h3 id="访问控制"><a href="#访问控制" class="headerlink" title="访问控制"></a>访问控制</h3><p><img src="/2020/07/22/TimeCrypt/Tree.png" style="zoom:40%;"></p>
+<p>构建一个适合时间序列数据的加密方式，其中秘钥的分发采用将 $K_i$与 $K_{i+1}$ 以正值与负值分发给第$i$条明文用于加密，由于时间序列数据是连续的，因此在解密过程只获得收尾两个秘钥即可对此区间的所有数据进行解密。同时数据所有者对不同的client分发不同分辨率数据的秘钥，即可对数据实现访问控制。</p>
+<p><img src="/2020/07/22/TimeCrypt/KeyStream.png" style="zoom:40%;"></p>
+<p><img src="/2020/07/22/TimeCrypt/KeyTree.png" style="zoom:40%;"></p>
+<p>本文提到的秘钥分发过程采用二叉树形式，在设置秘钥的过程中，将树的高度设置为一个很大的值，因此，存储在叶子节点的秘钥的数量基本接近无限大，这对时间序列的数据处理是有效的。同时在分发密钥时，对相应的节点进行派发，由于秘钥的单向性，也能够对用户的访问权限加以限制。</p>
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><p><img src="/2020/07/22/TimeCrypt/Evaluation.png" style="zoom:40%;"></p>
+<p>在实验结果中可以看到，采用新形势的秘钥分发策略，系统的吞吐提升明显。对比实验的后两者是没有改进的同态加密策略。</p>
+<p><img src="/2020/07/22/TimeCrypt/EvaluationLatency.png" style="zoom:40%;"></p>
+<p>在实验结果中看到对不同分辨率的数据进行查询的时间延迟都是在秒级以内，是可以接受的。</p>
+<h3 id="同态加密"><a href="#同态加密" class="headerlink" title="同态加密"></a>同态加密</h3><p>同态加密（HE）是一种加密形式，允许对密文进行计算，生成加密结果，加密后的结果与操作结果相匹配，就好像它们是在明文上执行一样。使用这样的工具，可以在不危及数据隐私的情况下外包存储或计算。</p>
+<p>一般的加密方案关注的都是<strong>数据存储安全</strong>。即，我要给其他人发个加密的东西，或者要在计算机或者其他服务器上存一个东西，我要对数据进行加密后在发送或者存储。没有密钥的用户，不可能从加密结果中得到有关原始数据的任何信息。只有拥有密钥的用户才能够正确解密，得到原始的内容。我们注意到，这个过程中<strong>用户是不能对加密结果做任何操作的</strong>，只能进行存储、传输。对加密结果做任何操作，都将会导致错误的解密，甚至解密失败。</p>
+<p>同态加密方案最有趣的地方在于，其关注的是<strong>数据处理安全</strong>。同态加密提供了一种<strong>对加密数据进行处理的功能</strong>。也就是说，其他人可以对加密数据进行处理，但是处理过程不会泄露任何原始内容。同时，拥有密钥的用户对处理过的数据进行解密后，得到的正好是处理后的结果。</p>
+<p>允许人们对密文进行特定形式的代数运算得到仍然是加密的结果，将其解密所得到的结果与对明文进行同样的运算结果一样。换言之，这项技术令人们可以在加密的数据中进行诸如检索、比较等操作，得出正确的结果，而在整个处理过程中无需对数据进行解密。其意义在于，真正从根本上解决将数据及其操作委托给第三方时的保密问题，例如对于各种云计算的应用。</p>
+<p>同态加密几乎就是为云计算而量身打造的！如果一个用户想要处理一个数据，但是他的计算机计算能力较弱。这个用户可以使用云计算来帮助他进行处理而得到结果。但是如果直接将数据交给云，无法保证安全性。于是，他可以使用同态加密，然后让云来对加密数据进行直接处理，并将处理结果返回给他。这样一来：</p>
+<ul>
+<li>用户向云服务商付款，得到了处理的结果；</li>
+<li>云服务商挣到了费用，并在不知道用户数据的前提下正确处理了数据；</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>不必对每一个密文解密后再计算而花费高昂的计算代价。</li>
+<li>可以实现无密钥方对密文的计算，密文计算无须经过密钥方，既可以减少通信代价，又可以转移计算任务。</li>
+<li>第三方为明文未知，提高了信息的安全性。</li>
+<li>对密文计算后解密的结果与明文进行同样运算的结果一致，保证了运算的正确性。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>同态加密技术目前的难度在于效率,效率一词包含两个方面，一个是加密数据的处理速度，一个是这个加密方案的数据存储量。</li>
+<li>满足同态加密的算法并不容易实现。</li>
+</ul>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="http://www.vontroy.com/2018/01/25/homomorphic-encryption-survey/" target="_blank" rel="noopener">http://www.vontroy.com/2018/01/25/homomorphic-encryption-survey/</a></p>
+<p>[2] <a href="https://zh.wikipedia.org/wiki/同态加密" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E5%90%8C%E6%80%81%E5%8A%A0%E5%AF%86</a></p>
+<p>[3] <a href="https://www.zhihu.com/question/27645858/answer/37598506" target="_blank" rel="noopener">https://www.zhihu.com/question/27645858/answer/37598506</a></p>
+<blockquote id="fn_cassandra">
+<sup>cassandra</sup>. <strong>Apache Cassandra</strong>（社区内一般简称为C*）是一套开源分布式<a href="https://zh.wikipedia.org/wiki/NoSQL" target="_blank" rel="noopener">NoSQL</a>数据库系统。它最初由<a href="https://zh.wikipedia.org/wiki/Facebook" target="_blank" rel="noopener">Facebook</a>开发，用于改善电子邮件系统的搜索性能的简单格式数据，集<a href="https://zh.wikipedia.org/wiki/Google" target="_blank" rel="noopener">Google</a> <a href="https://zh.wikipedia.org/wiki/BigTable" target="_blank" rel="noopener">BigTable</a>的数据模型与<a href="https://zh.wikipedia.org/wiki/Amazon" target="_blank" rel="noopener">Amazon</a> <a href="https://zh.wikipedia.org/w/index.php?title=Dynamo&amp;action=edit&amp;redlink=1" target="_blank" rel="noopener">Dynamo</a>的完全分布式架构于一身。Facebook于2008将 Cassandra 开源，此后，由于Cassandra良好的<a href="https://zh.wikipedia.org/wiki/可扩展性" target="_blank" rel="noopener">可扩展性</a>和性能，被 Apple<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-1" target="_blank" rel="noopener">[1]</a>, Comcast<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-2" target="_blank" rel="noopener">[2]</a>,Instagram<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-3" target="_blank" rel="noopener">[3]</a>, Spotify<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-4" target="_blank" rel="noopener">[4]</a>, eBay<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-5" target="_blank" rel="noopener">[5]</a>, Rackspace<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-6" target="_blank" rel="noopener">[6]</a>, Netflix<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-7" target="_blank" rel="noopener">[7]</a>等知名网站所采用，成为了一种流行的分布式结构化数据存储方案。<a href="#reffn_cassandra" title="Jump back to footnote [cassandra] in the text."> &#8617;</a>
+</blockquote>
+<blockquote id="fn_describe">
+<sup>describe</sup>. 加密过程是将明文对等加密，如果明文的长度低于256字节，则扩充为256字节长度之后再对其进行加密，由于本文的思想是对最小时间间隔的数据打包发送至云平台进行存储，因此在此间隔产生的数据大小是固定的，如果采用加密方式，则自然会增加加密的代价。同时传统的秘钥分发方式，解密过程也会有很高的延迟以及较大的IO.<a href="#reffn_describe" title="Jump back to footnote [describe] in the text."> &#8617;</a>
+</blockquote>
+
       
       <!-- reward -->
       
@@ -269,14 +293,14 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ykma.gitee.io/2020/06/27/Dancing-with-Wolves/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ykma.gitee.io/2020/07/22/TimeCrypt/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Detection/" rel="tag">Detection</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Event-driven/" rel="tag">Event-driven</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/System-Security/" rel="tag">System Security</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" rel="tag">论文解读</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/encrypt/" rel="tag">encrypt</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" rel="tag">论文解读</a></li></ul>
 
 
     </footer>
@@ -287,19 +311,19 @@
   
   <nav class="article-nav">
     
-      <a href="/2020/07/14/%E7%96%AB%E6%83%85%E6%9C%9F%E9%97%B4%E5%B0%8F%E7%A1%AE%E5%B9%B8/" class="article-nav-link">
+      <a href="/2020/08/05/Linux-%E8%84%9A%E6%9C%AC/" class="article-nav-link">
         <strong class="article-nav-caption">上一篇</strong>
         <div class="article-nav-title">
           
-            疫情期间小确幸
+            Linux 脚本
           
         </div>
       </a>
     
     
-      <a href="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/" class="article-nav-link">
+      <a href="/2020/07/21/SecVisor/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">RAMBleed Reading Bits in Memory Without Accessing Them</div>
+        <div class="article-nav-title">SecVisor</div>
       </a>
     
   </nav>
