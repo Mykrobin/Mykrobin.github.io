@@ -233,7 +233,7 @@
 </tbody>
 </table>
 </div>
-<h3 id="Catalog"><a href="#Catalog" class="headerlink" title="Catalog"></a>Catalog</h3><h3 id="main-idea"><a href="#main-idea" class="headerlink" title="main idea"></a>main idea</h3><p>&emsp;&emsp;VMM的执行权限最高，一旦VMM受到威胁，那么其所处的整个云环境都会受到威胁。因此本文目标是对云计算中非可信的VMM实时攻击进行事件驱动监控。为了保证VMM事件监控的可靠性，需要保证monitor自身的可靠。在具体实现过程中，将VMM的特权级指令清空，并转移到monitor执行。通过IPR实现对VMM特权级指令的拦截，通过ASR技术防止VMM篡改hook函数位置和VMM自身的代码。</p>
+<h3 id="Main-idea"><a href="#Main-idea" class="headerlink" title="Main idea"></a>Main idea</h3><p>&emsp;&emsp;VMM的执行权限最高，一旦VMM受到威胁，那么其所处的整个云环境都会受到威胁。因此本文目标是对云计算中非可信的VMM实时攻击进行事件驱动监控。为了保证VMM事件监控的可靠性，需要保证monitor自身的可靠。在具体实现过程中，将VMM的特权级指令清空，并转移到monitor执行。通过IPR实现对VMM特权级指令的拦截，通过ASR技术防止VMM篡改hook函数位置和VMM自身的代码。</p>
 <p>&emsp;&emsp;Q: 为什么要提供事件监测？</p>
 <p>&emsp;&emsp;A: 因为对于瞬时攻击而言，仅通过轮询的方式对VMM进行完整性监测，很难捕捉到攻击的踪迹，但是基于事件的方式则可以对攻击所触发的事件进行拦截。</p>
 <p>本文是国家自然基金项目支持，代码并未开源。</p>
@@ -290,7 +290,7 @@
 <p>本文的解决方法是：同时使用ASR和本文提出的IPR（基于工具的指令限制）方法，IPR通过ASR保证对VMM最高权限操作的拦截与验证，同时ASR基于IPR减轻部分威胁（来自于谁的威胁？）</p>
 <p>ASR：这种技术主要是对进程的表、堆、主程序代码、静态数据段、共享库等所在的地址进行随机化。如果某些代码的位置固定，那么一份攻击成功的话，就可以应用到其他机器继续进行攻击。因此ASR技术可以降低攻击成功的概率，并且使得攻击难以移植。</p>
 <p>另：一种技术叫做ALSR，Address space layout randomization，地址空间布局随机化</p>
-<h3 id="3-Design-of-Mutual-Protection"><a href="#3-Design-of-Mutual-Protection" class="headerlink" title="3 Design of Mutual-Protection"></a>3 Design of Mutual-Protection</h3><h4 id="3-1-Instrumentation-based-Privilege-Restriction"><a href="#3-1-Instrumentation-based-Privilege-Restriction" class="headerlink" title="3.1 Instrumentation-based Privilege Restriction"></a>3.1 Instrumentation-based Privilege Restriction</h4><h5 id="3-1-1-Interception-of-Privileged-Instruction-Execution"><a href="#3-1-1-Interception-of-Privileged-Instruction-Execution" class="headerlink" title="3.1.1 Interception of Privileged Instruction Execution"></a>3.1.1 Interception of Privileged Instruction Execution</h5><h5 id="3-1-2-Interception-of-MMU-Configuration"><a href="#3-1-2-Interception-of-MMU-Configuration" class="headerlink" title="3.1.2 Interception of MMU Configuration"></a>3.1.2 Interception of MMU Configuration</h5><h5 id="3-1-3-Interception-of-Interrupt-and-Exception-Handling"><a href="#3-1-3-Interception-of-Interrupt-and-Exception-Handling" class="headerlink" title="3.1.3 Interception of Interrupt and Exception Handling"></a>3.1.3 Interception of Interrupt and Exception Handling</h5><h5 id="3-1-4-Interception-of-IOMMU-Configuration"><a href="#3-1-4-Interception-of-IOMMU-Configuration" class="headerlink" title="3.1.4 Interception of IOMMU Configuration"></a>3.1.4 Interception of IOMMU Configuration</h5><h5 id="3-1-5-Interception-of-Hardware-Virtualization-Configuration"><a href="#3-1-5-Interception-of-Hardware-Virtualization-Configuration" class="headerlink" title="3.1.5 Interception of Hardware Virtualization Configuration"></a>3.1.5 Interception of Hardware Virtualization Configuration</h5><h4 id="3-2-Address-Space-Randomization"><a href="#3-2-Address-Space-Randomization" class="headerlink" title="3.2 Address Space Randomization"></a>3.2 Address Space Randomization</h4><h5 id="3-2-1-Possible-Attacks"><a href="#3-2-1-Possible-Attacks" class="headerlink" title="3.2.1 Possible Attacks"></a>3.2.1 Possible Attacks</h5><h5 id="3-2-2-Preventing-ASR-bypass-Attacks"><a href="#3-2-2-Preventing-ASR-bypass-Attacks" class="headerlink" title="3.2.2 Preventing ASR-bypass Attacks"></a>3.2.2 Preventing ASR-bypass Attacks</h5><h5 id="3-2-3-Preventing-Software-level-Information-Leaks"><a href="#3-2-3-Preventing-Software-level-Information-Leaks" class="headerlink" title="3.2.3 Preventing Software-level Information Leaks"></a>3.2.3 Preventing Software-level Information Leaks</h5><h5 id="3-2-4-Preventing-Hardware-level-Information-Leaks"><a href="#3-2-4-Preventing-Hardware-level-Information-Leaks" class="headerlink" title="3.2.4 Preventing Hardware-level Information Leaks"></a>3.2.4 Preventing Hardware-level Information Leaks</h5><h5 id="3-2-5-Preventing-Brute-force-Attacks"><a href="#3-2-5-Preventing-Brute-force-Attacks" class="headerlink" title="3.2.5 Preventing Brute-force Attacks"></a>3.2.5 Preventing Brute-force Attacks</h5><h5 id="3-2-6-Probabilistic-Protection"><a href="#3-2-6-Probabilistic-Protection" class="headerlink" title="3.2.6 Probabilistic Protection"></a>3.2.6 Probabilistic Protection</h5><h3 id="4-Trusted-Event-driven-VMM-Monitoring"><a href="#4-Trusted-Event-driven-VMM-Monitoring" class="headerlink" title="4 Trusted Event-driven VMM Monitoring"></a>4 Trusted Event-driven VMM Monitoring</h3><h4 id="4-1-Protection-of-Hook-Placement"><a href="#4-1-Protection-of-Hook-Placement" class="headerlink" title="4.1 Protection of Hook Placement"></a>4.1 Protection of Hook Placement</h4><h4 id="4-2-Assurance-of-ED-monitor’s-Integrity"><a href="#4-2-Assurance-of-ED-monitor’s-Integrity" class="headerlink" title="4.2 Assurance of ED-monitor’s Integrity"></a>4.2 Assurance of ED-monitor’s Integrity</h4><h4 id="4-3-ED-monitor-API"><a href="#4-3-ED-monitor-API" class="headerlink" title="4.3 ED-monitor API"></a>4.3 ED-monitor API</h4><h3 id="5-Prototype-Implementation"><a href="#5-Prototype-Implementation" class="headerlink" title="5 Prototype Implementation"></a>5 Prototype Implementation</h3><h4 id="5-1-Offline-Code-Instrumentation"><a href="#5-1-Offline-Code-Instrumentation" class="headerlink" title="5.1 Offline Code Instrumentation"></a>5.1 Offline Code Instrumentation</h4><h4 id="5-2-Initialization-Phase"><a href="#5-2-Initialization-Phase" class="headerlink" title="5.2 Initialization Phase"></a>5.2 Initialization Phase</h4><h4 id="5-3-Paravirtualization-Interface"><a href="#5-3-Paravirtualization-Interface" class="headerlink" title="5.3 Paravirtualization Interface"></a>5.3 Paravirtualization Interface</h4><h4 id="5-4-Loadable-Kernel-Modules"><a href="#5-4-Loadable-Kernel-Modules" class="headerlink" title="5.4 Loadable Kernel Modules"></a>5.4 Loadable Kernel Modules</h4><h3 id="6-Security-Analysis"><a href="#6-Security-Analysis" class="headerlink" title="6 Security Analysis"></a>6 Security Analysis</h3><h4 id="6-1-Subverting-IPR"><a href="#6-1-Subverting-IPR" class="headerlink" title="6.1 Subverting IPR"></a>6.1 Subverting IPR</h4><h5 id="6-1-1-Bypassing-the-Interception"><a href="#6-1-1-Bypassing-the-Interception" class="headerlink" title="6.1.1 Bypassing the Interception"></a>6.1.1 Bypassing the Interception</h5><h5 id="6-1-2-Subvertiong-the-Validation"><a href="#6-1-2-Subvertiong-the-Validation" class="headerlink" title="6.1.2 Subvertiong the Validation"></a>6.1.2 Subvertiong the Validation</h5><h4 id="6-2-Subverting-ASR"><a href="#6-2-Subverting-ASR" class="headerlink" title="6.2 Subverting ASR"></a>6.2 Subverting ASR</h4><h3 id="7-Performance-Evaluation"><a href="#7-Performance-Evaluation" class="headerlink" title="7 Performance Evaluation"></a>7 Performance Evaluation</h3><h4 id="7-1-Mutual-protection-Overhead"><a href="#7-1-Mutual-protection-Overhead" class="headerlink" title="7.1 Mutual-protection Overhead"></a>7.1 Mutual-protection Overhead</h4><h4 id="7-2-Monitoring-Overhead"><a href="#7-2-Monitoring-Overhead" class="headerlink" title="7.2 Monitoring Overhead"></a>7.2 Monitoring Overhead</h4><h5 id="7-2-1-ED-monitor-Innvocation-Overhead"><a href="#7-2-1-ED-monitor-Innvocation-Overhead" class="headerlink" title="7.2.1 ED-monitor Innvocation Overhead"></a>7.2.1 ED-monitor Innvocation Overhead</h5><h5 id="7-2-2-Overhead-of-VMM-Data-Integrity-Monitorning"><a href="#7-2-2-Overhead-of-VMM-Data-Integrity-Monitorning" class="headerlink" title="7.2.2 Overhead of VMM Data Integrity Monitorning"></a>7.2.2 Overhead of VMM Data Integrity Monitorning</h5><h3 id="8-Other-Related-Work"><a href="#8-Other-Related-Work" class="headerlink" title="8 Other Related Work"></a>8 Other Related Work</h3><h4 id="8-1-Isolation"><a href="#8-1-Isolation" class="headerlink" title="8.1 Isolation"></a>8.1 Isolation</h4><h4 id="8-2-TCB-Reduction-and-Privilege-Restriction"><a href="#8-2-TCB-Reduction-and-Privilege-Restriction" class="headerlink" title="8.2 TCB Reduction and Privilege Restriction"></a>8.2 TCB Reduction and Privilege Restriction</h4><h4 id="8-3-VM-monitoring"><a href="#8-3-VM-monitoring" class="headerlink" title="8.3 VM monitoring"></a>8.3 VM monitoring</h4><h4 id="8-4-Side-channel-attacks"><a href="#8-4-Side-channel-attacks" class="headerlink" title="8.4 Side-channel attacks"></a>8.4 Side-channel attacks</h4><h3 id="9-Conclusion"><a href="#9-Conclusion" class="headerlink" title="9 Conclusion"></a>9 Conclusion</h3>]]></content>
+]]></content>
       <categories>
         <category>paper</category>
         <category>VEE</category>
@@ -674,6 +674,11 @@
 <td>7</td>
 <td style="text-align:center">开源代码</td>
 <td style="text-align:center"><a href="https://github.com/TimeCrypt/timecrypt" target="_blank" rel="noopener">https://github.com/TimeCrypt/timecrypt</a></td>
+</tr>
+<tr>
+<td>8</td>
+<td style="text-align:center">同态加密</td>
+<td style="text-align:center"><a href="https://web.archive.org/web/20130704120108/http://www.cs.ut.ee/~lipmaa/crypto/link/public/homomorphic.php" target="_blank" rel="noopener">https://web.archive.org/web/20130704120108/http://www.cs.ut.ee/~lipmaa/crypto/link/public/homomorphic.php</a></td>
 </tr>
 </tbody>
 </table>
@@ -1242,6 +1247,84 @@
 <script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
       <tags>
         <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>FHEW</title>
+    <url>/2020/08/13/FHEW/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://eprint.iacr.org/2014/816.pdf" target="_blank" rel="noopener">FHEW</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Centrum Wiskunde &amp; Informatica, Amsterdam</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">对全同态加密中 bootstraping 进行优化</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">同态加密</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">优化影响同态加密效率的主要瓶颈——Gentry 的引导程序</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Cryptographic Techniques</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Homomorphic</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>A FULLY HOMOMORPHIC ENCRYPTION SCHEME</title>
+    <url>/2020/08/13/A-FULLY-HOMOMORPHIC-ENCRYPTION-SCHEME/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>Systematic Review on FHE</title>
+    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>安全计算</title>
+    <url>/2020/08/15/%E5%AE%89%E5%85%A8%E8%AE%A1%E7%AE%97/</url>
+    <content><![CDATA[<h3 id="什么是安全计算"><a href="#什么是安全计算" class="headerlink" title="什么是安全计算"></a>什么是安全计算</h3><h4 id="安全计算"><a href="#安全计算" class="headerlink" title="安全计算"></a>安全计算</h4><p>安全多方计算，Secure Multi-party Computation（SMC）在保护数据安全的前提下实现多方计算，即，多个参与者将各自的数据凑在一起，并在这个大数据集上进行一定的计算，并得到最后的结果。</p>
+<h4 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h4><h5 id="1-基于噪音"><a href="#1-基于噪音" class="headerlink" title="1.基于噪音"></a>1.基于噪音</h5><p>差分隐私（differential privacy）对计算过程利用噪声干扰，让原始数据淹没在噪音中，使得在引入噪声的数据中心无法推断出原始数据。（例如一张马赛克图片，无法推断出具体细节）</p>
+<p>优点：效率高<br>缺点：得到的结果不够准确</p>
+<h5 id="2-非噪音法"><a href="#2-非噪音法" class="headerlink" title="2.非噪音法"></a>2.非噪音法</h5><p>（这种方式一般通过密码学方法将数据编码或者加密，得到一些奇怪的数字，而且这些数字有一些性质，比如看上去很随机，但是保留了原始数据的线性关系，或者在打乱顺序的数据中心能够发现其与原始数据的映射关系。）</p>
+<p>a.混淆电路（Garbled Circuit）</p>
+<p>b.同态加密（Homomorphic Encryption）</p>
+<p>c.秘钥分享（Secret Sharing）</p>
+<p>以上提到的三种方式一般在源头将数据加密，计算操作看到的数据是密文，只要特定的假设条件满足，这类方法在计算过程中是不会泄露原始信息的。</p>
+<p>优点：不会对计算过程添加干扰，因此得到的是准确值，且运用密码学理论，保障安全性<br>缺点：由于运用很多密码学方法，整个过程的计算量、通讯量很大，对于一些复杂的任务（训练几十个上百层的CNN）短时间内很难完成。</p>
+<h3 id="差分隐私"><a href="#差分隐私" class="headerlink" title="差分隐私"></a>差分隐私</h3><h3 id="混淆电路"><a href="#混淆电路" class="headerlink" title="混淆电路"></a>混淆电路</h3><h3 id="同态加密"><a href="#同态加密" class="headerlink" title="同态加密"></a>同态加密</h3><h3 id="秘钥分享"><a href="#秘钥分享" class="headerlink" title="秘钥分享"></a>秘钥分享</h3>]]></content>
+      <tags>
+        <tag>Homomorphic</tag>
       </tags>
   </entry>
 </search>
