@@ -1642,7 +1642,7 @@
   </entry>
   <entry>
     <title>Xen log modify 脚本简化操作</title>
-    <url>/2020/08/05/Xen%20log%20modify%20%E8%84%9A%E6%9C%AC%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C/</url>
+    <url>/2020/08/05/Xen-log-modify-%E8%84%9A%E6%9C%AC%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C/</url>
     <content><![CDATA[<h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><p>目标用户ID与ip: </p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root:101.101.101.10</span><br></pre></td></tr></table></figure>
 <p>第一个脚本文件</p>
@@ -1680,6 +1680,7 @@
 ]]></content>
       <tags>
         <tag>Linux</tag>
+        <tag>Xen log</tag>
         <tag>Shell</tag>
       </tags>
   </entry>
