@@ -6,220 +6,6 @@
     <content><![CDATA[]]></content>
   </entry>
   <entry>
-    <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
-    <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://dl.acm.org/doi/epdf/10.1145/3035918.3056101" target="_blank" rel="noopener">Aurora</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Amazon</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">分布式数据库</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">数据库</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">致力于构建一个分布式数据库</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="0-研究背景-为什么出现Aurora？"><a href="#0-研究背景-为什么出现Aurora？" class="headerlink" title="0 研究背景 为什么出现Aurora？"></a>0 研究背景 为什么出现Aurora？</h3><p>&emsp; &emsp; Aurora是亚马逊云服务AWS中的关系型数据库服务，主要面向OLTP场景。 <strong>Aurora</strong>基本设计理念是在云上环境下，数据库的最大瓶颈不再是计算或者存储资源，而是网络，因此基于一套存储计算分离架构，将日志处理下推到分布式存储层，通过架构上的优化来解决网络瓶颈。 </p>
-<p>&emsp; &emsp; 在云上环境下，存储计算分离作为解决系统弹性和伸缩性的方案越来越普遍。广义来说，任何数据库，底下文件系统挂一个分布式存储，即可以认为做到了存储计算分离。通过存储计算分离，可以透明添加存储节点，剔除故障节点，进行故障切换，扩展存储空间等。在这个背景下，IO不再成为数据库的瓶颈，因为IO压力可以打散在多个存储节点上，反而是<strong>网络成为瓶颈</strong>，因为数据库实例与所有存储节点的交互都需要通过网络，尤其是为了提升数据库性能，数据库实例与存储节点可能是并行交互的，这进一步加重了网络压力。</p>
-<p>&emsp; &emsp; 传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。比如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。另外一个我们熟悉场景是事务提交操作(IO写操作)，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。 <strong>传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的。</strong></p>
-<p>&emsp; &emsp; 本文介绍的Aurora是一个云上环境全新的数据库服务可以很好的解决上述传统数据库遇到的问题。 <strong>它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。</strong> Aurora体系下的数据库实例仍然包含了大部分核心功能，比如查询处理，事务，锁，缓存管理，访问接口和undo日志管理等；但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
-<h3 id="1-面临问题"><a href="#1-面临问题" class="headerlink" title="1 面临问题"></a>1 面临问题</h3><p>&emsp;&emsp;在云环境中，将存储和计算分离已经成为解决系统弹性和可伸缩性的方案。实现存储计算分离，可以进行故障切换，扩展存储空间等。因此磁盘IO压力可以打散在多个存储节点上，所以IO不再成为数据库的瓶颈。存储和计算分离之后，数据库实例与所有存储节点的交互都需要通过网络，加重了网络带宽压力，从而网络成为瓶颈。</p>
-<h3 id="2-问题带来的挑战"><a href="#2-问题带来的挑战" class="headerlink" title="2 问题带来的挑战"></a>2 问题带来的挑战</h3><p>&emsp;&emsp;在云环境中数据库的瓶颈不再是计算或者是资源存储，而是网络。基于此，Aurora设计了存储和计算分离的架构，与传统数据库相比较，这些问题带来的挑战如下。</p>
-<p>&emsp;&emsp;传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。云环境中的IO操作与传统数据库中的操作是不同的，这带来了IO操作的挑战。</p>
-<p>&emsp;&emsp;事务提交操作，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的，这又是一大挑战。</p>
-<h3 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3 解决方法"></a>3 解决方法</h3><p>&emsp;&emsp;Aurora是一个云上环境全新的数据库服务可以很好的解决上述问题带来的挑战。它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。Aurora体系下的数据库实例仍然包含了大部分核心功能，但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
-<h5 id="3-1-数据存储"><a href="#3-1-数据存储" class="headerlink" title="3.1 数据存储"></a><strong>3.1</strong> <strong>数据存储</strong></h5><p>&emsp;&emsp;Aurora存储层的复制基于Quorum协议，假设复制拓扑中有V个节点，每个节点有一个投票权，读或写必须拿到Vr 或 Vw个投票才能返回。为了满足一致性，需要满足两个条件，首先Vr + Vw &gt; V，这个保证了每次读都能读到拥有最新数据的节点；第二，Vw &gt; V/2，每次写都要保证能获取到上次写的最新数据，避免写冲突。</p>
-<p>&emsp;&emsp;结合Quorum模型，V=6 ，Vw=4，Vr=3，Aurora可以容忍任何一个AZ出现故障，不会影响写服务；任何一个AZ出现故障，以及另外一个AZ中的一个节点出现故障，不会影响读服务且不会丢失数据。通过Quorum协议，Aurora可以保证只要AZ级别的故障(火灾，洪水，网络故障)和节点故障(磁盘故障，掉电，机器损坏)不同时发生，就不会破坏协议本身，数据库可用性和正确性就能得到保证。</p>
-<h5 id="3-2-日志即数据"><a href="#3-2-日志即数据" class="headerlink" title="3.2 日志即数据"></a><strong>3.2</strong> <strong>日志即数据</strong></h5><p>&emsp;&emsp;以MySQL为例，考虑主备复制，如图1所示，AZ1和AZ2分别部署一个MySQL实例做同步镜像复制，底层存储采用EBS，并且每个EBS还有自己的一份镜像，另外部署S3进行redo日志和binlog日志归档，以支持基于时间点的恢复。每个步骤都需要传递5种类型的数据，包括redo，binlog，data-page，double-write和frm元数据。图中的1，3，5步骤是顺序的，要进行4次网络IO，且其中3次是同步串行的。从存储角度来看，数据在EBS上存了4份，需要4份都写成功才能返回。所以在这种架构下，无论是IO量还是串行化模型都会导致性能损耗。</p>
-<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/1.png" width="300px" height="300px"></p>
-<p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图1. Mirrored MySQL写操作流程</p>
-<p>&emsp;&emsp;在Aurora中，所有的写类型只有一种，那就是redo日志。修改一个数据页，会同步产生对应的redo日志。事务提交时，需要事务对应的redo日志都落盘成功后才能返回。存储节点接收redo日志，基于旧版本数据页回放日志，可以得到新版本的数据页。为了避免每次都从头开始回放数据页变更产生的redo日志，存储节点会定期物化数据页版本。Aurora由跨AZ的一个主实例和多个副本实例组成，主实例与副本实例或者存储节点间只传递redo日志和元信息。主实例并发向6个存储节点和副本实例发送日志，当4/6的存储节点应答后，则认为日志已经持久化。传统数据库宕机重启后，恢复从最近的一个检查点开始，读取检查点后的所有redo日志进行回放，确保已经提交的事务对应的数据页得到更新。</p>
-<p>&emsp;&emsp;在Aurora中，redo日志相关的功能下推到存储层，回放日志的工作可以一直在后台做。真正进行故障恢复时，需要做的事情很少，所以故障恢复的速度非常快。Aurora存储服务设计的一个关键原则是减少前台用户写的响应时间，因此将尽可能多的操作移到后台异步执行，并且存储节点会根据前台的请求压力，自适应分配资源做不同的工作。对于Aurora而言，分离的存储服务层使得后台线程推进检查点动作完全不影响数据库实例，并且是推进地越快，越有利于前台的磁盘IO读操作。Aurora写基于Quorum模型，存储分片后，按片达成多数即可返回，由于分布足够离散，少数的磁盘IO压力大也不会影响到整体的写性能。</p>
-<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/2.png" width="400px" height="300px"></p>
-<p>如上图所示，图中详细介绍了主要的写流程，</p>
-<p>1).存储节点接收数据库实例的日志，并追加到内存队列；</p>
-<p>2).将日志在本地持久化成功后，给实例应答；</p>
-<p>3).按分片归类日志，并确认丢失了哪些日志；</p>
-<p>4).与其它存储节点交互，填充丢失的日志；</p>
-<p>5).回放日志生成新的数据页；</p>
-<p>6).周期性地备份数据页和日志到S3系统；</p>
-<p>7).周期性地回收过期的数据页版本；</p>
-<p>8).周期性地对数据页进行CRC校验。</p>
-<p>&emsp;&emsp;上述所有写相关的操作，只有第1)和第2)步是串行同步的，会直接影响前台请求的响应时间，其它操作都是异步的。</p>
-<h4 id="3-3-事务提交"><a href="#3-3-事务提交" class="headerlink" title="3.3 事务提交"></a><strong>3.3</strong> <strong>事务提交</strong></h4><p>&emsp;&emsp;在Aurora中，数据库实例向存储节点传递redo日志，达成多数派后将事务标记为提交状态，然后推进VDL，使数据库进入一个新的一致状态。每个事务的每条redo日志都会分配一个唯一的LSN，这个LSN一定大于当前最新的VDL。由于底层存储按segment分片，每个分片管理一部分页面，当一个事务涉及的修改跨多个分片时，事务对应的日志被打散，每个分片只能看到这个事务的部分日志。为了确保各个分片日志的完整性，每条日志都记录前一条日志的链接，通过前向链接确保分片拥有了完整的日志。Segment Complete LSN(SCL)表示分片拥有完整日志的位点，存储节点相互间通过gossip协议来弥补本地日志空洞，推进SCL。</p>
-<p>&emsp;&emsp;在Aurora中，事务提交是完全异步的。每个事务由若干个日志组成，并包含有一个唯一的“commit LSN”，工作线程处理事务提交请求时，将事务相关的日志提交到持久化队列并将事务挂起，并继续处理其它数据库请求。当VDL的位点大于事务的LSN时，表示这个事务redo日志都已经持久化，可以向客户端回包，通知事务已经成功执行。在Aurora中，有一个独立的线程处理事务成功执行的回包工作，因此，从整个提交流程来看，所有工作线程不会因为事务提交等待日志推进而堵塞，他们会继续处理新的请求，通过这种异步提交方式，大大提高了系统的吞吐。</p>
-<h4 id="3-4-故障恢复"><a href="#3-4-故障恢复" class="headerlink" title="3.4 故障恢复"></a><strong>3.4</strong> <strong>故障恢复</strong></h4><p>&emsp;&emsp;大多数数据库系统通常会周期性地做检查点，并将检查点信息计入日志。故障时，数据页中同时可能包含了提交和未提交的数据，因此，在故障恢复时，系统首先需要从上一个检查点开始回放日志，将数据页恢复到故障时的状态，然后根据undo日志回滚未交事务。从故障恢复的过程来看，故障恢复是一个比较耗时的操作，并且与检查点操作频率强相关。通过提高检查点频率，可以减少故障恢复时间，但是这直接会影响系统处理前台请求吞吐，所以需要在检查点频率和故障恢复时间做一个权衡，而在Aurora中不需要做这种权衡。</p>
-<p>&emsp;&emsp;Aurora将回放日志逻辑下推到存储节点，并且在数据库在线提供服务时在后台常态运行。因此，当出现故障重启时，存储服务能快速恢复。数据库实例宕机重启后，需要故障恢复来获得运行时的一致状态，实例与仲裁协议确定的N个存储节点通信，这样确保能读到最新的数据，并重新计算新的VDL，超过VDL部分的日志都可以被截断丢弃。在Aurora中，对于新分配的LSN范围做了限制，这个主要是为了避免数据库实例上堆积过多的未提交事务。</p>
-<h3 id="4-实验验证"><a href="#4-实验验证" class="headerlink" title="4 实验验证"></a>4 实验验证</h3><p>&emsp;&emsp;本文的实验对Aurora的读写能力，吞吐量大小，以及部署后用户的使用数据对Aurora进行了分析。</p>
-<p>&emsp;&emsp;从sysbench测试的数据来看，Aurora是基于镜像MySQL吞吐能力的35倍，每个事务的日志量比基于镜像MySQL日志量要少7.7倍。从用户的使用数据来看，某游戏公司使用后web应用响应时间明显降低，由之前的15ms降低到5.5ms,性能提高了近3倍，而且时间延迟明显降低。</p>
-<p>&emsp;&emsp;基于实验验证，Aurora相对于传统数据库的优势如下：</p>
-<p>&emsp;&emsp;第一，底层数据库存储是一个分布式存储服务，可以轻松应对故障；</p>
-<p>&emsp;&emsp;第二，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；</p>
-<p>&emsp;&emsp;第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
-<h3 id="5-相关工作"><a href="#5-相关工作" class="headerlink" title="5 相关工作"></a>5 相关工作</h3><p>&emsp;&emsp;本文的相关工作主要是在分布式存储的将存储与计算解耦、分布式系统、并发控制、日志结构的存储与数据恢复等几个方面分别进行描述的。在描述的过程中，首先通过对Aurora面临的问题进行逐个层面的分析，并对相关工作进行总结，在分析之后，将已有工作与Aurora相结合，并通过Aurora与先有工作进行比较说明，进一步阐述Aurora的实现原理。</p>
-<p>&emsp;&emsp;将存储与计算解耦：在此处本文提出与传统系统通常作为整体不同的数据库系统，介绍了有一些关于将内核分解为不同组件的数据库的研究。Deuteronomy 将提供并发控制和恢复的事务组件（TC）与提供LLAMA访问方法的数据组件（DC）分开，结构化缓存和存储管理器。Sinfonia和Hyder是在横向扩展服务上抽象事务访问方法的系统，并且可以使用这些抽象来实现数据库系统。Yesquel系统实现了多版本分布式平衡树，并将并发控制与查询处理器分离。在Aurora中，将查询处理、事务、并发、缓冲区高速缓存和访问方法与作为横向扩展服务实现的日志记录，存储和恢复分离。</p>
-<p>&emsp;&emsp;分布式系统：首先指出已经证明过的Brewer CAP定理，指出高度可用的系统无法在存在网络分区的情况下提供“强”的一致性保证。这个结果激发了作者对一致性目标的追求。并对相关工作进行总结，Bailis等人研究了提供高可用事务（HATs）的问题，该事务既不会在分区期间遭受不可用，也不会导致高网络延迟。他们表明可串行性，快照隔离和可重复读取隔离不符合HAT的要求，而大多数其他隔离级别都可以通过高可用性实现。Aurora通过简化假设，即在任何时候只有一个写入器使用从单个有序域分配的LSN生成日志更新来提供所有这些隔离级别。Google的Spanner提供外部一致的读写操作，并在一个时间戳上跨数据库提供全局一致的读取信息。这些功能使Spanner支持一致的备份，一致的分布式查询处理以及原子模式更新，所有这些都是在全球范围内进行的，甚至在正在进行的事务存在的情况下也是如此。Spanner专门针对Google的繁重工作负载，并依靠两阶段提交和两阶段锁定来进行读/写事务。</p>
-<p>&emsp;&emsp;并发控制：本文指出较弱的一致性和隔离模型在分布式数据库中是众所周知的，并导致了乐观的复制技术以及最终的一致性系统。集中式系统中的其他方法包括基于锁定的经典悲观方案，Hekaton中的多方案并发控制之类的乐观方案，VoltDB等分片方法和HyPer中的时间戳排序和Deuteronomy . Aurora的存储服务为数据库引擎提供了持久保留的本地磁盘的抽象，并允许引擎确定隔离和并发控制。</p>
-<p>&emsp;&emsp;日志结构存储：先介绍日志结构的起源，日志结构的存储系统由LFS 在1992年引入。并对最近的日志结构存储的相关工作进行总结，Deuteronomy 以及LLAMA 和Bw-Tree 的相关工作在存储引擎堆栈中以多种方式使用日志结构化技术。最后对本文提出的Aurora与Deuteronomy 进行横向比较说明。Aurora，通过编写增量而不是整个页面来减少写放大，Deuteronomy 和Aurora都实现纯重做日志记录，并跟踪最高稳定的LSN以确认提交。</p>
-<p>&emsp;&emsp;恢复：尽管传统数据库依赖于基于ARIES 的恢复协议，但是一些最近的系统已经选择了其他途径来提高性能。例如，Hekaton和VoltDB在崩溃后使用某种形式的更新日志来重建其内存状态。像Sinfonia这样的系统通过使用诸如进程对和状态机复制之类的技术来避免恢复。Graefe 描述了一种具有每页日志记录链的系统，该系统可以按需进行逐页重做，从而可以快速恢复。与Aurora一样，Deuteronomy 不需要重做恢复。这是因为Deuteronomy 会延迟事务，因此只有已提交的更新才会发布到持久存储中。结果，与Aurora不同，Deuteronomy 中的交易规模可能受到限制。</p>
-<h3 id="6-总结建议"><a href="#6-总结建议" class="headerlink" title="6 总结建议"></a>6 总结建议</h3><p>&emsp;&emsp;在计算与存储分离的云基础设施之上，通过仅传输redo log，大幅减少跨网络的IO数据传输，将产生大量IO的数据页合并和持久化交由本地存储来解决，大幅减缓了网络延迟对数据库性能的影响。即使网络传输的速度不再是分布式数据库的瓶颈，这种“日志即数据“的思想也是有意义的，因为在分布式数据库中的计算，存储，网络中，网络通信的功耗是最大的。</p>
-<p>&emsp;&emsp;Aurora诞生的原因是在弹性伸缩的云环境下，传统的高吞吐<strong>OLTP</strong>数据库既不能保证可用性，又不能保证持久性。 <strong>Aurora</strong>的关键点在于将传统数据库中的存储与计算分离，具体而言，将日志部分下推到一个独立的分布式存储服务层。由于这种分离架构下，所有IO操作都是通过网络，网络将成为最大的瓶颈，因此Aurora集中精力优化网络以便提高系统吞吐能力。Aurora依靠Quorum模型，在性能影响可控的前提下，解决云环境下的各种异常错误。在Aurora中，日志处理技术减少了I/O写放大，异步提交协议避免了同步等待，同时分离的存储服务层还避免了离线故障恢复和检查点操作。</p>
-<p>&emsp; &emsp;Aurora相对于传统数据库有三大优势，首先，底层数据库存储是一个分布式存储服务，可以轻松应对故障；其次，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
-<p>&emsp;&emsp;批评性建议：</p>
-<p>&emsp;&emsp;1.在存储结构方面，论文中没有给出caching很明确的细节说明，Caching是位于了存储层内还是计算层内？读者只能靠猜测。如果在文中给出了具体的细节说明，可能对读者理解本文具有很大的帮助。</p>
-<p>&emsp;&emsp;2.Amazon Aurora是基于开源MySQL的数据库，理论上修改GPL协议的开源软件再开发一个新软件是需要开源的，但它本身没有开放源代码，是一个闭源数据库。</p>
-<p>&emsp;&emsp;3.为什么备机节点可以多达15个呢？是为了应对数据库的读负载还是作为故障转移的目标，需要这么多备机做备选？本文在15个备份节点的解释上不是很清楚，读后存有疑惑。</p>
-<p>下面引用两位专家对Aurora的评价：</p>
-<p>Percona Vadim Tkachenko: Aurora没有解决写拓展和分库分表的问题。（2017）</p>
-<p>Bill Karwin：Aurora不适合对具有二级索引的表进行大量写操作的场景。（2017）</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>SIGMOD</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Dancing with Wolves</title>
-    <url>/2020/06/27/Dancing-with-Wolves/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://dl.acm.org/doi/pdf/10.1145/3050748.3050750" target="_blank" rel="noopener">Dancing with wolves</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Liang Deng,Nanjing University</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">对非可信的VMM进行事件监测</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">检测</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">通过ASR与IPR技术，ED-monitor可以及时、频繁地对VMM的监测</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="Main-idea"><a href="#Main-idea" class="headerlink" title="Main idea"></a>Main idea</h3><p>&emsp;&emsp;VMM的执行权限最高，一旦VMM受到威胁，那么其所处的整个云环境都会受到威胁。因此本文目标是对云计算中非可信的VMM实时攻击进行事件驱动监控。为了保证VMM事件监控的可靠性，需要保证monitor自身的可靠。在具体实现过程中，将VMM的特权级指令清空，并转移到monitor执行。通过IPR实现对VMM特权级指令的拦截，通过ASR技术防止VMM篡改hook函数位置和VMM自身的代码。</p>
-<p>&emsp;&emsp;Q: 为什么要提供事件监测？</p>
-<p>&emsp;&emsp;A: 因为对于瞬时攻击而言，仅通过轮询的方式对VMM进行完整性监测，很难捕捉到攻击的踪迹，但是基于事件的方式则可以对攻击所触发的事件进行拦截。</p>
-<p>本文是国家自然基金项目支持，代码并未开源。</p>
-<h3 id="ED-monitor"><a href="#ED-monitor" class="headerlink" title="ED-monitor"></a>ED-monitor</h3><p>&emsp;&emsp;实现事件监控对monitor的要求：monitor与VMM具有相同的执行权限（避免了不同权限之间转换带来的性能损失），monitor需要及时频繁地被调用。</p>
-<p>&emsp;&emsp;读到这里，感觉再往下深入就是解决几个问题：</p>
-<ol>
-<li><p>如何实现ASR？</p>
-</li>
-<li><p>如何实现IPR？</p>
-</li>
-<li><p>如何触发monitor？</p>
-<p>当需要在VMM中调用特权级指令的时候，会对monitor进行调用。</p>
-</li>
-<li><p>如何保证monitor的完整性？</p>
-<p>分为monitor memory完整性、控制流完整性和定制VMM调用monitor接口实现。</p>
-</li>
-<li><p>如何保证VMM不对自身hook函数的篡改？对hypervisor所有事件添加hook？</p>
-<p>采用W+X mapping policy对code hook的保护；</p>
-<p>使用SPT保护data hook.</p>
-</li>
-<li><p>安全性分析？</p>
-<p>几种保护机制可以满足安全的需求。可以实现对特权级指令的拦截、对其验证、防止对monitor的篡改，从而保证了monitor的完整性。IPR与ASR可以实现对原型的保护。</p>
-</li>
-<li><p>原型实现？</p>
-</li>
-</ol>
-<h3 id="0-Abstract"><a href="#0-Abstract" class="headerlink" title="0 Abstract"></a>0 Abstract</h3><p>高风险漏洞可能会使VMMS完全受损</p>
-<p>（这里提出的目的是说明在非信任环境中进行检测是十分必要的）</p>
-<p>VMM拥有最高执行权限，如果它被攻击的话，将会威胁整个环境，因此对VMM进行检测是必要的。</p>
-<p>main idea: 对云计算中非可信的VMM进行事件监控，不需要比VMM更高的特权级别也不需要特殊硬件的支持。</p>
-<h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h3><p>监控器应与VMM 处于相同的特权级别，并且在之间的转换上不能产生大量的时间代价</p>
-<p>且为了实现通过监控器就能捕获VMM的事件，需要保证监控器本身的完整性以及能够获取到VMM的事件，此时认为VMM是处于非可信状态的。</p>
-<p>Q: SMM不能读取MMU的配置，所以不适格作为事件驱动器的实现，也就是事件驱动监控器必须要获得MMU的配置？</p>
-<p>Q：这种基于事件驱动的监控，与时间依赖的关系？</p>
-<p>瞬时攻击能不能进行？</p>
-<p>本意：如果及时并且频繁的调用该监控器，那么就可以阻止瞬时攻击？</p>
-<p>当事件被触发就可以调用monitor，从而对VMM进行保护？</p>
-<p>当VMM访问监控器数据的时候，将会及时地调用监控程序进行完整性评估</p>
-<h3 id="2-Overview"><a href="#2-Overview" class="headerlink" title="2 Overview"></a>2 Overview</h3><h4 id="2-1-Threat-model"><a href="#2-1-Threat-model" class="headerlink" title="2.1 Threat model"></a>2.1 Threat model</h4><p>&emsp;&emsp;认为威胁来自于VMM，VMM拥有最高的执行权限，而且能够获取到内存或者磁盘中任意数据。如果VMM受到攻击的话，则攻击者具备VMM的权限，威胁整个机器。不考虑硬件威胁，开机过程也受信任。</p>
-<h4 id="2-2-Eventdriven-VMM-Monitoring"><a href="#2-2-Eventdriven-VMM-Monitoring" class="headerlink" title="2.2 Eventdriven VMM Monitoring"></a>2.2 Eventdriven VMM Monitoring</h4><p>hook 函数</p>
-<p>做什么的？</p>
-<p>钩子函数是置于VMM中的触发函数，目的是捕获指定的VMM事件行为，当产生这些行为的时候，VMM会运行钩子函数，从而激发对VMM完整性的检测。</p>
-<p>钩子函数通常如何设置？</p>
-<p>这些钩子函数可以是插入VMM代码中任意位置的代码挂钩（跳转指令），调用表内的数据挂钩或任何其他可以传输控制流的技术。</p>
-<h4 id="2-3-Placing-the-Monitor-in-the-Same-World"><a href="#2-3-Placing-the-Monitor-in-the-Same-World" class="headerlink" title="2.3 Placing the Monitor in the Same World"></a>2.3 Placing the Monitor in the Same World</h4><h4 id="2-4-Requirements-and-Challenges"><a href="#2-4-Requirements-and-Challenges" class="headerlink" title="2.4 Requirements and Challenges"></a>2.4 Requirements and Challenges</h4><p>保证ED-monitor 是受信任的，即保证monitor自身的完整性，该monitor不能被VMM篡改</p>
-<ol>
-<li><p>内存、控制流、入口</p>
-</li>
-<li><p>hook 函数的位置不应该别VMM篡改（这个如何实现？）【因为VMM有 最高执行权限】</p>
-</li>
-</ol>
-<h4 id="2-5-Our-Approach-Multual-Protection"><a href="#2-5-Our-Approach-Multual-Protection" class="headerlink" title="2.5 Our Approach: Multual-Protection"></a>2.5 Our Approach: Multual-Protection</h4><p>Q:这里写的比较简略，地址空间随机化如何能保证code和data？但VMM具备了最高执行权限，会有效果吗？（应用级别攻击）</p>
-<p>下文提到，VMM的权限可以获取到随机化后的monitor的remap，因此目前的ASR对事件的监控可能是无效的。本文的想法是限制VMM的特权指令，并让monitor代替执行最高权限。（这样VMM中进行最高权限的操作将会被monitor捕获）</p>
-<p>本文的解决方法是：同时使用ASR和本文提出的IPR（基于工具的指令限制）方法，IPR通过ASR保证对VMM最高权限操作的拦截与验证，同时ASR基于IPR减轻部分威胁（来自于谁的威胁？）</p>
-<p>ASR：这种技术主要是对进程的表、堆、主程序代码、静态数据段、共享库等所在的地址进行随机化。如果某些代码的位置固定，那么一份攻击成功的话，就可以应用到其他机器继续进行攻击。因此ASR技术可以降低攻击成功的概率，并且使得攻击难以移植。</p>
-<p>另：一种技术叫做ALSR，Address space layout randomization，地址空间布局随机化</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>VEE</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>System Security</tag>
-        <tag>Detection</tag>
-        <tag>Event-driven</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>BatchCrypt</title>
     <url>/2020/09/13/BatchCrypt/</url>
     <content><![CDATA[<div class="table-container">
@@ -245,7 +31,7 @@
 <tr>
 <td style="text-align:center">3</td>
 <td style="text-align:center">核心内容</td>
-<td style="text-align:center">Federal Learning</td>
+<td style="text-align:center">利用同态加密技术实现FL的安全数据传输，通过改进系统模型，降低同态加密带来的加密与通讯代价。</td>
 </tr>
 <tr>
 <td style="text-align:center">4</td>
@@ -442,6 +228,216 @@
       </tags>
   </entry>
   <entry>
+    <title>CloudMon</title>
+    <url>/2020/09/14/CloudMon/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href>CloudMon</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"><a href="https://chuliangweng.github.io/" target="_blank" rel="noopener">Cl.W</a></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">这篇文章信任hypervisor并在此基础上对guestVM进行保护，主要是从内存角度出发，针对rootkit攻击进行运行时检测。</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">System Security; Virtual Machine</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文构造一个动态的监控架构，并在此基础上保证guest VM 运行时的安全性，主要功能是在客户虚拟机中检测出rootkits攻击。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>​        本文构建了一个动态的监控架构，运行在特权级别，通过对guestVM内存的扫描，检测客户机是否受到rootkit攻击，从而保证guestVM的运行时安全性。利用虚拟化技术对客户机内存进行实时监控，且这些监控对于客户机是透明的，为了实现检测的有效与高效，本系统在性能和安全之间权衡。</p>
+<h4 id="Rootkit-攻击"><a href="#Rootkit-攻击" class="headerlink" title="Rootkit 攻击 "></a><font color="blue"><strong>Rootkit 攻击</strong> </font></h4><p>​        rootkit 能够以特权级指令访问 host，并且可以通过对系统进行更改隐藏自己的存在。</p>
+<p>​        检测rootkit，最好是对客户机透明，不更改客户机系统的前提下对其进行检测。</p>
+<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        假设VMM（hypervisor）与priviliged VM  是可信的，guest VM 会受到攻击，在开机阶段的安全性受到VMM的保护，并且对guest VM的攻击不会对privileged VM 的安全性造成影响。</p>
+<p>（有些保护是针对VMM的，但是这不在本文的考虑范围内，本文聚焦在对客户机的保护上）</p>
+<h3 id="CloudMon-系统设计"><a href="#CloudMon-系统设计" class="headerlink" title="CloudMon 系统设计"></a>CloudMon 系统设计</h3><p>​        目的是实现一个可以访问较低权限级别内存信息、检测潜在的攻击并且可以保证检测的实时性与系统性能。访问内存的操作实现是基于 Xen的xenctrl 库，这个库能够读取较低权限的内存（如guest VM的内存信息）。</p>
+<p>​        构建一个guest VM 内存的监控器，目标是对VM透明、高效且是瞬时性的，这种方式可行性是因为攻击者对VM内存任何的更改都是可见的。CloudMon扫描内核memory与寄存器，从而可以实时的检测内存状态变化。这是一个特权级别的VM，能够通过VMM访问其他VMs的内存信息，而不是单纯的一个安全的guest VM。</p>
+<p><img src="/2020/09/14/CloudMon/CloudMonArchitecture.png" width="400px" height="240px"></p>
+<p>​        从云中大量的攻击实例中提取rootkit攻击特征，并将该特征记录在Feature Lib中，通过比较RT Value 与 SV Table 中数值的差异情况，可以检测出系统调用表中的攻击情况，设置较小的检测时间间隔，可以近似实时的检测嵌入内核的 rootkit ，通过设置检测的时间间隔，可以控制性能开销。并且CloudMon会直接检索其内存，因此，包括DKSM 和Shadow Walker 在内的任何来宾内核rootkit都不会欺骗CloudMon。 </p>
+<font color="green">**获取开始地址信息**</font>
+
+<p>​        KV Searcher查找 guest VM 系统调用的起始地址，SV generator 通过扫描，比对通过大量OS攻击实例中获取到的攻击特征，从而可以判断出被攻击者。</p>
+<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a><font color="blue"><strong>实验环境</strong></font></h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Xen</th>
+<th>priviliged VM</th>
+<th>guest VM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xen-3.4.2</td>
+<td>Ubuntu 9.04</td>
+<td>Ubuntu 8.04</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>已经存在的检测方式：</p>
+<ol>
+<li><p>获取guest OS的system.map信息</p>
+</li>
+<li><p>one-on-one 运行在guest VM上</p>
+</li>
+</ol>
+<h3 id="相关工作介绍"><a href="#相关工作介绍" class="headerlink" title="相关工作介绍"></a>相关工作介绍</h3><p>本文将对VM的保护机制分为了 out-of-VM  与 in-VM两种</p>
+<p>A类：out-of-VM</p>
+<ol>
+<li><p>利用受信任的VM充当监控器。OSck,是一种one-on-one的监控模式</p>
+</li>
+<li><p>XenKIMONO 在VM中聚集信息时会暂停OS的执行</p>
+</li>
+<li><p>vIPS 通过预先设置，这种检测规则需要有固定的检测时间间隔</p>
+</li>
+</ol>
+<p>B类：in-VM</p>
+<ol>
+<li><p>硬件虚拟化技术</p>
+</li>
+<li><p>Lares 在guest VM 中内置hooks（钩子函数）实时的检测虚拟机的安全（事件检测）</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>TC</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Virtual Machine</tag>
+        <tag>System Security</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
+    <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://dl.acm.org/doi/epdf/10.1145/3035918.3056101" target="_blank" rel="noopener">Aurora</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Amazon</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">分布式数据库</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">数据库</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">致力于构建一个分布式数据库</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="0-研究背景-为什么出现Aurora？"><a href="#0-研究背景-为什么出现Aurora？" class="headerlink" title="0 研究背景 为什么出现Aurora？"></a>0 研究背景 为什么出现Aurora？</h3><p>&emsp; &emsp; Aurora是亚马逊云服务AWS中的关系型数据库服务，主要面向OLTP场景。 <strong>Aurora</strong>基本设计理念是在云上环境下，数据库的最大瓶颈不再是计算或者存储资源，而是网络，因此基于一套存储计算分离架构，将日志处理下推到分布式存储层，通过架构上的优化来解决网络瓶颈。 </p>
+<p>&emsp; &emsp; 在云上环境下，存储计算分离作为解决系统弹性和伸缩性的方案越来越普遍。广义来说，任何数据库，底下文件系统挂一个分布式存储，即可以认为做到了存储计算分离。通过存储计算分离，可以透明添加存储节点，剔除故障节点，进行故障切换，扩展存储空间等。在这个背景下，IO不再成为数据库的瓶颈，因为IO压力可以打散在多个存储节点上，反而是<strong>网络成为瓶颈</strong>，因为数据库实例与所有存储节点的交互都需要通过网络，尤其是为了提升数据库性能，数据库实例与存储节点可能是并行交互的，这进一步加重了网络压力。</p>
+<p>&emsp; &emsp; 传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。比如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。另外一个我们熟悉场景是事务提交操作(IO写操作)，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。 <strong>传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的。</strong></p>
+<p>&emsp; &emsp; 本文介绍的Aurora是一个云上环境全新的数据库服务可以很好的解决上述传统数据库遇到的问题。 <strong>它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。</strong> Aurora体系下的数据库实例仍然包含了大部分核心功能，比如查询处理，事务，锁，缓存管理，访问接口和undo日志管理等；但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
+<h3 id="1-面临问题"><a href="#1-面临问题" class="headerlink" title="1 面临问题"></a>1 面临问题</h3><p>&emsp;&emsp;在云环境中，将存储和计算分离已经成为解决系统弹性和可伸缩性的方案。实现存储计算分离，可以进行故障切换，扩展存储空间等。因此磁盘IO压力可以打散在多个存储节点上，所以IO不再成为数据库的瓶颈。存储和计算分离之后，数据库实例与所有存储节点的交互都需要通过网络，加重了网络带宽压力，从而网络成为瓶颈。</p>
+<h3 id="2-问题带来的挑战"><a href="#2-问题带来的挑战" class="headerlink" title="2 问题带来的挑战"></a>2 问题带来的挑战</h3><p>&emsp;&emsp;在云环境中数据库的瓶颈不再是计算或者是资源存储，而是网络。基于此，Aurora设计了存储和计算分离的架构，与传统数据库相比较，这些问题带来的挑战如下。</p>
+<p>&emsp;&emsp;传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。云环境中的IO操作与传统数据库中的操作是不同的，这带来了IO操作的挑战。</p>
+<p>&emsp;&emsp;事务提交操作，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的，这又是一大挑战。</p>
+<h3 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3 解决方法"></a>3 解决方法</h3><p>&emsp;&emsp;Aurora是一个云上环境全新的数据库服务可以很好的解决上述问题带来的挑战。它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。Aurora体系下的数据库实例仍然包含了大部分核心功能，但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
+<h5 id="3-1-数据存储"><a href="#3-1-数据存储" class="headerlink" title="3.1 数据存储"></a><strong>3.1</strong> <strong>数据存储</strong></h5><p>&emsp;&emsp;Aurora存储层的复制基于Quorum协议，假设复制拓扑中有V个节点，每个节点有一个投票权，读或写必须拿到Vr 或 Vw个投票才能返回。为了满足一致性，需要满足两个条件，首先Vr + Vw &gt; V，这个保证了每次读都能读到拥有最新数据的节点；第二，Vw &gt; V/2，每次写都要保证能获取到上次写的最新数据，避免写冲突。</p>
+<p>&emsp;&emsp;结合Quorum模型，V=6 ，Vw=4，Vr=3，Aurora可以容忍任何一个AZ出现故障，不会影响写服务；任何一个AZ出现故障，以及另外一个AZ中的一个节点出现故障，不会影响读服务且不会丢失数据。通过Quorum协议，Aurora可以保证只要AZ级别的故障(火灾，洪水，网络故障)和节点故障(磁盘故障，掉电，机器损坏)不同时发生，就不会破坏协议本身，数据库可用性和正确性就能得到保证。</p>
+<h5 id="3-2-日志即数据"><a href="#3-2-日志即数据" class="headerlink" title="3.2 日志即数据"></a><strong>3.2</strong> <strong>日志即数据</strong></h5><p>&emsp;&emsp;以MySQL为例，考虑主备复制，如图1所示，AZ1和AZ2分别部署一个MySQL实例做同步镜像复制，底层存储采用EBS，并且每个EBS还有自己的一份镜像，另外部署S3进行redo日志和binlog日志归档，以支持基于时间点的恢复。每个步骤都需要传递5种类型的数据，包括redo，binlog，data-page，double-write和frm元数据。图中的1，3，5步骤是顺序的，要进行4次网络IO，且其中3次是同步串行的。从存储角度来看，数据在EBS上存了4份，需要4份都写成功才能返回。所以在这种架构下，无论是IO量还是串行化模型都会导致性能损耗。</p>
+<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/1.png" width="300px" height="300px"></p>
+<p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图1. Mirrored MySQL写操作流程</p>
+<p>&emsp;&emsp;在Aurora中，所有的写类型只有一种，那就是redo日志。修改一个数据页，会同步产生对应的redo日志。事务提交时，需要事务对应的redo日志都落盘成功后才能返回。存储节点接收redo日志，基于旧版本数据页回放日志，可以得到新版本的数据页。为了避免每次都从头开始回放数据页变更产生的redo日志，存储节点会定期物化数据页版本。Aurora由跨AZ的一个主实例和多个副本实例组成，主实例与副本实例或者存储节点间只传递redo日志和元信息。主实例并发向6个存储节点和副本实例发送日志，当4/6的存储节点应答后，则认为日志已经持久化。传统数据库宕机重启后，恢复从最近的一个检查点开始，读取检查点后的所有redo日志进行回放，确保已经提交的事务对应的数据页得到更新。</p>
+<p>&emsp;&emsp;在Aurora中，redo日志相关的功能下推到存储层，回放日志的工作可以一直在后台做。真正进行故障恢复时，需要做的事情很少，所以故障恢复的速度非常快。Aurora存储服务设计的一个关键原则是减少前台用户写的响应时间，因此将尽可能多的操作移到后台异步执行，并且存储节点会根据前台的请求压力，自适应分配资源做不同的工作。对于Aurora而言，分离的存储服务层使得后台线程推进检查点动作完全不影响数据库实例，并且是推进地越快，越有利于前台的磁盘IO读操作。Aurora写基于Quorum模型，存储分片后，按片达成多数即可返回，由于分布足够离散，少数的磁盘IO压力大也不会影响到整体的写性能。</p>
+<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/2.png" width="400px" height="300px"></p>
+<p>如上图所示，图中详细介绍了主要的写流程，</p>
+<p>1).存储节点接收数据库实例的日志，并追加到内存队列；</p>
+<p>2).将日志在本地持久化成功后，给实例应答；</p>
+<p>3).按分片归类日志，并确认丢失了哪些日志；</p>
+<p>4).与其它存储节点交互，填充丢失的日志；</p>
+<p>5).回放日志生成新的数据页；</p>
+<p>6).周期性地备份数据页和日志到S3系统；</p>
+<p>7).周期性地回收过期的数据页版本；</p>
+<p>8).周期性地对数据页进行CRC校验。</p>
+<p>&emsp;&emsp;上述所有写相关的操作，只有第1)和第2)步是串行同步的，会直接影响前台请求的响应时间，其它操作都是异步的。</p>
+<h4 id="3-3-事务提交"><a href="#3-3-事务提交" class="headerlink" title="3.3 事务提交"></a><strong>3.3</strong> <strong>事务提交</strong></h4><p>&emsp;&emsp;在Aurora中，数据库实例向存储节点传递redo日志，达成多数派后将事务标记为提交状态，然后推进VDL，使数据库进入一个新的一致状态。每个事务的每条redo日志都会分配一个唯一的LSN，这个LSN一定大于当前最新的VDL。由于底层存储按segment分片，每个分片管理一部分页面，当一个事务涉及的修改跨多个分片时，事务对应的日志被打散，每个分片只能看到这个事务的部分日志。为了确保各个分片日志的完整性，每条日志都记录前一条日志的链接，通过前向链接确保分片拥有了完整的日志。Segment Complete LSN(SCL)表示分片拥有完整日志的位点，存储节点相互间通过gossip协议来弥补本地日志空洞，推进SCL。</p>
+<p>&emsp;&emsp;在Aurora中，事务提交是完全异步的。每个事务由若干个日志组成，并包含有一个唯一的“commit LSN”，工作线程处理事务提交请求时，将事务相关的日志提交到持久化队列并将事务挂起，并继续处理其它数据库请求。当VDL的位点大于事务的LSN时，表示这个事务redo日志都已经持久化，可以向客户端回包，通知事务已经成功执行。在Aurora中，有一个独立的线程处理事务成功执行的回包工作，因此，从整个提交流程来看，所有工作线程不会因为事务提交等待日志推进而堵塞，他们会继续处理新的请求，通过这种异步提交方式，大大提高了系统的吞吐。</p>
+<h4 id="3-4-故障恢复"><a href="#3-4-故障恢复" class="headerlink" title="3.4 故障恢复"></a><strong>3.4</strong> <strong>故障恢复</strong></h4><p>&emsp;&emsp;大多数数据库系统通常会周期性地做检查点，并将检查点信息计入日志。故障时，数据页中同时可能包含了提交和未提交的数据，因此，在故障恢复时，系统首先需要从上一个检查点开始回放日志，将数据页恢复到故障时的状态，然后根据undo日志回滚未交事务。从故障恢复的过程来看，故障恢复是一个比较耗时的操作，并且与检查点操作频率强相关。通过提高检查点频率，可以减少故障恢复时间，但是这直接会影响系统处理前台请求吞吐，所以需要在检查点频率和故障恢复时间做一个权衡，而在Aurora中不需要做这种权衡。</p>
+<p>&emsp;&emsp;Aurora将回放日志逻辑下推到存储节点，并且在数据库在线提供服务时在后台常态运行。因此，当出现故障重启时，存储服务能快速恢复。数据库实例宕机重启后，需要故障恢复来获得运行时的一致状态，实例与仲裁协议确定的N个存储节点通信，这样确保能读到最新的数据，并重新计算新的VDL，超过VDL部分的日志都可以被截断丢弃。在Aurora中，对于新分配的LSN范围做了限制，这个主要是为了避免数据库实例上堆积过多的未提交事务。</p>
+<h3 id="4-实验验证"><a href="#4-实验验证" class="headerlink" title="4 实验验证"></a>4 实验验证</h3><p>&emsp;&emsp;本文的实验对Aurora的读写能力，吞吐量大小，以及部署后用户的使用数据对Aurora进行了分析。</p>
+<p>&emsp;&emsp;从sysbench测试的数据来看，Aurora是基于镜像MySQL吞吐能力的35倍，每个事务的日志量比基于镜像MySQL日志量要少7.7倍。从用户的使用数据来看，某游戏公司使用后web应用响应时间明显降低，由之前的15ms降低到5.5ms,性能提高了近3倍，而且时间延迟明显降低。</p>
+<p>&emsp;&emsp;基于实验验证，Aurora相对于传统数据库的优势如下：</p>
+<p>&emsp;&emsp;第一，底层数据库存储是一个分布式存储服务，可以轻松应对故障；</p>
+<p>&emsp;&emsp;第二，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；</p>
+<p>&emsp;&emsp;第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
+<h3 id="5-相关工作"><a href="#5-相关工作" class="headerlink" title="5 相关工作"></a>5 相关工作</h3><p>&emsp;&emsp;本文的相关工作主要是在分布式存储的将存储与计算解耦、分布式系统、并发控制、日志结构的存储与数据恢复等几个方面分别进行描述的。在描述的过程中，首先通过对Aurora面临的问题进行逐个层面的分析，并对相关工作进行总结，在分析之后，将已有工作与Aurora相结合，并通过Aurora与先有工作进行比较说明，进一步阐述Aurora的实现原理。</p>
+<p>&emsp;&emsp;将存储与计算解耦：在此处本文提出与传统系统通常作为整体不同的数据库系统，介绍了有一些关于将内核分解为不同组件的数据库的研究。Deuteronomy 将提供并发控制和恢复的事务组件（TC）与提供LLAMA访问方法的数据组件（DC）分开，结构化缓存和存储管理器。Sinfonia和Hyder是在横向扩展服务上抽象事务访问方法的系统，并且可以使用这些抽象来实现数据库系统。Yesquel系统实现了多版本分布式平衡树，并将并发控制与查询处理器分离。在Aurora中，将查询处理、事务、并发、缓冲区高速缓存和访问方法与作为横向扩展服务实现的日志记录，存储和恢复分离。</p>
+<p>&emsp;&emsp;分布式系统：首先指出已经证明过的Brewer CAP定理，指出高度可用的系统无法在存在网络分区的情况下提供“强”的一致性保证。这个结果激发了作者对一致性目标的追求。并对相关工作进行总结，Bailis等人研究了提供高可用事务（HATs）的问题，该事务既不会在分区期间遭受不可用，也不会导致高网络延迟。他们表明可串行性，快照隔离和可重复读取隔离不符合HAT的要求，而大多数其他隔离级别都可以通过高可用性实现。Aurora通过简化假设，即在任何时候只有一个写入器使用从单个有序域分配的LSN生成日志更新来提供所有这些隔离级别。Google的Spanner提供外部一致的读写操作，并在一个时间戳上跨数据库提供全局一致的读取信息。这些功能使Spanner支持一致的备份，一致的分布式查询处理以及原子模式更新，所有这些都是在全球范围内进行的，甚至在正在进行的事务存在的情况下也是如此。Spanner专门针对Google的繁重工作负载，并依靠两阶段提交和两阶段锁定来进行读/写事务。</p>
+<p>&emsp;&emsp;并发控制：本文指出较弱的一致性和隔离模型在分布式数据库中是众所周知的，并导致了乐观的复制技术以及最终的一致性系统。集中式系统中的其他方法包括基于锁定的经典悲观方案，Hekaton中的多方案并发控制之类的乐观方案，VoltDB等分片方法和HyPer中的时间戳排序和Deuteronomy . Aurora的存储服务为数据库引擎提供了持久保留的本地磁盘的抽象，并允许引擎确定隔离和并发控制。</p>
+<p>&emsp;&emsp;日志结构存储：先介绍日志结构的起源，日志结构的存储系统由LFS 在1992年引入。并对最近的日志结构存储的相关工作进行总结，Deuteronomy 以及LLAMA 和Bw-Tree 的相关工作在存储引擎堆栈中以多种方式使用日志结构化技术。最后对本文提出的Aurora与Deuteronomy 进行横向比较说明。Aurora，通过编写增量而不是整个页面来减少写放大，Deuteronomy 和Aurora都实现纯重做日志记录，并跟踪最高稳定的LSN以确认提交。</p>
+<p>&emsp;&emsp;恢复：尽管传统数据库依赖于基于ARIES 的恢复协议，但是一些最近的系统已经选择了其他途径来提高性能。例如，Hekaton和VoltDB在崩溃后使用某种形式的更新日志来重建其内存状态。像Sinfonia这样的系统通过使用诸如进程对和状态机复制之类的技术来避免恢复。Graefe 描述了一种具有每页日志记录链的系统，该系统可以按需进行逐页重做，从而可以快速恢复。与Aurora一样，Deuteronomy 不需要重做恢复。这是因为Deuteronomy 会延迟事务，因此只有已提交的更新才会发布到持久存储中。结果，与Aurora不同，Deuteronomy 中的交易规模可能受到限制。</p>
+<h3 id="6-总结建议"><a href="#6-总结建议" class="headerlink" title="6 总结建议"></a>6 总结建议</h3><p>&emsp;&emsp;在计算与存储分离的云基础设施之上，通过仅传输redo log，大幅减少跨网络的IO数据传输，将产生大量IO的数据页合并和持久化交由本地存储来解决，大幅减缓了网络延迟对数据库性能的影响。即使网络传输的速度不再是分布式数据库的瓶颈，这种“日志即数据“的思想也是有意义的，因为在分布式数据库中的计算，存储，网络中，网络通信的功耗是最大的。</p>
+<p>&emsp;&emsp;Aurora诞生的原因是在弹性伸缩的云环境下，传统的高吞吐<strong>OLTP</strong>数据库既不能保证可用性，又不能保证持久性。 <strong>Aurora</strong>的关键点在于将传统数据库中的存储与计算分离，具体而言，将日志部分下推到一个独立的分布式存储服务层。由于这种分离架构下，所有IO操作都是通过网络，网络将成为最大的瓶颈，因此Aurora集中精力优化网络以便提高系统吞吐能力。Aurora依靠Quorum模型，在性能影响可控的前提下，解决云环境下的各种异常错误。在Aurora中，日志处理技术减少了I/O写放大，异步提交协议避免了同步等待，同时分离的存储服务层还避免了离线故障恢复和检查点操作。</p>
+<p>&emsp; &emsp;Aurora相对于传统数据库有三大优势，首先，底层数据库存储是一个分布式存储服务，可以轻松应对故障；其次，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
+<p>&emsp;&emsp;批评性建议：</p>
+<p>&emsp;&emsp;1.在存储结构方面，论文中没有给出caching很明确的细节说明，Caching是位于了存储层内还是计算层内？读者只能靠猜测。如果在文中给出了具体的细节说明，可能对读者理解本文具有很大的帮助。</p>
+<p>&emsp;&emsp;2.Amazon Aurora是基于开源MySQL的数据库，理论上修改GPL协议的开源软件再开发一个新软件是需要开源的，但它本身没有开放源代码，是一个闭源数据库。</p>
+<p>&emsp;&emsp;3.为什么备机节点可以多达15个呢？是为了应对数据库的读负载还是作为故障转移的目标，需要这么多备机做备选？本文在15个备份节点的解释上不是很清楚，读后存有疑惑。</p>
+<p>下面引用两位专家对Aurora的评价：</p>
+<p>Percona Vadim Tkachenko: Aurora没有解决写拓展和分库分表的问题。（2017）</p>
+<p>Bill Karwin：Aurora不适合对具有二级索引的表进行大量写操作的场景。（2017）</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>SIGMOD</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Attacks Directories, Not Caches</title>
     <url>/2020/07/17/Attacks-Directories-Not-Caches/</url>
     <content><![CDATA[<div class="table-container">
@@ -490,6 +486,116 @@
       <tags>
         <tag>论文解读</tag>
         <tag>side channel attack</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Dancing with Wolves</title>
+    <url>/2020/06/27/Dancing-with-Wolves/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://dl.acm.org/doi/pdf/10.1145/3050748.3050750" target="_blank" rel="noopener">Dancing with wolves</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Liang Deng,Nanjing University</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">对非可信的VMM进行事件监测</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">检测</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">通过ASR与IPR技术，ED-monitor可以及时、频繁地对VMM的监测</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Main-idea"><a href="#Main-idea" class="headerlink" title="Main idea"></a>Main idea</h3><p>&emsp;&emsp;VMM的执行权限最高，一旦VMM受到威胁，那么其所处的整个云环境都会受到威胁。因此本文目标是对云计算中非可信的VMM实时攻击进行事件驱动监控。为了保证VMM事件监控的可靠性，需要保证monitor自身的可靠。在具体实现过程中，将VMM的特权级指令清空，并转移到monitor执行。通过IPR实现对VMM特权级指令的拦截，通过ASR技术防止VMM篡改hook函数位置和VMM自身的代码。</p>
+<p>&emsp;&emsp;Q: 为什么要提供事件监测？</p>
+<p>&emsp;&emsp;A: 因为对于瞬时攻击而言，仅通过轮询的方式对VMM进行完整性监测，很难捕捉到攻击的踪迹，但是基于事件的方式则可以对攻击所触发的事件进行拦截。</p>
+<p>本文是国家自然基金项目支持，代码并未开源。</p>
+<h3 id="ED-monitor"><a href="#ED-monitor" class="headerlink" title="ED-monitor"></a>ED-monitor</h3><p>&emsp;&emsp;实现事件监控对monitor的要求：monitor与VMM具有相同的执行权限（避免了不同权限之间转换带来的性能损失），monitor需要及时频繁地被调用。</p>
+<p>&emsp;&emsp;读到这里，感觉再往下深入就是解决几个问题：</p>
+<ol>
+<li><p>如何实现ASR？</p>
+</li>
+<li><p>如何实现IPR？</p>
+</li>
+<li><p>如何触发monitor？</p>
+<p>当需要在VMM中调用特权级指令的时候，会对monitor进行调用。</p>
+</li>
+<li><p>如何保证monitor的完整性？</p>
+<p>分为monitor memory完整性、控制流完整性和定制VMM调用monitor接口实现。</p>
+</li>
+<li><p>如何保证VMM不对自身hook函数的篡改？对hypervisor所有事件添加hook？</p>
+<p>采用W+X mapping policy对code hook的保护；</p>
+<p>使用SPT保护data hook.</p>
+</li>
+<li><p>安全性分析？</p>
+<p>几种保护机制可以满足安全的需求。可以实现对特权级指令的拦截、对其验证、防止对monitor的篡改，从而保证了monitor的完整性。IPR与ASR可以实现对原型的保护。</p>
+</li>
+<li><p>原型实现？</p>
+</li>
+</ol>
+<h3 id="0-Abstract"><a href="#0-Abstract" class="headerlink" title="0 Abstract"></a>0 Abstract</h3><p>高风险漏洞可能会使VMMS完全受损</p>
+<p>（这里提出的目的是说明在非信任环境中进行检测是十分必要的）</p>
+<p>VMM拥有最高执行权限，如果它被攻击的话，将会威胁整个环境，因此对VMM进行检测是必要的。</p>
+<p>main idea: 对云计算中非可信的VMM进行事件监控，不需要比VMM更高的特权级别也不需要特殊硬件的支持。</p>
+<h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h3><p>监控器应与VMM 处于相同的特权级别，并且在之间的转换上不能产生大量的时间代价</p>
+<p>且为了实现通过监控器就能捕获VMM的事件，需要保证监控器本身的完整性以及能够获取到VMM的事件，此时认为VMM是处于非可信状态的。</p>
+<p>Q: SMM不能读取MMU的配置，所以不适格作为事件驱动器的实现，也就是事件驱动监控器必须要获得MMU的配置？</p>
+<p>Q：这种基于事件驱动的监控，与时间依赖的关系？</p>
+<p>瞬时攻击能不能进行？</p>
+<p>本意：如果及时并且频繁的调用该监控器，那么就可以阻止瞬时攻击？</p>
+<p>当事件被触发就可以调用monitor，从而对VMM进行保护？</p>
+<p>当VMM访问监控器数据的时候，将会及时地调用监控程序进行完整性评估</p>
+<h3 id="2-Overview"><a href="#2-Overview" class="headerlink" title="2 Overview"></a>2 Overview</h3><h4 id="2-1-Threat-model"><a href="#2-1-Threat-model" class="headerlink" title="2.1 Threat model"></a>2.1 Threat model</h4><p>&emsp;&emsp;认为威胁来自于VMM，VMM拥有最高的执行权限，而且能够获取到内存或者磁盘中任意数据。如果VMM受到攻击的话，则攻击者具备VMM的权限，威胁整个机器。不考虑硬件威胁，开机过程也受信任。</p>
+<h4 id="2-2-Eventdriven-VMM-Monitoring"><a href="#2-2-Eventdriven-VMM-Monitoring" class="headerlink" title="2.2 Eventdriven VMM Monitoring"></a>2.2 Eventdriven VMM Monitoring</h4><p>hook 函数</p>
+<p>做什么的？</p>
+<p>钩子函数是置于VMM中的触发函数，目的是捕获指定的VMM事件行为，当产生这些行为的时候，VMM会运行钩子函数，从而激发对VMM完整性的检测。</p>
+<p>钩子函数通常如何设置？</p>
+<p>这些钩子函数可以是插入VMM代码中任意位置的代码挂钩（跳转指令），调用表内的数据挂钩或任何其他可以传输控制流的技术。</p>
+<h4 id="2-3-Placing-the-Monitor-in-the-Same-World"><a href="#2-3-Placing-the-Monitor-in-the-Same-World" class="headerlink" title="2.3 Placing the Monitor in the Same World"></a>2.3 Placing the Monitor in the Same World</h4><h4 id="2-4-Requirements-and-Challenges"><a href="#2-4-Requirements-and-Challenges" class="headerlink" title="2.4 Requirements and Challenges"></a>2.4 Requirements and Challenges</h4><p>保证ED-monitor 是受信任的，即保证monitor自身的完整性，该monitor不能被VMM篡改</p>
+<ol>
+<li><p>内存、控制流、入口</p>
+</li>
+<li><p>hook 函数的位置不应该别VMM篡改（这个如何实现？）【因为VMM有 最高执行权限】</p>
+</li>
+</ol>
+<h4 id="2-5-Our-Approach-Multual-Protection"><a href="#2-5-Our-Approach-Multual-Protection" class="headerlink" title="2.5 Our Approach: Multual-Protection"></a>2.5 Our Approach: Multual-Protection</h4><p>Q:这里写的比较简略，地址空间随机化如何能保证code和data？但VMM具备了最高执行权限，会有效果吗？（应用级别攻击）</p>
+<p>下文提到，VMM的权限可以获取到随机化后的monitor的remap，因此目前的ASR对事件的监控可能是无效的。本文的想法是限制VMM的特权指令，并让monitor代替执行最高权限。（这样VMM中进行最高权限的操作将会被monitor捕获）</p>
+<p>本文的解决方法是：同时使用ASR和本文提出的IPR（基于工具的指令限制）方法，IPR通过ASR保证对VMM最高权限操作的拦截与验证，同时ASR基于IPR减轻部分威胁（来自于谁的威胁？）</p>
+<p>ASR：这种技术主要是对进程的表、堆、主程序代码、静态数据段、共享库等所在的地址进行随机化。如果某些代码的位置固定，那么一份攻击成功的话，就可以应用到其他机器继续进行攻击。因此ASR技术可以降低攻击成功的概率，并且使得攻击难以移植。</p>
+<p>另：一种技术叫做ALSR，Address space layout randomization，地址空间布局随机化</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>VEE</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>System Security</tag>
+        <tag>Detection</tag>
+        <tag>Event-driven</tag>
       </tags>
   </entry>
   <entry>
@@ -553,6 +659,21 @@
       </tags>
   </entry>
   <entry>
+    <title>Linux 脚本</title>
+    <url>/2020/08/05/Linux-%E8%84%9A%E6%9C%AC/</url>
+    <content><![CDATA[<h3 id="传输文件"><a href="#传输文件" class="headerlink" title="传输文件"></a>传输文件</h3><p>目标用户ID与ip: </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root:101.101.101.10</span><br></pre></td></tr></table></figure>
+<p>第一个脚本文件</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">scp test.txt root@<span class="number">101.101</span><span class="number">.101</span><span class="number">.10</span>:/home/</span><br></pre></td></tr></table></figure>
+<h3 id="执行权限"><a href="#执行权限" class="headerlink" title="执行权限"></a>执行权限</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">chmod +x ./test.sh  <span class="comment">#使脚本具有执行权限</span></span><br><span class="line">./test.sh  <span class="comment">#执行脚本</span></span><br></pre></td></tr></table></figure>
+<h3 id="自动输入密码"><a href="#自动输入密码" class="headerlink" title="自动输入密码"></a>自动输入密码</h3><p>免密登陆</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-copy-id -i ~&#x2F;.ssh&#x2F;id_rsa.pub user@ip</span><br></pre></td></tr></table></figure>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>FHEW</title>
     <url>/2020/08/13/FHEW/</url>
     <content><![CDATA[<div class="table-container">
@@ -612,18 +733,25 @@
       </tags>
   </entry>
   <entry>
-    <title>Linux 脚本</title>
-    <url>/2020/08/05/Linux-%E8%84%9A%E6%9C%AC/</url>
-    <content><![CDATA[<h3 id="传输文件"><a href="#传输文件" class="headerlink" title="传输文件"></a>传输文件</h3><p>目标用户ID与ip: </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root:101.101.101.10</span><br></pre></td></tr></table></figure>
-<p>第一个脚本文件</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">scp test.txt root@<span class="number">101.101</span><span class="number">.101</span><span class="number">.10</span>:/home/</span><br></pre></td></tr></table></figure>
-<h3 id="执行权限"><a href="#执行权限" class="headerlink" title="执行权限"></a>执行权限</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">chmod +x ./test.sh  <span class="comment">#使脚本具有执行权限</span></span><br><span class="line">./test.sh  <span class="comment">#执行脚本</span></span><br></pre></td></tr></table></figure>
-<h3 id="自动输入密码"><a href="#自动输入密码" class="headerlink" title="自动输入密码"></a>自动输入密码</h3><p>免密登陆</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-copy-id -i ~&#x2F;.ssh&#x2F;id_rsa.pub user@ip</span><br></pre></td></tr></table></figure>
+    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
+    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
+    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
+<ul>
+<li><strong>Active Monitoring（Synchronous）</strong></li>
+</ul>
+<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
+<ul>
+<li><strong>Passive Monitoring （Asynchronous）</strong></li>
+</ul>
+<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
 ]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
       <tags>
-        <tag>Linux</tag>
+        <tag>论文解读</tag>
+        <tag>虚拟化安全</tag>
       </tags>
   </entry>
   <entry>
@@ -753,6 +881,73 @@
       </tags>
   </entry>
   <entry>
+    <title>PUBG JNG</title>
+    <url>/2020/04/18/PUBG-JNG/</url>
+    <content><![CDATA[<h3 id="JNG战队发展历程回顾"><a href="#JNG战队发展历程回顾" class="headerlink" title="JNG战队发展历程回顾"></a>JNG战队发展历程回顾</h3><h4 id="JNG初次相遇"><a href="#JNG初次相遇" class="headerlink" title="JNG初次相遇"></a>JNG初次相遇</h4><p>很久很久以前，这支战队的几个骚年游荡在这样一个空旷的平原上</p>
+<p><img src="/2020/04/18/PUBG-JNG/1.jpg" alt="IMG_0814"></p>
+<p>这个寒假的某一天，他们在飞机上相遇，并开启了他们相识到并肩作战的征程</p>
+<p><img src="/2020/04/18/PUBG-JNG/2.jpg" alt="IMG_0815"></p>
+<h4 id="睡衣战队红极一时"><a href="#睡衣战队红极一时" class="headerlink" title="睡衣战队红极一时"></a>睡衣战队红极一时</h4><p>在他们相遇不久，便迎来了队伍的第一次胜利</p>
+<p><img src="/2020/04/18/PUBG-JNG/3.jpg" alt="IMG_0823"></p>
+<p>当时他们采取的是著名的车轮战，即3辆装甲车并驾齐驱，纵横四海的战术</p>
+<p><img src="/2020/04/18/PUBG-JNG/4.jpg" alt="IMG_0822"></p>
+<h4 id="各种模式吃鸡常态化"><a href="#各种模式吃鸡常态化" class="headerlink" title="各种模式吃鸡常态化"></a>各种模式吃鸡常态化</h4><p>在经历了短短几天的磨合后，这几个小伙子已经将吃鸡常态化</p>
+<p>普通模式</p>
+<p><img src="/2020/04/18/PUBG-JNG/5.jpg" alt="IMG_0863"></p>
+<p><img src="/2020/04/18/PUBG-JNG/20.jpg" alt></p>
+<p>特种兵模式</p>
+<p><img src="/2020/04/18/PUBG-JNG/6.jpg" alt="IMG_0833"></p>
+<p>一日两鸡已是正常</p>
+<p><img src="/2020/04/18/PUBG-JNG/7.jpg" alt="IMG_0838"></p>
+<p><img src="/2020/04/18/PUBG-JNG/8.jpg" alt="IMG_0852"></p>
+<h4 id="雪地扔雷，对手一片哀嚎"><a href="#雪地扔雷，对手一片哀嚎" class="headerlink" title="雪地扔雷，对手一片哀嚎"></a>雪地扔雷，对手一片哀嚎</h4><p><img src="/2020/04/18/PUBG-JNG/9.jpg" alt="IMG_0858"></p>
+<p><img src="/2020/04/18/PUBG-JNG/10.jpg" alt="IMG_0869"></p>
+<p><img src="/2020/04/18/PUBG-JNG/11.jpg" alt="IMG_0871"></p>
+<p><img src="/2020/04/18/PUBG-JNG/12.jpg" alt="IMG_0903"></p>
+<h4 id="最后一次征战雪地"><a href="#最后一次征战雪地" class="headerlink" title="最后一次征战雪地"></a>最后一次征战雪地</h4><p>在一次极寒模式对决中，几个小伙子竟然连锅端掉了一个满编RMB玩家。在这之后，光子工作室终于对他们下手了，出于人道主义，并不能直接限制玩家们参与游戏，于是乎，默默地移除了他们最擅长的极寒模式，他们再也不用落地寻找暖宝宝了，再也听不到系统提示：“暴风雪还有60秒到达，打开背包，利用打火机生火取暖”。但系统为了其余玩家的游戏体验，只能如此。</p>
+<p><img src="/2020/04/18/PUBG-JNG/13.jpg" alt="IMG_0909"></p>
+<h4 id="插曲"><a href="#插曲" class="headerlink" title="插曲"></a>插曲</h4><p>性感小wei在线比心</p>
+<p><img src="/2020/04/18/PUBG-JNG/14.jpg" alt="IMG_0834"></p>
+<h3 id="JNG-建队"><a href="#JNG-建队" class="headerlink" title="JNG 建队"></a>JNG 建队</h3><p>终于，在2020年4月17日，这支战队正式成立了</p>
+<p><img src="/2020/04/18/PUBG-JNG/15.jpg" alt="IMG_0855"></p>
+<p>属于JNG（Jining Gaming）的时刻已经来临</p>
+<p><img src="/2020/04/18/PUBG-JNG/16.jpg" alt></p>
+<p>今晚，请锁定和平精英，关注这支战队！</p>
+<p><img src="/2020/04/18/PUBG-JNG/21.jpg" alt></p>
+<p>建队首鸡</p>
+<p><img src="/2020/04/18/PUBG-JNG/18.jpg" alt></p>
+<p><img src="/2020/04/18/PUBG-JNG/19.jpg" alt></p>
+<p>一支穿云箭，千军万马来相见</p>
+<p><img src="/2020/04/18/PUBG-JNG/22.jpg" alt></p>
+<p>雪地彩蛋</p>
+<p><img src="/2020/04/18/PUBG-JNG/23.jpg" alt></p>
+]]></content>
+      <tags>
+        <tag>game-for-peace</tag>
+        <tag>JNG</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Systematic Review on FHE</title>
+    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>The first blog</title>
+    <url>/2020/04/18/The-first-blog/</url>
+    <content><![CDATA[<h3 id="The-first-bolg"><a href="#The-first-bolg" class="headerlink" title="The first bolg"></a>The first bolg</h3><p>Hello，this is my first bolg of github.io.</p>
+<p>I tried for about 12 hours to set up this simple website, right now, the author(me) still feel awsome.</p>
+<p>I have written some technology blogs in <a href="https://www.cnblogs.com/Robin5/" target="_blank" rel="noopener">Robin5</a>.</p>
+<p>Seize the time and face the bright future！</p>
+<p>I will work harder and harder!</p>
+<p>Witness me in github.io</p>
+]]></content>
+      <tags>
+        <tag>英文</tag>
+        <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SP&#39;15 Last-Level Cache Side-Channel Attacks are Practical</title>
     <url>/2020/05/18/SP-15-Last-Level-Cache-Side-Channel-Attacks-are-Practical/</url>
     <content><![CDATA[<div class="table-container">
@@ -803,21 +998,6 @@
         <tag>side channel attack</tag>
         <tag>cross VM</tag>
         <tag>last level cache</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>The first blog</title>
-    <url>/2020/04/18/The-first-blog/</url>
-    <content><![CDATA[<h3 id="The-first-bolg"><a href="#The-first-bolg" class="headerlink" title="The first bolg"></a>The first bolg</h3><p>Hello，this is my first bolg of github.io.</p>
-<p>I tried for about 12 hours to set up this simple website, right now, the author(me) still feel awsome.</p>
-<p>I have written some technology blogs in <a href="https://www.cnblogs.com/Robin5/" target="_blank" rel="noopener">Robin5</a>.</p>
-<p>Seize the time and face the bright future！</p>
-<p>I will work harder and harder!</p>
-<p>Witness me in github.io</p>
-]]></content>
-      <tags>
-        <tag>英文</tag>
-        <tag>essay</tag>
       </tags>
   </entry>
   <entry>
@@ -872,75 +1052,6 @@
       </tags>
   </entry>
   <entry>
-    <title>PUBG JNG</title>
-    <url>/2020/04/18/PUBG-JNG/</url>
-    <content><![CDATA[<h3 id="JNG战队发展历程回顾"><a href="#JNG战队发展历程回顾" class="headerlink" title="JNG战队发展历程回顾"></a>JNG战队发展历程回顾</h3><h4 id="JNG初次相遇"><a href="#JNG初次相遇" class="headerlink" title="JNG初次相遇"></a>JNG初次相遇</h4><p>很久很久以前，这支战队的几个骚年游荡在这样一个空旷的平原上</p>
-<p><img src="/2020/04/18/PUBG-JNG/1.jpg" alt="IMG_0814"></p>
-<p>这个寒假的某一天，他们在飞机上相遇，并开启了他们相识到并肩作战的征程</p>
-<p><img src="/2020/04/18/PUBG-JNG/2.jpg" alt="IMG_0815"></p>
-<h4 id="睡衣战队红极一时"><a href="#睡衣战队红极一时" class="headerlink" title="睡衣战队红极一时"></a>睡衣战队红极一时</h4><p>在他们相遇不久，便迎来了队伍的第一次胜利</p>
-<p><img src="/2020/04/18/PUBG-JNG/3.jpg" alt="IMG_0823"></p>
-<p>当时他们采取的是著名的车轮战，即3辆装甲车并驾齐驱，纵横四海的战术</p>
-<p><img src="/2020/04/18/PUBG-JNG/4.jpg" alt="IMG_0822"></p>
-<h4 id="各种模式吃鸡常态化"><a href="#各种模式吃鸡常态化" class="headerlink" title="各种模式吃鸡常态化"></a>各种模式吃鸡常态化</h4><p>在经历了短短几天的磨合后，这几个小伙子已经将吃鸡常态化</p>
-<p>普通模式</p>
-<p><img src="/2020/04/18/PUBG-JNG/5.jpg" alt="IMG_0863"></p>
-<p><img src="/2020/04/18/PUBG-JNG/20.jpg" alt></p>
-<p>特种兵模式</p>
-<p><img src="/2020/04/18/PUBG-JNG/6.jpg" alt="IMG_0833"></p>
-<p>一日两鸡已是正常</p>
-<p><img src="/2020/04/18/PUBG-JNG/7.jpg" alt="IMG_0838"></p>
-<p><img src="/2020/04/18/PUBG-JNG/8.jpg" alt="IMG_0852"></p>
-<h4 id="雪地扔雷，对手一片哀嚎"><a href="#雪地扔雷，对手一片哀嚎" class="headerlink" title="雪地扔雷，对手一片哀嚎"></a>雪地扔雷，对手一片哀嚎</h4><p><img src="/2020/04/18/PUBG-JNG/9.jpg" alt="IMG_0858"></p>
-<p><img src="/2020/04/18/PUBG-JNG/10.jpg" alt="IMG_0869"></p>
-<p><img src="/2020/04/18/PUBG-JNG/11.jpg" alt="IMG_0871"></p>
-<p><img src="/2020/04/18/PUBG-JNG/12.jpg" alt="IMG_0903"></p>
-<h4 id="最后一次征战雪地"><a href="#最后一次征战雪地" class="headerlink" title="最后一次征战雪地"></a>最后一次征战雪地</h4><p>在一次极寒模式对决中，几个小伙子竟然连锅端掉了一个满编RMB玩家。在这之后，光子工作室终于对他们下手了，出于人道主义，并不能直接限制玩家们参与游戏，于是乎，默默地移除了他们最擅长的极寒模式，他们再也不用落地寻找暖宝宝了，再也听不到系统提示：“暴风雪还有60秒到达，打开背包，利用打火机生火取暖”。但系统为了其余玩家的游戏体验，只能如此。</p>
-<p><img src="/2020/04/18/PUBG-JNG/13.jpg" alt="IMG_0909"></p>
-<h4 id="插曲"><a href="#插曲" class="headerlink" title="插曲"></a>插曲</h4><p>性感小wei在线比心</p>
-<p><img src="/2020/04/18/PUBG-JNG/14.jpg" alt="IMG_0834"></p>
-<h3 id="JNG-建队"><a href="#JNG-建队" class="headerlink" title="JNG 建队"></a>JNG 建队</h3><p>终于，在2020年4月17日，这支战队正式成立了</p>
-<p><img src="/2020/04/18/PUBG-JNG/15.jpg" alt="IMG_0855"></p>
-<p>属于JNG（Jining Gaming）的时刻已经来临</p>
-<p><img src="/2020/04/18/PUBG-JNG/16.jpg" alt></p>
-<p>今晚，请锁定和平精英，关注这支战队！</p>
-<p><img src="/2020/04/18/PUBG-JNG/21.jpg" alt></p>
-<p>建队首鸡</p>
-<p><img src="/2020/04/18/PUBG-JNG/18.jpg" alt></p>
-<p><img src="/2020/04/18/PUBG-JNG/19.jpg" alt></p>
-<p>一支穿云箭，千军万马来相见</p>
-<p><img src="/2020/04/18/PUBG-JNG/22.jpg" alt></p>
-<p>雪地彩蛋</p>
-<p><img src="/2020/04/18/PUBG-JNG/23.jpg" alt></p>
-]]></content>
-      <tags>
-        <tag>game-for-peace</tag>
-        <tag>JNG</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
-    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
-    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
-<ul>
-<li><strong>Active Monitoring（Synchronous）</strong></li>
-</ul>
-<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
-<ul>
-<li><strong>Passive Monitoring （Asynchronous）</strong></li>
-</ul>
-<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>虚拟化安全</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>The moment</title>
     <url>/2020/07/14/The-moment/</url>
     <content><![CDATA[<p>&emsp;&emsp;此时此刻，在家里敲代码+编辑文本，就在这一刻，我感觉电脑自带的键盘手感好棒，这种美妙的触感，爱了。</p>
@@ -955,11 +1066,6 @@
       <tags>
         <tag>essay</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Systematic Review on FHE</title>
-    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>TimeCrypt</title>
@@ -1099,11 +1205,15 @@
       </tags>
   </entry>
   <entry>
-    <title>Xen虚拟化技术完全导读</title>
-    <url>/2020/07/19/Xen%E8%99%9A%E6%8B%9F%E5%8C%96%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E5%AF%BC%E8%AF%BB/</url>
-    <content><![CDATA[]]></content>
+    <title>The outline of Outlier</title>
+    <url>/2020/07/14/The-outline-of-Outlier/</url>
+    <content><![CDATA[<h3 id="The-Outline-of-Outlier"><a href="#The-Outline-of-Outlier" class="headerlink" title="The Outline of Outlier"></a>The Outline of Outlier</h3><h3 id="0-Abstract"><a href="#0-Abstract" class="headerlink" title="0 Abstract"></a>0 Abstract</h3><h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h3><ol>
+<li>指出虚拟化的多租户云平台优点；</li>
+<li>hypervisor对于云平台很重要；</li>
+</ol>
+<h3 id="2-Background"><a href="#2-Background" class="headerlink" title="2 Background"></a>2 Background</h3><h4 id="2-1-Quick-View-of-Xen-Hypervisor"><a href="#2-1-Quick-View-of-Xen-Hypervisor" class="headerlink" title="2.1 Quick View  of Xen Hypervisor"></a>2.1 Quick View  of Xen Hypervisor</h4><h4 id="2-2-Dynamic-Root-of-Trust"><a href="#2-2-Dynamic-Root-of-Trust" class="headerlink" title="2.2 Dynamic Root of Trust"></a>2.2 Dynamic Root of Trust</h4><h4 id="2-3-Byzantine-Fault-Tolerance"><a href="#2-3-Byzantine-Fault-Tolerance" class="headerlink" title="2.3 Byzantine Fault Tolerance"></a>2.3 Byzantine Fault Tolerance</h4><h3 id="3-Overview"><a href="#3-Overview" class="headerlink" title="3 Overview"></a>3 Overview</h3><h4 id="3-1-Threat-Model-and-Assumptions"><a href="#3-1-Threat-Model-and-Assumptions" class="headerlink" title="3.1 Threat Model and Assumptions"></a>3.1 Threat Model and Assumptions</h4><h4 id="3-2-Goals"><a href="#3-2-Goals" class="headerlink" title="3.2 Goals"></a>3.2 Goals</h4><h4 id="3-3-Design-and-Approaches"><a href="#3-3-Design-and-Approaches" class="headerlink" title="3.3 Design and Approaches"></a>3.3 Design and Approaches</h4><h3 id="4-Implementation"><a href="#4-Implementation" class="headerlink" title="4 Implementation"></a>4 Implementation</h3><h4 id="4-1-Co-protocol"><a href="#4-1-Co-protocol" class="headerlink" title="4.1 Co-protocol"></a>4.1 Co-protocol</h4><h4 id="4-2-Checker"><a href="#4-2-Checker" class="headerlink" title="4.2 Checker"></a>4.2 Checker</h4><h3 id="5-Security-Analysis"><a href="#5-Security-Analysis" class="headerlink" title="5 Security Analysis"></a>5 Security Analysis</h3><h4 id="5-1-Theorems-in-the-Co-protocol"><a href="#5-1-Theorems-in-the-Co-protocol" class="headerlink" title="5.1 Theorems in the Co-protocol"></a>5.1 Theorems in the Co-protocol</h4><h4 id="5-2-Subverting-Outlier"><a href="#5-2-Subverting-Outlier" class="headerlink" title="5.2 Subverting Outlier"></a>5.2 Subverting Outlier</h4><h4 id="5-3-Attacking-Hypervisor-Code-Integrity"><a href="#5-3-Attacking-Hypervisor-Code-Integrity" class="headerlink" title="5.3 Attacking Hypervisor Code Integrity"></a>5.3 Attacking Hypervisor Code Integrity</h4><h4 id="5-4-Limitations-and-Future-Work"><a href="#5-4-Limitations-and-Future-Work" class="headerlink" title="5.4 Limitations and Future Work"></a>5.4 Limitations and Future Work</h4><h3 id="6-Evaluation"><a href="#6-Evaluation" class="headerlink" title="6 Evaluation"></a>6 Evaluation</h3><h4 id="6-1-CPU-Overhead"><a href="#6-1-CPU-Overhead" class="headerlink" title="6.1 CPU Overhead"></a>6.1 CPU Overhead</h4><h4 id="6-2-Network-Overhead"><a href="#6-2-Network-Overhead" class="headerlink" title="6.2 Network Overhead"></a>6.2 Network Overhead</h4><h4 id="6-3-Detection-Time"><a href="#6-3-Detection-Time" class="headerlink" title="6.3 Detection Time"></a>6.3 Detection Time</h4><h3 id="7-Related-Work"><a href="#7-Related-Work" class="headerlink" title="7 Related Work"></a>7 Related Work</h3><h3 id="8-Conclusion"><a href="#8-Conclusion" class="headerlink" title="8 Conclusion"></a>8 Conclusion</h3>]]></content>
       <tags>
-        <tag>读书笔记</tag>
+        <tag>paper</tag>
       </tags>
   </entry>
   <entry>
@@ -1214,6 +1324,14 @@
       </tags>
   </entry>
   <entry>
+    <title>Xen虚拟化技术完全导读</title>
+    <url>/2020/07/19/Xen%E8%99%9A%E6%8B%9F%E5%8C%96%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E5%AF%BC%E8%AF%BB/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>云虚拟化安全攻防实践</title>
     <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
     <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
@@ -1221,51 +1339,6 @@
 <h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
       <tags>
         <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>The outline of Outlier</title>
-    <url>/2020/07/14/The-outline-of-Outlier/</url>
-    <content><![CDATA[<h3 id="The-Outline-of-Outlier"><a href="#The-Outline-of-Outlier" class="headerlink" title="The Outline of Outlier"></a>The Outline of Outlier</h3><h3 id="0-Abstract"><a href="#0-Abstract" class="headerlink" title="0 Abstract"></a>0 Abstract</h3><h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h3><ol>
-<li>指出虚拟化的多租户云平台优点；</li>
-<li>hypervisor对于云平台很重要；</li>
-</ol>
-<h3 id="2-Background"><a href="#2-Background" class="headerlink" title="2 Background"></a>2 Background</h3><h4 id="2-1-Quick-View-of-Xen-Hypervisor"><a href="#2-1-Quick-View-of-Xen-Hypervisor" class="headerlink" title="2.1 Quick View  of Xen Hypervisor"></a>2.1 Quick View  of Xen Hypervisor</h4><h4 id="2-2-Dynamic-Root-of-Trust"><a href="#2-2-Dynamic-Root-of-Trust" class="headerlink" title="2.2 Dynamic Root of Trust"></a>2.2 Dynamic Root of Trust</h4><h4 id="2-3-Byzantine-Fault-Tolerance"><a href="#2-3-Byzantine-Fault-Tolerance" class="headerlink" title="2.3 Byzantine Fault Tolerance"></a>2.3 Byzantine Fault Tolerance</h4><h3 id="3-Overview"><a href="#3-Overview" class="headerlink" title="3 Overview"></a>3 Overview</h3><h4 id="3-1-Threat-Model-and-Assumptions"><a href="#3-1-Threat-Model-and-Assumptions" class="headerlink" title="3.1 Threat Model and Assumptions"></a>3.1 Threat Model and Assumptions</h4><h4 id="3-2-Goals"><a href="#3-2-Goals" class="headerlink" title="3.2 Goals"></a>3.2 Goals</h4><h4 id="3-3-Design-and-Approaches"><a href="#3-3-Design-and-Approaches" class="headerlink" title="3.3 Design and Approaches"></a>3.3 Design and Approaches</h4><h3 id="4-Implementation"><a href="#4-Implementation" class="headerlink" title="4 Implementation"></a>4 Implementation</h3><h4 id="4-1-Co-protocol"><a href="#4-1-Co-protocol" class="headerlink" title="4.1 Co-protocol"></a>4.1 Co-protocol</h4><h4 id="4-2-Checker"><a href="#4-2-Checker" class="headerlink" title="4.2 Checker"></a>4.2 Checker</h4><h3 id="5-Security-Analysis"><a href="#5-Security-Analysis" class="headerlink" title="5 Security Analysis"></a>5 Security Analysis</h3><h4 id="5-1-Theorems-in-the-Co-protocol"><a href="#5-1-Theorems-in-the-Co-protocol" class="headerlink" title="5.1 Theorems in the Co-protocol"></a>5.1 Theorems in the Co-protocol</h4><h4 id="5-2-Subverting-Outlier"><a href="#5-2-Subverting-Outlier" class="headerlink" title="5.2 Subverting Outlier"></a>5.2 Subverting Outlier</h4><h4 id="5-3-Attacking-Hypervisor-Code-Integrity"><a href="#5-3-Attacking-Hypervisor-Code-Integrity" class="headerlink" title="5.3 Attacking Hypervisor Code Integrity"></a>5.3 Attacking Hypervisor Code Integrity</h4><h4 id="5-4-Limitations-and-Future-Work"><a href="#5-4-Limitations-and-Future-Work" class="headerlink" title="5.4 Limitations and Future Work"></a>5.4 Limitations and Future Work</h4><h3 id="6-Evaluation"><a href="#6-Evaluation" class="headerlink" title="6 Evaluation"></a>6 Evaluation</h3><h4 id="6-1-CPU-Overhead"><a href="#6-1-CPU-Overhead" class="headerlink" title="6.1 CPU Overhead"></a>6.1 CPU Overhead</h4><h4 id="6-2-Network-Overhead"><a href="#6-2-Network-Overhead" class="headerlink" title="6.2 Network Overhead"></a>6.2 Network Overhead</h4><h4 id="6-3-Detection-Time"><a href="#6-3-Detection-Time" class="headerlink" title="6.3 Detection Time"></a>6.3 Detection Time</h4><h3 id="7-Related-Work"><a href="#7-Related-Work" class="headerlink" title="7 Related Work"></a>7 Related Work</h3><h3 id="8-Conclusion"><a href="#8-Conclusion" class="headerlink" title="8 Conclusion"></a>8 Conclusion</h3>]]></content>
-      <tags>
-        <tag>paper</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>安全计算</title>
-    <url>/2020/08/15/%E5%AE%89%E5%85%A8%E8%AE%A1%E7%AE%97/</url>
-    <content><![CDATA[<h3 id="什么是安全计算"><a href="#什么是安全计算" class="headerlink" title="什么是安全计算"></a>什么是安全计算</h3><h4 id="安全计算"><a href="#安全计算" class="headerlink" title="安全计算"></a>安全计算</h4><p>安全多方计算，Secure Multi-party Computation（SMC）在保护数据安全的前提下实现多方计算，即，多个参与者将各自的数据凑在一起，并在这个大数据集上进行一定的计算，并得到最后的结果。</p>
-<h4 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h4><h5 id="1-基于噪音"><a href="#1-基于噪音" class="headerlink" title="1.基于噪音"></a>1.基于噪音</h5><p>差分隐私（differential privacy）对计算过程利用噪声干扰，让原始数据淹没在噪音中，使得在引入噪声的数据中心无法推断出原始数据。（例如一张马赛克图片，无法推断出具体细节）</p>
-<p>优点：效率高<br>缺点：得到的结果不够准确</p>
-<h5 id="2-非噪音法"><a href="#2-非噪音法" class="headerlink" title="2.非噪音法"></a>2.非噪音法</h5><p>（这种方式一般通过密码学方法将数据编码或者加密，得到一些奇怪的数字，而且这些数字有一些性质，比如看上去很随机，但是保留了原始数据的线性关系，或者在打乱顺序的数据中心能够发现其与原始数据的映射关系。）</p>
-<p>a.混淆电路（Garbled Circuit）</p>
-<p>b.同态加密（Homomorphic Encryption）</p>
-<p>c.秘钥分享（Secret Sharing）</p>
-<p>以上提到的三种方式一般在源头将数据加密，计算操作看到的数据是密文，只要特定的假设条件满足，这类方法在计算过程中是不会泄露原始信息的。</p>
-<p>优点：不会对计算过程添加干扰，因此得到的是准确值，且运用密码学理论，保障安全性<br>缺点：由于运用很多密码学方法，整个过程的计算量、通讯量很大，对于一些复杂的任务（训练几十个上百层的CNN）短时间内很难完成。</p>
-<h3 id="差分隐私"><a href="#差分隐私" class="headerlink" title="差分隐私"></a>差分隐私</h3><h3 id="混淆电路"><a href="#混淆电路" class="headerlink" title="混淆电路"></a>混淆电路</h3><h3 id="同态加密"><a href="#同态加密" class="headerlink" title="同态加密"></a>同态加密</h3><h3 id="秘钥分享"><a href="#秘钥分享" class="headerlink" title="秘钥分享"></a>秘钥分享</h3>]]></content>
-      <tags>
-        <tag>Homomorphic</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>博士学长有话说</title>
-    <url>/2020/04/22/%E5%8D%9A%E5%A3%AB%E5%AD%A6%E9%95%BF%E6%9C%89%E8%AF%9D%E8%AF%B4/</url>
-    <content><![CDATA[<div id="hexo-blog-encrypt" data-wpm="wrong password" data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
-  <div class="hbe-input-container">
-  <input type="password" id="hbePass" placeholder="" />
-    <label for="hbePass">Hello,welcome,please input the password</label>
-    <div class="bottom-line"></div>
-  </div>
-  <script id="hbeData" type="hbeData" data-hmacdigest="1b16e90030d91775c67fff0c64376e1adc72b3ccf16f52afec472d3d8df2a40f">44c8f92312f791d29699ba43ff42e648e9fa79b21ee4766c9acf0d26939412c79fde9f6a68c68773ec79f6bbd3d70d1e7162aea39893be6ccf46c02c959d95643bdec9e4084cb7574e34842c8786cdec82f0133ec7597c022bf4afbf3d23b45bf64908ca7fe7086de24f37469058b5fe6974bbb76c70b11e6c3c2c7637d6926a8e1b3f0eaaf008004de62ac5a4c5fa95b574ef3d5368d2e885d696cb18e4b9f316e86ac8decfdcfa74b973c79ccd197864383c2d409d5dc5089ad35fbb452a052b520fc33647a5a81162bfb330114f86f881d2e7e5ebbfddd0b6234608f229c97e78d6975787de78df0f0b4a6ef6d50157d584bad495dc4e06e577b002a424625edc17fa5bf727bf18ccce6841e80890e7d579747117e583e6f108f18ae523ceb950c9816848be80ebb3e458ac93ecaf4cc9ec5f728bb8767533a1f4976f3a24919de098dbe952e1a662cd191eadf382f7d8fcba9e546cae100e7ea363c4680b2584c95a22243c8565f91e113702b4ee443b22bb66e46aa4ca0e5b272014db1fcc6491df3e1742f540a818620b143a0dca8ebd6a426e6654beba3745302f165483bb33f25c8876595091e6ff557393a568477869f58b69a7fffd81e770bae4fb44eac9702621483a97a8cfbe9b666e5f47c2cc41becc477f37faf8c05ff9cd75dd4f4938c7ec35fa0e6f28768529a37f4c49f56c9cbbc6a425494a7688dc71a1550e7e757da2aa909947e35a753eb7d15b47d3cd6ea067ec3646429f7e0746a51aae0bbf119cf6b82ec67896bd3171ffa6eb18613635273e81f67d115e1fe93b853dc7120c8c72cb9a83ffb29f3b61bc470d4aca13eff6f897cd9c72c7f0758af4dc3171f37dd2392224b59e5e5519c624f2cf6b9e51964de2f10ee481c6877e382686aa919b10bb59393b731e2ab5ebec8dbc0e15f3ec51e5f622a92b646235e7bfa16a0a534b4771d540e8e39a89ed271e4dca3a783e3ecc31def3a680b654145e1f0b47cfbd8ff7b727864588244eff0645221688400bfed7fab9d992f5d4bb36029f172d26118923235ecedf58fb6a21728fde95e0a8aab5c1670d6883d1ab3fd650ae84b3b3788a4474e70e383697a86630899c3337a02456983a999dd65911c7c11f2e2c83699b4703b5a9e8349d98d98c6a08df5b92320668e8b0db3fbfe1d56760d46589201e0457cf5bdc01b0315844dcfca9de8713313e016381ca49d52d452affa3bf407177e1a754f0159275ac3c9a7b39363943d67335bee16cf6918229ff1ebf12a7f1d7c7ed4052a816f74a53b7b5bab82f5870c66ca314e67e8d4757aaa8046a11f6aeddd6f5e8e73c527ce28a9858980d2e87dc6d7f4acce57380a8127c5da47b6193ccf062e25928d1924674a180cc33de639a04c513d7aa9384cb6a0a2a26fd8c244f48eb71fc227e4743733f5dc69df65b6fda757e7226d8585cb834394ff192ac71247cd08bf1616599fd29e224ad34a09e7d299a95016630ea1ad0cf432900ba3c29be728496fa03a63c437b6aa489581a3cb7426b1bff26a43bd275ecad2194fb42a7d6138715f5b65e03128464c3c5a8e37eb3e7dedee0eeb8a6397db7ef4feb63d847eeda4fc85a8b31f8a2356f00ba321faf4373db0c506372a0b5d9283fe587d0a98f016217e6687b434085b4579298e6f1820041b78e4d1447efa8650df72738f04541733000da5fa7184b9c7a1f6487d1c814c2a4666bb4d1496d97b5a2cad81653fb406faabb579d9648371b00c7a94893c17edc2013cb8dcbb74da811a2a1fe755558f70a703913c262192532501e5785ed9807ef5a2e01414e846aa26eb9fbf4194bc2a5448445c5e0120376754343d2dbdc3c2465520829535f6e1d56d26da037baf53508d9a75227b0ba651f5765400b41957a449f10a9dfb0a746bd6faf300ab6642fefaf4cf5dbbc56d2734a2db0a247696e51646a3ee979f62f987362d150fff8e39c055ea1c4f37f320bca5c529195e76e6804349596f8cf2c2caae3f52342728f2230129c2ade9f5d6e2fa3cc5148fbc2a02b53fbba35ab051897cb39abf5a4f5850dd2d4d16b6d7245c01b32da3911bcec1b6b57109f5b7edbf57744fb9fc03854675df9c51b3c8cdea58e00ef731bab37d30631370edf452f778ed6d9a870f593712a855ef6eb53dffe053a84a1a828f7c2e84679bf37c1931bef3fbb6911f0beaab48db2a18b49868ace725683ae091a9891817e220a1bb6cbf71d2b661d63c991c11b0f208ff194e37adb39afe1dddea6ca853c39a1e01820a711a41a4a5465f9efac2477a3a72da7fc15d2246dd92636ec1146719996b020438064905a2c7e5c79bfd52e8ead5f001fc7ebbfcec0c4e2a593bf5b0a1eeacf158c07a43447ad2951b50f78b6b1bec41ba695214ae32545e7b8f63ee841b32a2f052500a22afe1500f4c742ca3cf62fa42f6a5f7010a5e15b7b3df3637760e2baf3a77cf270c02feacc0dccc6ac945f72452668e73a728338cb1d68e37e8979840888a041dbcbb65835b5508d8f2dc0e9acf1063e55e7e3c6e01017cea5674c9314a4e2df48f29a2e41a6fe3844f22fb34c4c000cf33f02dea61bba4e49849e85e4d8a7aa3fda0f584ccdccdcbf6ec9d1b33ab1cdd94a8ab56e9752e74ccc2700aa5d0623f12b4e5717c5fe37b89e470d5ccb425920450a1a24e47262cc7fe92cdd5a2f73e42686fd8cbb72b02a0b957ee56f4cceff38b159b682371d5d56243f97fc8aa18d9c7b09cb10d0deed680b2fdac6c35fc3b3a8940c177e94932ce97e64505e4ffe9887a35fb6647f69bceb89b61c0a1695bfacbee7469e629a6441344d07ff4c704793c451b1a4fed26f95bfc3509cac24c5550d3b1fd65e4c2308cf40e4d9a62fbd340169eb8f818c74179ba4ec3e110701dcfa359f90e9b38ca80554d1ef30098a1810140b09b6ad501b8f31b430c16b6bc328345c34318e1effa3421b880944b363b04f97e9ceea0065e49c9b751b6914213d8d3f0d80cd12299aaf99b8583f261acfce84f495294967809140bb4b4555fc15134803e3240e41f3016c7f22d7aeff27c35a374d19e0e71762c32db03b3228fa8e934b406ac27ca4d40dab25944e5add5d6cabc5c253b20e52dcbc45fd42770242360ccf37334c05a12d645443831604c8881c52d7fac315614f2f5b37624fd461da5cc9dcbd32bf4209b8e71c86b9b35ac1d3a2544000b67f9516d934273fb33b05516464128204f4de5dcb5c768005defad687512bb5883c0b4dc03bcb030f24f4bafe0172ad33f78575228c347a57445fce25dd9047539a380be0e61d53156168ab24b7a6ca661e5aa3a3cbb3b618d442150f011edfc0b4cb9f3d6d8f0cccc2c2a64786bd4d82bf02b4370a53f05b24c338f1e7c483370ed68683c4f9f0d45c46c645f9c316d00663050fa2b75483fe368b558d0109ef66975e652045c7e76e080a42d1a7efeeea57f0fcf11a383a2b7753e21bb4b2a47036f38bc15f04e9f615b9363c7ba230e9017a341d7353b850ba2ecf295d9ae85c68fa83064f5da2a0f2e80adbc8579d9e9a749489f494e85886d6998fe6f0588e8b3d5710bdf052d2e8618261e0900d98e806d364750b5721c681c625208b9c8bafc82de6f703037111a385bbe4e02d92734e5be8368629b908da342a4c780c64197822d9fa0e4ce67f064f76acde85288775717d0d23762f8b33a556c60c3655c105b2c09dc5a0ac4ecd18dd47ccb043e3ab0914d5bf39aabd0c4daf1d2f23039aa54b4458fcc06b841719c3e237ef29a0c267258915b2c9cbbc5c31541fe780624b3406f0d0b42d5cb2d9535bbfcf798291337ef64ee3e556ec413d1e8087bfa02c79386d583137c20095f162c7739efc4df384939c7f87952c763f19463fce23bbfb951c491a733676af9bff3abfca76d9f62b7b124a5431d919535688045d9c6807231714d7f8f4dbffdc37a8600ce4a60aa8e070b3e1b11e76213b697e28279e9da53b3a0cbd159d0aae54cc006a113e8d9020dd15cac1354e411f87339a0bb537a21df398dfefddbf6da46c76dbd4d9d0e86aa286aff3781b959a4ac109e8020187b34b70b2eeb49e21161e4dee91e78943918a23ca7dc3927fc8ccc0b5226829a531876c2d5d62bcf9784df3db34516529d97abd44e2f2b5ecdf828ca5bf3fade6874954db69610a6f6981b4064734b770c05bdc5c275da0a0b939e9a9f3a88d91c6c1c3e3cc506a6c6d332d2cb65d36a768800265723a9e6af1dec15dc568326ebdf82434d56ac46889f2628737a4f274bed1bd26b20a9e81f848355410517d513c83a7208ea6e2c9d76841b331021124186aa17f4c41bdf4dcdb66c489dc50f9da069cf2ddc6d423d60827cdbabf334b2dffe0001315e9df505c6ba6ca2baf40bf03ade6bbd9c7067a36718f9e20da2b3a8a33c9e46b953092c0d815995e95de05f066be0b9afa63b514375c5209ef52642c3927dfa5cf577521781210211c63b7cd3918b56512200927c39559775ba7193d85acaaece5b35c61c63bc3266bce5cc81c13b3abefea91bb8cc05c826ce62fe6ae2d0c6bdf07402faaed5c055c14b652eeac59ea3c7015dba809a326a751f31219ba6049fbaab70e96c021060cc3f5319cad2e225bd1101355bdde8a469b0aababd85ba806b19d0043818d8ba64dc5ff9872d892a50d248030426d3d52c10284138cd052326a4c1ae67245f3d6fdebc9aadbb955bd587365e894b843c42ff9218bb479bee777cefe65a10d3db71d4dda1f0b22cc7b763f903c27cbab7ededba3a046a91315757805790ca441bc9b77c41e7a35bf9bbbd764f92577d8fb75710aec350a7f8145e55dacead6807c451a8082bc35d17ce14bbcdbe9fcf03db4a372966471ec2be9afa1e4769f6865642eee82decd974efc21e4ae0a52497e39a8f0598d5fb3b65aa4f83bbdf2b8b5f963732c9815c4d05b22dec90cbd592b08a8d210687f634236bcc6ca7b25f162c55bc49230a72298e5ab725cb1298198e248a55c76b33afe138e7013427a3d497b978f2f5559ba63b7d5511c6ad041f5a45451350cf77b2077a6e56a02d01dae7d6db22fd0085f17de66f19c779eb73ef6da4c7198f3f49d1c0ef94ee781cbf9482dde971228b2ae49a6fb65ad08ba31dacdb570c617eb7690e276a2c615f20840020ccf085906d5208fcdb79af322cf558641d6d39a0c243e4fe7f0ecd5fce77494efd114a2f99078bf7bfdec52a658649a844e50c1674c909f9e34fcbf973af1bc30609e1c8f76d268b80ca7c200127fc52093ccf42abe3e51e3cb0178b1ad0f2484cffcae0320b0523752284cdda47a912c0ab781fefad7c84187684d26e7a2bc4947ec5b3b7c03f437be23395225d0655d31bab1810b38c6088e24b9388375d0a30845a2f266540f01b09eb7f7a2ba90629d137254f4bb84ebc8c7bf7a36ec397f4284414d8a2712c03aa2382cdc7eca5c82559d96760521f90c0e2e0470def1c20ffe9480e92563acdd1d3b858202eb09214fff38113a350158fcb8723626c3b218b9b0e0156ed0a7b8dc2ae4f7249974506ce8fac58dab21f321980896388775250c27a5a3c51cf760d5932784ab7215f08fa7a223224d286c8687cbdd96c107873c393a4b63fba56e860b50bacc0c59bb7709a2fcc6330e3ed7f61bf5ac559d08f7d4158698d0a53255ba11e9242c2e53b525deb9d1a7357937d07be5cb800d50f84d9146fdb1dc9ec69e6aa6e29e0d3b53df49324844bf9658d244593bf084b71ee7f786a57df6e6cadfcd9c1a565f92fd5147ca1c6374100658d46ee9e96b7ffcafd738ad4eb7cab30c857ebace08795ada0514afe44089367d3e5a334dfec8f48692c5197f80400c05a80e5b3ada74630a5085a19a18e0a60887482021c4a0fa07a03c940b96beae0f6faa3da9f1f1f25c2bf1d331d21617ae47dceec65cbf1fd58516474f3a46c3247bbf370410d283fcf0f5698fffb9eeeed5b06e6984e63f03f71df29cc6e4b50df720e0602306f949dd6030ee4f4368151b5da8b0fd85d4cb611fc8c6e141d412a425baf56d79404f171e19158c1453a37de987ccfbb6c88de9202cd2eb00c1c067429cf5fc49bc3f80a8e41f90081ea328456aee1943999546d93c8c67ad93572d98ed67ab266a2b7eba78ffa2cefd793429306e6a55480bb297ba2a03efbac0a1211fa03fa9e70bda0c4569e1cc4b6025b96654e7ea9a1d645fa13e65975f97a4dfa2399a5531710b6cef7785fcb102d2c8ea7bf8b145d45ebd9ba23f959fdfd904b4d4a7f01d16cdbede831221f9157923e812b5ca467a7b721f09772fe8312d97405e04414ea4f2b46536723a00766faa5bc93e20be98c32c1fb5ece090b3f0f1c5dcf902c33a7a321fb83f878a8099b6bfc18da3fe92f0e08856062b6aa99ef17090bd817c76d308981ba035dcc6ea5e3a5a11ccdaf357b3ba0a3a71f2a9eba277a5bc85b78079ce801ac1794331bf389c0ea731dc8b5df2af601bfacd0bc0286c267aa5d336bf1e2b1604fb84318278d5bda935410cf73460e9bde2168c8a99ee54e34d8041d49434703576d9eaa6397e98a8874e39ca15b4648cdc15572399c2d6b9a6f5590ad3ca644bdbd8252cbd45016d6a9024a587993d50155e70d222c43a68462ce649b81631b437490344a028263cbaee3e69bc8a86e142ef5672b3e6e5f81fe99278d16ddb7463e7e239bdb419d28dee81a09339bb27e8e15c52f8a861bc5828c8f8c05a87a3feb77309aa2fd4699d32708ad3371389195fd69fc1daca849c489d78b6bddd0c46278c03fa1aa68dfda0fe628691a3ac9cf84898934ce497b08b368f321fd8d43979f659db3d2456e93f0318e9d3fd42b82f0fca8fc66905dd8054573da762b821fe6bc63155045fefed9a09925da70b01c2b7c65675fd8c9d60692d183dd4718759fb95d7a2eb6fddeb76a081f1421b4b7481d7b955f271f9dbab7b2569daa774cdc7ea27c69d29e1fc52cdb4eb28fb34aafe82a41649d87514f58b66c575b249cf0b2c9da18b329f6c12a588a007f48a8f71a8181034495f7c7ed17a4920077b50589eea596b11ad6bd3eba477bf66d81d4da0002674f83537f08041850c2587b66cf50a45c1fe8a9556786de49ab2d0721964ff460f16e91c425e6ea27051e470c20b3fdc0850e9c19a8f4a1c1c137aaba5718a6672abcbcac722038a0572a4fbdf1690bc9b24704c7eccd9bd351bd73ecca619660d879ce7045a80df370e4b3e5133387ac73cd1c3e78ad544872787d7ee0d08af411eb7726d188a84e73967435fd3e9543ec63212a1c4b338f596be230528d6ba2e0d029c1cd7752bf75825c4d1fbb970dc6301876a327cc46fa09b78ff04f855b65565cac6bde31337f37829003a4a6cfe678871d0dd72cbd2894b7de21e75b73f87c3f49522c797197131d741ee18f4ae0d0909c7af12cb7d4a749301f2435e2911865bc7baef5f889ec4dbea96063c0d8fd05e71367bbf7153322e3bdb3df9ea414d5d1dd59924b18ebcffcb21522486a1ede0dbf5178192d163735ad3b8988f7b3acf1c19f2cdc47b89dccdbc5ed93c7b958f063eeee02a53481ef694e8c96b67ec38bd674d4fca3e2b74d615d6af7d8efd2e6dffee16948d450c4a6fa0b63ba1db240230331b219a7a2eb7d11977da0517ce86dbbfe64e3969b44db65461627b23e3f1ec467d53dfa3687fabe7bac06ee820d107a5db39f89c2ce8951861f1b33826fa54f26fd013cde0861e995acba9c2f6841248d166825a47b40b8e9ca91a13748cc836d455df74821f08138f54bf7b2083574db5d2ab80022304260b90fa842ff4ac0439c23a28a1490cd8bcf0e884f38264ba7bbe7053a9d40af4f7c3d7b9dda8bfd1b0b79dc1ef3d54ff1523b9f4fbcb5095f188a50e2c1d78f5e054e33b6c2bd0741a4980c4c2d703c347a701be48f65a7dc4c07ca1439a69cf27395b83e5aea8946133715c361f434089f8bf4616b260cdfb32adc026e8cb7a1980dabdf3c18c42bc39bb8f1c83fe099d41cb3183415166258244a759529881c18f4b8593570f14c5395e1a83e1cc4e43af42e52fde1d9bdb995edb6888263bdb4da02e4fd868c0ce0edf3a8a5937de36e6522b35999490d8fdad3b42fd833fa36a0f61bd6e5a5722723dde437183305f93eb327a7344046001a546d75e3356aa6b49c731c48672d4271b1c0fd13b83330de5304b3a1261ba6822938fe0c63bf33bd5bccd342faf52f9b7e77c0c9d7df91cf6eea5ae4500eda71fcaeb5d10eb6907ead874fcebf221db8a9adece3ce4ad39329f952393ec9e6ea3a37099c5cebd7e3a70f5f75ceaf41ebfd88f40301e8a0a843262e9e701d48a514171f3169c98b2611ca445f2e28bc88cbfe2cbb546fb9e28d4af1827b743ff9de5f040436d0727762fd370607f9bd7229fd6225d5012b60e0fc2f23d1fce9c142d6a70e701970d8915dc3ece6fc513df3a1ed10e4fda74e5569421a178a3fbdcd6d9b163382577d0227fa201d33676d9a91aefed41d6ff7a6025a3e240d922e0086365206937586a553eea43c6da9a89359a07cbd3d9b98aa2cbb931befaca8630ca175bc7c107dcfef0192ebd97090d047e814014a0bda12da2fa853cbc5340116081c74c6208503c0b751c10f73b56c8f3d77b4b41c64956ac595b30f295aca8a7443246755a7fdd82fbe6d3f3d4da4a8c5c34b4caa639984b67ab2c377947748804e78cb3779d180b86123daa405886474b2e5b36f7191369145faeb0d15926045028939deb7b88840839643139f9d74a95d600a2ed6d86dea73215a3fcf2e13ee924e6e850025b76f229d4efb21a3aa6feaec7d4074a02a0256c9ad9c04e15a190fe2a0ede854c1976586e30034d706ddaf4a5741d2c5452398b0f2832939e0b81e62b1b8dfd712ecabb71ae57fd6f9f37364d65f68ca6848c5d0cc85430ff8c82fe48efd13589c8102a182206ac3c778086257bf9a1349a9f797a36937956cfa019756402bb594387b5a112d539f0f39c63565f1638c9308bca8a8014cf8329a6b135d430c5786242f3dad99a0deebae78d706b71692b619caa184fdd0cd760b4c18e40eae6187f037aac091fa25e6d836a5cbfef4f06f7c37d7a450889ee0f01b746bbfbb01ff4257aa986c9eef304740355d8191263ef6feb747e595502fd19656abb8127b486adbad5fd16f0e46b9cb85a25ac2c220bbb2b50c991fbec1313db716f844880cb27f6de6714f7b0fa1e1de965b4696351b374a8539acab916d0a239dd17cce091fb76ef314bd353e619fdf3051d111bb64fb95cd48ab0707b5f6d80535b09c26e07273a858e84c7cf2bb6602ee2ad6e06ba35d3287aafd455b36263a74f4e0b5bf923f5546af4a29236fc4b9d21d6fe2660d4291fed5202722d34a1438b35ef3c6cfa621492489a9bba4770afa5711708117754b8710d5d50015e8d4b4466245d06261c535d274dc5f29d46b2730f06479f9f665a36aacfb78e71e66bc15f1be915aa1ae13ccdf64d95243da41ae990a741e2649535354f4113a732bfc971524b6ed555612ba2f967da825cdcec88d94b5fd33201ee607b0fb5fdc40e553ca2b50655baff7de1b5b351029b4f7eb1991aec75668bd22db06d8a8da2a287357304f8defe56764f3532ac3e19e83a7e4b573b92508d6c58441f562492950c2d4a12d1dcd593cc83bae820bd561573addfe4f2c8feedff84934b2ac574cc31e1f1cfb2bfd1b50adf228e1b27fc1625e74b2affb1f3fbd57ff26b325c5fb3cef53f0b3f427fae3275166ed4fd43d5af498ee3511d06e1cbeff42cb8b4ebda2db5a4f09a1f16c5ea1a40e29a7192c07a9a2bf34dcedbd9998f8b62720a77cdd39662d8a8e4a71e2eb88d3b993de0a9e77e125b1e96f6068acbe3bd2fc1e39615a668bfa493a67204e4236f6231ca1f7bf0fef0dc0ccd9ac7378b5e1ea00b7ba42e6d965fed006780e8660010f4db4e9d769266310cb9e0c3cae0710995906fdd2fe6894736f4b602df768cdfbaa145e9e00db0c60e7dbd620911a8eeb5b6220546691727a9f730693f341dbd69183f2a1d066b54da41239f542db24ed118ea4866b272d2610e8b36ff5f92d63eb449303af08ddae7f4c67e1eb983eff49c979f1d8cd83a1744e3c021b6e544c2dc79597a6abfe8ef3a9a4618083039a065af577fe73f38b4f4af181f6c6137c7995116cffc3a97a52c8fcc744ecf348229c5998b369f68265f29ecefcf283e1772ad6b494df9cf9d080a45d25d45fa73091eb938dd6ac5dfe0de8f553f8ade3b529e12ffbd3970e7ddb8b9f91c1b52f26f32b9ef1804a177ba4d82387b2f04a70a4693ecb9c181dd088290abf7497ec731f933abadb62f8da4a1a9313ba167889548c62fcec534b0661cd5a3daef64d22185e280b5ff3c5cf1acaa5fe5dec22996b5f84bfa86f6a7489864338ada0fd55d6daf901cbcf4579900b3bf9011b87984f2ab63421f522151871b8e1ca5845fc5549ab4d9db8fce12552238df5f451b8a11fa12e6e90434cd861dc39896995881898b6e07e63954254b7f6cc61a268684a15291354564239f9eaa1282bbb33f06216aa87ff7fbcd2a8337bf156afb9e4a48c2e5f9817c6ac3a9bb15e10ffff20505af08e4b54315d0eb2a118cb099726f77bc407d935936500a8ceb47f400f4cb4e8ba9d6c226a96b7216af1c4b7788a43a05e2864c6c0a287e90c136787e977b20103a17f8c9ec5111f48aef5156561387ee40e6f3e9f109ab4cd27ea84371439055c718e487726adca4a9671bf534c49adcd62ffcbbdf3bd2d8742a74e0d0ea419905864d644108d2f2eebe630a81e15508c934dae92cefa5139dc946df46036a1e4d771d8962a50e142393c4b48c4892ef1c0d55045293eb382a501b47f13f17f29b831c2e3b4cf478c5e4b7d7d35c16ead60bbd85c336ec71b0d44ca85fa26c780a9bc0b6f992c5dada74b0f8b6624bf03533a5340d3984bd68173ad8f5ffe55828ab94771b4af082dfa173f4388e65faa3c063dbd48a94bceeba03e1d3b2660451e0f145d57b0b636497ffbbe89a2d2abf21a55feafa3394bb6995ef79cfc279aebeb8d7187bb247cffeeac6a60126818fff1e234dbbdbfd09f8ecbeadbf67d906801c24d0147093f52ecbc2dd1025814d471cf63f6e4709c1368616197d0e91b8e8bd241c3d6a768f8f1655b4ba90a53bdd1e73674f5b537f2bd18fadd669137cf8a3776ebd29e57e61af584694d3d64d4a40750b6133aefeea32b49d2320ceca0efa7eb004a73bc0846ccb319b39a6d326a1cec13b83e15fa4d67556cb5ab10328b208da2bfe3a47de3841c060e7c05024dec4fa945fdd20f3b0a6f5b68fd942ff8910b5459124a67c0ebdfe28f991527cf0953a8c0369807e75112ad36d7a8b310b148fc833bd0cd13457c379f90037a195835a4f65076474de232d4d61d6ec83d416dd81a379402d0827d46d3c01d6fd44f18a042d6d453a03a85dc042be01d90f174e23014883d305404c880d10a8f3e7d58e3207ac32cb39a34644e1b63b7c6613c78362f2c59311a5e2af01ce3821027c42b56f85e6817271c11c9f0578347e0adaea8e584f47da53770c87c270ea94abb2e29610885a0232fb68a6c07349e38f03442dbd952fa83716c07c63c1409148701146aca157349cfc947dc5aca62521b6c9e08a5214a1c10a201e32325d79a1e1c1cdc25888e900b9a4a7e19839b1723af8d670fc432f2f80e5a40f640a7b7c5a602ea99637bfa1001daed0c22ae30e8ef095ec850dfeef4662dd3bb3ce6602bd0a9b9e32a318e99fabbad98a33d3848803894cce5d347530dc98dcda85e60e666708c481a57ff2707af1fec81690855e27a962179a438a6e0617c887bb704d3dcd3168e9439fca7835a5afe7f90f161590b8b722153e700ed5a3c2c6429cae73e5e42b044fae04735a023e19431aa1e427759d59334594008ee2290c01f436e363647096cdbbea58bdd8efa51e650e50dd1dd246479f964f574425693d102b10313bc384d43c4ecec854ff956e5d083b64a5fa66a7632535b6cacff6a24b9e8ef9d0831e92700a92820848ee26a54a46669eafd4549ade2eb60c7f02e68d37ee5a2e00fe5995fdb555067c60ba13eb7ec33db6df3709801d3ecaa86610a898ed695f57e64aca</script>
-</div>
-<script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
-      <tags>
-        <tag>essay</tag>
       </tags>
   </entry>
   <entry>
@@ -1324,21 +1397,6 @@
       <tags>
         <tag>Xen log</tag>
         <tag>虚拟机</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>泉城济南</title>
-    <url>/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/</url>
-    <content><![CDATA[<h3 id="泉城济南"><a href="#泉城济南" class="headerlink" title="泉城济南"></a>泉城济南</h3><p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-7.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-8.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-2.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-3.jpg" width="500px" height="350px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-4.jpg" width="500px" height="390px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-5.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-6.jpg" width="500px" height="400px"></p>
-]]></content>
-      <tags>
-        <tag>picture</tag>
       </tags>
   </entry>
   <entry>
@@ -1434,11 +1492,36 @@
       </tags>
   </entry>
   <entry>
-    <title>虚拟机 系统与进程的通用平台</title>
-    <url>/2020/07/17/%E8%99%9A%E6%8B%9F%E6%9C%BA-%E7%B3%BB%E7%BB%9F%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E9%80%9A%E7%94%A8%E5%B9%B3%E5%8F%B0/</url>
-    <content><![CDATA[]]></content>
+    <title>博士学长有话说</title>
+    <url>/2020/04/22/%E5%8D%9A%E5%A3%AB%E5%AD%A6%E9%95%BF%E6%9C%89%E8%AF%9D%E8%AF%B4/</url>
+    <content><![CDATA[<div id="hexo-blog-encrypt" data-wpm="wrong password" data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
+  <div class="hbe-input-container">
+  <input type="password" id="hbePass" placeholder="" />
+    <label for="hbePass">Hello,welcome,please input the password</label>
+    <div class="bottom-line"></div>
+  </div>
+  <script id="hbeData" type="hbeData" data-hmacdigest="1b16e90030d91775c67fff0c64376e1adc72b3ccf16f52afec472d3d8df2a40f">44c8f92312f791d29699ba43ff42e648e9fa79b21ee4766c9acf0d26939412c79fde9f6a68c68773ec79f6bbd3d70d1e7162aea39893be6ccf46c02c959d95643bdec9e4084cb7574e34842c8786cdec82f0133ec7597c022bf4afbf3d23b45bf64908ca7fe7086de24f37469058b5fe6974bbb76c70b11e6c3c2c7637d6926a8e1b3f0eaaf008004de62ac5a4c5fa95b574ef3d5368d2e885d696cb18e4b9f316e86ac8decfdcfa74b973c79ccd197864383c2d409d5dc5089ad35fbb452a052b520fc33647a5a81162bfb330114f86f881d2e7e5ebbfddd0b6234608f229c97e78d6975787de78df0f0b4a6ef6d50157d584bad495dc4e06e577b002a424625edc17fa5bf727bf18ccce6841e80890e7d579747117e583e6f108f18ae523ceb950c9816848be80ebb3e458ac93ecaf4cc9ec5f728bb8767533a1f4976f3a24919de098dbe952e1a662cd191eadf382f7d8fcba9e546cae100e7ea363c4680b2584c95a22243c8565f91e113702b4ee443b22bb66e46aa4ca0e5b272014db1fcc6491df3e1742f540a818620b143a0dca8ebd6a426e6654beba3745302f165483bb33f25c8876595091e6ff557393a568477869f58b69a7fffd81e770bae4fb44eac9702621483a97a8cfbe9b666e5f47c2cc41becc477f37faf8c05ff9cd75dd4f4938c7ec35fa0e6f28768529a37f4c49f56c9cbbc6a425494a7688dc71a1550e7e757da2aa909947e35a753eb7d15b47d3cd6ea067ec3646429f7e0746a51aae0bbf119cf6b82ec67896bd3171ffa6eb18613635273e81f67d115e1fe93b853dc7120c8c72cb9a83ffb29f3b61bc470d4aca13eff6f897cd9c72c7f0758af4dc3171f37dd2392224b59e5e5519c624f2cf6b9e51964de2f10ee481c6877e382686aa919b10bb59393b731e2ab5ebec8dbc0e15f3ec51e5f622a92b646235e7bfa16a0a534b4771d540e8e39a89ed271e4dca3a783e3ecc31def3a680b654145e1f0b47cfbd8ff7b727864588244eff0645221688400bfed7fab9d992f5d4bb36029f172d26118923235ecedf58fb6a21728fde95e0a8aab5c1670d6883d1ab3fd650ae84b3b3788a4474e70e383697a86630899c3337a02456983a999dd65911c7c11f2e2c83699b4703b5a9e8349d98d98c6a08df5b92320668e8b0db3fbfe1d56760d46589201e0457cf5bdc01b0315844dcfca9de8713313e016381ca49d52d452affa3bf407177e1a754f0159275ac3c9a7b39363943d67335bee16cf6918229ff1ebf12a7f1d7c7ed4052a816f74a53b7b5bab82f5870c66ca314e67e8d4757aaa8046a11f6aeddd6f5e8e73c527ce28a9858980d2e87dc6d7f4acce57380a8127c5da47b6193ccf062e25928d1924674a180cc33de639a04c513d7aa9384cb6a0a2a26fd8c244f48eb71fc227e4743733f5dc69df65b6fda757e7226d8585cb834394ff192ac71247cd08bf1616599fd29e224ad34a09e7d299a95016630ea1ad0cf432900ba3c29be728496fa03a63c437b6aa489581a3cb7426b1bff26a43bd275ecad2194fb42a7d6138715f5b65e03128464c3c5a8e37eb3e7dedee0eeb8a6397db7ef4feb63d847eeda4fc85a8b31f8a2356f00ba321faf4373db0c506372a0b5d9283fe587d0a98f016217e6687b434085b4579298e6f1820041b78e4d1447efa8650df72738f04541733000da5fa7184b9c7a1f6487d1c814c2a4666bb4d1496d97b5a2cad81653fb406faabb579d9648371b00c7a94893c17edc2013cb8dcbb74da811a2a1fe755558f70a703913c262192532501e5785ed9807ef5a2e01414e846aa26eb9fbf4194bc2a5448445c5e0120376754343d2dbdc3c2465520829535f6e1d56d26da037baf53508d9a75227b0ba651f5765400b41957a449f10a9dfb0a746bd6faf300ab6642fefaf4cf5dbbc56d2734a2db0a247696e51646a3ee979f62f987362d150fff8e39c055ea1c4f37f320bca5c529195e76e6804349596f8cf2c2caae3f52342728f2230129c2ade9f5d6e2fa3cc5148fbc2a02b53fbba35ab051897cb39abf5a4f5850dd2d4d16b6d7245c01b32da3911bcec1b6b57109f5b7edbf57744fb9fc03854675df9c51b3c8cdea58e00ef731bab37d30631370edf452f778ed6d9a870f593712a855ef6eb53dffe053a84a1a828f7c2e84679bf37c1931bef3fbb6911f0beaab48db2a18b49868ace725683ae091a9891817e220a1bb6cbf71d2b661d63c991c11b0f208ff194e37adb39afe1dddea6ca853c39a1e01820a711a41a4a5465f9efac2477a3a72da7fc15d2246dd92636ec1146719996b020438064905a2c7e5c79bfd52e8ead5f001fc7ebbfcec0c4e2a593bf5b0a1eeacf158c07a43447ad2951b50f78b6b1bec41ba695214ae32545e7b8f63ee841b32a2f052500a22afe1500f4c742ca3cf62fa42f6a5f7010a5e15b7b3df3637760e2baf3a77cf270c02feacc0dccc6ac945f72452668e73a728338cb1d68e37e8979840888a041dbcbb65835b5508d8f2dc0e9acf1063e55e7e3c6e01017cea5674c9314a4e2df48f29a2e41a6fe3844f22fb34c4c000cf33f02dea61bba4e49849e85e4d8a7aa3fda0f584ccdccdcbf6ec9d1b33ab1cdd94a8ab56e9752e74ccc2700aa5d0623f12b4e5717c5fe37b89e470d5ccb425920450a1a24e47262cc7fe92cdd5a2f73e42686fd8cbb72b02a0b957ee56f4cceff38b159b682371d5d56243f97fc8aa18d9c7b09cb10d0deed680b2fdac6c35fc3b3a8940c177e94932ce97e64505e4ffe9887a35fb6647f69bceb89b61c0a1695bfacbee7469e629a6441344d07ff4c704793c451b1a4fed26f95bfc3509cac24c5550d3b1fd65e4c2308cf40e4d9a62fbd340169eb8f818c74179ba4ec3e110701dcfa359f90e9b38ca80554d1ef30098a1810140b09b6ad501b8f31b430c16b6bc328345c34318e1effa3421b880944b363b04f97e9ceea0065e49c9b751b6914213d8d3f0d80cd12299aaf99b8583f261acfce84f495294967809140bb4b4555fc15134803e3240e41f3016c7f22d7aeff27c35a374d19e0e71762c32db03b3228fa8e934b406ac27ca4d40dab25944e5add5d6cabc5c253b20e52dcbc45fd42770242360ccf37334c05a12d645443831604c8881c52d7fac315614f2f5b37624fd461da5cc9dcbd32bf4209b8e71c86b9b35ac1d3a2544000b67f9516d934273fb33b05516464128204f4de5dcb5c768005defad687512bb5883c0b4dc03bcb030f24f4bafe0172ad33f78575228c347a57445fce25dd9047539a380be0e61d53156168ab24b7a6ca661e5aa3a3cbb3b618d442150f011edfc0b4cb9f3d6d8f0cccc2c2a64786bd4d82bf02b4370a53f05b24c338f1e7c483370ed68683c4f9f0d45c46c645f9c316d00663050fa2b75483fe368b558d0109ef66975e652045c7e76e080a42d1a7efeeea57f0fcf11a383a2b7753e21bb4b2a47036f38bc15f04e9f615b9363c7ba230e9017a341d7353b850ba2ecf295d9ae85c68fa83064f5da2a0f2e80adbc8579d9e9a749489f494e85886d6998fe6f0588e8b3d5710bdf052d2e8618261e0900d98e806d364750b5721c681c625208b9c8bafc82de6f703037111a385bbe4e02d92734e5be8368629b908da342a4c780c64197822d9fa0e4ce67f064f76acde85288775717d0d23762f8b33a556c60c3655c105b2c09dc5a0ac4ecd18dd47ccb043e3ab0914d5bf39aabd0c4daf1d2f23039aa54b4458fcc06b841719c3e237ef29a0c267258915b2c9cbbc5c31541fe780624b3406f0d0b42d5cb2d9535bbfcf798291337ef64ee3e556ec413d1e8087bfa02c79386d583137c20095f162c7739efc4df384939c7f87952c763f19463fce23bbfb951c491a733676af9bff3abfca76d9f62b7b124a5431d919535688045d9c6807231714d7f8f4dbffdc37a8600ce4a60aa8e070b3e1b11e76213b697e28279e9da53b3a0cbd159d0aae54cc006a113e8d9020dd15cac1354e411f87339a0bb537a21df398dfefddbf6da46c76dbd4d9d0e86aa286aff3781b959a4ac109e8020187b34b70b2eeb49e21161e4dee91e78943918a23ca7dc3927fc8ccc0b5226829a531876c2d5d62bcf9784df3db34516529d97abd44e2f2b5ecdf828ca5bf3fade6874954db69610a6f6981b4064734b770c05bdc5c275da0a0b939e9a9f3a88d91c6c1c3e3cc506a6c6d332d2cb65d36a768800265723a9e6af1dec15dc568326ebdf82434d56ac46889f2628737a4f274bed1bd26b20a9e81f848355410517d513c83a7208ea6e2c9d76841b331021124186aa17f4c41bdf4dcdb66c489dc50f9da069cf2ddc6d423d60827cdbabf334b2dffe0001315e9df505c6ba6ca2baf40bf03ade6bbd9c7067a36718f9e20da2b3a8a33c9e46b953092c0d815995e95de05f066be0b9afa63b514375c5209ef52642c3927dfa5cf577521781210211c63b7cd3918b56512200927c39559775ba7193d85acaaece5b35c61c63bc3266bce5cc81c13b3abefea91bb8cc05c826ce62fe6ae2d0c6bdf07402faaed5c055c14b652eeac59ea3c7015dba809a326a751f31219ba6049fbaab70e96c021060cc3f5319cad2e225bd1101355bdde8a469b0aababd85ba806b19d0043818d8ba64dc5ff9872d892a50d248030426d3d52c10284138cd052326a4c1ae67245f3d6fdebc9aadbb955bd587365e894b843c42ff9218bb479bee777cefe65a10d3db71d4dda1f0b22cc7b763f903c27cbab7ededba3a046a91315757805790ca441bc9b77c41e7a35bf9bbbd764f92577d8fb75710aec350a7f8145e55dacead6807c451a8082bc35d17ce14bbcdbe9fcf03db4a372966471ec2be9afa1e4769f6865642eee82decd974efc21e4ae0a52497e39a8f0598d5fb3b65aa4f83bbdf2b8b5f963732c9815c4d05b22dec90cbd592b08a8d210687f634236bcc6ca7b25f162c55bc49230a72298e5ab725cb1298198e248a55c76b33afe138e7013427a3d497b978f2f5559ba63b7d5511c6ad041f5a45451350cf77b2077a6e56a02d01dae7d6db22fd0085f17de66f19c779eb73ef6da4c7198f3f49d1c0ef94ee781cbf9482dde971228b2ae49a6fb65ad08ba31dacdb570c617eb7690e276a2c615f20840020ccf085906d5208fcdb79af322cf558641d6d39a0c243e4fe7f0ecd5fce77494efd114a2f99078bf7bfdec52a658649a844e50c1674c909f9e34fcbf973af1bc30609e1c8f76d268b80ca7c200127fc52093ccf42abe3e51e3cb0178b1ad0f2484cffcae0320b0523752284cdda47a912c0ab781fefad7c84187684d26e7a2bc4947ec5b3b7c03f437be23395225d0655d31bab1810b38c6088e24b9388375d0a30845a2f266540f01b09eb7f7a2ba90629d137254f4bb84ebc8c7bf7a36ec397f4284414d8a2712c03aa2382cdc7eca5c82559d96760521f90c0e2e0470def1c20ffe9480e92563acdd1d3b858202eb09214fff38113a350158fcb8723626c3b218b9b0e0156ed0a7b8dc2ae4f7249974506ce8fac58dab21f321980896388775250c27a5a3c51cf760d5932784ab7215f08fa7a223224d286c8687cbdd96c107873c393a4b63fba56e860b50bacc0c59bb7709a2fcc6330e3ed7f61bf5ac559d08f7d4158698d0a53255ba11e9242c2e53b525deb9d1a7357937d07be5cb800d50f84d9146fdb1dc9ec69e6aa6e29e0d3b53df49324844bf9658d244593bf084b71ee7f786a57df6e6cadfcd9c1a565f92fd5147ca1c6374100658d46ee9e96b7ffcafd738ad4eb7cab30c857ebace08795ada0514afe44089367d3e5a334dfec8f48692c5197f80400c05a80e5b3ada74630a5085a19a18e0a60887482021c4a0fa07a03c940b96beae0f6faa3da9f1f1f25c2bf1d331d21617ae47dceec65cbf1fd58516474f3a46c3247bbf370410d283fcf0f5698fffb9eeeed5b06e6984e63f03f71df29cc6e4b50df720e0602306f949dd6030ee4f4368151b5da8b0fd85d4cb611fc8c6e141d412a425baf56d79404f171e19158c1453a37de987ccfbb6c88de9202cd2eb00c1c067429cf5fc49bc3f80a8e41f90081ea328456aee1943999546d93c8c67ad93572d98ed67ab266a2b7eba78ffa2cefd793429306e6a55480bb297ba2a03efbac0a1211fa03fa9e70bda0c4569e1cc4b6025b96654e7ea9a1d645fa13e65975f97a4dfa2399a5531710b6cef7785fcb102d2c8ea7bf8b145d45ebd9ba23f959fdfd904b4d4a7f01d16cdbede831221f9157923e812b5ca467a7b721f09772fe8312d97405e04414ea4f2b46536723a00766faa5bc93e20be98c32c1fb5ece090b3f0f1c5dcf902c33a7a321fb83f878a8099b6bfc18da3fe92f0e08856062b6aa99ef17090bd817c76d308981ba035dcc6ea5e3a5a11ccdaf357b3ba0a3a71f2a9eba277a5bc85b78079ce801ac1794331bf389c0ea731dc8b5df2af601bfacd0bc0286c267aa5d336bf1e2b1604fb84318278d5bda935410cf73460e9bde2168c8a99ee54e34d8041d49434703576d9eaa6397e98a8874e39ca15b4648cdc15572399c2d6b9a6f5590ad3ca644bdbd8252cbd45016d6a9024a587993d50155e70d222c43a68462ce649b81631b437490344a028263cbaee3e69bc8a86e142ef5672b3e6e5f81fe99278d16ddb7463e7e239bdb419d28dee81a09339bb27e8e15c52f8a861bc5828c8f8c05a87a3feb77309aa2fd4699d32708ad3371389195fd69fc1daca849c489d78b6bddd0c46278c03fa1aa68dfda0fe628691a3ac9cf84898934ce497b08b368f321fd8d43979f659db3d2456e93f0318e9d3fd42b82f0fca8fc66905dd8054573da762b821fe6bc63155045fefed9a09925da70b01c2b7c65675fd8c9d60692d183dd4718759fb95d7a2eb6fddeb76a081f1421b4b7481d7b955f271f9dbab7b2569daa774cdc7ea27c69d29e1fc52cdb4eb28fb34aafe82a41649d87514f58b66c575b249cf0b2c9da18b329f6c12a588a007f48a8f71a8181034495f7c7ed17a4920077b50589eea596b11ad6bd3eba477bf66d81d4da0002674f83537f08041850c2587b66cf50a45c1fe8a9556786de49ab2d0721964ff460f16e91c425e6ea27051e470c20b3fdc0850e9c19a8f4a1c1c137aaba5718a6672abcbcac722038a0572a4fbdf1690bc9b24704c7eccd9bd351bd73ecca619660d879ce7045a80df370e4b3e5133387ac73cd1c3e78ad544872787d7ee0d08af411eb7726d188a84e73967435fd3e9543ec63212a1c4b338f596be230528d6ba2e0d029c1cd7752bf75825c4d1fbb970dc6301876a327cc46fa09b78ff04f855b65565cac6bde31337f37829003a4a6cfe678871d0dd72cbd2894b7de21e75b73f87c3f49522c797197131d741ee18f4ae0d0909c7af12cb7d4a749301f2435e2911865bc7baef5f889ec4dbea96063c0d8fd05e71367bbf7153322e3bdb3df9ea414d5d1dd59924b18ebcffcb21522486a1ede0dbf5178192d163735ad3b8988f7b3acf1c19f2cdc47b89dccdbc5ed93c7b958f063eeee02a53481ef694e8c96b67ec38bd674d4fca3e2b74d615d6af7d8efd2e6dffee16948d450c4a6fa0b63ba1db240230331b219a7a2eb7d11977da0517ce86dbbfe64e3969b44db65461627b23e3f1ec467d53dfa3687fabe7bac06ee820d107a5db39f89c2ce8951861f1b33826fa54f26fd013cde0861e995acba9c2f6841248d166825a47b40b8e9ca91a13748cc836d455df74821f08138f54bf7b2083574db5d2ab80022304260b90fa842ff4ac0439c23a28a1490cd8bcf0e884f38264ba7bbe7053a9d40af4f7c3d7b9dda8bfd1b0b79dc1ef3d54ff1523b9f4fbcb5095f188a50e2c1d78f5e054e33b6c2bd0741a4980c4c2d703c347a701be48f65a7dc4c07ca1439a69cf27395b83e5aea8946133715c361f434089f8bf4616b260cdfb32adc026e8cb7a1980dabdf3c18c42bc39bb8f1c83fe099d41cb3183415166258244a759529881c18f4b8593570f14c5395e1a83e1cc4e43af42e52fde1d9bdb995edb6888263bdb4da02e4fd868c0ce0edf3a8a5937de36e6522b35999490d8fdad3b42fd833fa36a0f61bd6e5a5722723dde437183305f93eb327a7344046001a546d75e3356aa6b49c731c48672d4271b1c0fd13b83330de5304b3a1261ba6822938fe0c63bf33bd5bccd342faf52f9b7e77c0c9d7df91cf6eea5ae4500eda71fcaeb5d10eb6907ead874fcebf221db8a9adece3ce4ad39329f952393ec9e6ea3a37099c5cebd7e3a70f5f75ceaf41ebfd88f40301e8a0a843262e9e701d48a514171f3169c98b2611ca445f2e28bc88cbfe2cbb546fb9e28d4af1827b743ff9de5f040436d0727762fd370607f9bd7229fd6225d5012b60e0fc2f23d1fce9c142d6a70e701970d8915dc3ece6fc513df3a1ed10e4fda74e5569421a178a3fbdcd6d9b163382577d0227fa201d33676d9a91aefed41d6ff7a6025a3e240d922e0086365206937586a553eea43c6da9a89359a07cbd3d9b98aa2cbb931befaca8630ca175bc7c107dcfef0192ebd97090d047e814014a0bda12da2fa853cbc5340116081c74c6208503c0b751c10f73b56c8f3d77b4b41c64956ac595b30f295aca8a7443246755a7fdd82fbe6d3f3d4da4a8c5c34b4caa639984b67ab2c377947748804e78cb3779d180b86123daa405886474b2e5b36f7191369145faeb0d15926045028939deb7b88840839643139f9d74a95d600a2ed6d86dea73215a3fcf2e13ee924e6e850025b76f229d4efb21a3aa6feaec7d4074a02a0256c9ad9c04e15a190fe2a0ede854c1976586e30034d706ddaf4a5741d2c5452398b0f2832939e0b81e62b1b8dfd712ecabb71ae57fd6f9f37364d65f68ca6848c5d0cc85430ff8c82fe48efd13589c8102a182206ac3c778086257bf9a1349a9f797a36937956cfa019756402bb594387b5a112d539f0f39c63565f1638c9308bca8a8014cf8329a6b135d430c5786242f3dad99a0deebae78d706b71692b619caa184fdd0cd760b4c18e40eae6187f037aac091fa25e6d836a5cbfef4f06f7c37d7a450889ee0f01b746bbfbb01ff4257aa986c9eef304740355d8191263ef6feb747e595502fd19656abb8127b486adbad5fd16f0e46b9cb85a25ac2c220bbb2b50c991fbec1313db716f844880cb27f6de6714f7b0fa1e1de965b4696351b374a8539acab916d0a239dd17cce091fb76ef314bd353e619fdf3051d111bb64fb95cd48ab0707b5f6d80535b09c26e07273a858e84c7cf2bb6602ee2ad6e06ba35d3287aafd455b36263a74f4e0b5bf923f5546af4a29236fc4b9d21d6fe2660d4291fed5202722d34a1438b35ef3c6cfa621492489a9bba4770afa5711708117754b8710d5d50015e8d4b4466245d06261c535d274dc5f29d46b2730f06479f9f665a36aacfb78e71e66bc15f1be915aa1ae13ccdf64d95243da41ae990a741e2649535354f4113a732bfc971524b6ed555612ba2f967da825cdcec88d94b5fd33201ee607b0fb5fdc40e553ca2b50655baff7de1b5b351029b4f7eb1991aec75668bd22db06d8a8da2a287357304f8defe56764f3532ac3e19e83a7e4b573b92508d6c58441f562492950c2d4a12d1dcd593cc83bae820bd561573addfe4f2c8feedff84934b2ac574cc31e1f1cfb2bfd1b50adf228e1b27fc1625e74b2affb1f3fbd57ff26b325c5fb3cef53f0b3f427fae3275166ed4fd43d5af498ee3511d06e1cbeff42cb8b4ebda2db5a4f09a1f16c5ea1a40e29a7192c07a9a2bf34dcedbd9998f8b62720a77cdd39662d8a8e4a71e2eb88d3b993de0a9e77e125b1e96f6068acbe3bd2fc1e39615a668bfa493a67204e4236f6231ca1f7bf0fef0dc0ccd9ac7378b5e1ea00b7ba42e6d965fed006780e8660010f4db4e9d769266310cb9e0c3cae0710995906fdd2fe6894736f4b602df768cdfbaa145e9e00db0c60e7dbd620911a8eeb5b6220546691727a9f730693f341dbd69183f2a1d066b54da41239f542db24ed118ea4866b272d2610e8b36ff5f92d63eb449303af08ddae7f4c67e1eb983eff49c979f1d8cd83a1744e3c021b6e544c2dc79597a6abfe8ef3a9a4618083039a065af577fe73f38b4f4af181f6c6137c7995116cffc3a97a52c8fcc744ecf348229c5998b369f68265f29ecefcf283e1772ad6b494df9cf9d080a45d25d45fa73091eb938dd6ac5dfe0de8f553f8ade3b529e12ffbd3970e7ddb8b9f91c1b52f26f32b9ef1804a177ba4d82387b2f04a70a4693ecb9c181dd088290abf7497ec731f933abadb62f8da4a1a9313ba167889548c62fcec534b0661cd5a3daef64d22185e280b5ff3c5cf1acaa5fe5dec22996b5f84bfa86f6a7489864338ada0fd55d6daf901cbcf4579900b3bf9011b87984f2ab63421f522151871b8e1ca5845fc5549ab4d9db8fce12552238df5f451b8a11fa12e6e90434cd861dc39896995881898b6e07e63954254b7f6cc61a268684a15291354564239f9eaa1282bbb33f06216aa87ff7fbcd2a8337bf156afb9e4a48c2e5f9817c6ac3a9bb15e10ffff20505af08e4b54315d0eb2a118cb099726f77bc407d935936500a8ceb47f400f4cb4e8ba9d6c226a96b7216af1c4b7788a43a05e2864c6c0a287e90c136787e977b20103a17f8c9ec5111f48aef5156561387ee40e6f3e9f109ab4cd27ea84371439055c718e487726adca4a9671bf534c49adcd62ffcbbdf3bd2d8742a74e0d0ea419905864d644108d2f2eebe630a81e15508c934dae92cefa5139dc946df46036a1e4d771d8962a50e142393c4b48c4892ef1c0d55045293eb382a501b47f13f17f29b831c2e3b4cf478c5e4b7d7d35c16ead60bbd85c336ec71b0d44ca85fa26c780a9bc0b6f992c5dada74b0f8b6624bf03533a5340d3984bd68173ad8f5ffe55828ab94771b4af082dfa173f4388e65faa3c063dbd48a94bceeba03e1d3b2660451e0f145d57b0b636497ffbbe89a2d2abf21a55feafa3394bb6995ef79cfc279aebeb8d7187bb247cffeeac6a60126818fff1e234dbbdbfd09f8ecbeadbf67d906801c24d0147093f52ecbc2dd1025814d471cf63f6e4709c1368616197d0e91b8e8bd241c3d6a768f8f1655b4ba90a53bdd1e73674f5b537f2bd18fadd669137cf8a3776ebd29e57e61af584694d3d64d4a40750b6133aefeea32b49d2320ceca0efa7eb004a73bc0846ccb319b39a6d326a1cec13b83e15fa4d67556cb5ab10328b208da2bfe3a47de3841c060e7c05024dec4fa945fdd20f3b0a6f5b68fd942ff8910b5459124a67c0ebdfe28f991527cf0953a8c0369807e75112ad36d7a8b310b148fc833bd0cd13457c379f90037a195835a4f65076474de232d4d61d6ec83d416dd81a379402d0827d46d3c01d6fd44f18a042d6d453a03a85dc042be01d90f174e23014883d305404c880d10a8f3e7d58e3207ac32cb39a34644e1b63b7c6613c78362f2c59311a5e2af01ce3821027c42b56f85e6817271c11c9f0578347e0adaea8e584f47da53770c87c270ea94abb2e29610885a0232fb68a6c07349e38f03442dbd952fa83716c07c63c1409148701146aca157349cfc947dc5aca62521b6c9e08a5214a1c10a201e32325d79a1e1c1cdc25888e900b9a4a7e19839b1723af8d670fc432f2f80e5a40f640a7b7c5a602ea99637bfa1001daed0c22ae30e8ef095ec850dfeef4662dd3bb3ce6602bd0a9b9e32a318e99fabbad98a33d3848803894cce5d347530dc98dcda85e60e666708c481a57ff2707af1fec81690855e27a962179a438a6e0617c887bb704d3dcd3168e9439fca7835a5afe7f90f161590b8b722153e700ed5a3c2c6429cae73e5e42b044fae04735a023e19431aa1e427759d59334594008ee2290c01f436e363647096cdbbea58bdd8efa51e650e50dd1dd246479f964f574425693d102b10313bc384d43c4ecec854ff956e5d083b64a5fa66a7632535b6cacff6a24b9e8ef9d0831e92700a92820848ee26a54a46669eafd4549ade2eb60c7f02e68d37ee5a2e00fe5995fdb555067c60ba13eb7ec33db6df3709801d3ecaa86610a898ed695f57e64aca</script>
+</div>
+<script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
       <tags>
-        <tag>读书笔记</tag>
+        <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>安全计算</title>
+    <url>/2020/08/15/%E5%AE%89%E5%85%A8%E8%AE%A1%E7%AE%97/</url>
+    <content><![CDATA[<h3 id="什么是安全计算"><a href="#什么是安全计算" class="headerlink" title="什么是安全计算"></a>什么是安全计算</h3><h4 id="安全计算"><a href="#安全计算" class="headerlink" title="安全计算"></a>安全计算</h4><p>安全多方计算，Secure Multi-party Computation（SMC）在保护数据安全的前提下实现多方计算，即，多个参与者将各自的数据凑在一起，并在这个大数据集上进行一定的计算，并得到最后的结果。</p>
+<h4 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h4><h5 id="1-基于噪音"><a href="#1-基于噪音" class="headerlink" title="1.基于噪音"></a>1.基于噪音</h5><p>差分隐私（differential privacy）对计算过程利用噪声干扰，让原始数据淹没在噪音中，使得在引入噪声的数据中心无法推断出原始数据。（例如一张马赛克图片，无法推断出具体细节）</p>
+<p>优点：效率高<br>缺点：得到的结果不够准确</p>
+<h5 id="2-非噪音法"><a href="#2-非噪音法" class="headerlink" title="2.非噪音法"></a>2.非噪音法</h5><p>（这种方式一般通过密码学方法将数据编码或者加密，得到一些奇怪的数字，而且这些数字有一些性质，比如看上去很随机，但是保留了原始数据的线性关系，或者在打乱顺序的数据中心能够发现其与原始数据的映射关系。）</p>
+<p>a.混淆电路（Garbled Circuit）</p>
+<p>b.同态加密（Homomorphic Encryption）</p>
+<p>c.秘钥分享（Secret Sharing）</p>
+<p>以上提到的三种方式一般在源头将数据加密，计算操作看到的数据是密文，只要特定的假设条件满足，这类方法在计算过程中是不会泄露原始信息的。</p>
+<p>优点：不会对计算过程添加干扰，因此得到的是准确值，且运用密码学理论，保障安全性<br>缺点：由于运用很多密码学方法，整个过程的计算量、通讯量很大，对于一些复杂的任务（训练几十个上百层的CNN）短时间内很难完成。</p>
+<h3 id="差分隐私"><a href="#差分隐私" class="headerlink" title="差分隐私"></a>差分隐私</h3><h3 id="混淆电路"><a href="#混淆电路" class="headerlink" title="混淆电路"></a>混淆电路</h3><h3 id="同态加密"><a href="#同态加密" class="headerlink" title="同态加密"></a>同态加密</h3><h3 id="秘钥分享"><a href="#秘钥分享" class="headerlink" title="秘钥分享"></a>秘钥分享</h3>]]></content>
+      <tags>
+        <tag>Homomorphic</tag>
       </tags>
   </entry>
   <entry>
@@ -1455,6 +1538,29 @@
 ]]></content>
       <tags>
         <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>泉城济南</title>
+    <url>/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/</url>
+    <content><![CDATA[<h3 id="泉城济南"><a href="#泉城济南" class="headerlink" title="泉城济南"></a>泉城济南</h3><p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-7.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-8.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-2.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-3.jpg" width="500px" height="350px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-4.jpg" width="500px" height="390px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-5.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-6.jpg" width="500px" height="400px"></p>
+]]></content>
+      <tags>
+        <tag>picture</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>虚拟机 系统与进程的通用平台</title>
+    <url>/2020/07/17/%E8%99%9A%E6%8B%9F%E6%9C%BA-%E7%B3%BB%E7%BB%9F%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E9%80%9A%E7%94%A8%E5%B9%B3%E5%8F%B0/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
