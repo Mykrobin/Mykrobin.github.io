@@ -9,7 +9,7 @@
     
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
   <title>
-    CloudMon |  MYKRobin&#39;S BLOG
+    Xen log 3 Using Serial Debug Xen |  MYKRobin&#39;S BLOG
   </title>
   <meta name="generator" content="hexo-theme-ayer">
   
@@ -44,7 +44,7 @@
   <div id="app">
     <main class="content on">
       <section class="outer">
-  <article id="post-CloudMon" class="article article-type-post" itemscope
+  <article id="post-Xen-log-3-Using-Serial-Debug-Xen" class="article article-type-post" itemscope
   itemprop="blogPost" data-scroll-reveal>
 
   <div class="article-inner">
@@ -52,7 +52,7 @@
     <header class="article-header">
        
 <h1 class="article-title sea-center" style="border-left:0" itemprop="name">
-  CloudMon
+  Xen log 3 Using Serial Debug Xen
 </h1>
  
 
@@ -61,14 +61,10 @@
 
     
     <div class="article-meta">
-      <a href="/2020/09/14/CloudMon/" class="article-date">
-  <time datetime="2020-09-14T14:50:58.000Z" itemprop="datePublished">2020-09-14</time>
+      <a href="/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/" class="article-date">
+  <time datetime="2020-10-09T15:07:09.000Z" itemprop="datePublished">2020-10-09</time>
 </a>
       
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/paper/">paper</a> / <a class="article-category-link" href="/categories/paper/TC/">TC</a>
-  </div>
-
       
       
 <div class="word_count">
@@ -76,7 +72,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">976</span>
+            <span class="post-count">863</span>
         </span>
     </span>
 
@@ -110,98 +106,40 @@
       
 
       
-      <div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href>CloudMon</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"><a href="https://chuliangweng.github.io/" target="_blank" rel="noopener">Cl.W</a></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">这篇文章信任hypervisor并在此基础上对guestVM进行保护，主要是从内存角度出发，针对rootkit攻击进行运行时检测。</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">System Security; Virtual Machine</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文构造一个动态的监控架构，并在此基础上保证guest VM 运行时的安全性，主要功能是在客户虚拟机中检测出rootkits攻击。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>​        本文构建了一个动态的监控架构，运行在特权级别，通过对guestVM内存的扫描，检测客户机是否受到rootkit攻击，从而保证guestVM的运行时安全性。利用虚拟化技术对客户机内存进行实时监控，且这些监控对于客户机是透明的，为了实现检测的有效与高效，本系统在性能和安全之间权衡。</p>
-<h4 id="Rootkit-攻击"><a href="#Rootkit-攻击" class="headerlink" title="Rootkit 攻击 "></a><font color="blue"><strong>Rootkit 攻击</strong> </font></h4><p>​        rootkit 能够以特权级指令访问 host，并且可以通过对系统进行更改隐藏自己的存在。</p>
-<p>​        检测rootkit，最好是对客户机透明，不更改客户机系统的前提下对其进行检测。</p>
-<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        假设VMM（hypervisor）与priviliged VM  是可信的，guest VM 会受到攻击，在开机阶段的安全性受到VMM的保护，并且对guest VM的攻击不会对privileged VM 的安全性造成影响。</p>
-<p>（有些保护是针对VMM的，但是这不在本文的考虑范围内，本文聚焦在对客户机的保护上）</p>
-<h3 id="CloudMon-系统设计"><a href="#CloudMon-系统设计" class="headerlink" title="CloudMon 系统设计"></a>CloudMon 系统设计</h3><p>​        目的是实现一个可以访问较低权限级别内存信息、检测潜在的攻击并且可以保证检测的实时性与系统性能。访问内存的操作实现是基于 Xen的xenctrl 库，这个库能够读取较低权限的内存（如guest VM的内存信息）。</p>
-<p>​        构建一个guest VM 内存的监控器，目标是对VM透明、高效且是瞬时性的，这种方式可行性是因为攻击者对VM内存任何的更改都是可见的。CloudMon扫描内核memory与寄存器，从而可以实时的检测内存状态变化。这是一个特权级别的VM，能够通过VMM访问其他VMs的内存信息，而不是单纯的一个安全的guest VM。</p>
-<p><img src="/2020/09/14/CloudMon/CloudMonArchitecture.png" width="400px" height="240px"></p>
-<p>​        从云中大量的攻击实例中提取rootkit攻击特征，并将该特征记录在Feature Lib中，通过比较RT Value 与 SV Table 中数值的差异情况，可以检测出系统调用表中的攻击情况，设置较小的检测时间间隔，可以近似实时的检测嵌入内核的 rootkit ，通过设置检测的时间间隔，可以控制性能开销。并且CloudMon会直接检索其内存，因此，包括DKSM 和Shadow Walker 在内的任何来宾内核rootkit都不会欺骗CloudMon。 </p>
-<font color="green">**获取开始地址信息**</font>
-
-<p>​        KV Searcher查找 guest VM 系统调用的起始地址，SV generator 通过扫描，比对通过大量OS攻击实例中获取到的攻击特征，从而可以判断出被攻击者。</p>
-<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a><font color="blue"><strong>实验环境</strong></font></h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>Xen</th>
-<th>priviliged VM</th>
-<th>guest VM</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Xen-3.4.2</td>
-<td>Ubuntu 9.04</td>
-<td>Ubuntu 8.04</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>已经存在的检测方式：</p>
-<ol>
-<li><p>获取guest OS的system.map信息</p>
-</li>
-<li><p>one-on-one 运行在guest VM上</p>
-</li>
-</ol>
-<h3 id="相关工作介绍"><a href="#相关工作介绍" class="headerlink" title="相关工作介绍"></a>相关工作介绍</h3><p>本文将对VM的保护机制分为了 out-of-VM  与 in-VM两种</p>
-<p>A类：out-of-VM</p>
-<ol>
-<li><p>利用受信任的VM充当监控器。OSck,是一种one-on-one的监控模式</p>
-</li>
-<li><p>XenKIMONO 在VM中聚集信息时会暂停OS的执行</p>
-</li>
-<li><p>vIPS 通过预先设置，这种检测规则需要有固定的检测时间间隔</p>
-</li>
-</ol>
-<p>B类：in-VM</p>
-<ol>
-<li><p>硬件虚拟化技术</p>
-</li>
-<li><p>Lares 在guest VM 中内置hooks（钩子函数）实时的检测虚拟机的安全（事件检测）</p>
-</li>
-</ol>
+      <p>注：本文的配置是在<a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">官网</a>指导下进行的，因为在配置过程中遇到一点问题，记录下配置过程。</p>
+<p>Xen的log信息是打印在内存中的，读取打印信息需要<code>xl dm</code> 进行查看，如果在查看之前xen崩溃的话，是读取不到任何信息的，通过串口的方式可以将数据实时的打印出来，方便调试。</p>
+<p>这里使用的是usb转rs232.</p>
+<h3 id="配置读取设备"><a href="#配置读取设备" class="headerlink" title="配置读取设备"></a>配置读取设备</h3><p>在读取设备和Xen机器上配置<code>minicom</code> 用于测试串口。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Ubuntu dmesg | grep tty</span><br></pre></td></tr></table></figure>
+<p>输出信息如下</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[    0.094791] printk: console [tty0] enabled</span><br><span class="line">[    0.757835] 00:02: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A</span><br><span class="line">[    0.779505] 0000:00:16.3: ttyS4 at I/O 0xf060 (irq = 19, base_baud = 115200) is a 16550A</span><br><span class="line">[    2.825408] usb 1-13: pl2303 converter now attached to ttyUSB0</span><br><span class="line">[ 3435.257916] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0</span><br><span class="line">[ 3437.386713] usb 1-14: pl2303 converter now attached to ttyUSB0</span><br><span class="line">[13860.597447] pl2303 ttyUSB0: pl2303_set_control_lines - failed: -19</span><br><span class="line">[13860.597451] pl2303 ttyUSB0: error sending <span class="built_in">break</span> = -19</span><br><span class="line">[13860.597584] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0</span><br><span class="line">[13863.385826] usb 1-8: pl2303 converter now attached to ttyUSB0</span><br></pre></td></tr></table></figure>
+<p>于是设置默认串口为 <code>ttyUSB0</code> ,使用<code>minicom -s</code> 进入<code>serial prot setup</code> 进行设置</p>
+<p><img src="/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/xen-3.png" width="500px" height="300px"> </p>
+<p>(配置完没有截图，取自 [2] )，配置好读取设备后，静置，备用。</p>
+<h3 id="配置Xen-设备"><a href="#配置Xen-设备" class="headerlink" title="配置Xen 设备"></a>配置Xen 设备</h3><p>读取Xen设备信息</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dmesg | grep tty</span><br></pre></td></tr></table></figure>
+<p>输出信息</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">console [tty0] enabled</span><br><span class="line">00:03: ttyS5 at I/O 0xc0c8 (irq = 16, base_baud = 115200) is a 16550A</span><br></pre></td></tr></table></figure>
+<p>这里确定tty0 、 ttyS5 （如果没有输出全部信息的话，执行下面的命令查看）</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/tty/driver/serial</span><br></pre></td></tr></table></figure>
+<p>输出信息</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">serinfo:1.0 driver revision:</span><br><span class="line">0: uart:16550A port:000003F8 irq:4 tx:0 rx:0</span><br><span class="line">1: uart:unknown port:000002F8 irq:3</span><br><span class="line">2: uart:unknown port:000003E8 irq:4</span><br><span class="line">3: uart:unknown port:000002E8 irq:3</span><br><span class="line">4: uart:XR16850 port:0000C0C0 irq:16 tx:0 rx:0</span><br><span class="line">5: uart:XR16850 port:0000C0C8 irq:16 tx:0 rx:0 CTS|DTR|DSR|CD|RI</span><br></pre></td></tr></table></figure>
+<p>可以确定，Xen设备的串口是<code>ttyS5</code> 物理地址为 <code>0xc0c8</code> </p>
+<h4 id="测试串口通讯情况"><a href="#测试串口通讯情况" class="headerlink" title="测试串口通讯情况"></a>测试串口通讯情况</h4><p>在Xen设备的<code>minicom</code> 上设置默认的端口为<code>ttyS5</code> 看两台机器是否能够正常通讯，即，在读取设备输入，在Xen设备上可以输出响应内容，反之亦然。</p>
+<h4 id="修改Grub文件"><a href="#修改Grub文件" class="headerlink" title="修改Grub文件"></a>修改Grub文件</h4><p>在<code>/etc/default/grub</code>文件中 添加如下内容</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># This can guarantee sync output when using `printk`</span></span><br><span class="line">GRUB_CMDLINE_XEN=<span class="string">"loglvl=all guest_loglvl=all sync_console console_to_ring com1=115200,8n1,0x3080 console=com1,vga com0_mem=4096"</span></span><br><span class="line"></span><br><span class="line">GRUB_CMDLINE_LINUX_DEFAULT=<span class="string">"console=tty0 console=ttyS5,115200n8"</span></span><br><span class="line">GRUB_CMDLINE_LINUX=<span class="string">"console=hvc0 earlyprintk=xen"</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>sync_console</code>: 保证输出是同步的，以防一些内容在xen crash之前打不出来</li>
+<li><code>console_to_ring</code>: 将Guest的log同步到dom0中打印输出.</li>
+<li><code>console=com1,vga</code>: 将终端连到com1上，这样我们就可以通过串口输入用户名密码登陆</li>
+</ul>
+<p>输入 <code>sudo update-grub</code> 更新grub文件，重启</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在自定义<a href="https://ykma.gitee.io/2020/07/19/Xen-log-2-Add-a-new-Hypercall/">Hypercall</a> 后，执行<code>privcmd.c</code> 文件会在读取设备上看到相应的log信息，这里不放图了。</p>
+<h3 id="采坑指南"><a href="#采坑指南" class="headerlink" title="采坑指南"></a>采坑指南</h3><p>我刚配置串口的时候，采用Ubuntu18读取日志信息，Debian9编译Xen，两台机器通信正常，<code>reboot</code> Xen设备后会打印开机日志，随后便是一通乱码，不输出用户自定义log信息。调整两台设备的编码格式、语言（en.utf-8）等均未果，至今没有解决这个bug</p>
+<p>感受一下乱码：分别是正常读取与16进制读取的结果</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">�`�f���f�����`�f���f���怀�`�f���f����~x�~~x�~�`�f���f���怀�`�f��~怀</span><br><span class="line"></span><br><span class="line">�`�f���f枞f�~x��枘�����f��ff��~��~fx�f��~������~��~��~��fx�</span><br><span class="line"></span><br><span class="line">06 fe 60 e6 66 fe 06 f8 00 f8 66 fe 00 f8 e6 80 06 fe 60 e6 66 fe 06 f8 00 f8 6</span><br></pre></td></tr></table></figure>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">https://wiki.xenproject.org/wiki/Xen_Serial_Console</a></p>
+<p>[2] <a href="** https://silentming.net/blog/2016/09/18/xen-log-5-debug-xen/**">Xen Log 5-Debug Xen on Physical Machine</a></p>
 
       
       <!-- reward -->
@@ -266,14 +204,14 @@
     <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
     <p>扫一扫，分享到微信</p>
     <div class="wx-qrcode">
-      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ykma.gitee.io/2020/09/14/CloudMon/" alt="微信分享二维码">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ykma.gitee.io/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/" alt="微信分享二维码">
     </div>
 </div>
 
 <div id="share-mask"></div>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/System-Security/" rel="tag">System Security</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Virtual-Machine/" rel="tag">Virtual Machine</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/" rel="tag">论文解读</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/" rel="tag">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Virtualization/" rel="tag">Virtualization</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Xen-log/" rel="tag">Xen log</a></li></ul>
 
 
     </footer>
@@ -284,19 +222,10 @@
   
   <nav class="article-nav">
     
+    
       <a href="/2020/10/09/PrivateEye/" class="article-nav-link">
-        <strong class="article-nav-caption">上一篇</strong>
-        <div class="article-nav-title">
-          
-            PrivateEye
-          
-        </div>
-      </a>
-    
-    
-      <a href="/2020/09/13/BatchCrypt/" class="article-nav-link">
         <strong class="article-nav-caption">下一篇</strong>
-        <div class="article-nav-title">BatchCrypt</div>
+        <div class="article-nav-title">PrivateEye</div>
       </a>
     
   </nav>

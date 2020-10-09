@@ -1685,4 +1685,130 @@
         <tag>Shell</tag>
       </tags>
   </entry>
+  <entry>
+    <title>PrivateEye</title>
+    <url>/2020/10/09/PrivateEye/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.usenix.org/system/files/nsdi20-paper-arzani.pdf" target="_blank" rel="noopener">PrivateEye</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">对部署在云上的虚拟机进行保护，而不是对hypervisor进行防护</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">保护云安全</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">通过对少数机器进行保护，得到攻击者特征，并利用此特征对云上全部机器进行保护。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h3><p>​        云中会部署一些可以检测VM是否受攻击的检测系统，但是往往都没有启用，这就使得VM在云上几乎在没有任何保护的情况下运行，这在安全的角度看是十分不可取的。让用户在不受保护的状态下运行或者完全在云供应商提供的检测系统的保护下运行，这两者似乎都不可取。如果不保护，则受攻击的VM可以攻击其余未被攻击的VM，并且不是所有的用户都需要在被严格保护的情况下运行。经过统计，约5%的用户愿意承担云供应商提供的安全监测系统的额外费用。本文基于此提出PrivateEye解决方案，它是一个可扩展、解决隐私保护的解决方案，能够对数据中心全部的VM进行防护。通过检测较少的机器，将检测后结果应用于云中其余的机器进行检测。</p>
+<p>保护的定位：<br>针对云上的VMs,而不是hypervisor本身。</p>
+<p>使用的方法：<br>利用机器学习的方法，根据已经存在的5%的少数用户特征，应用于云上全部主机检测。</p>
+<p>​        本文目标是提供给用户一个透明的（不需要用户权限）可以保护客户机隐私、数据中心级别的保护机制，并且无需进行广泛而昂贵的监控，目标是针对全部的VM进行防护。</p>
+<p><img src="/2020/10/09/PrivateEye/private_1.png" width="500px" height="300px"></p>
+<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        本文认为任何VM都不是可信的，因为他们可以运行任何的代码，但是，云供应商提供的hypervisor、网络以及硬件是可靠的。并且认为供应商提供的检测方式能够足够精确的保护供应商提供的VMs.其中恶意软件为了掩盖其攻击能够调整自身行为，但是恶意软件无法识别VM是否受到供应商的保护。并且云供应商的保护软件可以通过近期的检测重新训练PrivateEye，因此PrivateEye可以通过不断的训练起到保护云上主机安全的目的。</p>
+<p>​        供应商仅能要求使用他们所提供工作负载的第一方VM使用OBDs,但是不能要求全部的VM都使用，并且在Azure的统计显示，超过95%的用户不使用OBDs。正因为用户不愿意使用供应商提供的检测器，所以基于此受限，供应商只能使用非侵入式的检测来保证VM不受侵害。</p>
+<p>设计目标：</p>
+<ol>
+<li><p>GDPR（欧洲数据隐私法）： 要求可以追踪用户的个人隐私信息（PII），以便用户可以检查或者删除此信息。供应商需要在48小时内回答用户请求，这时供应商可以1. 使用原数据对数据进行连接和标记，2. 或者避免存储与PII相关的数据。这就要求VM的公共IP必须映射到用户账户，但公共IP 是动态及时分配的，因此GDPR 对PII的处理代价是十分昂贵的。（PrivateEye是如何处理的？）</p>
+</li>
+<li><p>较低的运行代价</p>
+</li>
+<li><p>OBD对大量的VM进行检测获取到充足的攻击数据集。</p>
+</li>
+<li><p>（OBDs 与PrivateEye关系：后者更宏观，前者更具有通用的保护性）</p>
+</li>
+</ol>
+<p>OBDs是一个广泛的监控器，PrivateEye对VM有着更加严格的监控，目的是避免大量用户没必要的损失。在不必要的更进一步的检测时无需客户机的许可就会对VM进行保护，一旦发现可疑攻击，就会对VM发出警告，以请求更深入的检测VM。</p>
+<p><img src="/2020/10/09/PrivateEye/architecture.png" width="500px" height="300px"></p>
+<h3 id="Evaluation"><a href="#Evaluation" class="headerlink" title="Evaluation"></a>Evaluation</h3><p>• What is PrivateEye’s accuracy? </p>
+<p>​        PrivateEye can detect 95.77% of compromised samples with 1% FPR.</p>
+<p>• What causes PrivateEye’s false positives/negatives? </p>
+<p>​        PrivateEye’s FNs were mostly OBD false positives.</p>
+<p>• How does PrivateEye’s RF compare to other models? </p>
+<p>​        PrivateEye’s FPs have similar flow-patterns to compro- mised VMs. </p>
+<p>• How does PrivateEye’s sampling limit affect accuracy? </p>
+<p>​        The choice of sampling limit is important.</p>
+ <font color="green"> **蜜罐** </font>
+
+<p>​        本质上是一种对攻击方进行欺骗的技术，通过布置一些作为诱饵的主机、网络服务或者信息，诱使攻击方对它们实施攻击，从而可以对攻击行为进行捕获和分析，了解攻击方所使用的工具与方法，推测攻击意图和动机，能够让防御方清晰地了解他们所面对的安全威胁，并通过技术和管理手段来增强实际系统的安全防护能力。蜜罐好比是情报收集系统。蜜罐好像是故意让人攻击的目标，引诱黑客前来攻击。所以攻击者入侵后，你就可以知道他是如何得逞的，随时了解针对服务器发动的最新的攻击和漏洞。还可以通过窃听黑客之间的联系，收集黑客所用的种种工具，并且掌握他们的社交网络。</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>NSDI</category>
+      </categories>
+      <tags>
+        <tag>Virtual Machine</tag>
+        <tag>Hypervisor</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Xen log 3 Using Serial Debug Xen</title>
+    <url>/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/</url>
+    <content><![CDATA[<p>注：本文的配置是在<a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">官网</a>指导下进行的，因为在配置过程中遇到一点问题，记录下配置过程。</p>
+<p>Xen的log信息是打印在内存中的，读取打印信息需要<code>xl dm</code> 进行查看，如果在查看之前xen崩溃的话，是读取不到任何信息的，通过串口的方式可以将数据实时的打印出来，方便调试。</p>
+<p>这里使用的是usb转rs232.</p>
+<h3 id="配置读取设备"><a href="#配置读取设备" class="headerlink" title="配置读取设备"></a>配置读取设备</h3><p>在读取设备和Xen机器上配置<code>minicom</code> 用于测试串口。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">Ubuntu dmesg | grep tty</span><br></pre></td></tr></table></figure>
+<p>输出信息如下</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[    0.094791] printk: console [tty0] enabled</span><br><span class="line">[    0.757835] 00:02: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A</span><br><span class="line">[    0.779505] 0000:00:16.3: ttyS4 at I/O 0xf060 (irq = 19, base_baud = 115200) is a 16550A</span><br><span class="line">[    2.825408] usb 1-13: pl2303 converter now attached to ttyUSB0</span><br><span class="line">[ 3435.257916] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0</span><br><span class="line">[ 3437.386713] usb 1-14: pl2303 converter now attached to ttyUSB0</span><br><span class="line">[13860.597447] pl2303 ttyUSB0: pl2303_set_control_lines - failed: -19</span><br><span class="line">[13860.597451] pl2303 ttyUSB0: error sending <span class="built_in">break</span> = -19</span><br><span class="line">[13860.597584] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0</span><br><span class="line">[13863.385826] usb 1-8: pl2303 converter now attached to ttyUSB0</span><br></pre></td></tr></table></figure>
+<p>于是设置默认串口为 <code>ttyUSB0</code> ,使用<code>minicom -s</code> 进入<code>serial prot setup</code> 进行设置</p>
+<p><img src="/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/xen-3.png" width="500px" height="300px"> </p>
+<p>(配置完没有截图，取自 [2] )，配置好读取设备后，静置，备用。</p>
+<h3 id="配置Xen-设备"><a href="#配置Xen-设备" class="headerlink" title="配置Xen 设备"></a>配置Xen 设备</h3><p>读取Xen设备信息</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">dmesg | grep tty</span><br></pre></td></tr></table></figure>
+<p>输出信息</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">console [tty0] enabled</span><br><span class="line">00:03: ttyS5 at I/O 0xc0c8 (irq = 16, base_baud = 115200) is a 16550A</span><br></pre></td></tr></table></figure>
+<p>这里确定tty0 、 ttyS5 （如果没有输出全部信息的话，执行下面的命令查看）</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">cat /proc/tty/driver/serial</span><br></pre></td></tr></table></figure>
+<p>输出信息</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">serinfo:1.0 driver revision:</span><br><span class="line">0: uart:16550A port:000003F8 irq:4 tx:0 rx:0</span><br><span class="line">1: uart:unknown port:000002F8 irq:3</span><br><span class="line">2: uart:unknown port:000003E8 irq:4</span><br><span class="line">3: uart:unknown port:000002E8 irq:3</span><br><span class="line">4: uart:XR16850 port:0000C0C0 irq:16 tx:0 rx:0</span><br><span class="line">5: uart:XR16850 port:0000C0C8 irq:16 tx:0 rx:0 CTS|DTR|DSR|CD|RI</span><br></pre></td></tr></table></figure>
+<p>可以确定，Xen设备的串口是<code>ttyS5</code> 物理地址为 <code>0xc0c8</code> </p>
+<h4 id="测试串口通讯情况"><a href="#测试串口通讯情况" class="headerlink" title="测试串口通讯情况"></a>测试串口通讯情况</h4><p>在Xen设备的<code>minicom</code> 上设置默认的端口为<code>ttyS5</code> 看两台机器是否能够正常通讯，即，在读取设备输入，在Xen设备上可以输出响应内容，反之亦然。</p>
+<h4 id="修改Grub文件"><a href="#修改Grub文件" class="headerlink" title="修改Grub文件"></a>修改Grub文件</h4><p>在<code>/etc/default/grub</code>文件中 添加如下内容</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># This can guarantee sync output when using `printk`</span></span><br><span class="line">GRUB_CMDLINE_XEN=<span class="string">"loglvl=all guest_loglvl=all sync_console console_to_ring com1=115200,8n1,0x3080 console=com1,vga com0_mem=4096"</span></span><br><span class="line"></span><br><span class="line">GRUB_CMDLINE_LINUX_DEFAULT=<span class="string">"console=tty0 console=ttyS5,115200n8"</span></span><br><span class="line">GRUB_CMDLINE_LINUX=<span class="string">"console=hvc0 earlyprintk=xen"</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>sync_console</code>: 保证输出是同步的，以防一些内容在xen crash之前打不出来</li>
+<li><code>console_to_ring</code>: 将Guest的log同步到dom0中打印输出.</li>
+<li><code>console=com1,vga</code>: 将终端连到com1上，这样我们就可以通过串口输入用户名密码登陆</li>
+</ul>
+<p>输入 <code>sudo update-grub</code> 更新grub文件，重启</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在自定义<a href="https://ykma.gitee.io/2020/07/19/Xen-log-2-Add-a-new-Hypercall/">Hypercall</a> 后，执行<code>privcmd.c</code> 文件会在读取设备上看到相应的log信息，这里不放图了。</p>
+<h3 id="采坑指南"><a href="#采坑指南" class="headerlink" title="采坑指南"></a>采坑指南</h3><p>我刚配置串口的时候，采用Ubuntu18读取日志信息，Debian9编译Xen，两台机器通信正常，<code>reboot</code> Xen设备后会打印开机日志，随后便是一通乱码，不输出用户自定义log信息。调整两台设备的编码格式、语言（en.utf-8）等均未果，至今没有解决这个bug</p>
+<p>感受一下乱码：分别是正常读取与16进制读取的结果</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">�`�f���f�����`�f���f���怀�`�f���f����~x�~~x�~�`�f���f���怀�`�f��~怀</span><br><span class="line"></span><br><span class="line">�`�f���f枞f�~x��枘�����f��ff��~��~fx�f��~������~��~��~��fx�</span><br><span class="line"></span><br><span class="line">06 fe 60 e6 66 fe 06 f8 00 f8 66 fe 00 f8 e6 80 06 fe 60 e6 66 fe 06 f8 00 f8 6</span><br></pre></td></tr></table></figure>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">https://wiki.xenproject.org/wiki/Xen_Serial_Console</a></p>
+<p>[2] <a href="** https://silentming.net/blog/2016/09/18/xen-log-5-debug-xen/**">Xen Log 5-Debug Xen on Physical Machine</a></p>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Xen log</tag>
+        <tag>Virtualization</tag>
+      </tags>
+  </entry>
 </search>
