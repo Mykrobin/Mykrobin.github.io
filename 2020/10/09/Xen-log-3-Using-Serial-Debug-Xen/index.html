@@ -135,7 +135,7 @@
 </ul>
 <p>输入 <code>sudo update-grub</code> 更新grub文件，重启</p>
 <h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在自定义<a href="https://ykma.gitee.io/2020/07/19/Xen-log-2-Add-a-new-Hypercall/">Hypercall</a> 后，执行<code>privcmd.c</code> 文件会在读取设备上看到相应的log信息，这里不放图了。</p>
-<h3 id="采坑指南"><a href="#采坑指南" class="headerlink" title="采坑指南"></a>采坑指南</h3><p>我刚配置串口的时候，采用Ubuntu18读取日志信息，Debian9编译Xen，两台机器通信正常，<code>reboot</code> Xen设备后会打印开机日志，随后便是一通乱码，不输出用户自定义log信息。调整两台设备的编码格式、语言（en.utf-8）等均未果，至今没有解决这个bug</p>
+<h3 id="踩坑指南"><a href="#踩坑指南" class="headerlink" title="踩坑指南"></a>踩坑指南</h3><p>我刚配置串口的时候，采用Ubuntu18读取日志信息，Debian9编译Xen，两台机器通信正常，<code>reboot</code> Xen设备后会打印开机日志，随后便是一通乱码，不输出用户自定义log信息。调整两台设备的编码格式、语言（en.utf-8）等均未果，至今没有解决这个bug</p>
 <p>感受一下乱码：分别是正常读取与16进制读取的结果</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">�`�f���f�����`�f���f���怀�`�f���f����~x�~~x�~�`�f���f���怀�`�f��~怀</span><br><span class="line"></span><br><span class="line">�`�f���f枞f�~x��枘�����f��ff��~��~fx�f��~������~��~��~��fx�</span><br><span class="line"></span><br><span class="line">06 fe 60 e6 66 fe 06 f8 00 f8 66 fe 00 f8 e6 80 06 fe 60 e6 66 fe 06 f8 00 f8 6</span><br></pre></td></tr></table></figure>
 <h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">https://wiki.xenproject.org/wiki/Xen_Serial_Console</a></p>

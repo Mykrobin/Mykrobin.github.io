@@ -6,6 +6,161 @@
     <content><![CDATA[]]></content>
   </entry>
   <entry>
+    <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
+    <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://dl.acm.org/doi/epdf/10.1145/3035918.3056101" target="_blank" rel="noopener">Aurora</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Amazon</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">分布式数据库</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">数据库</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">致力于构建一个分布式数据库</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="0-研究背景-为什么出现Aurora？"><a href="#0-研究背景-为什么出现Aurora？" class="headerlink" title="0 研究背景 为什么出现Aurora？"></a>0 研究背景 为什么出现Aurora？</h3><p>&emsp; &emsp; Aurora是亚马逊云服务AWS中的关系型数据库服务，主要面向OLTP场景。 <strong>Aurora</strong>基本设计理念是在云上环境下，数据库的最大瓶颈不再是计算或者存储资源，而是网络，因此基于一套存储计算分离架构，将日志处理下推到分布式存储层，通过架构上的优化来解决网络瓶颈。 </p>
+<p>&emsp; &emsp; 在云上环境下，存储计算分离作为解决系统弹性和伸缩性的方案越来越普遍。广义来说，任何数据库，底下文件系统挂一个分布式存储，即可以认为做到了存储计算分离。通过存储计算分离，可以透明添加存储节点，剔除故障节点，进行故障切换，扩展存储空间等。在这个背景下，IO不再成为数据库的瓶颈，因为IO压力可以打散在多个存储节点上，反而是<strong>网络成为瓶颈</strong>，因为数据库实例与所有存储节点的交互都需要通过网络，尤其是为了提升数据库性能，数据库实例与存储节点可能是并行交互的，这进一步加重了网络压力。</p>
+<p>&emsp; &emsp; 传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。比如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。另外一个我们熟悉场景是事务提交操作(IO写操作)，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。 <strong>传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的。</strong></p>
+<p>&emsp; &emsp; 本文介绍的Aurora是一个云上环境全新的数据库服务可以很好的解决上述传统数据库遇到的问题。 <strong>它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。</strong> Aurora体系下的数据库实例仍然包含了大部分核心功能，比如查询处理，事务，锁，缓存管理，访问接口和undo日志管理等；但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
+<h3 id="1-面临问题"><a href="#1-面临问题" class="headerlink" title="1 面临问题"></a>1 面临问题</h3><p>&emsp;&emsp;在云环境中，将存储和计算分离已经成为解决系统弹性和可伸缩性的方案。实现存储计算分离，可以进行故障切换，扩展存储空间等。因此磁盘IO压力可以打散在多个存储节点上，所以IO不再成为数据库的瓶颈。存储和计算分离之后，数据库实例与所有存储节点的交互都需要通过网络，加重了网络带宽压力，从而网络成为瓶颈。</p>
+<h3 id="2-问题带来的挑战"><a href="#2-问题带来的挑战" class="headerlink" title="2 问题带来的挑战"></a>2 问题带来的挑战</h3><p>&emsp;&emsp;在云环境中数据库的瓶颈不再是计算或者是资源存储，而是网络。基于此，Aurora设计了存储和计算分离的架构，与传统数据库相比较，这些问题带来的挑战如下。</p>
+<p>&emsp;&emsp;传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。云环境中的IO操作与传统数据库中的操作是不同的，这带来了IO操作的挑战。</p>
+<p>&emsp;&emsp;事务提交操作，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的，这又是一大挑战。</p>
+<h3 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3 解决方法"></a>3 解决方法</h3><p>&emsp;&emsp;Aurora是一个云上环境全新的数据库服务可以很好的解决上述问题带来的挑战。它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。Aurora体系下的数据库实例仍然包含了大部分核心功能，但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
+<h5 id="3-1-数据存储"><a href="#3-1-数据存储" class="headerlink" title="3.1 数据存储"></a><strong>3.1</strong> <strong>数据存储</strong></h5><p>&emsp;&emsp;Aurora存储层的复制基于Quorum协议，假设复制拓扑中有V个节点，每个节点有一个投票权，读或写必须拿到Vr 或 Vw个投票才能返回。为了满足一致性，需要满足两个条件，首先Vr + Vw &gt; V，这个保证了每次读都能读到拥有最新数据的节点；第二，Vw &gt; V/2，每次写都要保证能获取到上次写的最新数据，避免写冲突。</p>
+<p>&emsp;&emsp;结合Quorum模型，V=6 ，Vw=4，Vr=3，Aurora可以容忍任何一个AZ出现故障，不会影响写服务；任何一个AZ出现故障，以及另外一个AZ中的一个节点出现故障，不会影响读服务且不会丢失数据。通过Quorum协议，Aurora可以保证只要AZ级别的故障(火灾，洪水，网络故障)和节点故障(磁盘故障，掉电，机器损坏)不同时发生，就不会破坏协议本身，数据库可用性和正确性就能得到保证。</p>
+<h5 id="3-2-日志即数据"><a href="#3-2-日志即数据" class="headerlink" title="3.2 日志即数据"></a><strong>3.2</strong> <strong>日志即数据</strong></h5><p>&emsp;&emsp;以MySQL为例，考虑主备复制，如图1所示，AZ1和AZ2分别部署一个MySQL实例做同步镜像复制，底层存储采用EBS，并且每个EBS还有自己的一份镜像，另外部署S3进行redo日志和binlog日志归档，以支持基于时间点的恢复。每个步骤都需要传递5种类型的数据，包括redo，binlog，data-page，double-write和frm元数据。图中的1，3，5步骤是顺序的，要进行4次网络IO，且其中3次是同步串行的。从存储角度来看，数据在EBS上存了4份，需要4份都写成功才能返回。所以在这种架构下，无论是IO量还是串行化模型都会导致性能损耗。</p>
+<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/1.png" width="300px" height="300px"></p>
+<p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图1. Mirrored MySQL写操作流程</p>
+<p>&emsp;&emsp;在Aurora中，所有的写类型只有一种，那就是redo日志。修改一个数据页，会同步产生对应的redo日志。事务提交时，需要事务对应的redo日志都落盘成功后才能返回。存储节点接收redo日志，基于旧版本数据页回放日志，可以得到新版本的数据页。为了避免每次都从头开始回放数据页变更产生的redo日志，存储节点会定期物化数据页版本。Aurora由跨AZ的一个主实例和多个副本实例组成，主实例与副本实例或者存储节点间只传递redo日志和元信息。主实例并发向6个存储节点和副本实例发送日志，当4/6的存储节点应答后，则认为日志已经持久化。传统数据库宕机重启后，恢复从最近的一个检查点开始，读取检查点后的所有redo日志进行回放，确保已经提交的事务对应的数据页得到更新。</p>
+<p>&emsp;&emsp;在Aurora中，redo日志相关的功能下推到存储层，回放日志的工作可以一直在后台做。真正进行故障恢复时，需要做的事情很少，所以故障恢复的速度非常快。Aurora存储服务设计的一个关键原则是减少前台用户写的响应时间，因此将尽可能多的操作移到后台异步执行，并且存储节点会根据前台的请求压力，自适应分配资源做不同的工作。对于Aurora而言，分离的存储服务层使得后台线程推进检查点动作完全不影响数据库实例，并且是推进地越快，越有利于前台的磁盘IO读操作。Aurora写基于Quorum模型，存储分片后，按片达成多数即可返回，由于分布足够离散，少数的磁盘IO压力大也不会影响到整体的写性能。</p>
+<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/2.png" width="400px" height="300px"></p>
+<p>如上图所示，图中详细介绍了主要的写流程，</p>
+<p>1).存储节点接收数据库实例的日志，并追加到内存队列；</p>
+<p>2).将日志在本地持久化成功后，给实例应答；</p>
+<p>3).按分片归类日志，并确认丢失了哪些日志；</p>
+<p>4).与其它存储节点交互，填充丢失的日志；</p>
+<p>5).回放日志生成新的数据页；</p>
+<p>6).周期性地备份数据页和日志到S3系统；</p>
+<p>7).周期性地回收过期的数据页版本；</p>
+<p>8).周期性地对数据页进行CRC校验。</p>
+<p>&emsp;&emsp;上述所有写相关的操作，只有第1)和第2)步是串行同步的，会直接影响前台请求的响应时间，其它操作都是异步的。</p>
+<h4 id="3-3-事务提交"><a href="#3-3-事务提交" class="headerlink" title="3.3 事务提交"></a><strong>3.3</strong> <strong>事务提交</strong></h4><p>&emsp;&emsp;在Aurora中，数据库实例向存储节点传递redo日志，达成多数派后将事务标记为提交状态，然后推进VDL，使数据库进入一个新的一致状态。每个事务的每条redo日志都会分配一个唯一的LSN，这个LSN一定大于当前最新的VDL。由于底层存储按segment分片，每个分片管理一部分页面，当一个事务涉及的修改跨多个分片时，事务对应的日志被打散，每个分片只能看到这个事务的部分日志。为了确保各个分片日志的完整性，每条日志都记录前一条日志的链接，通过前向链接确保分片拥有了完整的日志。Segment Complete LSN(SCL)表示分片拥有完整日志的位点，存储节点相互间通过gossip协议来弥补本地日志空洞，推进SCL。</p>
+<p>&emsp;&emsp;在Aurora中，事务提交是完全异步的。每个事务由若干个日志组成，并包含有一个唯一的“commit LSN”，工作线程处理事务提交请求时，将事务相关的日志提交到持久化队列并将事务挂起，并继续处理其它数据库请求。当VDL的位点大于事务的LSN时，表示这个事务redo日志都已经持久化，可以向客户端回包，通知事务已经成功执行。在Aurora中，有一个独立的线程处理事务成功执行的回包工作，因此，从整个提交流程来看，所有工作线程不会因为事务提交等待日志推进而堵塞，他们会继续处理新的请求，通过这种异步提交方式，大大提高了系统的吞吐。</p>
+<h4 id="3-4-故障恢复"><a href="#3-4-故障恢复" class="headerlink" title="3.4 故障恢复"></a><strong>3.4</strong> <strong>故障恢复</strong></h4><p>&emsp;&emsp;大多数数据库系统通常会周期性地做检查点，并将检查点信息计入日志。故障时，数据页中同时可能包含了提交和未提交的数据，因此，在故障恢复时，系统首先需要从上一个检查点开始回放日志，将数据页恢复到故障时的状态，然后根据undo日志回滚未交事务。从故障恢复的过程来看，故障恢复是一个比较耗时的操作，并且与检查点操作频率强相关。通过提高检查点频率，可以减少故障恢复时间，但是这直接会影响系统处理前台请求吞吐，所以需要在检查点频率和故障恢复时间做一个权衡，而在Aurora中不需要做这种权衡。</p>
+<p>&emsp;&emsp;Aurora将回放日志逻辑下推到存储节点，并且在数据库在线提供服务时在后台常态运行。因此，当出现故障重启时，存储服务能快速恢复。数据库实例宕机重启后，需要故障恢复来获得运行时的一致状态，实例与仲裁协议确定的N个存储节点通信，这样确保能读到最新的数据，并重新计算新的VDL，超过VDL部分的日志都可以被截断丢弃。在Aurora中，对于新分配的LSN范围做了限制，这个主要是为了避免数据库实例上堆积过多的未提交事务。</p>
+<h3 id="4-实验验证"><a href="#4-实验验证" class="headerlink" title="4 实验验证"></a>4 实验验证</h3><p>&emsp;&emsp;本文的实验对Aurora的读写能力，吞吐量大小，以及部署后用户的使用数据对Aurora进行了分析。</p>
+<p>&emsp;&emsp;从sysbench测试的数据来看，Aurora是基于镜像MySQL吞吐能力的35倍，每个事务的日志量比基于镜像MySQL日志量要少7.7倍。从用户的使用数据来看，某游戏公司使用后web应用响应时间明显降低，由之前的15ms降低到5.5ms,性能提高了近3倍，而且时间延迟明显降低。</p>
+<p>&emsp;&emsp;基于实验验证，Aurora相对于传统数据库的优势如下：</p>
+<p>&emsp;&emsp;第一，底层数据库存储是一个分布式存储服务，可以轻松应对故障；</p>
+<p>&emsp;&emsp;第二，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；</p>
+<p>&emsp;&emsp;第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
+<h3 id="5-相关工作"><a href="#5-相关工作" class="headerlink" title="5 相关工作"></a>5 相关工作</h3><p>&emsp;&emsp;本文的相关工作主要是在分布式存储的将存储与计算解耦、分布式系统、并发控制、日志结构的存储与数据恢复等几个方面分别进行描述的。在描述的过程中，首先通过对Aurora面临的问题进行逐个层面的分析，并对相关工作进行总结，在分析之后，将已有工作与Aurora相结合，并通过Aurora与先有工作进行比较说明，进一步阐述Aurora的实现原理。</p>
+<p>&emsp;&emsp;将存储与计算解耦：在此处本文提出与传统系统通常作为整体不同的数据库系统，介绍了有一些关于将内核分解为不同组件的数据库的研究。Deuteronomy 将提供并发控制和恢复的事务组件（TC）与提供LLAMA访问方法的数据组件（DC）分开，结构化缓存和存储管理器。Sinfonia和Hyder是在横向扩展服务上抽象事务访问方法的系统，并且可以使用这些抽象来实现数据库系统。Yesquel系统实现了多版本分布式平衡树，并将并发控制与查询处理器分离。在Aurora中，将查询处理、事务、并发、缓冲区高速缓存和访问方法与作为横向扩展服务实现的日志记录，存储和恢复分离。</p>
+<p>&emsp;&emsp;分布式系统：首先指出已经证明过的Brewer CAP定理，指出高度可用的系统无法在存在网络分区的情况下提供“强”的一致性保证。这个结果激发了作者对一致性目标的追求。并对相关工作进行总结，Bailis等人研究了提供高可用事务（HATs）的问题，该事务既不会在分区期间遭受不可用，也不会导致高网络延迟。他们表明可串行性，快照隔离和可重复读取隔离不符合HAT的要求，而大多数其他隔离级别都可以通过高可用性实现。Aurora通过简化假设，即在任何时候只有一个写入器使用从单个有序域分配的LSN生成日志更新来提供所有这些隔离级别。Google的Spanner提供外部一致的读写操作，并在一个时间戳上跨数据库提供全局一致的读取信息。这些功能使Spanner支持一致的备份，一致的分布式查询处理以及原子模式更新，所有这些都是在全球范围内进行的，甚至在正在进行的事务存在的情况下也是如此。Spanner专门针对Google的繁重工作负载，并依靠两阶段提交和两阶段锁定来进行读/写事务。</p>
+<p>&emsp;&emsp;并发控制：本文指出较弱的一致性和隔离模型在分布式数据库中是众所周知的，并导致了乐观的复制技术以及最终的一致性系统。集中式系统中的其他方法包括基于锁定的经典悲观方案，Hekaton中的多方案并发控制之类的乐观方案，VoltDB等分片方法和HyPer中的时间戳排序和Deuteronomy . Aurora的存储服务为数据库引擎提供了持久保留的本地磁盘的抽象，并允许引擎确定隔离和并发控制。</p>
+<p>&emsp;&emsp;日志结构存储：先介绍日志结构的起源，日志结构的存储系统由LFS 在1992年引入。并对最近的日志结构存储的相关工作进行总结，Deuteronomy 以及LLAMA 和Bw-Tree 的相关工作在存储引擎堆栈中以多种方式使用日志结构化技术。最后对本文提出的Aurora与Deuteronomy 进行横向比较说明。Aurora，通过编写增量而不是整个页面来减少写放大，Deuteronomy 和Aurora都实现纯重做日志记录，并跟踪最高稳定的LSN以确认提交。</p>
+<p>&emsp;&emsp;恢复：尽管传统数据库依赖于基于ARIES 的恢复协议，但是一些最近的系统已经选择了其他途径来提高性能。例如，Hekaton和VoltDB在崩溃后使用某种形式的更新日志来重建其内存状态。像Sinfonia这样的系统通过使用诸如进程对和状态机复制之类的技术来避免恢复。Graefe 描述了一种具有每页日志记录链的系统，该系统可以按需进行逐页重做，从而可以快速恢复。与Aurora一样，Deuteronomy 不需要重做恢复。这是因为Deuteronomy 会延迟事务，因此只有已提交的更新才会发布到持久存储中。结果，与Aurora不同，Deuteronomy 中的交易规模可能受到限制。</p>
+<h3 id="6-总结建议"><a href="#6-总结建议" class="headerlink" title="6 总结建议"></a>6 总结建议</h3><p>&emsp;&emsp;在计算与存储分离的云基础设施之上，通过仅传输redo log，大幅减少跨网络的IO数据传输，将产生大量IO的数据页合并和持久化交由本地存储来解决，大幅减缓了网络延迟对数据库性能的影响。即使网络传输的速度不再是分布式数据库的瓶颈，这种“日志即数据“的思想也是有意义的，因为在分布式数据库中的计算，存储，网络中，网络通信的功耗是最大的。</p>
+<p>&emsp;&emsp;Aurora诞生的原因是在弹性伸缩的云环境下，传统的高吞吐<strong>OLTP</strong>数据库既不能保证可用性，又不能保证持久性。 <strong>Aurora</strong>的关键点在于将传统数据库中的存储与计算分离，具体而言，将日志部分下推到一个独立的分布式存储服务层。由于这种分离架构下，所有IO操作都是通过网络，网络将成为最大的瓶颈，因此Aurora集中精力优化网络以便提高系统吞吐能力。Aurora依靠Quorum模型，在性能影响可控的前提下，解决云环境下的各种异常错误。在Aurora中，日志处理技术减少了I/O写放大，异步提交协议避免了同步等待，同时分离的存储服务层还避免了离线故障恢复和检查点操作。</p>
+<p>&emsp; &emsp;Aurora相对于传统数据库有三大优势，首先，底层数据库存储是一个分布式存储服务，可以轻松应对故障；其次，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
+<p>&emsp;&emsp;批评性建议：</p>
+<p>&emsp;&emsp;1.在存储结构方面，论文中没有给出caching很明确的细节说明，Caching是位于了存储层内还是计算层内？读者只能靠猜测。如果在文中给出了具体的细节说明，可能对读者理解本文具有很大的帮助。</p>
+<p>&emsp;&emsp;2.Amazon Aurora是基于开源MySQL的数据库，理论上修改GPL协议的开源软件再开发一个新软件是需要开源的，但它本身没有开放源代码，是一个闭源数据库。</p>
+<p>&emsp;&emsp;3.为什么备机节点可以多达15个呢？是为了应对数据库的读负载还是作为故障转移的目标，需要这么多备机做备选？本文在15个备份节点的解释上不是很清楚，读后存有疑惑。</p>
+<p>下面引用两位专家对Aurora的评价：</p>
+<p>Percona Vadim Tkachenko: Aurora没有解决写拓展和分库分表的问题。（2017）</p>
+<p>Bill Karwin：Aurora不适合对具有二级索引的表进行大量写操作的场景。（2017）</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>SIGMOD</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Attacks Directories, Not Caches</title>
+    <url>/2020/07/17/Attacks-Directories-Not-Caches/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href>Attack Directories, Not Caches: Side-Channel Attacks in a Non-Inclusive World</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">Side Channel Attack</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">Attack, Cache</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">基于缓存的侧信道攻击在新型缓存的攻击实践</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="0-Main-idea"><a href="#0-Main-idea" class="headerlink" title="0. Main idea"></a>0. Main idea</h3>]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>side channel attack</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>BatchCrypt</title>
     <url>/2020/09/13/BatchCrypt/</url>
     <content><![CDATA[<div class="table-container">
@@ -334,161 +489,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
-    <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://dl.acm.org/doi/epdf/10.1145/3035918.3056101" target="_blank" rel="noopener">Aurora</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Amazon</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">分布式数据库</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">数据库</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">致力于构建一个分布式数据库</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="0-研究背景-为什么出现Aurora？"><a href="#0-研究背景-为什么出现Aurora？" class="headerlink" title="0 研究背景 为什么出现Aurora？"></a>0 研究背景 为什么出现Aurora？</h3><p>&emsp; &emsp; Aurora是亚马逊云服务AWS中的关系型数据库服务，主要面向OLTP场景。 <strong>Aurora</strong>基本设计理念是在云上环境下，数据库的最大瓶颈不再是计算或者存储资源，而是网络，因此基于一套存储计算分离架构，将日志处理下推到分布式存储层，通过架构上的优化来解决网络瓶颈。 </p>
-<p>&emsp; &emsp; 在云上环境下，存储计算分离作为解决系统弹性和伸缩性的方案越来越普遍。广义来说，任何数据库，底下文件系统挂一个分布式存储，即可以认为做到了存储计算分离。通过存储计算分离，可以透明添加存储节点，剔除故障节点，进行故障切换，扩展存储空间等。在这个背景下，IO不再成为数据库的瓶颈，因为IO压力可以打散在多个存储节点上，反而是<strong>网络成为瓶颈</strong>，因为数据库实例与所有存储节点的交互都需要通过网络，尤其是为了提升数据库性能，数据库实例与存储节点可能是并行交互的，这进一步加重了网络压力。</p>
-<p>&emsp; &emsp; 传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。比如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。另外一个我们熟悉场景是事务提交操作(IO写操作)，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。 <strong>传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的。</strong></p>
-<p>&emsp; &emsp; 本文介绍的Aurora是一个云上环境全新的数据库服务可以很好的解决上述传统数据库遇到的问题。 <strong>它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。</strong> Aurora体系下的数据库实例仍然包含了大部分核心功能，比如查询处理，事务，锁，缓存管理，访问接口和undo日志管理等；但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
-<h3 id="1-面临问题"><a href="#1-面临问题" class="headerlink" title="1 面临问题"></a>1 面临问题</h3><p>&emsp;&emsp;在云环境中，将存储和计算分离已经成为解决系统弹性和可伸缩性的方案。实现存储计算分离，可以进行故障切换，扩展存储空间等。因此磁盘IO压力可以打散在多个存储节点上，所以IO不再成为数据库的瓶颈。存储和计算分离之后，数据库实例与所有存储节点的交互都需要通过网络，加重了网络带宽压力，从而网络成为瓶颈。</p>
-<h3 id="2-问题带来的挑战"><a href="#2-问题带来的挑战" class="headerlink" title="2 问题带来的挑战"></a>2 问题带来的挑战</h3><p>&emsp;&emsp;在云环境中数据库的瓶颈不再是计算或者是资源存储，而是网络。基于此，Aurora设计了存储和计算分离的架构，与传统数据库相比较，这些问题带来的挑战如下。</p>
-<p>&emsp;&emsp;传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。云环境中的IO操作与传统数据库中的操作是不同的，这带来了IO操作的挑战。</p>
-<p>&emsp;&emsp;事务提交操作，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的，这又是一大挑战。</p>
-<h3 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3 解决方法"></a>3 解决方法</h3><p>&emsp;&emsp;Aurora是一个云上环境全新的数据库服务可以很好的解决上述问题带来的挑战。它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。Aurora体系下的数据库实例仍然包含了大部分核心功能，但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
-<h5 id="3-1-数据存储"><a href="#3-1-数据存储" class="headerlink" title="3.1 数据存储"></a><strong>3.1</strong> <strong>数据存储</strong></h5><p>&emsp;&emsp;Aurora存储层的复制基于Quorum协议，假设复制拓扑中有V个节点，每个节点有一个投票权，读或写必须拿到Vr 或 Vw个投票才能返回。为了满足一致性，需要满足两个条件，首先Vr + Vw &gt; V，这个保证了每次读都能读到拥有最新数据的节点；第二，Vw &gt; V/2，每次写都要保证能获取到上次写的最新数据，避免写冲突。</p>
-<p>&emsp;&emsp;结合Quorum模型，V=6 ，Vw=4，Vr=3，Aurora可以容忍任何一个AZ出现故障，不会影响写服务；任何一个AZ出现故障，以及另外一个AZ中的一个节点出现故障，不会影响读服务且不会丢失数据。通过Quorum协议，Aurora可以保证只要AZ级别的故障(火灾，洪水，网络故障)和节点故障(磁盘故障，掉电，机器损坏)不同时发生，就不会破坏协议本身，数据库可用性和正确性就能得到保证。</p>
-<h5 id="3-2-日志即数据"><a href="#3-2-日志即数据" class="headerlink" title="3.2 日志即数据"></a><strong>3.2</strong> <strong>日志即数据</strong></h5><p>&emsp;&emsp;以MySQL为例，考虑主备复制，如图1所示，AZ1和AZ2分别部署一个MySQL实例做同步镜像复制，底层存储采用EBS，并且每个EBS还有自己的一份镜像，另外部署S3进行redo日志和binlog日志归档，以支持基于时间点的恢复。每个步骤都需要传递5种类型的数据，包括redo，binlog，data-page，double-write和frm元数据。图中的1，3，5步骤是顺序的，要进行4次网络IO，且其中3次是同步串行的。从存储角度来看，数据在EBS上存了4份，需要4份都写成功才能返回。所以在这种架构下，无论是IO量还是串行化模型都会导致性能损耗。</p>
-<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/1.png" width="300px" height="300px"></p>
-<p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图1. Mirrored MySQL写操作流程</p>
-<p>&emsp;&emsp;在Aurora中，所有的写类型只有一种，那就是redo日志。修改一个数据页，会同步产生对应的redo日志。事务提交时，需要事务对应的redo日志都落盘成功后才能返回。存储节点接收redo日志，基于旧版本数据页回放日志，可以得到新版本的数据页。为了避免每次都从头开始回放数据页变更产生的redo日志，存储节点会定期物化数据页版本。Aurora由跨AZ的一个主实例和多个副本实例组成，主实例与副本实例或者存储节点间只传递redo日志和元信息。主实例并发向6个存储节点和副本实例发送日志，当4/6的存储节点应答后，则认为日志已经持久化。传统数据库宕机重启后，恢复从最近的一个检查点开始，读取检查点后的所有redo日志进行回放，确保已经提交的事务对应的数据页得到更新。</p>
-<p>&emsp;&emsp;在Aurora中，redo日志相关的功能下推到存储层，回放日志的工作可以一直在后台做。真正进行故障恢复时，需要做的事情很少，所以故障恢复的速度非常快。Aurora存储服务设计的一个关键原则是减少前台用户写的响应时间，因此将尽可能多的操作移到后台异步执行，并且存储节点会根据前台的请求压力，自适应分配资源做不同的工作。对于Aurora而言，分离的存储服务层使得后台线程推进检查点动作完全不影响数据库实例，并且是推进地越快，越有利于前台的磁盘IO读操作。Aurora写基于Quorum模型，存储分片后，按片达成多数即可返回，由于分布足够离散，少数的磁盘IO压力大也不会影响到整体的写性能。</p>
-<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/2.png" width="400px" height="300px"></p>
-<p>如上图所示，图中详细介绍了主要的写流程，</p>
-<p>1).存储节点接收数据库实例的日志，并追加到内存队列；</p>
-<p>2).将日志在本地持久化成功后，给实例应答；</p>
-<p>3).按分片归类日志，并确认丢失了哪些日志；</p>
-<p>4).与其它存储节点交互，填充丢失的日志；</p>
-<p>5).回放日志生成新的数据页；</p>
-<p>6).周期性地备份数据页和日志到S3系统；</p>
-<p>7).周期性地回收过期的数据页版本；</p>
-<p>8).周期性地对数据页进行CRC校验。</p>
-<p>&emsp;&emsp;上述所有写相关的操作，只有第1)和第2)步是串行同步的，会直接影响前台请求的响应时间，其它操作都是异步的。</p>
-<h4 id="3-3-事务提交"><a href="#3-3-事务提交" class="headerlink" title="3.3 事务提交"></a><strong>3.3</strong> <strong>事务提交</strong></h4><p>&emsp;&emsp;在Aurora中，数据库实例向存储节点传递redo日志，达成多数派后将事务标记为提交状态，然后推进VDL，使数据库进入一个新的一致状态。每个事务的每条redo日志都会分配一个唯一的LSN，这个LSN一定大于当前最新的VDL。由于底层存储按segment分片，每个分片管理一部分页面，当一个事务涉及的修改跨多个分片时，事务对应的日志被打散，每个分片只能看到这个事务的部分日志。为了确保各个分片日志的完整性，每条日志都记录前一条日志的链接，通过前向链接确保分片拥有了完整的日志。Segment Complete LSN(SCL)表示分片拥有完整日志的位点，存储节点相互间通过gossip协议来弥补本地日志空洞，推进SCL。</p>
-<p>&emsp;&emsp;在Aurora中，事务提交是完全异步的。每个事务由若干个日志组成，并包含有一个唯一的“commit LSN”，工作线程处理事务提交请求时，将事务相关的日志提交到持久化队列并将事务挂起，并继续处理其它数据库请求。当VDL的位点大于事务的LSN时，表示这个事务redo日志都已经持久化，可以向客户端回包，通知事务已经成功执行。在Aurora中，有一个独立的线程处理事务成功执行的回包工作，因此，从整个提交流程来看，所有工作线程不会因为事务提交等待日志推进而堵塞，他们会继续处理新的请求，通过这种异步提交方式，大大提高了系统的吞吐。</p>
-<h4 id="3-4-故障恢复"><a href="#3-4-故障恢复" class="headerlink" title="3.4 故障恢复"></a><strong>3.4</strong> <strong>故障恢复</strong></h4><p>&emsp;&emsp;大多数数据库系统通常会周期性地做检查点，并将检查点信息计入日志。故障时，数据页中同时可能包含了提交和未提交的数据，因此，在故障恢复时，系统首先需要从上一个检查点开始回放日志，将数据页恢复到故障时的状态，然后根据undo日志回滚未交事务。从故障恢复的过程来看，故障恢复是一个比较耗时的操作，并且与检查点操作频率强相关。通过提高检查点频率，可以减少故障恢复时间，但是这直接会影响系统处理前台请求吞吐，所以需要在检查点频率和故障恢复时间做一个权衡，而在Aurora中不需要做这种权衡。</p>
-<p>&emsp;&emsp;Aurora将回放日志逻辑下推到存储节点，并且在数据库在线提供服务时在后台常态运行。因此，当出现故障重启时，存储服务能快速恢复。数据库实例宕机重启后，需要故障恢复来获得运行时的一致状态，实例与仲裁协议确定的N个存储节点通信，这样确保能读到最新的数据，并重新计算新的VDL，超过VDL部分的日志都可以被截断丢弃。在Aurora中，对于新分配的LSN范围做了限制，这个主要是为了避免数据库实例上堆积过多的未提交事务。</p>
-<h3 id="4-实验验证"><a href="#4-实验验证" class="headerlink" title="4 实验验证"></a>4 实验验证</h3><p>&emsp;&emsp;本文的实验对Aurora的读写能力，吞吐量大小，以及部署后用户的使用数据对Aurora进行了分析。</p>
-<p>&emsp;&emsp;从sysbench测试的数据来看，Aurora是基于镜像MySQL吞吐能力的35倍，每个事务的日志量比基于镜像MySQL日志量要少7.7倍。从用户的使用数据来看，某游戏公司使用后web应用响应时间明显降低，由之前的15ms降低到5.5ms,性能提高了近3倍，而且时间延迟明显降低。</p>
-<p>&emsp;&emsp;基于实验验证，Aurora相对于传统数据库的优势如下：</p>
-<p>&emsp;&emsp;第一，底层数据库存储是一个分布式存储服务，可以轻松应对故障；</p>
-<p>&emsp;&emsp;第二，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；</p>
-<p>&emsp;&emsp;第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
-<h3 id="5-相关工作"><a href="#5-相关工作" class="headerlink" title="5 相关工作"></a>5 相关工作</h3><p>&emsp;&emsp;本文的相关工作主要是在分布式存储的将存储与计算解耦、分布式系统、并发控制、日志结构的存储与数据恢复等几个方面分别进行描述的。在描述的过程中，首先通过对Aurora面临的问题进行逐个层面的分析，并对相关工作进行总结，在分析之后，将已有工作与Aurora相结合，并通过Aurora与先有工作进行比较说明，进一步阐述Aurora的实现原理。</p>
-<p>&emsp;&emsp;将存储与计算解耦：在此处本文提出与传统系统通常作为整体不同的数据库系统，介绍了有一些关于将内核分解为不同组件的数据库的研究。Deuteronomy 将提供并发控制和恢复的事务组件（TC）与提供LLAMA访问方法的数据组件（DC）分开，结构化缓存和存储管理器。Sinfonia和Hyder是在横向扩展服务上抽象事务访问方法的系统，并且可以使用这些抽象来实现数据库系统。Yesquel系统实现了多版本分布式平衡树，并将并发控制与查询处理器分离。在Aurora中，将查询处理、事务、并发、缓冲区高速缓存和访问方法与作为横向扩展服务实现的日志记录，存储和恢复分离。</p>
-<p>&emsp;&emsp;分布式系统：首先指出已经证明过的Brewer CAP定理，指出高度可用的系统无法在存在网络分区的情况下提供“强”的一致性保证。这个结果激发了作者对一致性目标的追求。并对相关工作进行总结，Bailis等人研究了提供高可用事务（HATs）的问题，该事务既不会在分区期间遭受不可用，也不会导致高网络延迟。他们表明可串行性，快照隔离和可重复读取隔离不符合HAT的要求，而大多数其他隔离级别都可以通过高可用性实现。Aurora通过简化假设，即在任何时候只有一个写入器使用从单个有序域分配的LSN生成日志更新来提供所有这些隔离级别。Google的Spanner提供外部一致的读写操作，并在一个时间戳上跨数据库提供全局一致的读取信息。这些功能使Spanner支持一致的备份，一致的分布式查询处理以及原子模式更新，所有这些都是在全球范围内进行的，甚至在正在进行的事务存在的情况下也是如此。Spanner专门针对Google的繁重工作负载，并依靠两阶段提交和两阶段锁定来进行读/写事务。</p>
-<p>&emsp;&emsp;并发控制：本文指出较弱的一致性和隔离模型在分布式数据库中是众所周知的，并导致了乐观的复制技术以及最终的一致性系统。集中式系统中的其他方法包括基于锁定的经典悲观方案，Hekaton中的多方案并发控制之类的乐观方案，VoltDB等分片方法和HyPer中的时间戳排序和Deuteronomy . Aurora的存储服务为数据库引擎提供了持久保留的本地磁盘的抽象，并允许引擎确定隔离和并发控制。</p>
-<p>&emsp;&emsp;日志结构存储：先介绍日志结构的起源，日志结构的存储系统由LFS 在1992年引入。并对最近的日志结构存储的相关工作进行总结，Deuteronomy 以及LLAMA 和Bw-Tree 的相关工作在存储引擎堆栈中以多种方式使用日志结构化技术。最后对本文提出的Aurora与Deuteronomy 进行横向比较说明。Aurora，通过编写增量而不是整个页面来减少写放大，Deuteronomy 和Aurora都实现纯重做日志记录，并跟踪最高稳定的LSN以确认提交。</p>
-<p>&emsp;&emsp;恢复：尽管传统数据库依赖于基于ARIES 的恢复协议，但是一些最近的系统已经选择了其他途径来提高性能。例如，Hekaton和VoltDB在崩溃后使用某种形式的更新日志来重建其内存状态。像Sinfonia这样的系统通过使用诸如进程对和状态机复制之类的技术来避免恢复。Graefe 描述了一种具有每页日志记录链的系统，该系统可以按需进行逐页重做，从而可以快速恢复。与Aurora一样，Deuteronomy 不需要重做恢复。这是因为Deuteronomy 会延迟事务，因此只有已提交的更新才会发布到持久存储中。结果，与Aurora不同，Deuteronomy 中的交易规模可能受到限制。</p>
-<h3 id="6-总结建议"><a href="#6-总结建议" class="headerlink" title="6 总结建议"></a>6 总结建议</h3><p>&emsp;&emsp;在计算与存储分离的云基础设施之上，通过仅传输redo log，大幅减少跨网络的IO数据传输，将产生大量IO的数据页合并和持久化交由本地存储来解决，大幅减缓了网络延迟对数据库性能的影响。即使网络传输的速度不再是分布式数据库的瓶颈，这种“日志即数据“的思想也是有意义的，因为在分布式数据库中的计算，存储，网络中，网络通信的功耗是最大的。</p>
-<p>&emsp;&emsp;Aurora诞生的原因是在弹性伸缩的云环境下，传统的高吞吐<strong>OLTP</strong>数据库既不能保证可用性，又不能保证持久性。 <strong>Aurora</strong>的关键点在于将传统数据库中的存储与计算分离，具体而言，将日志部分下推到一个独立的分布式存储服务层。由于这种分离架构下，所有IO操作都是通过网络，网络将成为最大的瓶颈，因此Aurora集中精力优化网络以便提高系统吞吐能力。Aurora依靠Quorum模型，在性能影响可控的前提下，解决云环境下的各种异常错误。在Aurora中，日志处理技术减少了I/O写放大，异步提交协议避免了同步等待，同时分离的存储服务层还避免了离线故障恢复和检查点操作。</p>
-<p>&emsp; &emsp;Aurora相对于传统数据库有三大优势，首先，底层数据库存储是一个分布式存储服务，可以轻松应对故障；其次，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
-<p>&emsp;&emsp;批评性建议：</p>
-<p>&emsp;&emsp;1.在存储结构方面，论文中没有给出caching很明确的细节说明，Caching是位于了存储层内还是计算层内？读者只能靠猜测。如果在文中给出了具体的细节说明，可能对读者理解本文具有很大的帮助。</p>
-<p>&emsp;&emsp;2.Amazon Aurora是基于开源MySQL的数据库，理论上修改GPL协议的开源软件再开发一个新软件是需要开源的，但它本身没有开放源代码，是一个闭源数据库。</p>
-<p>&emsp;&emsp;3.为什么备机节点可以多达15个呢？是为了应对数据库的读负载还是作为故障转移的目标，需要这么多备机做备选？本文在15个备份节点的解释上不是很清楚，读后存有疑惑。</p>
-<p>下面引用两位专家对Aurora的评价：</p>
-<p>Percona Vadim Tkachenko: Aurora没有解决写拓展和分库分表的问题。（2017）</p>
-<p>Bill Karwin：Aurora不适合对具有二级索引的表进行大量写操作的场景。（2017）</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>SIGMOD</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Attacks Directories, Not Caches</title>
-    <url>/2020/07/17/Attacks-Directories-Not-Caches/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href>Attack Directories, Not Caches: Side-Channel Attacks in a Non-Inclusive World</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">Side Channel Attack</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">Attack, Cache</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">基于缓存的侧信道攻击在新型缓存的攻击实践</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="0-Main-idea"><a href="#0-Main-idea" class="headerlink" title="0. Main idea"></a>0. Main idea</h3>]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>side channel attack</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Dancing with Wolves</title>
     <url>/2020/06/27/Dancing-with-Wolves/</url>
     <content><![CDATA[<div class="table-container">
@@ -599,6 +599,57 @@
       </tags>
   </entry>
   <entry>
+    <title>FHEW</title>
+    <url>/2020/08/13/FHEW/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://eprint.iacr.org/2014/816.pdf" target="_blank" rel="noopener">FHEW</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Centrum Wiskunde &amp; Informatica, Amsterdam</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">对全同态加密中 bootstraping 进行优化</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">同态加密</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">优化影响同态加密效率的主要瓶颈——Gentry 的引导程序</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Cryptographic Techniques</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Homomorphic</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>HIMA</title>
     <url>/2020/07/21/HIMA/</url>
     <content><![CDATA[<div class="table-container">
@@ -659,57 +710,6 @@
       </tags>
   </entry>
   <entry>
-    <title>FHEW</title>
-    <url>/2020/08/13/FHEW/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://eprint.iacr.org/2014/816.pdf" target="_blank" rel="noopener">FHEW</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Centrum Wiskunde &amp; Informatica, Amsterdam</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">对全同态加密中 bootstraping 进行优化</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">同态加密</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">优化影响同态加密效率的主要瓶颈——Gentry 的引导程序</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Cryptographic Techniques</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>Homomorphic</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Operating Systems</title>
     <url>/2020/07/17/Operating-Systems/</url>
     <content><![CDATA[]]></content>
@@ -737,6 +737,88 @@
       <tags>
         <tag>论文解读</tag>
         <tag>虚拟化安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PrivateEye</title>
+    <url>/2020/10/09/PrivateEye/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.usenix.org/system/files/nsdi20-paper-arzani.pdf" target="_blank" rel="noopener">PrivateEye</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">对部署在云上的虚拟机进行保护，而不是对hypervisor进行防护</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">保护云安全</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">通过对少数机器进行保护，得到攻击者特征，并利用此特征对云上全部机器进行保护。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h3><p>​        云中会部署一些可以检测VM是否受攻击的检测系统，但是往往都没有启用，这就使得VM在云上几乎在没有任何保护的情况下运行，这在安全的角度看是十分不可取的。让用户在不受保护的状态下运行或者完全在云供应商提供的检测系统的保护下运行，这两者似乎都不可取。如果不保护，则受攻击的VM可以攻击其余未被攻击的VM，并且不是所有的用户都需要在被严格保护的情况下运行。经过统计，约5%的用户愿意承担云供应商提供的安全监测系统的额外费用。本文基于此提出PrivateEye解决方案，它是一个可扩展、解决隐私保护的解决方案，能够对数据中心全部的VM进行防护。通过检测较少的机器，将检测后结果应用于云中其余的机器进行检测。</p>
+<p>保护的定位：<br>针对云上的VMs,而不是hypervisor本身。</p>
+<p>使用的方法：<br>利用机器学习的方法，根据已经存在的5%的少数用户特征，应用于云上全部主机检测。</p>
+<p>​        本文目标是提供给用户一个透明的（不需要用户权限）可以保护客户机隐私、数据中心级别的保护机制，并且无需进行广泛而昂贵的监控，目标是针对全部的VM进行防护。</p>
+<p><img src="/2020/10/09/PrivateEye/private_1.png" width="500px" height="300px"></p>
+<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        本文认为任何VM都不是可信的，因为他们可以运行任何的代码，但是，云供应商提供的hypervisor、网络以及硬件是可靠的。并且认为供应商提供的检测方式能够足够精确的保护供应商提供的VMs.其中恶意软件为了掩盖其攻击能够调整自身行为，但是恶意软件无法识别VM是否受到供应商的保护。并且云供应商的保护软件可以通过近期的检测重新训练PrivateEye，因此PrivateEye可以通过不断的训练起到保护云上主机安全的目的。</p>
+<p>​        供应商仅能要求使用他们所提供工作负载的第一方VM使用OBDs,但是不能要求全部的VM都使用，并且在Azure的统计显示，超过95%的用户不使用OBDs。正因为用户不愿意使用供应商提供的检测器，所以基于此受限，供应商只能使用非侵入式的检测来保证VM不受侵害。</p>
+<p>设计目标：</p>
+<ol>
+<li><p>GDPR（欧洲数据隐私法）： 要求可以追踪用户的个人隐私信息（PII），以便用户可以检查或者删除此信息。供应商需要在48小时内回答用户请求，这时供应商可以1. 使用原数据对数据进行连接和标记，2. 或者避免存储与PII相关的数据。这就要求VM的公共IP必须映射到用户账户，但公共IP 是动态及时分配的，因此GDPR 对PII的处理代价是十分昂贵的。（PrivateEye是如何处理的？）</p>
+</li>
+<li><p>较低的运行代价</p>
+</li>
+<li><p>OBD对大量的VM进行检测获取到充足的攻击数据集。</p>
+</li>
+<li><p>（OBDs 与PrivateEye关系：后者更宏观，前者更具有通用的保护性）</p>
+</li>
+</ol>
+<p>OBDs是一个广泛的监控器，PrivateEye对VM有着更加严格的监控，目的是避免大量用户没必要的损失。在不必要的更进一步的检测时无需客户机的许可就会对VM进行保护，一旦发现可疑攻击，就会对VM发出警告，以请求更深入的检测VM。</p>
+<p><img src="/2020/10/09/PrivateEye/architecture.png" width="500px" height="300px"></p>
+<h3 id="Evaluation"><a href="#Evaluation" class="headerlink" title="Evaluation"></a>Evaluation</h3><p>• What is PrivateEye’s accuracy? </p>
+<p>​        PrivateEye can detect 95.77% of compromised samples with 1% FPR.</p>
+<p>• What causes PrivateEye’s false positives/negatives? </p>
+<p>​        PrivateEye’s FNs were mostly OBD false positives.</p>
+<p>• How does PrivateEye’s RF compare to other models? </p>
+<p>​        PrivateEye’s FPs have similar flow-patterns to compro- mised VMs. </p>
+<p>• How does PrivateEye’s sampling limit affect accuracy? </p>
+<p>​        The choice of sampling limit is important.</p>
+ <font color="green"> **蜜罐** </font>
+
+<p>​        本质上是一种对攻击方进行欺骗的技术，通过布置一些作为诱饵的主机、网络服务或者信息，诱使攻击方对它们实施攻击，从而可以对攻击行为进行捕获和分析，了解攻击方所使用的工具与方法，推测攻击意图和动机，能够让防御方清晰地了解他们所面对的安全威胁，并通过技术和管理手段来增强实际系统的安全防护能力。蜜罐好比是情报收集系统。蜜罐好像是故意让人攻击的目标，引诱黑客前来攻击。所以攻击者入侵后，你就可以知道他是如何得逞的，随时了解针对服务器发动的最新的攻击和漏洞。还可以通过窃听黑客之间的联系，收集黑客所用的种种工具，并且掌握他们的社交网络。</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>NSDI</category>
+      </categories>
+      <tags>
+        <tag>Virtual Machine</tag>
+        <tag>Hypervisor</tag>
       </tags>
   </entry>
   <entry>
@@ -1254,6 +1336,50 @@
       </tags>
   </entry>
   <entry>
+    <title>Xen log 3 Using Serial Debug Xen</title>
+    <url>/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/</url>
+    <content><![CDATA[<p>注：本文的配置是在<a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">官网</a>指导下进行的，因为在配置过程中遇到一点问题，记录下配置过程。</p>
+<p>Xen的log信息是打印在内存中的，读取打印信息需要<code>xl dm</code> 进行查看，如果在查看之前xen崩溃的话，是读取不到任何信息的，通过串口的方式可以将数据实时的打印出来，方便调试。</p>
+<p>这里使用的是usb转rs232.</p>
+<h3 id="配置读取设备"><a href="#配置读取设备" class="headerlink" title="配置读取设备"></a>配置读取设备</h3><p>在读取设备和Xen机器上配置<code>minicom</code> 用于测试串口。</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">Ubuntu dmesg | grep tty</span><br></pre></td></tr></table></figure>
+<p>输出信息如下</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[    0.094791] printk: console [tty0] enabled</span><br><span class="line">[    0.757835] 00:02: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A</span><br><span class="line">[    0.779505] 0000:00:16.3: ttyS4 at I/O 0xf060 (irq = 19, base_baud = 115200) is a 16550A</span><br><span class="line">[    2.825408] usb 1-13: pl2303 converter now attached to ttyUSB0</span><br><span class="line">[ 3435.257916] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0</span><br><span class="line">[ 3437.386713] usb 1-14: pl2303 converter now attached to ttyUSB0</span><br><span class="line">[13860.597447] pl2303 ttyUSB0: pl2303_set_control_lines - failed: -19</span><br><span class="line">[13860.597451] pl2303 ttyUSB0: error sending <span class="built_in">break</span> = -19</span><br><span class="line">[13860.597584] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0</span><br><span class="line">[13863.385826] usb 1-8: pl2303 converter now attached to ttyUSB0</span><br></pre></td></tr></table></figure>
+<p>于是设置默认串口为 <code>ttyUSB0</code> ,使用<code>minicom -s</code> 进入<code>serial prot setup</code> 进行设置</p>
+<p><img src="/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/xen-3.png" width="500px" height="300px"> </p>
+<p>(配置完没有截图，取自 [2] )，配置好读取设备后，静置，备用。</p>
+<h3 id="配置Xen-设备"><a href="#配置Xen-设备" class="headerlink" title="配置Xen 设备"></a>配置Xen 设备</h3><p>读取Xen设备信息</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">dmesg | grep tty</span><br></pre></td></tr></table></figure>
+<p>输出信息</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">console [tty0] enabled</span><br><span class="line">00:03: ttyS5 at I/O 0xc0c8 (irq = 16, base_baud = 115200) is a 16550A</span><br></pre></td></tr></table></figure>
+<p>这里确定tty0 、 ttyS5 （如果没有输出全部信息的话，执行下面的命令查看）</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">cat /proc/tty/driver/serial</span><br></pre></td></tr></table></figure>
+<p>输出信息</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">serinfo:1.0 driver revision:</span><br><span class="line">0: uart:16550A port:000003F8 irq:4 tx:0 rx:0</span><br><span class="line">1: uart:unknown port:000002F8 irq:3</span><br><span class="line">2: uart:unknown port:000003E8 irq:4</span><br><span class="line">3: uart:unknown port:000002E8 irq:3</span><br><span class="line">4: uart:XR16850 port:0000C0C0 irq:16 tx:0 rx:0</span><br><span class="line">5: uart:XR16850 port:0000C0C8 irq:16 tx:0 rx:0 CTS|DTR|DSR|CD|RI</span><br></pre></td></tr></table></figure>
+<p>可以确定，Xen设备的串口是<code>ttyS5</code> 物理地址为 <code>0xc0c8</code> </p>
+<h4 id="测试串口通讯情况"><a href="#测试串口通讯情况" class="headerlink" title="测试串口通讯情况"></a>测试串口通讯情况</h4><p>在Xen设备的<code>minicom</code> 上设置默认的端口为<code>ttyS5</code> 看两台机器是否能够正常通讯，即，在读取设备输入，在Xen设备上可以输出响应内容，反之亦然。</p>
+<h4 id="修改Grub文件"><a href="#修改Grub文件" class="headerlink" title="修改Grub文件"></a>修改Grub文件</h4><p>在<code>/etc/default/grub</code>文件中 添加如下内容</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># This can guarantee sync output when using `printk`</span></span><br><span class="line">GRUB_CMDLINE_XEN=<span class="string">"loglvl=all guest_loglvl=all sync_console console_to_ring com1=115200,8n1,0x3080 console=com1,vga com0_mem=4096"</span></span><br><span class="line"></span><br><span class="line">GRUB_CMDLINE_LINUX_DEFAULT=<span class="string">"console=tty0 console=ttyS5,115200n8"</span></span><br><span class="line">GRUB_CMDLINE_LINUX=<span class="string">"console=hvc0 earlyprintk=xen"</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>sync_console</code>: 保证输出是同步的，以防一些内容在xen crash之前打不出来</li>
+<li><code>console_to_ring</code>: 将Guest的log同步到dom0中打印输出.</li>
+<li><code>console=com1,vga</code>: 将终端连到com1上，这样我们就可以通过串口输入用户名密码登陆</li>
+</ul>
+<p>输入 <code>sudo update-grub</code> 更新grub文件，重启</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在自定义<a href="https://ykma.gitee.io/2020/07/19/Xen-log-2-Add-a-new-Hypercall/">Hypercall</a> 后，执行<code>privcmd.c</code> 文件会在读取设备上看到相应的log信息，这里不放图了。</p>
+<h3 id="踩坑指南"><a href="#踩坑指南" class="headerlink" title="踩坑指南"></a>踩坑指南</h3><p>我刚配置串口的时候，采用Ubuntu18读取日志信息，Debian9编译Xen，两台机器通信正常，<code>reboot</code> Xen设备后会打印开机日志，随后便是一通乱码，不输出用户自定义log信息。调整两台设备的编码格式、语言（en.utf-8）等均未果，至今没有解决这个bug</p>
+<p>感受一下乱码：分别是正常读取与16进制读取的结果</p>
+<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">�`�f���f�����`�f���f���怀�`�f���f����~x�~~x�~�`�f���f���怀�`�f��~怀</span><br><span class="line"></span><br><span class="line">�`�f���f枞f�~x��枘�����f��ff��~��~fx�f��~������~��~��~��fx�</span><br><span class="line"></span><br><span class="line">06 fe 60 e6 66 fe 06 f8 00 f8 66 fe 00 f8 e6 80 06 fe 60 e6 66 fe 06 f8 00 f8 6</span><br></pre></td></tr></table></figure>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">https://wiki.xenproject.org/wiki/Xen_Serial_Console</a></p>
+<p>[2] <a href="** https://silentming.net/blog/2016/09/18/xen-log-5-debug-xen/**">Xen Log 5-Debug Xen on Physical Machine</a></p>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Xen log</tag>
+        <tag>Virtualization</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Xen log 2 Add a new Hypercall</title>
     <url>/2020/07/19/Xen-log-2-Add-a-new-Hypercall/</url>
     <content><![CDATA[<p>当前使用的xen版本为Xen-4.11</p>
@@ -1317,16 +1443,6 @@
       </tags>
   </entry>
   <entry>
-    <title>云虚拟化安全攻防实践</title>
-    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
-<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
-<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Xen log 0 Ubuntu18源码安装Xen4.11</title>
     <url>/2020/05/22/Xen-log-0-Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/</url>
     <content><![CDATA[<p>在部署Xen的时候采用的是Ubuntu18.04(英文版) + Xen4.11</p>
@@ -1383,6 +1499,60 @@
       <tags>
         <tag>Xen log</tag>
         <tag>虚拟机</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Xen log modify 脚本简化操作</title>
+    <url>/2020/08/05/Xen-log-modify-%E8%84%9A%E6%9C%AC%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><p>目标用户ID与ip: </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root:101.101.101.10</span><br></pre></td></tr></table></figure>
+<p>第一个脚本文件</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">scp test.txt root@<span class="number">101.101</span><span class="number">.101</span><span class="number">.10</span>:/home/</span><br></pre></td></tr></table></figure>
+<h4 id="执行权限"><a href="#执行权限" class="headerlink" title="执行权限"></a>执行权限</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">chmod +x ./test.sh  <span class="comment">#使脚本具有执行权限</span></span><br><span class="line">./test.sh  <span class="comment">#执行脚本</span></span><br></pre></td></tr></table></figure>
+<h4 id="自动输入密码"><a href="#自动输入密码" class="headerlink" title="自动输入密码"></a>自动输入密码</h4><p>免密登陆</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-copy-id -i ~&#x2F;.ssh&#x2F;id_rsa.pub user@ip</span><br></pre></td></tr></table></figure>
+<h4 id="获取当前目录"><a href="#获取当前目录" class="headerlink" title="获取当前目录"></a>获取当前目录</h4><p>获取当前目录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br></pre></td></tr></table></figure>
+<h3 id="修改文件实战"><a href="#修改文件实战" class="headerlink" title="修改文件实战"></a>修改文件实战</h3><h4 id="目录说明"><a href="#目录说明" class="headerlink" title="目录说明"></a>目录说明</h4><blockquote>
+<p>脚本所在目录 /xen-modify/</p>
+<p>其中 <code>*.sh</code> 文件是要执行的脚本文件，<code>*.c *.h</code> 是在本地（最终文件是要覆盖在服务器上的）修改后的文件。</p>
+<p>└──xen<br>└── xen-modify<br>   │    ├── backup.sh<br>   │    ├── hypercall.h<br>   │    ├── install-lib.sh<br>   │    ├── install-xen.sh<br>   │    ├── mm.c<br>   │    ├── move.sh<br>   │    ├── privcmd.c<br>   │    ├── pv<br>   │    │  └── hypercall.c<br>   │    ├── x86<br>   │    │  └── hypercall.c<br>   │    └── xen.h</p>
+</blockquote>
+<h4 id="backup-sh"><a href="#backup-sh" class="headerlink" title="backup.sh"></a>backup.sh</h4><blockquote>
+<p>​        backup的目的是备份即将被修改的文件，目标文件的位置在xen文件夹内，<code>backup.sh</code> 文件在<code>xen-modify</code> 文件夹内，在获得当前目录后，需要依次进入目标文件所在目录，对文件进行备份。<br>​        因为是对原始文件进行备份，所以在执行此操作时，仅在首次备份时执行，以后不执行。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/include/public/</span><br><span class="line">cp xen.h xen-backup.h</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp hypercall.c hypercall-backup.c</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/pv/</span><br><span class="line">cp hypercall.c hypercall-backup.c</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/include/xen/</span><br><span class="line">cp hypercall.h hypercall-backup.h</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp mm.c mm-backup.c</span><br></pre></td></tr></table></figure>
+<h4 id="install-xen-sh"><a href="#install-xen-sh" class="headerlink" title="install-xen.sh"></a>install-xen.sh</h4><blockquote>
+<p>这里只需要进入<code>xen</code> 目录一次就可以进行操作，所以直接使用 <code>cd ../xen</code> 进入目标目录。</p>
+<p>这一步是在编译<code>xen</code> 源码的时候进行的。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd ../xen</span><br><span class="line">./configure</span><br><span class="line">make xen -j8</span><br><span class="line">make tools -j8</span><br><span class="line">make install-xen</span><br><span class="line">make install-tools</span><br><span class="line">update-grub</span><br></pre></td></tr></table></figure>
+<h4 id="install-lib-sh"><a href="#install-lib-sh" class="headerlink" title="install-lib.sh"></a>install-lib.sh</h4><blockquote>
+<p>搭建 <code>xen</code> 的依赖。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">apt-get install build-essential -y</span><br><span class="line">apt-get install bcc bin86 gawk bridge-utils iproute libcurl3 libcurl4-openssl-dev bzip2 transfig tgif  -y</span><br><span class="line">apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial -y</span><br><span class="line">apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev -y</span><br><span class="line">apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev -y</span><br><span class="line">apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc -y</span><br><span class="line">apt-get build-dep xen -y</span><br></pre></td></tr></table></figure>
+<h4 id="move-sh"><a href="#move-sh" class="headerlink" title="move.sh"></a>move.sh</h4><blockquote>
+<p>将<code>xen-modify</code> 文件夹下的文件依次覆盖原始文件。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br><span class="line"></span><br><span class="line">cp xen.h /$&#123;workdir&#125;/../xen/xen/include/public/</span><br><span class="line">cp x86/hypercall.c /$&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp pv/hypercall.c /$&#123;workdir&#125;/../xen/xen/arch/x86/pv/</span><br><span class="line">cp hypercall.h /$&#123;workdir&#125;/../xen/xen/include/xen/</span><br><span class="line">cp mm.c /$&#123;workdir&#125;/../xen/xen/arch/x86/</span><br></pre></td></tr></table></figure>
+<hr>
+<p>modify log</p>
+<p>​    2020年8月5日      创建<br>​    2020年9月30日    增加<code>xen</code> 的脚本命令</p>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>Xen log</tag>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>云虚拟化安全攻防实践</title>
+    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
+<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
+<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
+      <tags>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -1511,6 +1681,21 @@
       </tags>
   </entry>
   <entry>
+    <title>泉城济南</title>
+    <url>/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/</url>
+    <content><![CDATA[<h3 id="泉城济南"><a href="#泉城济南" class="headerlink" title="泉城济南"></a>泉城济南</h3><p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-7.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-8.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-2.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-3.jpg" width="500px" height="350px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-4.jpg" width="500px" height="390px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-5.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-6.jpg" width="500px" height="400px"></p>
+]]></content>
+      <tags>
+        <tag>picture</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>本科毕业游记</title>
     <url>/2020/07/16/%E6%9C%AC%E7%A7%91%E6%AF%95%E4%B8%9A%E6%B8%B8%E8%AE%B0/</url>
     <content><![CDATA[<p>当自己满怀负面情绪的时候，出去走走吧</p>
@@ -1524,21 +1709,6 @@
 ]]></content>
       <tags>
         <tag>essay</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>泉城济南</title>
-    <url>/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/</url>
-    <content><![CDATA[<h3 id="泉城济南"><a href="#泉城济南" class="headerlink" title="泉城济南"></a>泉城济南</h3><p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-7.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-8.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-2.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-3.jpg" width="500px" height="350px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-4.jpg" width="500px" height="390px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-5.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-6.jpg" width="500px" height="400px"></p>
-]]></content>
-      <tags>
-        <tag>picture</tag>
       </tags>
   </entry>
   <entry>
@@ -1639,176 +1809,6 @@
 ]]></content>
       <tags>
         <tag>essay</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Xen log modify 脚本简化操作</title>
-    <url>/2020/08/05/Xen-log-modify-%E8%84%9A%E6%9C%AC%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C/</url>
-    <content><![CDATA[<h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><p>目标用户ID与ip: </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root:101.101.101.10</span><br></pre></td></tr></table></figure>
-<p>第一个脚本文件</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">scp test.txt root@<span class="number">101.101</span><span class="number">.101</span><span class="number">.10</span>:/home/</span><br></pre></td></tr></table></figure>
-<h4 id="执行权限"><a href="#执行权限" class="headerlink" title="执行权限"></a>执行权限</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">chmod +x ./test.sh  <span class="comment">#使脚本具有执行权限</span></span><br><span class="line">./test.sh  <span class="comment">#执行脚本</span></span><br></pre></td></tr></table></figure>
-<h4 id="自动输入密码"><a href="#自动输入密码" class="headerlink" title="自动输入密码"></a>自动输入密码</h4><p>免密登陆</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-copy-id -i ~&#x2F;.ssh&#x2F;id_rsa.pub user@ip</span><br></pre></td></tr></table></figure>
-<h4 id="获取当前目录"><a href="#获取当前目录" class="headerlink" title="获取当前目录"></a>获取当前目录</h4><p>获取当前目录</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br></pre></td></tr></table></figure>
-<h3 id="修改文件实战"><a href="#修改文件实战" class="headerlink" title="修改文件实战"></a>修改文件实战</h3><h4 id="目录说明"><a href="#目录说明" class="headerlink" title="目录说明"></a>目录说明</h4><blockquote>
-<p>脚本所在目录 /xen-modify/</p>
-<p>其中 <code>*.sh</code> 文件是要执行的脚本文件，<code>*.c *.h</code> 是在本地（最终文件是要覆盖在服务器上的）修改后的文件。</p>
-<p>└──xen<br>└── xen-modify<br>   │    ├── backup.sh<br>   │    ├── hypercall.h<br>   │    ├── install-lib.sh<br>   │    ├── install-xen.sh<br>   │    ├── mm.c<br>   │    ├── move.sh<br>   │    ├── privcmd.c<br>   │    ├── pv<br>   │    │  └── hypercall.c<br>   │    ├── x86<br>   │    │  └── hypercall.c<br>   │    └── xen.h</p>
-</blockquote>
-<h4 id="backup-sh"><a href="#backup-sh" class="headerlink" title="backup.sh"></a>backup.sh</h4><blockquote>
-<p>​        backup的目的是备份即将被修改的文件，目标文件的位置在xen文件夹内，<code>backup.sh</code> 文件在<code>xen-modify</code> 文件夹内，在获得当前目录后，需要依次进入目标文件所在目录，对文件进行备份。<br>​        因为是对原始文件进行备份，所以在执行此操作时，仅在首次备份时执行，以后不执行。</p>
-</blockquote>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/include/public/</span><br><span class="line">cp xen.h xen-backup.h</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp hypercall.c hypercall-backup.c</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/pv/</span><br><span class="line">cp hypercall.c hypercall-backup.c</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/include/xen/</span><br><span class="line">cp hypercall.h hypercall-backup.h</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp mm.c mm-backup.c</span><br></pre></td></tr></table></figure>
-<h4 id="install-xen-sh"><a href="#install-xen-sh" class="headerlink" title="install-xen.sh"></a>install-xen.sh</h4><blockquote>
-<p>这里只需要进入<code>xen</code> 目录一次就可以进行操作，所以直接使用 <code>cd ../xen</code> 进入目标目录。</p>
-<p>这一步是在编译<code>xen</code> 源码的时候进行的。</p>
-</blockquote>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd ../xen</span><br><span class="line">./configure</span><br><span class="line">make xen -j8</span><br><span class="line">make tools -j8</span><br><span class="line">make install-xen</span><br><span class="line">make install-tools</span><br><span class="line">update-grub</span><br></pre></td></tr></table></figure>
-<h4 id="install-lib-sh"><a href="#install-lib-sh" class="headerlink" title="install-lib.sh"></a>install-lib.sh</h4><blockquote>
-<p>搭建 <code>xen</code> 的依赖。</p>
-</blockquote>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">apt-get install build-essential -y</span><br><span class="line">apt-get install bcc bin86 gawk bridge-utils iproute libcurl3 libcurl4-openssl-dev bzip2 transfig tgif  -y</span><br><span class="line">apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial -y</span><br><span class="line">apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev -y</span><br><span class="line">apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev -y</span><br><span class="line">apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc -y</span><br><span class="line">apt-get build-dep xen -y</span><br></pre></td></tr></table></figure>
-<h4 id="move-sh"><a href="#move-sh" class="headerlink" title="move.sh"></a>move.sh</h4><blockquote>
-<p>将<code>xen-modify</code> 文件夹下的文件依次覆盖原始文件。</p>
-</blockquote>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br><span class="line"></span><br><span class="line">cp xen.h /$&#123;workdir&#125;/../xen/xen/include/public/</span><br><span class="line">cp x86/hypercall.c /$&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp pv/hypercall.c /$&#123;workdir&#125;/../xen/xen/arch/x86/pv/</span><br><span class="line">cp hypercall.h /$&#123;workdir&#125;/../xen/xen/include/xen/</span><br><span class="line">cp mm.c /$&#123;workdir&#125;/../xen/xen/arch/x86/</span><br></pre></td></tr></table></figure>
-<hr>
-<p>modify log</p>
-<p>​    2020年8月5日      创建<br>​    2020年9月30日    增加<code>xen</code> 的脚本命令</p>
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-        <tag>Xen log</tag>
-        <tag>Shell</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PrivateEye</title>
-    <url>/2020/10/09/PrivateEye/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.usenix.org/system/files/nsdi20-paper-arzani.pdf" target="_blank" rel="noopener">PrivateEye</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">对部署在云上的虚拟机进行保护，而不是对hypervisor进行防护</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">保护云安全</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">通过对少数机器进行保护，得到攻击者特征，并利用此特征对云上全部机器进行保护。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h3><p>​        云中会部署一些可以检测VM是否受攻击的检测系统，但是往往都没有启用，这就使得VM在云上几乎在没有任何保护的情况下运行，这在安全的角度看是十分不可取的。让用户在不受保护的状态下运行或者完全在云供应商提供的检测系统的保护下运行，这两者似乎都不可取。如果不保护，则受攻击的VM可以攻击其余未被攻击的VM，并且不是所有的用户都需要在被严格保护的情况下运行。经过统计，约5%的用户愿意承担云供应商提供的安全监测系统的额外费用。本文基于此提出PrivateEye解决方案，它是一个可扩展、解决隐私保护的解决方案，能够对数据中心全部的VM进行防护。通过检测较少的机器，将检测后结果应用于云中其余的机器进行检测。</p>
-<p>保护的定位：<br>针对云上的VMs,而不是hypervisor本身。</p>
-<p>使用的方法：<br>利用机器学习的方法，根据已经存在的5%的少数用户特征，应用于云上全部主机检测。</p>
-<p>​        本文目标是提供给用户一个透明的（不需要用户权限）可以保护客户机隐私、数据中心级别的保护机制，并且无需进行广泛而昂贵的监控，目标是针对全部的VM进行防护。</p>
-<p><img src="/2020/10/09/PrivateEye/private_1.png" width="500px" height="300px"></p>
-<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        本文认为任何VM都不是可信的，因为他们可以运行任何的代码，但是，云供应商提供的hypervisor、网络以及硬件是可靠的。并且认为供应商提供的检测方式能够足够精确的保护供应商提供的VMs.其中恶意软件为了掩盖其攻击能够调整自身行为，但是恶意软件无法识别VM是否受到供应商的保护。并且云供应商的保护软件可以通过近期的检测重新训练PrivateEye，因此PrivateEye可以通过不断的训练起到保护云上主机安全的目的。</p>
-<p>​        供应商仅能要求使用他们所提供工作负载的第一方VM使用OBDs,但是不能要求全部的VM都使用，并且在Azure的统计显示，超过95%的用户不使用OBDs。正因为用户不愿意使用供应商提供的检测器，所以基于此受限，供应商只能使用非侵入式的检测来保证VM不受侵害。</p>
-<p>设计目标：</p>
-<ol>
-<li><p>GDPR（欧洲数据隐私法）： 要求可以追踪用户的个人隐私信息（PII），以便用户可以检查或者删除此信息。供应商需要在48小时内回答用户请求，这时供应商可以1. 使用原数据对数据进行连接和标记，2. 或者避免存储与PII相关的数据。这就要求VM的公共IP必须映射到用户账户，但公共IP 是动态及时分配的，因此GDPR 对PII的处理代价是十分昂贵的。（PrivateEye是如何处理的？）</p>
-</li>
-<li><p>较低的运行代价</p>
-</li>
-<li><p>OBD对大量的VM进行检测获取到充足的攻击数据集。</p>
-</li>
-<li><p>（OBDs 与PrivateEye关系：后者更宏观，前者更具有通用的保护性）</p>
-</li>
-</ol>
-<p>OBDs是一个广泛的监控器，PrivateEye对VM有着更加严格的监控，目的是避免大量用户没必要的损失。在不必要的更进一步的检测时无需客户机的许可就会对VM进行保护，一旦发现可疑攻击，就会对VM发出警告，以请求更深入的检测VM。</p>
-<p><img src="/2020/10/09/PrivateEye/architecture.png" width="500px" height="300px"></p>
-<h3 id="Evaluation"><a href="#Evaluation" class="headerlink" title="Evaluation"></a>Evaluation</h3><p>• What is PrivateEye’s accuracy? </p>
-<p>​        PrivateEye can detect 95.77% of compromised samples with 1% FPR.</p>
-<p>• What causes PrivateEye’s false positives/negatives? </p>
-<p>​        PrivateEye’s FNs were mostly OBD false positives.</p>
-<p>• How does PrivateEye’s RF compare to other models? </p>
-<p>​        PrivateEye’s FPs have similar flow-patterns to compro- mised VMs. </p>
-<p>• How does PrivateEye’s sampling limit affect accuracy? </p>
-<p>​        The choice of sampling limit is important.</p>
- <font color="green"> **蜜罐** </font>
-
-<p>​        本质上是一种对攻击方进行欺骗的技术，通过布置一些作为诱饵的主机、网络服务或者信息，诱使攻击方对它们实施攻击，从而可以对攻击行为进行捕获和分析，了解攻击方所使用的工具与方法，推测攻击意图和动机，能够让防御方清晰地了解他们所面对的安全威胁，并通过技术和管理手段来增强实际系统的安全防护能力。蜜罐好比是情报收集系统。蜜罐好像是故意让人攻击的目标，引诱黑客前来攻击。所以攻击者入侵后，你就可以知道他是如何得逞的，随时了解针对服务器发动的最新的攻击和漏洞。还可以通过窃听黑客之间的联系，收集黑客所用的种种工具，并且掌握他们的社交网络。</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>NSDI</category>
-      </categories>
-      <tags>
-        <tag>Virtual Machine</tag>
-        <tag>Hypervisor</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Xen log 3 Using Serial Debug Xen</title>
-    <url>/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/</url>
-    <content><![CDATA[<p>注：本文的配置是在<a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">官网</a>指导下进行的，因为在配置过程中遇到一点问题，记录下配置过程。</p>
-<p>Xen的log信息是打印在内存中的，读取打印信息需要<code>xl dm</code> 进行查看，如果在查看之前xen崩溃的话，是读取不到任何信息的，通过串口的方式可以将数据实时的打印出来，方便调试。</p>
-<p>这里使用的是usb转rs232.</p>
-<h3 id="配置读取设备"><a href="#配置读取设备" class="headerlink" title="配置读取设备"></a>配置读取设备</h3><p>在读取设备和Xen机器上配置<code>minicom</code> 用于测试串口。</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">Ubuntu dmesg | grep tty</span><br></pre></td></tr></table></figure>
-<p>输出信息如下</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">[    0.094791] printk: console [tty0] enabled</span><br><span class="line">[    0.757835] 00:02: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A</span><br><span class="line">[    0.779505] 0000:00:16.3: ttyS4 at I/O 0xf060 (irq = 19, base_baud = 115200) is a 16550A</span><br><span class="line">[    2.825408] usb 1-13: pl2303 converter now attached to ttyUSB0</span><br><span class="line">[ 3435.257916] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0</span><br><span class="line">[ 3437.386713] usb 1-14: pl2303 converter now attached to ttyUSB0</span><br><span class="line">[13860.597447] pl2303 ttyUSB0: pl2303_set_control_lines - failed: -19</span><br><span class="line">[13860.597451] pl2303 ttyUSB0: error sending <span class="built_in">break</span> = -19</span><br><span class="line">[13860.597584] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0</span><br><span class="line">[13863.385826] usb 1-8: pl2303 converter now attached to ttyUSB0</span><br></pre></td></tr></table></figure>
-<p>于是设置默认串口为 <code>ttyUSB0</code> ,使用<code>minicom -s</code> 进入<code>serial prot setup</code> 进行设置</p>
-<p><img src="/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/xen-3.png" width="500px" height="300px"> </p>
-<p>(配置完没有截图，取自 [2] )，配置好读取设备后，静置，备用。</p>
-<h3 id="配置Xen-设备"><a href="#配置Xen-设备" class="headerlink" title="配置Xen 设备"></a>配置Xen 设备</h3><p>读取Xen设备信息</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">dmesg | grep tty</span><br></pre></td></tr></table></figure>
-<p>输出信息</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">console [tty0] enabled</span><br><span class="line">00:03: ttyS5 at I/O 0xc0c8 (irq = 16, base_baud = 115200) is a 16550A</span><br></pre></td></tr></table></figure>
-<p>这里确定tty0 、 ttyS5 （如果没有输出全部信息的话，执行下面的命令查看）</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">cat /proc/tty/driver/serial</span><br></pre></td></tr></table></figure>
-<p>输出信息</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">serinfo:1.0 driver revision:</span><br><span class="line">0: uart:16550A port:000003F8 irq:4 tx:0 rx:0</span><br><span class="line">1: uart:unknown port:000002F8 irq:3</span><br><span class="line">2: uart:unknown port:000003E8 irq:4</span><br><span class="line">3: uart:unknown port:000002E8 irq:3</span><br><span class="line">4: uart:XR16850 port:0000C0C0 irq:16 tx:0 rx:0</span><br><span class="line">5: uart:XR16850 port:0000C0C8 irq:16 tx:0 rx:0 CTS|DTR|DSR|CD|RI</span><br></pre></td></tr></table></figure>
-<p>可以确定，Xen设备的串口是<code>ttyS5</code> 物理地址为 <code>0xc0c8</code> </p>
-<h4 id="测试串口通讯情况"><a href="#测试串口通讯情况" class="headerlink" title="测试串口通讯情况"></a>测试串口通讯情况</h4><p>在Xen设备的<code>minicom</code> 上设置默认的端口为<code>ttyS5</code> 看两台机器是否能够正常通讯，即，在读取设备输入，在Xen设备上可以输出响应内容，反之亦然。</p>
-<h4 id="修改Grub文件"><a href="#修改Grub文件" class="headerlink" title="修改Grub文件"></a>修改Grub文件</h4><p>在<code>/etc/default/grub</code>文件中 添加如下内容</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line"><span class="comment"># This can guarantee sync output when using `printk`</span></span><br><span class="line">GRUB_CMDLINE_XEN=<span class="string">"loglvl=all guest_loglvl=all sync_console console_to_ring com1=115200,8n1,0x3080 console=com1,vga com0_mem=4096"</span></span><br><span class="line"></span><br><span class="line">GRUB_CMDLINE_LINUX_DEFAULT=<span class="string">"console=tty0 console=ttyS5,115200n8"</span></span><br><span class="line">GRUB_CMDLINE_LINUX=<span class="string">"console=hvc0 earlyprintk=xen"</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>sync_console</code>: 保证输出是同步的，以防一些内容在xen crash之前打不出来</li>
-<li><code>console_to_ring</code>: 将Guest的log同步到dom0中打印输出.</li>
-<li><code>console=com1,vga</code>: 将终端连到com1上，这样我们就可以通过串口输入用户名密码登陆</li>
-</ul>
-<p>输入 <code>sudo update-grub</code> 更新grub文件，重启</p>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在自定义<a href="https://ykma.gitee.io/2020/07/19/Xen-log-2-Add-a-new-Hypercall/">Hypercall</a> 后，执行<code>privcmd.c</code> 文件会在读取设备上看到相应的log信息，这里不放图了。</p>
-<h3 id="采坑指南"><a href="#采坑指南" class="headerlink" title="采坑指南"></a>采坑指南</h3><p>我刚配置串口的时候，采用Ubuntu18读取日志信息，Debian9编译Xen，两台机器通信正常，<code>reboot</code> Xen设备后会打印开机日志，随后便是一通乱码，不输出用户自定义log信息。调整两台设备的编码格式、语言（en.utf-8）等均未果，至今没有解决这个bug</p>
-<p>感受一下乱码：分别是正常读取与16进制读取的结果</p>
-<figure class="highlight sh"><table><tr><td class="code"><pre><span class="line">�`�f���f�����`�f���f���怀�`�f���f����~x�~~x�~�`�f���f���怀�`�f��~怀</span><br><span class="line"></span><br><span class="line">�`�f���f枞f�~x��枘�����f��ff��~��~fx�f��~������~��~��~��fx�</span><br><span class="line"></span><br><span class="line">06 fe 60 e6 66 fe 06 f8 00 f8 66 fe 00 f8 e6 80 06 fe 60 e6 66 fe 06 f8 00 f8 6</span><br></pre></td></tr></table></figure>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">https://wiki.xenproject.org/wiki/Xen_Serial_Console</a></p>
-<p>[2] <a href="** https://silentming.net/blog/2016/09/18/xen-log-5-debug-xen/**">Xen Log 5-Debug Xen on Physical Machine</a></p>
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-        <tag>Xen log</tag>
-        <tag>Virtualization</tag>
       </tags>
   </entry>
 </search>
