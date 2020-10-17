@@ -152,7 +152,7 @@
 <p><img src="/2020/10/12/Applying-TPM-to-Cloud/papercountry.png" width="500"></p>
 <font color="DodgerBlue"> Paper Structure </font>
 
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Summary.png" width="600" height="400"></p>
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Summary.png" width="600"></p>
 <h3 id="Answering-the-Following-Question"><a href="#Answering-the-Following-Question" class="headerlink" title="Answering the Following Question"></a>Answering the Following Question</h3><h4 id="RQ1-For-what-purposes-is-TPM-used-in-the-cloud"><a href="#RQ1-For-what-purposes-is-TPM-used-in-the-cloud" class="headerlink" title="RQ1: For what purposes is TPM used in the cloud?"></a>RQ1: For what purposes is TPM used in the cloud?</h4><blockquote>
 <p><strong>TPM 在云中的作用是什么？为什么要用到TPM？</strong></p>
 </blockquote>
@@ -168,7 +168,7 @@
 <h4 id="RQ5-At-which-phase-are-the-TPM-features-used"><a href="#RQ5-At-which-phase-are-the-TPM-features-used" class="headerlink" title="RQ5: At which phase are the TPM features used?"></a>RQ5: At which phase are the TPM features used?</h4><blockquote>
 <p><strong>在什么阶段用到了TPM？</strong><br><strong>A：boot time, run time and both.</strong></p>
 </blockquote>
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Phase.png" width="400" height="250"></p>
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Phase.png"></p>
 <h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>​        可信计算利用硬件信任根以及与之关联的软件构建可信环境，提供信任和隐私保护。TPM这个模块，提供安全启动、远程验证、完整性检测以及机密功能。2011年发布了TPM1.2版本，2016年公布了TPM2.0版本。</p>
 <p>​        远程证明是可信计算技术提供的主要功能，它将信任逐步从较低级别扩展到较高级别和应用程序。 这被称为信任链。 在信任链方案中，所有将要加载的组件都被认为是不可信的，因此，在加载之前需要对其进行测量。 TPM包含平台配置寄存器（PCR）受保护的内存位置，该位置存储敏感的安全信息（例如测量信息）。</p>
 <p>​        除了强大的隔离存储，TPM还拥有用于加密操作的唯一认可密钥（EK）。该密钥是在TPM制造时生成的，密钥的私有部分永远不会离开TPM。 在远程认证时，为了保护平台身份的私密性，使用了认证身份密钥（AIK）。 当平台（证明者）收到（来自验证者的）远程证明请求时，它会发送一个完整性报告，该报告由PCR值及其数字签名（由AIK计算）组成。 由于AIK的私有部分从未离开过TPM，因此可以保证报告的完整性和真实性。</p>
