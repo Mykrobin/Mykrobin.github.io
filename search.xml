@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>A FULLY HOMOMORPHIC ENCRYPTION SCHEME</title>
+    <url>/2020/08/13/A-FULLY-HOMOMORPHIC-ENCRYPTION-SCHEME/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
     <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
     <content><![CDATA[<div class="table-container">
@@ -102,62 +107,6 @@
       <tags>
         <tag>论文解读</tag>
         <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>A FULLY HOMOMORPHIC ENCRYPTION SCHEME</title>
-    <url>/2020/08/13/A-FULLY-HOMOMORPHIC-ENCRYPTION-SCHEME/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>Attacks Directories, Not Caches</title>
-    <url>/2020/07/17/Attacks-Directories-Not-Caches/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href>Attack Directories, Not Caches: Side-Channel Attacks in a Non-Inclusive World</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">Side Channel Attack</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">Attack, Cache</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">基于缓存的侧信道攻击在新型缓存的攻击实践</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="0-Main-idea"><a href="#0-Main-idea" class="headerlink" title="0. Main idea"></a>0. Main idea</h3>]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>side channel attack</tag>
       </tags>
   </entry>
   <entry>
@@ -558,8 +507,8 @@
       </tags>
   </entry>
   <entry>
-    <title>CloudMon</title>
-    <url>/2020/09/14/CloudMon/</url>
+    <title>Attacks Directories, Not Caches</title>
+    <url>/2020/07/17/Attacks-Directories-Not-Caches/</url>
     <content><![CDATA[<div class="table-container">
 <table>
 <thead>
@@ -573,94 +522,39 @@
 <tr>
 <td style="text-align:center">1</td>
 <td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href>CloudMon</a></td>
+<td style="text-align:center"><a href>Attack Directories, Not Caches: Side-Channel Attacks in a Non-Inclusive World</a></td>
 </tr>
 <tr>
 <td style="text-align:center">2</td>
 <td style="text-align:center">作者信息</td>
-<td style="text-align:center"><a href="https://chuliangweng.github.io/" target="_blank" rel="noopener">Cl.W</a></td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
 <td style="text-align:center">3</td>
 <td style="text-align:center">核心内容</td>
-<td style="text-align:center">这篇文章信任hypervisor并在此基础上对guestVM进行保护，主要是从内存角度出发，针对rootkit攻击进行运行时检测。</td>
+<td style="text-align:center">Side Channel Attack</td>
 </tr>
 <tr>
 <td style="text-align:center">4</td>
 <td style="text-align:center">研究领域</td>
-<td style="text-align:center">System Security; Virtual Machine</td>
+<td style="text-align:center">Attack, Cache</td>
 </tr>
 <tr>
 <td style="text-align:center">5</td>
 <td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文构造一个动态的监控架构，并在此基础上保证guest VM 运行时的安全性，主要功能是在客户虚拟机中检测出rootkits攻击。</td>
+<td style="text-align:center">基于缓存的侧信道攻击在新型缓存的攻击实践</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>​        本文构建了一个动态的监控架构，运行在特权级别，通过对guestVM内存的扫描，检测客户机是否受到rootkit攻击，从而保证guestVM的运行时安全性。利用虚拟化技术对客户机内存进行实时监控，且这些监控对于客户机是透明的，为了实现检测的有效与高效，本系统在性能和安全之间权衡。</p>
-<h4 id="Rootkit-攻击"><a href="#Rootkit-攻击" class="headerlink" title="Rootkit 攻击 "></a><font color="blue"><strong>Rootkit 攻击</strong> </font></h4><p>​        rootkit 能够以特权级指令访问 host，并且可以通过对系统进行更改隐藏自己的存在。</p>
-<p>​        检测rootkit，最好是对客户机透明，不更改客户机系统的前提下对其进行检测。</p>
-<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        假设VMM（hypervisor）与priviliged VM  是可信的，guest VM 会受到攻击，在开机阶段的安全性受到VMM的保护，并且对guest VM的攻击不会对privileged VM 的安全性造成影响。</p>
-<p>（有些保护是针对VMM的，但是这不在本文的考虑范围内，本文聚焦在对客户机的保护上）</p>
-<h3 id="CloudMon-系统设计"><a href="#CloudMon-系统设计" class="headerlink" title="CloudMon 系统设计"></a>CloudMon 系统设计</h3><p>​        目的是实现一个可以访问较低权限级别内存信息、检测潜在的攻击并且可以保证检测的实时性与系统性能。访问内存的操作实现是基于 Xen的xenctrl 库，这个库能够读取较低权限的内存（如guest VM的内存信息）。</p>
-<p>​        构建一个guest VM 内存的监控器，目标是对VM透明、高效且是瞬时性的，这种方式可行性是因为攻击者对VM内存任何的更改都是可见的。CloudMon扫描内核memory与寄存器，从而可以实时的检测内存状态变化。这是一个特权级别的VM，能够通过VMM访问其他VMs的内存信息，而不是单纯的一个安全的guest VM。</p>
-<p><img src="/2020/09/14/CloudMon/CloudMonArchitecture.png" width="400px" height="240px"></p>
-<p>​        从云中大量的攻击实例中提取rootkit攻击特征，并将该特征记录在Feature Lib中，通过比较RT Value 与 SV Table 中数值的差异情况，可以检测出系统调用表中的攻击情况，设置较小的检测时间间隔，可以近似实时的检测嵌入内核的 rootkit ，通过设置检测的时间间隔，可以控制性能开销。并且CloudMon会直接检索其内存，因此，包括DKSM 和Shadow Walker 在内的任何来宾内核rootkit都不会欺骗CloudMon。 </p>
-<font color="green">**获取开始地址信息**</font>
-
-<p>​        KV Searcher查找 guest VM 系统调用的起始地址，SV generator 通过扫描，比对通过大量OS攻击实例中获取到的攻击特征，从而可以判断出被攻击者。</p>
-<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a><font color="blue"><strong>实验环境</strong></font></h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>Xen</th>
-<th>priviliged VM</th>
-<th>guest VM</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Xen-3.4.2</td>
-<td>Ubuntu 9.04</td>
-<td>Ubuntu 8.04</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>已经存在的检测方式：</p>
-<ol>
-<li><p>获取guest OS的system.map信息</p>
-</li>
-<li><p>one-on-one 运行在guest VM上</p>
-</li>
-</ol>
-<h3 id="相关工作介绍"><a href="#相关工作介绍" class="headerlink" title="相关工作介绍"></a>相关工作介绍</h3><p>本文将对VM的保护机制分为了 out-of-VM  与 in-VM两种</p>
-<p>A类：out-of-VM</p>
-<ol>
-<li><p>利用受信任的VM充当监控器。OSck,是一种one-on-one的监控模式</p>
-</li>
-<li><p>XenKIMONO 在VM中聚集信息时会暂停OS的执行</p>
-</li>
-<li><p>vIPS 通过预先设置，这种检测规则需要有固定的检测时间间隔</p>
-</li>
-</ol>
-<p>B类：in-VM</p>
-<ol>
-<li><p>硬件虚拟化技术</p>
-</li>
-<li><p>Lares 在guest VM 中内置hooks（钩子函数）实时的检测虚拟机的安全（事件检测）</p>
-</li>
-</ol>
-]]></content>
+<h3 id="0-Main-idea"><a href="#0-Main-idea" class="headerlink" title="0. Main idea"></a>0. Main idea</h3>]]></content>
       <categories>
         <category>paper</category>
-        <category>TC</category>
+        <category>Security and Privacy</category>
       </categories>
       <tags>
         <tag>论文解读</tag>
-        <tag>Virtual Machine</tag>
-        <tag>System Security</tag>
+        <tag>side channel attack</tag>
       </tags>
   </entry>
   <entry>
@@ -814,7 +708,7 @@
 </tbody>
 </table>
 </div>
-<h3 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h3><h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><h4 id="为什么会出现这种问题"><a href="#为什么会出现这种问题" class="headerlink" title="为什么会出现这种问题"></a>为什么会出现这种问题</h4><h3 id="虚拟机退出？"><a href="#虚拟机退出？" class="headerlink" title="虚拟机退出？"></a>虚拟机退出？</h3><h3 id="嵌套虚拟化？"><a href="#嵌套虚拟化？" class="headerlink" title="嵌套虚拟化？"></a>嵌套虚拟化？</h3><h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3>]]></content>
+<h3 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h3><h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><h4 id="为什么会出现这种问题"><a href="#为什么会出现这种问题" class="headerlink" title="为什么会出现这种问题"></a>为什么会出现这种问题</h4><h3 id="虚拟机退出？"><a href="#虚拟机退出？" class="headerlink" title="虚拟机退出？"></a>虚拟机退出？</h3><h3 id="嵌套虚拟化？"><a href="#嵌套虚拟化？" class="headerlink" title="嵌套虚拟化？"></a>嵌套虚拟化？</h3><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3>]]></content>
       <categories>
         <category>paper</category>
         <category>Security</category>
@@ -823,6 +717,112 @@
         <tag>论文解读</tag>
         <tag>Untrusted Hypervisor</tag>
         <tag>Virtualization</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CloudMon</title>
+    <url>/2020/09/14/CloudMon/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href>CloudMon</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"><a href="https://chuliangweng.github.io/" target="_blank" rel="noopener">Cl.W</a></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">这篇文章信任hypervisor并在此基础上对guestVM进行保护，主要是从内存角度出发，针对rootkit攻击进行运行时检测。</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">System Security; Virtual Machine</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文构造一个动态的监控架构，并在此基础上保证guest VM 运行时的安全性，主要功能是在客户虚拟机中检测出rootkits攻击。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>​        本文构建了一个动态的监控架构，运行在特权级别，通过对guestVM内存的扫描，检测客户机是否受到rootkit攻击，从而保证guestVM的运行时安全性。利用虚拟化技术对客户机内存进行实时监控，且这些监控对于客户机是透明的，为了实现检测的有效与高效，本系统在性能和安全之间权衡。</p>
+<h4 id="Rootkit-攻击"><a href="#Rootkit-攻击" class="headerlink" title="Rootkit 攻击 "></a><font color="blue"><strong>Rootkit 攻击</strong> </font></h4><p>​        rootkit 能够以特权级指令访问 host，并且可以通过对系统进行更改隐藏自己的存在。</p>
+<p>​        检测rootkit，最好是对客户机透明，不更改客户机系统的前提下对其进行检测。</p>
+<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        假设VMM（hypervisor）与priviliged VM  是可信的，guest VM 会受到攻击，在开机阶段的安全性受到VMM的保护，并且对guest VM的攻击不会对privileged VM 的安全性造成影响。</p>
+<p>（有些保护是针对VMM的，但是这不在本文的考虑范围内，本文聚焦在对客户机的保护上）</p>
+<h3 id="CloudMon-系统设计"><a href="#CloudMon-系统设计" class="headerlink" title="CloudMon 系统设计"></a>CloudMon 系统设计</h3><p>​        目的是实现一个可以访问较低权限级别内存信息、检测潜在的攻击并且可以保证检测的实时性与系统性能。访问内存的操作实现是基于 Xen的xenctrl 库，这个库能够读取较低权限的内存（如guest VM的内存信息）。</p>
+<p>​        构建一个guest VM 内存的监控器，目标是对VM透明、高效且是瞬时性的，这种方式可行性是因为攻击者对VM内存任何的更改都是可见的。CloudMon扫描内核memory与寄存器，从而可以实时的检测内存状态变化。这是一个特权级别的VM，能够通过VMM访问其他VMs的内存信息，而不是单纯的一个安全的guest VM。</p>
+<p><img src="/2020/09/14/CloudMon/CloudMonArchitecture.png" width="400px" height="240px"></p>
+<p>​        从云中大量的攻击实例中提取rootkit攻击特征，并将该特征记录在Feature Lib中，通过比较RT Value 与 SV Table 中数值的差异情况，可以检测出系统调用表中的攻击情况，设置较小的检测时间间隔，可以近似实时的检测嵌入内核的 rootkit ，通过设置检测的时间间隔，可以控制性能开销。并且CloudMon会直接检索其内存，因此，包括DKSM 和Shadow Walker 在内的任何来宾内核rootkit都不会欺骗CloudMon。 </p>
+<font color="green">**获取开始地址信息**</font>
+
+<p>​        KV Searcher查找 guest VM 系统调用的起始地址，SV generator 通过扫描，比对通过大量OS攻击实例中获取到的攻击特征，从而可以判断出被攻击者。</p>
+<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a><font color="blue"><strong>实验环境</strong></font></h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Xen</th>
+<th>priviliged VM</th>
+<th>guest VM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xen-3.4.2</td>
+<td>Ubuntu 9.04</td>
+<td>Ubuntu 8.04</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>已经存在的检测方式：</p>
+<ol>
+<li><p>获取guest OS的system.map信息</p>
+</li>
+<li><p>one-on-one 运行在guest VM上</p>
+</li>
+</ol>
+<h3 id="相关工作介绍"><a href="#相关工作介绍" class="headerlink" title="相关工作介绍"></a>相关工作介绍</h3><p>本文将对VM的保护机制分为了 out-of-VM  与 in-VM两种</p>
+<p>A类：out-of-VM</p>
+<ol>
+<li><p>利用受信任的VM充当监控器。OSck,是一种one-on-one的监控模式</p>
+</li>
+<li><p>XenKIMONO 在VM中聚集信息时会暂停OS的执行</p>
+</li>
+<li><p>vIPS 通过预先设置，这种检测规则需要有固定的检测时间间隔</p>
+</li>
+</ol>
+<p>B类：in-VM</p>
+<ol>
+<li><p>硬件虚拟化技术</p>
+</li>
+<li><p>Lares 在guest VM 中内置hooks（钩子函数）实时的检测虚拟机的安全（事件检测）</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>TC</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>System Security</tag>
+        <tag>Virtual Machine</tag>
       </tags>
   </entry>
   <entry>
@@ -934,28 +934,6 @@
         <tag>论文解读</tag>
         <tag>Detection</tag>
         <tag>Hypervisor</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
-    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
-    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
-<ul>
-<li><strong>Active Monitoring（Synchronous）</strong></li>
-</ul>
-<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
-<ul>
-<li><strong>Passive Monitoring （Asynchronous）</strong></li>
-</ul>
-<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>虚拟化安全</tag>
       </tags>
   </entry>
   <entry>
@@ -1081,6 +1059,28 @@
       </tags>
   </entry>
   <entry>
+    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
+    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
+    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
+<ul>
+<li><strong>Active Monitoring（Synchronous）</strong></li>
+</ul>
+<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
+<ul>
+<li><strong>Passive Monitoring （Asynchronous）</strong></li>
+</ul>
+<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>虚拟化安全</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PUBG JNG</title>
     <url>/2020/04/18/PUBG-JNG/</url>
     <content><![CDATA[<h3 id="JNG战队发展历程回顾"><a href="#JNG战队发展历程回顾" class="headerlink" title="JNG战队发展历程回顾"></a>JNG战队发展历程回顾</h3><h4 id="JNG初次相遇"><a href="#JNG初次相遇" class="headerlink" title="JNG初次相遇"></a>JNG初次相遇</h4><p>很久很久以前，这支战队的几个骚年游荡在这样一个空旷的平原上</p>
@@ -1125,6 +1125,18 @@
       <tags>
         <tag>game-for-peace</tag>
         <tag>JNG</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RADAR</title>
+    <url>/2020/07/18/RADAR/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -1207,18 +1219,6 @@
       <tags>
         <tag>Virtual Machine</tag>
         <tag>Hypervisor</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>RADAR</title>
-    <url>/2020/07/18/RADAR/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -1450,26 +1450,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Systematic Review on FHE</title>
-    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>The first blog</title>
-    <url>/2020/04/18/The-first-blog/</url>
-    <content><![CDATA[<h3 id="The-first-bolg"><a href="#The-first-bolg" class="headerlink" title="The first bolg"></a>The first bolg</h3><p>Hello，this is my first bolg of github.io.</p>
-<p>I tried for about 12 hours to set up this simple website, right now, the author(me) still feel awsome.</p>
-<p>I have written some technology blogs in <a href="https://www.cnblogs.com/Robin5/" target="_blank" rel="noopener">Robin5</a>.</p>
-<p>Seize the time and face the bright future！</p>
-<p>I will work harder and harder!</p>
-<p>Witness me in github.io</p>
-]]></content>
-      <tags>
-        <tag>英文</tag>
-        <tag>essay</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>The moment</title>
     <url>/2020/07/14/The-moment/</url>
     <content><![CDATA[<p>&emsp;&emsp;此时此刻，在家里敲代码+编辑文本，就在这一刻，我感觉电脑自带的键盘手感好棒，这种美妙的触感，爱了。</p>
@@ -1484,6 +1464,26 @@
       <tags>
         <tag>essay</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>The first blog</title>
+    <url>/2020/04/18/The-first-blog/</url>
+    <content><![CDATA[<h3 id="The-first-bolg"><a href="#The-first-bolg" class="headerlink" title="The first bolg"></a>The first bolg</h3><p>Hello，this is my first bolg of github.io.</p>
+<p>I tried for about 12 hours to set up this simple website, right now, the author(me) still feel awsome.</p>
+<p>I have written some technology blogs in <a href="https://www.cnblogs.com/Robin5/" target="_blank" rel="noopener">Robin5</a>.</p>
+<p>Seize the time and face the bright future！</p>
+<p>I will work harder and harder!</p>
+<p>Witness me in github.io</p>
+]]></content>
+      <tags>
+        <tag>essay</tag>
+        <tag>英文</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Systematic Review on FHE</title>
+    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>The outline of Outlier</title>
@@ -1844,68 +1844,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Xen log modify 脚本简化操作</title>
-    <url>/2020/08/05/Xen-log-modify-%E8%84%9A%E6%9C%AC%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C/</url>
-    <content><![CDATA[<h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><p>目标用户ID与ip: </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root:101.101.101.10</span><br></pre></td></tr></table></figure>
-<p>第一个脚本文件</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">scp test.txt root@<span class="number">101.101</span><span class="number">.101</span><span class="number">.10</span>:/home/</span><br></pre></td></tr></table></figure>
-<h4 id="执行权限"><a href="#执行权限" class="headerlink" title="执行权限"></a>执行权限</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">chmod +x ./test.sh  <span class="comment">#使脚本具有执行权限</span></span><br><span class="line">./test.sh  <span class="comment">#执行脚本</span></span><br></pre></td></tr></table></figure>
-<h4 id="自动输入密码"><a href="#自动输入密码" class="headerlink" title="自动输入密码"></a>自动输入密码</h4><p>免密登陆</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-copy-id -i ~&#x2F;.ssh&#x2F;id_rsa.pub user@ip</span><br></pre></td></tr></table></figure>
-<h4 id="获取当前目录"><a href="#获取当前目录" class="headerlink" title="获取当前目录"></a>获取当前目录</h4><p>获取当前目录</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br></pre></td></tr></table></figure>
-<h3 id="修改文件实战"><a href="#修改文件实战" class="headerlink" title="修改文件实战"></a>修改文件实战</h3><h4 id="目录说明"><a href="#目录说明" class="headerlink" title="目录说明"></a>目录说明</h4><blockquote>
-<p>脚本所在目录 /xen-modify/</p>
-<p>其中 <code>*.sh</code> 文件是要执行的脚本文件，<code>*.c *.h</code> 是在本地（最终文件是要覆盖在服务器上的）修改后的文件。</p>
-<p>└──xen<br>└── xen-modify<br>   │    ├── backup.sh<br>   │    ├── hypercall.h<br>   │    ├── install-lib.sh<br>   │    ├── install-xen.sh<br>   │    ├── mm.c<br>   │    ├── move.sh<br>   │    ├── privcmd.c<br>   │    ├── pv<br>   │    │  └── hypercall.c<br>   │    ├── x86<br>   │    │  └── hypercall.c<br>   │    └── xen.h</p>
-</blockquote>
-<h4 id="backup-sh"><a href="#backup-sh" class="headerlink" title="backup.sh"></a>backup.sh</h4><blockquote>
-<p>​        backup的目的是备份即将被修改的文件，目标文件的位置在xen文件夹内，<code>backup.sh</code> 文件在<code>xen-modify</code> 文件夹内，在获得当前目录后，需要依次进入目标文件所在目录，对文件进行备份。<br>​        因为是对原始文件进行备份，所以在执行此操作时，仅在首次备份时执行，以后不执行。</p>
-</blockquote>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/include/public/</span><br><span class="line">cp xen.h xen-backup.h</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp hypercall.c hypercall-backup.c</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/pv/</span><br><span class="line">cp hypercall.c hypercall-backup.c</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/include/xen/</span><br><span class="line">cp hypercall.h hypercall-backup.h</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp mm.c mm-backup.c</span><br></pre></td></tr></table></figure>
-<h4 id="install-xen-sh"><a href="#install-xen-sh" class="headerlink" title="install-xen.sh"></a>install-xen.sh</h4><blockquote>
-<p>这里只需要进入<code>xen</code> 目录一次就可以进行操作，所以直接使用 <code>cd ../xen</code> 进入目标目录。</p>
-<p>这一步是在编译<code>xen</code> 源码的时候进行的。</p>
-</blockquote>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd ../xen</span><br><span class="line">./configure</span><br><span class="line">make xen -j8</span><br><span class="line">make tools -j8</span><br><span class="line">make install-xen</span><br><span class="line">make install-tools</span><br><span class="line">update-grub</span><br></pre></td></tr></table></figure>
-<h4 id="install-lib-sh"><a href="#install-lib-sh" class="headerlink" title="install-lib.sh"></a>install-lib.sh</h4><blockquote>
-<p>搭建 <code>xen</code> 的依赖。</p>
-</blockquote>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">apt-get install build-essential -y</span><br><span class="line">apt-get install bcc bin86 gawk bridge-utils iproute libcurl3 libcurl4-openssl-dev bzip2 transfig tgif  -y</span><br><span class="line">apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial -y</span><br><span class="line">apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev -y</span><br><span class="line">apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev -y</span><br><span class="line">apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc -y</span><br><span class="line">apt-get build-dep xen -y</span><br></pre></td></tr></table></figure>
-<h4 id="move-sh"><a href="#move-sh" class="headerlink" title="move.sh"></a>move.sh</h4><blockquote>
-<p>将<code>xen-modify</code> 文件夹下的文件依次覆盖原始文件。</p>
-</blockquote>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br><span class="line"></span><br><span class="line">cp xen.h /$&#123;workdir&#125;/../xen/xen/include/public/</span><br><span class="line">cp x86/hypercall.c /$&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp pv/hypercall.c /$&#123;workdir&#125;/../xen/xen/arch/x86/pv/</span><br><span class="line">cp hypercall.h /$&#123;workdir&#125;/../xen/xen/include/xen/</span><br><span class="line">cp mm.c /$&#123;workdir&#125;/../xen/xen/arch/x86/</span><br></pre></td></tr></table></figure>
-<hr>
-<p>modify log</p>
-<p>​    2020年8月5日      创建<br>​    2020年9月30日    增加<code>xen</code> 的脚本命令</p>
-]]></content>
-      <tags>
-        <tag>Xen log</tag>
-        <tag>Linux</tag>
-        <tag>Shell</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Xen虚拟化技术完全导读</title>
-    <url>/2020/07/19/Xen%E8%99%9A%E6%8B%9F%E5%8C%96%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E5%AF%BC%E8%AF%BB/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>云虚拟化安全攻防实践</title>
-    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
-<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
-<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>RAMBleed Reading Bits in Memory Without Accessing Them</title>
     <url>/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/</url>
     <content><![CDATA[<div class="table-container">
@@ -1998,6 +1936,58 @@
       </tags>
   </entry>
   <entry>
+    <title>Xen虚拟化技术完全导读</title>
+    <url>/2020/07/19/Xen%E8%99%9A%E6%8B%9F%E5%8C%96%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E5%AF%BC%E8%AF%BB/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Xen log modify 脚本简化操作</title>
+    <url>/2020/08/05/Xen-log-modify-%E8%84%9A%E6%9C%AC%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><p>目标用户ID与ip: </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root:101.101.101.10</span><br></pre></td></tr></table></figure>
+<p>第一个脚本文件</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">scp test.txt root@<span class="number">101.101</span><span class="number">.101</span><span class="number">.10</span>:/home/</span><br></pre></td></tr></table></figure>
+<h4 id="执行权限"><a href="#执行权限" class="headerlink" title="执行权限"></a>执行权限</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">chmod +x ./test.sh  <span class="comment">#使脚本具有执行权限</span></span><br><span class="line">./test.sh  <span class="comment">#执行脚本</span></span><br></pre></td></tr></table></figure>
+<h4 id="自动输入密码"><a href="#自动输入密码" class="headerlink" title="自动输入密码"></a>自动输入密码</h4><p>免密登陆</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-copy-id -i ~&#x2F;.ssh&#x2F;id_rsa.pub user@ip</span><br></pre></td></tr></table></figure>
+<h4 id="获取当前目录"><a href="#获取当前目录" class="headerlink" title="获取当前目录"></a>获取当前目录</h4><p>获取当前目录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br></pre></td></tr></table></figure>
+<h3 id="修改文件实战"><a href="#修改文件实战" class="headerlink" title="修改文件实战"></a>修改文件实战</h3><h4 id="目录说明"><a href="#目录说明" class="headerlink" title="目录说明"></a>目录说明</h4><blockquote>
+<p>脚本所在目录 /xen-modify/</p>
+<p>其中 <code>*.sh</code> 文件是要执行的脚本文件，<code>*.c *.h</code> 是在本地（最终文件是要覆盖在服务器上的）修改后的文件。</p>
+<p>└──xen<br>└── xen-modify<br>   │    ├── backup.sh<br>   │    ├── hypercall.h<br>   │    ├── install-lib.sh<br>   │    ├── install-xen.sh<br>   │    ├── mm.c<br>   │    ├── move.sh<br>   │    ├── privcmd.c<br>   │    ├── pv<br>   │    │  └── hypercall.c<br>   │    ├── x86<br>   │    │  └── hypercall.c<br>   │    └── xen.h</p>
+</blockquote>
+<h4 id="backup-sh"><a href="#backup-sh" class="headerlink" title="backup.sh"></a>backup.sh</h4><blockquote>
+<p>​        backup的目的是备份即将被修改的文件，目标文件的位置在xen文件夹内，<code>backup.sh</code> 文件在<code>xen-modify</code> 文件夹内，在获得当前目录后，需要依次进入目标文件所在目录，对文件进行备份。<br>​        因为是对原始文件进行备份，所以在执行此操作时，仅在首次备份时执行，以后不执行。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/include/public/</span><br><span class="line">cp xen.h xen-backup.h</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp hypercall.c hypercall-backup.c</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/pv/</span><br><span class="line">cp hypercall.c hypercall-backup.c</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/include/xen/</span><br><span class="line">cp hypercall.h hypercall-backup.h</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp mm.c mm-backup.c</span><br></pre></td></tr></table></figure>
+<h4 id="install-xen-sh"><a href="#install-xen-sh" class="headerlink" title="install-xen.sh"></a>install-xen.sh</h4><blockquote>
+<p>这里只需要进入<code>xen</code> 目录一次就可以进行操作，所以直接使用 <code>cd ../xen</code> 进入目标目录。</p>
+<p>这一步是在编译<code>xen</code> 源码的时候进行的。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd ../xen</span><br><span class="line">./configure</span><br><span class="line">make xen -j8</span><br><span class="line">make tools -j8</span><br><span class="line">make install-xen</span><br><span class="line">make install-tools</span><br><span class="line">update-grub</span><br></pre></td></tr></table></figure>
+<h4 id="install-lib-sh"><a href="#install-lib-sh" class="headerlink" title="install-lib.sh"></a>install-lib.sh</h4><blockquote>
+<p>搭建 <code>xen</code> 的依赖。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">apt-get install build-essential -y</span><br><span class="line">apt-get install bcc bin86 gawk bridge-utils iproute libcurl3 libcurl4-openssl-dev bzip2 transfig tgif  -y</span><br><span class="line">apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial -y</span><br><span class="line">apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev -y</span><br><span class="line">apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev -y</span><br><span class="line">apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc -y</span><br><span class="line">apt-get build-dep xen -y</span><br></pre></td></tr></table></figure>
+<h4 id="move-sh"><a href="#move-sh" class="headerlink" title="move.sh"></a>move.sh</h4><blockquote>
+<p>将<code>xen-modify</code> 文件夹下的文件依次覆盖原始文件。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br><span class="line"></span><br><span class="line">cp xen.h /$&#123;workdir&#125;/../xen/xen/include/public/</span><br><span class="line">cp x86/hypercall.c /$&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp pv/hypercall.c /$&#123;workdir&#125;/../xen/xen/arch/x86/pv/</span><br><span class="line">cp hypercall.h /$&#123;workdir&#125;/../xen/xen/include/xen/</span><br><span class="line">cp mm.c /$&#123;workdir&#125;/../xen/xen/arch/x86/</span><br></pre></td></tr></table></figure>
+<hr>
+<p>modify log</p>
+<p>​    2020年8月5日      创建<br>​    2020年9月30日    增加<code>xen</code> 的脚本命令</p>
+]]></content>
+      <tags>
+        <tag>Xen log</tag>
+        <tag>Linux</tag>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>博士学长有话说</title>
     <url>/2020/04/22/%E5%8D%9A%E5%A3%AB%E5%AD%A6%E9%95%BF%E6%9C%89%E8%AF%9D%E8%AF%B4/</url>
     <content><![CDATA[<div id="hexo-blog-encrypt" data-wpm="wrong password" data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
@@ -2014,36 +2004,13 @@
       </tags>
   </entry>
   <entry>
-    <title>安全计算</title>
-    <url>/2020/08/15/%E5%AE%89%E5%85%A8%E8%AE%A1%E7%AE%97/</url>
-    <content><![CDATA[<h3 id="什么是安全计算"><a href="#什么是安全计算" class="headerlink" title="什么是安全计算"></a>什么是安全计算</h3><h4 id="安全计算"><a href="#安全计算" class="headerlink" title="安全计算"></a>安全计算</h4><p>安全多方计算，Secure Multi-party Computation（SMC）在保护数据安全的前提下实现多方计算，即，多个参与者将各自的数据凑在一起，并在这个大数据集上进行一定的计算，并得到最后的结果。</p>
-<h4 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h4><h5 id="1-基于噪音"><a href="#1-基于噪音" class="headerlink" title="1.基于噪音"></a>1.基于噪音</h5><p>差分隐私（differential privacy）对计算过程利用噪声干扰，让原始数据淹没在噪音中，使得在引入噪声的数据中心无法推断出原始数据。（例如一张马赛克图片，无法推断出具体细节）</p>
-<p>优点：效率高<br>缺点：得到的结果不够准确</p>
-<h5 id="2-非噪音法"><a href="#2-非噪音法" class="headerlink" title="2.非噪音法"></a>2.非噪音法</h5><p>（这种方式一般通过密码学方法将数据编码或者加密，得到一些奇怪的数字，而且这些数字有一些性质，比如看上去很随机，但是保留了原始数据的线性关系，或者在打乱顺序的数据中心能够发现其与原始数据的映射关系。）</p>
-<p>a.混淆电路（Garbled Circuit）</p>
-<p>b.同态加密（Homomorphic Encryption）</p>
-<p>c.秘钥分享（Secret Sharing）</p>
-<p>以上提到的三种方式一般在源头将数据加密，计算操作看到的数据是密文，只要特定的假设条件满足，这类方法在计算过程中是不会泄露原始信息的。</p>
-<p>优点：不会对计算过程添加干扰，因此得到的是准确值，且运用密码学理论，保障安全性<br>缺点：由于运用很多密码学方法，整个过程的计算量、通讯量很大，对于一些复杂的任务（训练几十个上百层的CNN）短时间内很难完成。</p>
-<h3 id="差分隐私"><a href="#差分隐私" class="headerlink" title="差分隐私"></a>差分隐私</h3><h3 id="混淆电路"><a href="#混淆电路" class="headerlink" title="混淆电路"></a>混淆电路</h3><h3 id="同态加密"><a href="#同态加密" class="headerlink" title="同态加密"></a>同态加密</h3><h3 id="秘钥分享"><a href="#秘钥分享" class="headerlink" title="秘钥分享"></a>秘钥分享</h3>]]></content>
+    <title>云虚拟化安全攻防实践</title>
+    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
+<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
+<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
       <tags>
-        <tag>Homomorphic</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>本科毕业游记</title>
-    <url>/2020/07/16/%E6%9C%AC%E7%A7%91%E6%AF%95%E4%B8%9A%E6%B8%B8%E8%AE%B0/</url>
-    <content><![CDATA[<p>当自己满怀负面情绪的时候，出去走走吧</p>
-<p>18年毕业季，对我来说，可能用诸事不顺形容更加贴切。这里不想再回顾那个至暗时刻了~略过500字</p>
-<p>在提交了本科毕业论文之后，跟舍友选择了去旅游，去闲逛。回忆起来，真的挺感谢那次远足。在游玩的时候，有时内心会有一种很强烈的声音在表达：世间如此美好，请继续相信并热爱美好的事情。其实当别人跟你在一起生活了很长时间之后，你的一举一动背后所掩盖的事实都会多多少少的被察觉吧，或悲或喜。非常感谢舍友们对自己的包容与尊重，如果当时真的在某些言语或行为上伤害过你们，真的很抱歉，记住一个人的好总好过记住一个人的坏。</p>
-<p>现在想想，那次旅行是自己成长最迅速的一段时光。懂得了很多，也体会了很多。初到上海时的激动掩盖了自己内心的伤楚，甚至创下了迄今为止单日步数记录。是初到上海的下里巴人，第一次感受到了什么叫繁华。交大与复旦的学子，让我感受到这个城市在文化上的包容与开放。深入灵隐感受那里的绝美景色，站在苏堤眺望西湖两岸，数次跨越钱塘江大桥，亲自挤一挤杭州的地铁也让自己对杭州有了深刻的印象。在绍兴的一间民宿鼓起勇气跟老外谈天侃地，这睡前的卧谈也给自己增加了不少自信心。英语说的烂，到底是谁遭罪？苏州、绍兴的旅途，亲身体会到了什么是江南水乡，那种只会出现在电视画面上的景色，竟然就在自己眼前，脚下，所泛小舟之旁。也许电子设备能够记录下景色，但无法转达自己身临其境的感受。最后一站，品过南京大排档后，跟高中同学去了当时梦寐以求的南京大学，涉足在南大的各个角落，跟南大学子一起篮球，仿佛获得一天的南大身份体验卡。夜幕降临，远去之时，梦也该醒了~</p>
-<p>这次的旅途过后，大家都在匆匆忙忙准备毕业的时候，我选择了再战名校。虽然这时显得跟整个学校的节奏不符，但比起之前浑浑噩噩的生活，这种逐梦并筑梦的日子更能让人铭记，更能拨动生命中响亮的音符。毕业论文答辩结束，导师惊讶的问我怎么没在考研光荣榜上看到我的名字，我不知道该如何面对这样一个始终对我抱有最大希望的老师；离校前一个月，准备租房子；离校前三周，准备6级考试；离校前两周，买下了全新备考资料，参加了6级考试，并见到了大三对我印象深刻（不听她讲课却能考近满分成绩的坏学生）的专业课老师，想对她说声对不起，老师，在你课上不是故意气你的；离校前一周，拿到了双证，见到了导员，真的很想对她说声谢谢，老师再见，但终未说出口。离校前3天，我花光了3个月的积蓄，算是买醉吧，那一段时间，是我四年里第一次跟这么多同学侃侃而谈，有的甚至是四年来第一次交流，原来那时的我在他们眼里还不算差，现在想想已经够欣慰了。6月24号，与母校彻底再见了~</p>
-<p>其实二战也没有想得那么复杂，干就完了。但真正难的是做出那个决定，鼓起勇气面对未知的挑战。</p>
-<p>我始终怀念并感激当年出去撒欢的自己</p>
-<p>2020年7月16日01:27:26 于济宁</p>
-]]></content>
-      <tags>
-        <tag>essay</tag>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -2097,6 +2064,39 @@
       </tags>
   </entry>
   <entry>
+    <title>安全计算</title>
+    <url>/2020/08/15/%E5%AE%89%E5%85%A8%E8%AE%A1%E7%AE%97/</url>
+    <content><![CDATA[<h3 id="什么是安全计算"><a href="#什么是安全计算" class="headerlink" title="什么是安全计算"></a>什么是安全计算</h3><h4 id="安全计算"><a href="#安全计算" class="headerlink" title="安全计算"></a>安全计算</h4><p>安全多方计算，Secure Multi-party Computation（SMC）在保护数据安全的前提下实现多方计算，即，多个参与者将各自的数据凑在一起，并在这个大数据集上进行一定的计算，并得到最后的结果。</p>
+<h4 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h4><h5 id="1-基于噪音"><a href="#1-基于噪音" class="headerlink" title="1.基于噪音"></a>1.基于噪音</h5><p>差分隐私（differential privacy）对计算过程利用噪声干扰，让原始数据淹没在噪音中，使得在引入噪声的数据中心无法推断出原始数据。（例如一张马赛克图片，无法推断出具体细节）</p>
+<p>优点：效率高<br>缺点：得到的结果不够准确</p>
+<h5 id="2-非噪音法"><a href="#2-非噪音法" class="headerlink" title="2.非噪音法"></a>2.非噪音法</h5><p>（这种方式一般通过密码学方法将数据编码或者加密，得到一些奇怪的数字，而且这些数字有一些性质，比如看上去很随机，但是保留了原始数据的线性关系，或者在打乱顺序的数据中心能够发现其与原始数据的映射关系。）</p>
+<p>a.混淆电路（Garbled Circuit）</p>
+<p>b.同态加密（Homomorphic Encryption）</p>
+<p>c.秘钥分享（Secret Sharing）</p>
+<p>以上提到的三种方式一般在源头将数据加密，计算操作看到的数据是密文，只要特定的假设条件满足，这类方法在计算过程中是不会泄露原始信息的。</p>
+<p>优点：不会对计算过程添加干扰，因此得到的是准确值，且运用密码学理论，保障安全性<br>缺点：由于运用很多密码学方法，整个过程的计算量、通讯量很大，对于一些复杂的任务（训练几十个上百层的CNN）短时间内很难完成。</p>
+<h3 id="差分隐私"><a href="#差分隐私" class="headerlink" title="差分隐私"></a>差分隐私</h3><h3 id="混淆电路"><a href="#混淆电路" class="headerlink" title="混淆电路"></a>混淆电路</h3><h3 id="同态加密"><a href="#同态加密" class="headerlink" title="同态加密"></a>同态加密</h3><h3 id="秘钥分享"><a href="#秘钥分享" class="headerlink" title="秘钥分享"></a>秘钥分享</h3>]]></content>
+      <tags>
+        <tag>Homomorphic</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>本科毕业游记</title>
+    <url>/2020/07/16/%E6%9C%AC%E7%A7%91%E6%AF%95%E4%B8%9A%E6%B8%B8%E8%AE%B0/</url>
+    <content><![CDATA[<p>当自己满怀负面情绪的时候，出去走走吧</p>
+<p>18年毕业季，对我来说，可能用诸事不顺形容更加贴切。这里不想再回顾那个至暗时刻了~略过500字</p>
+<p>在提交了本科毕业论文之后，跟舍友选择了去旅游，去闲逛。回忆起来，真的挺感谢那次远足。在游玩的时候，有时内心会有一种很强烈的声音在表达：世间如此美好，请继续相信并热爱美好的事情。其实当别人跟你在一起生活了很长时间之后，你的一举一动背后所掩盖的事实都会多多少少的被察觉吧，或悲或喜。非常感谢舍友们对自己的包容与尊重，如果当时真的在某些言语或行为上伤害过你们，真的很抱歉，记住一个人的好总好过记住一个人的坏。</p>
+<p>现在想想，那次旅行是自己成长最迅速的一段时光。懂得了很多，也体会了很多。初到上海时的激动掩盖了自己内心的伤楚，甚至创下了迄今为止单日步数记录。是初到上海的下里巴人，第一次感受到了什么叫繁华。交大与复旦的学子，让我感受到这个城市在文化上的包容与开放。深入灵隐感受那里的绝美景色，站在苏堤眺望西湖两岸，数次跨越钱塘江大桥，亲自挤一挤杭州的地铁也让自己对杭州有了深刻的印象。在绍兴的一间民宿鼓起勇气跟老外谈天侃地，这睡前的卧谈也给自己增加了不少自信心。英语说的烂，到底是谁遭罪？苏州、绍兴的旅途，亲身体会到了什么是江南水乡，那种只会出现在电视画面上的景色，竟然就在自己眼前，脚下，所泛小舟之旁。也许电子设备能够记录下景色，但无法转达自己身临其境的感受。最后一站，品过南京大排档后，跟高中同学去了当时梦寐以求的南京大学，涉足在南大的各个角落，跟南大学子一起篮球，仿佛获得一天的南大身份体验卡。夜幕降临，远去之时，梦也该醒了~</p>
+<p>这次的旅途过后，大家都在匆匆忙忙准备毕业的时候，我选择了再战名校。虽然这时显得跟整个学校的节奏不符，但比起之前浑浑噩噩的生活，这种逐梦并筑梦的日子更能让人铭记，更能拨动生命中响亮的音符。毕业论文答辩结束，导师惊讶的问我怎么没在考研光荣榜上看到我的名字，我不知道该如何面对这样一个始终对我抱有最大希望的老师；离校前一个月，准备租房子；离校前三周，准备6级考试；离校前两周，买下了全新备考资料，参加了6级考试，并见到了大三对我印象深刻（不听她讲课却能考近满分成绩的坏学生）的专业课老师，想对她说声对不起，老师，在你课上不是故意气你的；离校前一周，拿到了双证，见到了导员，真的很想对她说声谢谢，老师再见，但终未说出口。离校前3天，我花光了3个月的积蓄，算是买醉吧，那一段时间，是我四年里第一次跟这么多同学侃侃而谈，有的甚至是四年来第一次交流，原来那时的我在他们眼里还不算差，现在想想已经够欣慰了。6月24号，与母校彻底再见了~</p>
+<p>其实二战也没有想得那么复杂，干就完了。但真正难的是做出那个决定，鼓起勇气面对未知的挑战。</p>
+<p>我始终怀念并感激当年出去撒欢的自己</p>
+<p>2020年7月16日01:27:26 于济宁</p>
+]]></content>
+      <tags>
+        <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>泉城济南</title>
     <url>/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/</url>
     <content><![CDATA[<h3 id="泉城济南"><a href="#泉城济南" class="headerlink" title="泉城济南"></a>泉城济南</h3><p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-7.jpg" width="500px" height="400px"></p>
@@ -2138,14 +2138,6 @@
       </tags>
   </entry>
   <entry>
-    <title>虚拟机 系统与进程的通用平台</title>
-    <url>/2020/07/17/%E8%99%9A%E6%8B%9F%E6%9C%BA-%E7%B3%BB%E7%BB%9F%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E9%80%9A%E7%94%A8%E5%B9%B3%E5%8F%B0/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[转载]博士学历真的很重要吗</title>
     <url>/2020/04/19/%E8%BD%AC%E8%BD%BD-%E5%8D%9A%E5%A3%AB%E5%AD%A6%E5%8E%86%E7%9C%9F%E7%9A%84%E5%BE%88%E9%87%8D%E8%A6%81%E5%90%97/</url>
     <content><![CDATA[<div id="hexo-blog-encrypt" data-wpm="wrong password" data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
@@ -2159,6 +2151,14 @@
 <script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
       <tags>
         <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>虚拟机 系统与进程的通用平台</title>
+    <url>/2020/07/17/%E8%99%9A%E6%8B%9F%E6%9C%BA-%E7%B3%BB%E7%BB%9F%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E9%80%9A%E7%94%A8%E5%B9%B3%E5%8F%B0/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
 </search>
