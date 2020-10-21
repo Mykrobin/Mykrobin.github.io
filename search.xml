@@ -6,6 +6,181 @@
     <content><![CDATA[]]></content>
   </entry>
   <entry>
+    <title>Applying TPM to Cloud</title>
+    <url>/2020/10/12/Applying-TPM-to-Cloud/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:left">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:left">原文PDF</td>
+<td style="text-align:center"><a href="https://onlinelibrary.wiley.com/doi/pdf/10.1002/spy2.93" target="_blank" rel="noopener">Survey</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:left">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:left">核心内容</td>
+<td style="text-align:center">调研了13年至18年的近120篇文献，且这些论文都利用TPM提高云计算安全。</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:left">研究领域</td>
+<td style="text-align:center">可信计算</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:left">全文总览</td>
+<td style="text-align:center">本文对TPM在云计算安全方面进行的细致的调研，并结合调研结果认为TPM在云计算安全的保护领域具有很大的趋势。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Paper-Source"><a href="#Paper-Source" class="headerlink" title="Paper Source"></a>Paper Source</h3><p><img src="/2020/10/12/Applying-TPM-to-Cloud/sources.png" width="500"></p>
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/papercountry.png" width="500"></p>
+<font color="DodgerBlue"> Paper Structure </font>
+
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Summary.png" width="600"></p>
+<h3 id="Answering-the-Following-Question"><a href="#Answering-the-Following-Question" class="headerlink" title="Answering the Following Question"></a>Answering the Following Question</h3><h4 id="RQ1-For-what-purposes-is-TPM-used-in-the-cloud"><a href="#RQ1-For-what-purposes-is-TPM-used-in-the-cloud" class="headerlink" title="RQ1: For what purposes is TPM used in the cloud?"></a>RQ1: For what purposes is TPM used in the cloud?</h4><blockquote>
+<p><strong>TPM 在云中的作用是什么？为什么要用到TPM？</strong></p>
+</blockquote>
+<h4 id="RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud"><a href="#RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud" class="headerlink" title="RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?"></a>RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?</h4><blockquote>
+<p><strong>TPM的确缓解了的云中的哪些攻击？</strong></p>
+</blockquote>
+<h4 id="RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？"><a href="#RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？" class="headerlink" title="RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？"></a>RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？</h4><blockquote>
+<p><strong>完整性度量的组件到底是什么？云中完整性度量的解释是什么？</strong></p>
+</blockquote>
+<h4 id="RQ4-At-what-level-are-TPM-primitives-invoked"><a href="#RQ4-At-what-level-are-TPM-primitives-invoked" class="headerlink" title="RQ4: At what level are TPM primitives invoked?"></a>RQ4: At what level are TPM primitives invoked?</h4><blockquote>
+<p><strong>TPM被调用的级别是什么？</strong></p>
+</blockquote>
+<h4 id="RQ5-At-which-phase-are-the-TPM-features-used"><a href="#RQ5-At-which-phase-are-the-TPM-features-used" class="headerlink" title="RQ5: At which phase are the TPM features used?"></a>RQ5: At which phase are the TPM features used?</h4><blockquote>
+<p><strong>在什么阶段用到了TPM？</strong><br><strong>A：boot time, run time and both.</strong></p>
+</blockquote>
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Phase.png"></p>
+<h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>​        可信计算利用硬件信任根以及与之关联的软件构建可信环境，提供信任和隐私保护。TPM这个模块，提供安全启动、远程验证、完整性检测以及机密功能。2011年发布了TPM1.2版本，2016年公布了TPM2.0版本。</p>
+<p>​        远程证明是可信计算技术提供的主要功能，它将信任逐步从较低级别扩展到较高级别和应用程序。 这被称为信任链。 在信任链方案中，所有将要加载的组件都被认为是不可信的，因此，在加载之前需要对其进行测量。 TPM包含平台配置寄存器（PCR）受保护的内存位置，该位置存储敏感的安全信息（例如测量信息）。</p>
+<p>​        除了强大的隔离存储，TPM还拥有用于加密操作的唯一认可密钥（EK）。该密钥是在TPM制造时生成的，密钥的私有部分永远不会离开TPM。 在远程认证时，为了保护平台身份的私密性，使用了认证身份密钥（AIK）。 当平台（证明者）收到（来自验证者的）远程证明请求时，它会发送一个完整性报告，该报告由PCR值及其数字签名（由AIK计算）组成。 由于AIK的私有部分从未离开过TPM，因此可以保证报告的完整性和真实性。</p>
+<p>​        初步理解，TPM有几种存在模式，比如：以芯片方式存在电脑主板上或者以firmware形式存在于BIOS中。</p>
+<h4 id="The-Aims-of-TPM"><a href="#The-Aims-of-TPM" class="headerlink" title="The Aims of TPM"></a>The Aims of TPM</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TPMAims.png" width="500" height="280"></p>
+<font color="DodgerBlue"> 远程验证（Remote Attestation ）</font>
+
+<blockquote>
+<ol>
+<li>请求验证者向被验证者发送验证请求，这个请求中包括 <em>nonce</em><sup><a href="#fn_1" id="reffn_1">1</a></sup> ，目的是防止重播攻击（Replay attack）</li>
+<li>接收到验证请求的一方向自己的TPM提出验证请求，TPM验证自身需要度量的模块</li>
+<li>验证后的结果发送给远端的验证发起者（发起者要验证(a)TPM 的真实性(b) 发送数值的真实性）</li>
+</ol>
+</blockquote>
+<font color="DodgerBlue"> 完整性度量 （Integrity Measurement）</font>
+
+<blockquote>
+<p>TPM计算并存储不同组件的哈希值，并将这些哈希值在哈希链中进行转换，并将结果与已经存储的数值相比较。<br>完整性度量分为静态与动态两种类型：<br>        静态：保证在运行之前没有发生篡改<br>        动态：保证在运行过程中没有发生恶意篡改</p>
+</blockquote>
+<font color="DodgerBlue"> Generation and secure storage ofkeys</font>
+
+<blockquote>
+<p>生成随机秘钥的方法：种子、随机数生成器、直接导入TPM中。<br>生成的秘钥保存在TPM中</p>
+</blockquote>
+<font color="DodgerBlue"> Trusted boot</font>
+
+<blockquote>
+<p>在开机时，TPM会检查硬件、软件、固件组件的异同，保证在启动系统之前的环境是可信的。</p>
+<p>本文的参考文献 [14] 利用TPM的可信启动构造一个可信的环境，保证在开机过程中没有恶意入侵。<br>[15] 提出一个用于监控整个云平台的框架，可信启动保证被监控环境的完整性，既对云中租户也是针对云供应商。</p>
+</blockquote>
+<font color="DodgerBlue"> Hardware root of trust</font>
+
+<blockquote>
+<p>信任根是可以在密码系统中信任的来源，加密安全依赖于秘钥来进行加密解密与生成或者验证数字签名，因此，在这种系统中包括不易损坏的硬件模块，并且提供了一定程度的信任保障。<br>TPM可以提供硬件信任根、提供开机与运行时的完整性度量并且保护度量结果。</p>
+</blockquote>
+<h4 id="Security-Threats"><a href="#Security-Threats" class="headerlink" title="Security Threats"></a>Security Threats</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TopThreats.png" width="380" height="500"></p>
+<h4 id="The-level-of-TPM-invoking"><a href="#The-level-of-TPM-invoking" class="headerlink" title="The level of TPM invoking"></a>The level of TPM invoking</h4><font color="DodgerBlue"> Hardware </font>
+
+<blockquote>
+<p>在IoT和云计算等分布式系统模型中，主机平台的安全性至关重要，因为它托管着存储或处理（大量）数据。 TPM是一种用于平台身份验证以及验证其完整性的强大解决方案。在参考文献90中提出的解决方案中，扩展了HCloud（用于医疗保健数据的私有云），并且TPM嵌入在主机平台上以对客户端进行身份验证，并测量静态和动态完整性。讨论了可信云可以提供外部认证服务并进行内部可信调度。提供给外部的每个服务都有一个唯一的映像/进程在内存中运行。加载到内存时，需要验证此过程。可以使用TPM执行静态测量，以验证存储在物理存储库中的文件和软件包。同样，使用TPM签名保护数据库的完整性，以提供硬件级别的安全性。对于过程的动态完整性测量，TPM PCR用于存储和显示逐步的测量值。 Yang等[86]提出了一种设计，旨在为客户提供有关存储在云中的数据的新鲜度，有效性和完整性的保证。为了实现此目标，他们在不受信任的服务器上使用受信任的硬件设备，使客户端能够验证其数据的新鲜度和完整性。在系统运行之前，需要验证平台是否以受信任的方式启动。参考文献91讨论TPM是衡量启动过程和确定平台启动完整性的关键步骤的信任基础。在虚拟环境中，TPM提供了根植于硬件的信任链，该信任链将扩展到虚拟机管理程序。如果关键组件（例如BIOS，固件和虚拟机管理程序）已证明其完整性，则可以确保平台引导的完整性。为了确保启动组件的完整性，需要执行两个步骤：首先，测量引导过程，其次，进行证明，即保证和已执行的组件是受信任的组件。</p>
+</blockquote>
+<font color="DodgerBlue"> Hypervisor </font>
+
+<blockquote>
+<p>本文参考文献28构造了基于Xen的迁移框架：</p>
+<p>Xen虚拟机管理程序的安全迁移框架。该设计使用可信计算和相邻完整性度量来动态监视相邻虚拟机管理程序的完整性。更具体地说，为确保始终监视主机，当主机初始化时，TPM模块会验证虚拟机监控程序并将更新消息发送到完整性验证表（该表包含受信任的虚拟机监控程序列表），并将该虚拟机监控程序标记为受信任的。这意味着，如果未收到此类消息，则认为该特定的管理程序不可信。此外，系统会动态监控虚拟机监控程序的运行状态，如果虚拟机监控程序遭到破坏，则会发送相应的更新消息以报告受到破坏的情况。根据此完整性表的结果，确定源虚拟机管理程序是否受信任以及是否应启动VM迁移过程。</p>
+</blockquote>
+<h4 id="Phase-of-integrity-measurement"><a href="#Phase-of-integrity-measurement" class="headerlink" title="Phase of integrity measurement"></a>Phase of integrity measurement</h4><font color="DodgerBlue"> Boot time </font>
+
+<blockquote>
+<p>可信平台技术追求的原则之一是在关键组件加载和执行之前验证它们的信任和完整性。因此，在运行时完整性检查之前，需要确保正确引导了系统并且正在运行适当的操作系统。受信任的平台通过创建信任链来实现这种信任，该信任链以BIOS引导块中的受信任代码（CRTM）为核心信任根。 CRTM衡量其他实体的完整性价值，并且在平台的整个生命周期内保持不变。 CRTM是普通BIOS的补充，它首先运行以测量BIOS块和硬件，然后将控制权传递给引导加载程序。然后在将控件传递给OS之前测量OS内核映像。在此引导过程的每个步骤中，都会获取测量值，并据此扩展相关的TPM PCR值。该测量过程证明了系统的完整性，并确保引导和操作系统软件是制造商想要的版本，并且未被恶意第三方或恶意软件篡改。100Nanavati等人74指出，在虚拟环境中，可信引导技术允许用户证明基础启动平台的身份，并确保加载的虚拟化平台值得信赖。这为用户提供了有关可以向其提交关键数据的虚拟化平台的具体保证。 TPM通过使用加密原语为虚拟化平台提供此受信任的引导，并为其建立信任根。在ALIBI可信监视框架中，17 TPM用于在服务提供商平台上提供信任根。 TPM PCR记录平台上正在执行的软件的状态，并且由于PCR值仅是附加值，因此仅通过重新启动才能消除以前的记录。 TPM还拥有一个公共-私人密钥对。私钥仅保留在TPM的安全环境中，并用于计算TPM生成的证明值（从经过身份验证的启动累积的度量）的签名。使用TPM的公钥，外部验证程序可以检查签名的有效性，并推断出PCR值表示平台软件的状态。</p>
+</blockquote>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>​        本文所统计并分析了120篇文献后，认为TPM技术在云中应用是一种趋势。在云中TPM技术的主要目标是远程验证以及完整性度量。本文主要分析了TPM的功能，TPM可应对云中的安全威胁，TPM提供完整性度量的阶段以及层次并指出了留有的研究空间，最后指出主要的研究差距。</p>
+<blockquote id="fn_1">
+<sup>1</sup>. 在加密技术中的初始向量和加密散列函数都发挥着重要作用，在各类验证协议的通信应用中确保验证信息不被重复使用以对抗重放攻击(Replay Attack)<a href="#reffn_1" title="Jump back to footnote [1] in the text."> &#8617;</a>
+</blockquote>
+<h3 id="引文延伸阅读"><a href="#引文延伸阅读" class="headerlink" title="引文延伸阅读"></a>引文延伸阅读</h3><p>Here are the papers worth reading further.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>theme</th>
+<th>Reference Number &amp; Summary</th>
+<th>Reference Number &amp; Summary</th>
+<th>more</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>远程验证</td>
+<td>6：TPM进行远程验证VMs</td>
+<td>7：验证用户所在地理位置</td>
+<td></td>
+</tr>
+<tr>
+<td>完整性度量</td>
+<td>10：多用户环境中数据拥有完整性</td>
+<td>11：动态的完成性度量的模型（Xen）</td>
+<td>8、9</td>
+</tr>
+<tr>
+<td>生成秘钥安全存储</td>
+<td>12</td>
+<td>13</td>
+<td></td>
+</tr>
+<tr>
+<td>安全启动</td>
+<td><a href="https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=2969&amp;context=sis_research" target="_blank" rel="noopener">14</a>：protect the hypervisor</td>
+<td>15 ：monitoring the cloud platform</td>
+<td></td>
+</tr>
+<tr>
+<td>硬件信任根</td>
+<td>17 25 33 34 35</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://www.zhihu.com/question/19790488/answer/19290308" target="_blank" rel="noopener">什么是彩虹表？</a> </p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>TPM</tag>
+        <tag>Security</tag>
+        <tag>Cloud Computing</tag>
+        <tag>可信计算</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
     <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
     <content><![CDATA[<div class="table-container">
@@ -332,178 +507,109 @@
       </tags>
   </entry>
   <entry>
-    <title>Applying TPM to Cloud</title>
-    <url>/2020/10/12/Applying-TPM-to-Cloud/</url>
+    <title>CloudMon</title>
+    <url>/2020/09/14/CloudMon/</url>
     <content><![CDATA[<div class="table-container">
 <table>
 <thead>
 <tr>
 <th style="text-align:center">序号</th>
-<th style="text-align:left">属性</th>
+<th style="text-align:center">属性</th>
 <th style="text-align:center">内容</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:center">1</td>
-<td style="text-align:left">原文PDF</td>
-<td style="text-align:center"><a href="https://onlinelibrary.wiley.com/doi/pdf/10.1002/spy2.93" target="_blank" rel="noopener">Survey</a></td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href>CloudMon</a></td>
 </tr>
 <tr>
 <td style="text-align:center">2</td>
-<td style="text-align:left">作者信息</td>
-<td style="text-align:center"></td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"><a href="https://chuliangweng.github.io/" target="_blank" rel="noopener">Cl.W</a></td>
 </tr>
 <tr>
 <td style="text-align:center">3</td>
-<td style="text-align:left">核心内容</td>
-<td style="text-align:center">调研了13年至18年的近120篇文献，且这些论文都利用TPM提高云计算安全。</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">这篇文章信任hypervisor并在此基础上对guestVM进行保护，主要是从内存角度出发，针对rootkit攻击进行运行时检测。</td>
 </tr>
 <tr>
 <td style="text-align:center">4</td>
-<td style="text-align:left">研究领域</td>
-<td style="text-align:center">可信计算</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">System Security; Virtual Machine</td>
 </tr>
 <tr>
 <td style="text-align:center">5</td>
-<td style="text-align:left">全文总览</td>
-<td style="text-align:center">本文对TPM在云计算安全方面进行的细致的调研，并结合调研结果认为TPM在云计算安全的保护领域具有很大的趋势。</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文构造一个动态的监控架构，并在此基础上保证guest VM 运行时的安全性，主要功能是在客户虚拟机中检测出rootkits攻击。</td>
 </tr>
 </tbody>
 </table>
 </div>
-<h3 id="Paper-Source"><a href="#Paper-Source" class="headerlink" title="Paper Source"></a>Paper Source</h3><p><img src="/2020/10/12/Applying-TPM-to-Cloud/sources.png" width="500"></p>
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/papercountry.png" width="500"></p>
-<font color="DodgerBlue"> Paper Structure </font>
+<p>​        本文构建了一个动态的监控架构，运行在特权级别，通过对guestVM内存的扫描，检测客户机是否受到rootkit攻击，从而保证guestVM的运行时安全性。利用虚拟化技术对客户机内存进行实时监控，且这些监控对于客户机是透明的，为了实现检测的有效与高效，本系统在性能和安全之间权衡。</p>
+<h4 id="Rootkit-攻击"><a href="#Rootkit-攻击" class="headerlink" title="Rootkit 攻击 "></a><font color="blue"><strong>Rootkit 攻击</strong> </font></h4><p>​        rootkit 能够以特权级指令访问 host，并且可以通过对系统进行更改隐藏自己的存在。</p>
+<p>​        检测rootkit，最好是对客户机透明，不更改客户机系统的前提下对其进行检测。</p>
+<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        假设VMM（hypervisor）与priviliged VM  是可信的，guest VM 会受到攻击，在开机阶段的安全性受到VMM的保护，并且对guest VM的攻击不会对privileged VM 的安全性造成影响。</p>
+<p>（有些保护是针对VMM的，但是这不在本文的考虑范围内，本文聚焦在对客户机的保护上）</p>
+<h3 id="CloudMon-系统设计"><a href="#CloudMon-系统设计" class="headerlink" title="CloudMon 系统设计"></a>CloudMon 系统设计</h3><p>​        目的是实现一个可以访问较低权限级别内存信息、检测潜在的攻击并且可以保证检测的实时性与系统性能。访问内存的操作实现是基于 Xen的xenctrl 库，这个库能够读取较低权限的内存（如guest VM的内存信息）。</p>
+<p>​        构建一个guest VM 内存的监控器，目标是对VM透明、高效且是瞬时性的，这种方式可行性是因为攻击者对VM内存任何的更改都是可见的。CloudMon扫描内核memory与寄存器，从而可以实时的检测内存状态变化。这是一个特权级别的VM，能够通过VMM访问其他VMs的内存信息，而不是单纯的一个安全的guest VM。</p>
+<p><img src="/2020/09/14/CloudMon/CloudMonArchitecture.png" width="400px" height="240px"></p>
+<p>​        从云中大量的攻击实例中提取rootkit攻击特征，并将该特征记录在Feature Lib中，通过比较RT Value 与 SV Table 中数值的差异情况，可以检测出系统调用表中的攻击情况，设置较小的检测时间间隔，可以近似实时的检测嵌入内核的 rootkit ，通过设置检测的时间间隔，可以控制性能开销。并且CloudMon会直接检索其内存，因此，包括DKSM 和Shadow Walker 在内的任何来宾内核rootkit都不会欺骗CloudMon。 </p>
+<font color="green">**获取开始地址信息**</font>
 
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Summary.png" width="600"></p>
-<h3 id="Answering-the-Following-Question"><a href="#Answering-the-Following-Question" class="headerlink" title="Answering the Following Question"></a>Answering the Following Question</h3><h4 id="RQ1-For-what-purposes-is-TPM-used-in-the-cloud"><a href="#RQ1-For-what-purposes-is-TPM-used-in-the-cloud" class="headerlink" title="RQ1: For what purposes is TPM used in the cloud?"></a>RQ1: For what purposes is TPM used in the cloud?</h4><blockquote>
-<p><strong>TPM 在云中的作用是什么？为什么要用到TPM？</strong></p>
-</blockquote>
-<h4 id="RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud"><a href="#RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud" class="headerlink" title="RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?"></a>RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?</h4><blockquote>
-<p><strong>TPM的确缓解了的云中的哪些攻击？</strong></p>
-</blockquote>
-<h4 id="RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？"><a href="#RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？" class="headerlink" title="RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？"></a>RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？</h4><blockquote>
-<p><strong>完整性度量的组件到底是什么？云中完整性度量的解释是什么？</strong></p>
-</blockquote>
-<h4 id="RQ4-At-what-level-are-TPM-primitives-invoked"><a href="#RQ4-At-what-level-are-TPM-primitives-invoked" class="headerlink" title="RQ4: At what level are TPM primitives invoked?"></a>RQ4: At what level are TPM primitives invoked?</h4><blockquote>
-<p><strong>TPM被调用的级别是什么？</strong></p>
-</blockquote>
-<h4 id="RQ5-At-which-phase-are-the-TPM-features-used"><a href="#RQ5-At-which-phase-are-the-TPM-features-used" class="headerlink" title="RQ5: At which phase are the TPM features used?"></a>RQ5: At which phase are the TPM features used?</h4><blockquote>
-<p><strong>在什么阶段用到了TPM？</strong><br><strong>A：boot time, run time and both.</strong></p>
-</blockquote>
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Phase.png"></p>
-<h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>​        可信计算利用硬件信任根以及与之关联的软件构建可信环境，提供信任和隐私保护。TPM这个模块，提供安全启动、远程验证、完整性检测以及机密功能。2011年发布了TPM1.2版本，2016年公布了TPM2.0版本。</p>
-<p>​        远程证明是可信计算技术提供的主要功能，它将信任逐步从较低级别扩展到较高级别和应用程序。 这被称为信任链。 在信任链方案中，所有将要加载的组件都被认为是不可信的，因此，在加载之前需要对其进行测量。 TPM包含平台配置寄存器（PCR）受保护的内存位置，该位置存储敏感的安全信息（例如测量信息）。</p>
-<p>​        除了强大的隔离存储，TPM还拥有用于加密操作的唯一认可密钥（EK）。该密钥是在TPM制造时生成的，密钥的私有部分永远不会离开TPM。 在远程认证时，为了保护平台身份的私密性，使用了认证身份密钥（AIK）。 当平台（证明者）收到（来自验证者的）远程证明请求时，它会发送一个完整性报告，该报告由PCR值及其数字签名（由AIK计算）组成。 由于AIK的私有部分从未离开过TPM，因此可以保证报告的完整性和真实性。</p>
-<p>​        初步理解，TPM有几种存在模式，比如：以芯片方式存在电脑主板上或者以firmware形式存在于BIOS中。</p>
-<h4 id="The-Aims-of-TPM"><a href="#The-Aims-of-TPM" class="headerlink" title="The Aims of TPM"></a>The Aims of TPM</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TPMAims.png" width="500" height="280"></p>
-<font color="DodgerBlue"> 远程验证（Remote Attestation ）</font>
-
-<blockquote>
-<ol>
-<li>请求验证者向被验证者发送验证请求，这个请求中包括 <em>nonce</em><sup><a href="#fn_1" id="reffn_1">1</a></sup> ，目的是防止重播攻击（Replay attack）</li>
-<li>接收到验证请求的一方向自己的TPM提出验证请求，TPM验证自身需要度量的模块</li>
-<li>验证后的结果发送给远端的验证发起者（发起者要验证(a)TPM 的真实性(b) 发送数值的真实性）</li>
-</ol>
-</blockquote>
-<font color="DodgerBlue"> 完整性度量 （Integrity Measurement）</font>
-
-<blockquote>
-<p>TPM计算并存储不同组件的哈希值，并将这些哈希值在哈希链中进行转换，并将结果与已经存储的数值相比较。<br>完整性度量分为静态与动态两种类型：<br>        静态：保证在运行之前没有发生篡改<br>        动态：保证在运行过程中没有发生恶意篡改</p>
-</blockquote>
-<font color="DodgerBlue"> Generation and secure storage ofkeys</font>
-
-<blockquote>
-<p>生成随机秘钥的方法：种子、随机数生成器、直接导入TPM中。<br>生成的秘钥保存在TPM中</p>
-</blockquote>
-<font color="DodgerBlue"> Trusted boot</font>
-
-<blockquote>
-<p>在开机时，TPM会检查硬件、软件、固件组件的异同，保证在启动系统之前的环境是可信的。</p>
-<p>本文的参考文献 [14] 利用TPM的可信启动构造一个可信的环境，保证在开机过程中没有恶意入侵。<br>[15] 提出一个用于监控整个云平台的框架，可信启动保证被监控环境的完整性，既对云中租户也是针对云供应商。</p>
-</blockquote>
-<font color="DodgerBlue"> Hardware root of trust</font>
-
-<blockquote>
-<p>信任根是可以在密码系统中信任的来源，加密安全依赖于秘钥来进行加密解密与生成或者验证数字签名，因此，在这种系统中包括不易损坏的硬件模块，并且提供了一定程度的信任保障。<br>TPM可以提供硬件信任根、提供开机与运行时的完整性度量并且保护度量结果。</p>
-</blockquote>
-<h4 id="Security-Threats"><a href="#Security-Threats" class="headerlink" title="Security Threats"></a>Security Threats</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TopThreats.png" width="380" height="500"></p>
-<h4 id="The-level-of-TPM-invoking"><a href="#The-level-of-TPM-invoking" class="headerlink" title="The level of TPM invoking"></a>The level of TPM invoking</h4><font color="DodgerBlue"> Hardware </font>
-
-<blockquote>
-<p>在IoT和云计算等分布式系统模型中，主机平台的安全性至关重要，因为它托管着存储或处理（大量）数据。 TPM是一种用于平台身份验证以及验证其完整性的强大解决方案。在参考文献90中提出的解决方案中，扩展了HCloud（用于医疗保健数据的私有云），并且TPM嵌入在主机平台上以对客户端进行身份验证，并测量静态和动态完整性。讨论了可信云可以提供外部认证服务并进行内部可信调度。提供给外部的每个服务都有一个唯一的映像/进程在内存中运行。加载到内存时，需要验证此过程。可以使用TPM执行静态测量，以验证存储在物理存储库中的文件和软件包。同样，使用TPM签名保护数据库的完整性，以提供硬件级别的安全性。对于过程的动态完整性测量，TPM PCR用于存储和显示逐步的测量值。 Yang等[86]提出了一种设计，旨在为客户提供有关存储在云中的数据的新鲜度，有效性和完整性的保证。为了实现此目标，他们在不受信任的服务器上使用受信任的硬件设备，使客户端能够验证其数据的新鲜度和完整性。在系统运行之前，需要验证平台是否以受信任的方式启动。参考文献91讨论TPM是衡量启动过程和确定平台启动完整性的关键步骤的信任基础。在虚拟环境中，TPM提供了根植于硬件的信任链，该信任链将扩展到虚拟机管理程序。如果关键组件（例如BIOS，固件和虚拟机管理程序）已证明其完整性，则可以确保平台引导的完整性。为了确保启动组件的完整性，需要执行两个步骤：首先，测量引导过程，其次，进行证明，即保证和已执行的组件是受信任的组件。</p>
-</blockquote>
-<font color="DodgerBlue"> Hypervisor </font>
-
-<blockquote>
-<p>本文参考文献28构造了基于Xen的迁移框架：</p>
-<p>Xen虚拟机管理程序的安全迁移框架。该设计使用可信计算和相邻完整性度量来动态监视相邻虚拟机管理程序的完整性。更具体地说，为确保始终监视主机，当主机初始化时，TPM模块会验证虚拟机监控程序并将更新消息发送到完整性验证表（该表包含受信任的虚拟机监控程序列表），并将该虚拟机监控程序标记为受信任的。这意味着，如果未收到此类消息，则认为该特定的管理程序不可信。此外，系统会动态监控虚拟机监控程序的运行状态，如果虚拟机监控程序遭到破坏，则会发送相应的更新消息以报告受到破坏的情况。根据此完整性表的结果，确定源虚拟机管理程序是否受信任以及是否应启动VM迁移过程。</p>
-</blockquote>
-<h4 id="Phase-of-integrity-measurement"><a href="#Phase-of-integrity-measurement" class="headerlink" title="Phase of integrity measurement"></a>Phase of integrity measurement</h4><font color="DodgerBlue"> Boot time </font>
-
-<blockquote>
-<p>可信平台技术追求的原则之一是在关键组件加载和执行之前验证它们的信任和完整性。因此，在运行时完整性检查之前，需要确保正确引导了系统并且正在运行适当的操作系统。受信任的平台通过创建信任链来实现这种信任，该信任链以BIOS引导块中的受信任代码（CRTM）为核心信任根。 CRTM衡量其他实体的完整性价值，并且在平台的整个生命周期内保持不变。 CRTM是普通BIOS的补充，它首先运行以测量BIOS块和硬件，然后将控制权传递给引导加载程序。然后在将控件传递给OS之前测量OS内核映像。在此引导过程的每个步骤中，都会获取测量值，并据此扩展相关的TPM PCR值。该测量过程证明了系统的完整性，并确保引导和操作系统软件是制造商想要的版本，并且未被恶意第三方或恶意软件篡改。100Nanavati等人74指出，在虚拟环境中，可信引导技术允许用户证明基础启动平台的身份，并确保加载的虚拟化平台值得信赖。这为用户提供了有关可以向其提交关键数据的虚拟化平台的具体保证。 TPM通过使用加密原语为虚拟化平台提供此受信任的引导，并为其建立信任根。在ALIBI可信监视框架中，17 TPM用于在服务提供商平台上提供信任根。 TPM PCR记录平台上正在执行的软件的状态，并且由于PCR值仅是附加值，因此仅通过重新启动才能消除以前的记录。 TPM还拥有一个公共-私人密钥对。私钥仅保留在TPM的安全环境中，并用于计算TPM生成的证明值（从经过身份验证的启动累积的度量）的签名。使用TPM的公钥，外部验证程序可以检查签名的有效性，并推断出PCR值表示平台软件的状态。</p>
-</blockquote>
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>​        本文所统计并分析了120篇文献后，认为TPM技术在云中应用是一种趋势。在云中TPM技术的主要目标是远程验证以及完整性度量。本文主要分析了TPM的功能，TPM可应对云中的安全威胁，TPM提供完整性度量的阶段以及层次并指出了留有的研究空间，最后指出主要的研究差距。</p>
-<blockquote id="fn_1">
-<sup>1</sup>. 在加密技术中的初始向量和加密散列函数都发挥着重要作用，在各类验证协议的通信应用中确保验证信息不被重复使用以对抗重放攻击(Replay Attack)<a href="#reffn_1" title="Jump back to footnote [1] in the text."> &#8617;</a>
-</blockquote>
-<h3 id="引文延伸阅读"><a href="#引文延伸阅读" class="headerlink" title="引文延伸阅读"></a>引文延伸阅读</h3><p>Here are the papers worth reading further.</p>
-<div class="table-container">
+<p>​        KV Searcher查找 guest VM 系统调用的起始地址，SV generator 通过扫描，比对通过大量OS攻击实例中获取到的攻击特征，从而可以判断出被攻击者。</p>
+<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a><font color="blue"><strong>实验环境</strong></font></h4><div class="table-container">
 <table>
 <thead>
 <tr>
-<th>theme</th>
-<th>Reference Number &amp; Summary</th>
-<th>Reference Number &amp; Summary</th>
-<th>more</th>
+<th>Xen</th>
+<th>priviliged VM</th>
+<th>guest VM</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>远程验证</td>
-<td>6：TPM进行远程验证VMs</td>
-<td>7：验证用户所在地理位置</td>
-<td></td>
-</tr>
-<tr>
-<td>完整性度量</td>
-<td>10：多用户环境中数据拥有完整性</td>
-<td>11：动态的完成性度量的模型（Xen）</td>
-<td>8、9</td>
-</tr>
-<tr>
-<td>生成秘钥安全存储</td>
-<td>12</td>
-<td>13</td>
-<td></td>
-</tr>
-<tr>
-<td>安全启动</td>
-<td><a href="https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=2969&amp;context=sis_research" target="_blank" rel="noopener">14</a>：protect the hypervisor</td>
-<td>15 ：monitoring the cloud platform</td>
-<td></td>
-</tr>
-<tr>
-<td>硬件信任根</td>
-<td>17 25 33 34 35</td>
-<td></td>
+<td>Xen-3.4.2</td>
+<td>Ubuntu 9.04</td>
+<td>Ubuntu 8.04</td>
 </tr>
 </tbody>
 </table>
 </div>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://www.zhihu.com/question/19790488/answer/19290308" target="_blank" rel="noopener">什么是彩虹表？</a> </p>
+<p>已经存在的检测方式：</p>
+<ol>
+<li><p>获取guest OS的system.map信息</p>
+</li>
+<li><p>one-on-one 运行在guest VM上</p>
+</li>
+</ol>
+<h3 id="相关工作介绍"><a href="#相关工作介绍" class="headerlink" title="相关工作介绍"></a>相关工作介绍</h3><p>本文将对VM的保护机制分为了 out-of-VM  与 in-VM两种</p>
+<p>A类：out-of-VM</p>
+<ol>
+<li><p>利用受信任的VM充当监控器。OSck,是一种one-on-one的监控模式</p>
+</li>
+<li><p>XenKIMONO 在VM中聚集信息时会暂停OS的执行</p>
+</li>
+<li><p>vIPS 通过预先设置，这种检测规则需要有固定的检测时间间隔</p>
+</li>
+</ol>
+<p>B类：in-VM</p>
+<ol>
+<li><p>硬件虚拟化技术</p>
+</li>
+<li><p>Lares 在guest VM 中内置hooks（钩子函数）实时的检测虚拟机的安全（事件检测）</p>
+</li>
+</ol>
 ]]></content>
       <categories>
         <category>paper</category>
-        <category>Security and Privacy</category>
+        <category>TC</category>
       </categories>
       <tags>
-        <tag>TPM</tag>
-        <tag>Security</tag>
-        <tag>Cloud Computing</tag>
-        <tag>可信计算</tag>
+        <tag>论文解读</tag>
+        <tag>Virtual Machine</tag>
+        <tag>System Security</tag>
       </tags>
   </entry>
   <entry>
@@ -708,7 +814,7 @@
 </tbody>
 </table>
 </div>
-<h3 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h3><h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><h4 id="为什么会出现这种问题"><a href="#为什么会出现这种问题" class="headerlink" title="为什么会出现这种问题"></a>为什么会出现这种问题</h4><h3 id="虚拟机退出？"><a href="#虚拟机退出？" class="headerlink" title="虚拟机退出？"></a>虚拟机退出？</h3><h3 id="嵌套虚拟化？"><a href="#嵌套虚拟化？" class="headerlink" title="嵌套虚拟化？"></a>嵌套虚拟化？</h3><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3>]]></content>
+<h3 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h3><h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><h4 id="为什么会出现这种问题"><a href="#为什么会出现这种问题" class="headerlink" title="为什么会出现这种问题"></a>为什么会出现这种问题</h4><h3 id="虚拟机退出？"><a href="#虚拟机退出？" class="headerlink" title="虚拟机退出？"></a>虚拟机退出？</h3><h3 id="嵌套虚拟化？"><a href="#嵌套虚拟化？" class="headerlink" title="嵌套虚拟化？"></a>嵌套虚拟化？</h3><h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3>]]></content>
       <categories>
         <category>paper</category>
         <category>Security</category>
@@ -717,112 +823,6 @@
         <tag>论文解读</tag>
         <tag>Untrusted Hypervisor</tag>
         <tag>Virtualization</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CloudMon</title>
-    <url>/2020/09/14/CloudMon/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href>CloudMon</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"><a href="https://chuliangweng.github.io/" target="_blank" rel="noopener">Cl.W</a></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">这篇文章信任hypervisor并在此基础上对guestVM进行保护，主要是从内存角度出发，针对rootkit攻击进行运行时检测。</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">System Security; Virtual Machine</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文构造一个动态的监控架构，并在此基础上保证guest VM 运行时的安全性，主要功能是在客户虚拟机中检测出rootkits攻击。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>​        本文构建了一个动态的监控架构，运行在特权级别，通过对guestVM内存的扫描，检测客户机是否受到rootkit攻击，从而保证guestVM的运行时安全性。利用虚拟化技术对客户机内存进行实时监控，且这些监控对于客户机是透明的，为了实现检测的有效与高效，本系统在性能和安全之间权衡。</p>
-<h4 id="Rootkit-攻击"><a href="#Rootkit-攻击" class="headerlink" title="Rootkit 攻击 "></a><font color="blue"><strong>Rootkit 攻击</strong> </font></h4><p>​        rootkit 能够以特权级指令访问 host，并且可以通过对系统进行更改隐藏自己的存在。</p>
-<p>​        检测rootkit，最好是对客户机透明，不更改客户机系统的前提下对其进行检测。</p>
-<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        假设VMM（hypervisor）与priviliged VM  是可信的，guest VM 会受到攻击，在开机阶段的安全性受到VMM的保护，并且对guest VM的攻击不会对privileged VM 的安全性造成影响。</p>
-<p>（有些保护是针对VMM的，但是这不在本文的考虑范围内，本文聚焦在对客户机的保护上）</p>
-<h3 id="CloudMon-系统设计"><a href="#CloudMon-系统设计" class="headerlink" title="CloudMon 系统设计"></a>CloudMon 系统设计</h3><p>​        目的是实现一个可以访问较低权限级别内存信息、检测潜在的攻击并且可以保证检测的实时性与系统性能。访问内存的操作实现是基于 Xen的xenctrl 库，这个库能够读取较低权限的内存（如guest VM的内存信息）。</p>
-<p>​        构建一个guest VM 内存的监控器，目标是对VM透明、高效且是瞬时性的，这种方式可行性是因为攻击者对VM内存任何的更改都是可见的。CloudMon扫描内核memory与寄存器，从而可以实时的检测内存状态变化。这是一个特权级别的VM，能够通过VMM访问其他VMs的内存信息，而不是单纯的一个安全的guest VM。</p>
-<p><img src="/2020/09/14/CloudMon/CloudMonArchitecture.png" width="400px" height="240px"></p>
-<p>​        从云中大量的攻击实例中提取rootkit攻击特征，并将该特征记录在Feature Lib中，通过比较RT Value 与 SV Table 中数值的差异情况，可以检测出系统调用表中的攻击情况，设置较小的检测时间间隔，可以近似实时的检测嵌入内核的 rootkit ，通过设置检测的时间间隔，可以控制性能开销。并且CloudMon会直接检索其内存，因此，包括DKSM 和Shadow Walker 在内的任何来宾内核rootkit都不会欺骗CloudMon。 </p>
-<font color="green">**获取开始地址信息**</font>
-
-<p>​        KV Searcher查找 guest VM 系统调用的起始地址，SV generator 通过扫描，比对通过大量OS攻击实例中获取到的攻击特征，从而可以判断出被攻击者。</p>
-<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a><font color="blue"><strong>实验环境</strong></font></h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>Xen</th>
-<th>priviliged VM</th>
-<th>guest VM</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Xen-3.4.2</td>
-<td>Ubuntu 9.04</td>
-<td>Ubuntu 8.04</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>已经存在的检测方式：</p>
-<ol>
-<li><p>获取guest OS的system.map信息</p>
-</li>
-<li><p>one-on-one 运行在guest VM上</p>
-</li>
-</ol>
-<h3 id="相关工作介绍"><a href="#相关工作介绍" class="headerlink" title="相关工作介绍"></a>相关工作介绍</h3><p>本文将对VM的保护机制分为了 out-of-VM  与 in-VM两种</p>
-<p>A类：out-of-VM</p>
-<ol>
-<li><p>利用受信任的VM充当监控器。OSck,是一种one-on-one的监控模式</p>
-</li>
-<li><p>XenKIMONO 在VM中聚集信息时会暂停OS的执行</p>
-</li>
-<li><p>vIPS 通过预先设置，这种检测规则需要有固定的检测时间间隔</p>
-</li>
-</ol>
-<p>B类：in-VM</p>
-<ol>
-<li><p>硬件虚拟化技术</p>
-</li>
-<li><p>Lares 在guest VM 中内置hooks（钩子函数）实时的检测虚拟机的安全（事件检测）</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>TC</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>System Security</tag>
-        <tag>Virtual Machine</tag>
       </tags>
   </entry>
   <entry>
@@ -874,6 +874,28 @@
       <tags>
         <tag>论文解读</tag>
         <tag>Homomorphic</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
+    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
+    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
+<ul>
+<li><strong>Active Monitoring（Synchronous）</strong></li>
+</ul>
+<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
+<ul>
+<li><strong>Passive Monitoring （Asynchronous）</strong></li>
+</ul>
+<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>虚拟化安全</tag>
       </tags>
   </entry>
   <entry>
@@ -1059,28 +1081,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
-    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
-    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
-<ul>
-<li><strong>Active Monitoring（Synchronous）</strong></li>
-</ul>
-<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
-<ul>
-<li><strong>Passive Monitoring （Asynchronous）</strong></li>
-</ul>
-<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>虚拟化安全</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PUBG JNG</title>
     <url>/2020/04/18/PUBG-JNG/</url>
     <content><![CDATA[<h3 id="JNG战队发展历程回顾"><a href="#JNG战队发展历程回顾" class="headerlink" title="JNG战队发展历程回顾"></a>JNG战队发展历程回顾</h3><h4 id="JNG初次相遇"><a href="#JNG初次相遇" class="headerlink" title="JNG初次相遇"></a>JNG初次相遇</h4><p>很久很久以前，这支战队的几个骚年游荡在这样一个空旷的平原上</p>
@@ -1125,18 +1125,6 @@
       <tags>
         <tag>game-for-peace</tag>
         <tag>JNG</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>RADAR</title>
-    <url>/2020/07/18/RADAR/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -1219,6 +1207,18 @@
       <tags>
         <tag>Virtual Machine</tag>
         <tag>Hypervisor</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RADAR</title>
+    <url>/2020/07/18/RADAR/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -1323,6 +1323,26 @@
       <tags>
         <tag>论文解读</tag>
         <tag>Detection</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Systematic Review on FHE</title>
+    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>The first blog</title>
+    <url>/2020/04/18/The-first-blog/</url>
+    <content><![CDATA[<h3 id="The-first-bolg"><a href="#The-first-bolg" class="headerlink" title="The first bolg"></a>The first bolg</h3><p>Hello，this is my first bolg of github.io.</p>
+<p>I tried for about 12 hours to set up this simple website, right now, the author(me) still feel awsome.</p>
+<p>I have written some technology blogs in <a href="https://www.cnblogs.com/Robin5/" target="_blank" rel="noopener">Robin5</a>.</p>
+<p>Seize the time and face the bright future！</p>
+<p>I will work harder and harder!</p>
+<p>Witness me in github.io</p>
+]]></content>
+      <tags>
+        <tag>英文</tag>
+        <tag>essay</tag>
       </tags>
   </entry>
   <entry>
@@ -1464,26 +1484,6 @@
       <tags>
         <tag>essay</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>The first blog</title>
-    <url>/2020/04/18/The-first-blog/</url>
-    <content><![CDATA[<h3 id="The-first-bolg"><a href="#The-first-bolg" class="headerlink" title="The first bolg"></a>The first bolg</h3><p>Hello，this is my first bolg of github.io.</p>
-<p>I tried for about 12 hours to set up this simple website, right now, the author(me) still feel awsome.</p>
-<p>I have written some technology blogs in <a href="https://www.cnblogs.com/Robin5/" target="_blank" rel="noopener">Robin5</a>.</p>
-<p>Seize the time and face the bright future！</p>
-<p>I will work harder and harder!</p>
-<p>Witness me in github.io</p>
-]]></content>
-      <tags>
-        <tag>essay</tag>
-        <tag>英文</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Systematic Review on FHE</title>
-    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>The outline of Outlier</title>
@@ -1844,6 +1844,50 @@
       </tags>
   </entry>
   <entry>
+    <title>Xen log modify 脚本简化操作</title>
+    <url>/2020/08/05/Xen-log-modify-%E8%84%9A%E6%9C%AC%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><p>目标用户ID与ip: </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root:101.101.101.10</span><br></pre></td></tr></table></figure>
+<p>第一个脚本文件</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">scp test.txt root@<span class="number">101.101</span><span class="number">.101</span><span class="number">.10</span>:/home/</span><br></pre></td></tr></table></figure>
+<h4 id="执行权限"><a href="#执行权限" class="headerlink" title="执行权限"></a>执行权限</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">chmod +x ./test.sh  <span class="comment">#使脚本具有执行权限</span></span><br><span class="line">./test.sh  <span class="comment">#执行脚本</span></span><br></pre></td></tr></table></figure>
+<h4 id="自动输入密码"><a href="#自动输入密码" class="headerlink" title="自动输入密码"></a>自动输入密码</h4><p>免密登陆</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-copy-id -i ~&#x2F;.ssh&#x2F;id_rsa.pub user@ip</span><br></pre></td></tr></table></figure>
+<h4 id="获取当前目录"><a href="#获取当前目录" class="headerlink" title="获取当前目录"></a>获取当前目录</h4><p>获取当前目录</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br></pre></td></tr></table></figure>
+<h3 id="修改文件实战"><a href="#修改文件实战" class="headerlink" title="修改文件实战"></a>修改文件实战</h3><h4 id="目录说明"><a href="#目录说明" class="headerlink" title="目录说明"></a>目录说明</h4><blockquote>
+<p>脚本所在目录 /xen-modify/</p>
+<p>其中 <code>*.sh</code> 文件是要执行的脚本文件，<code>*.c *.h</code> 是在本地（最终文件是要覆盖在服务器上的）修改后的文件。</p>
+<p>└──xen<br>└── xen-modify<br>   │    ├── backup.sh<br>   │    ├── hypercall.h<br>   │    ├── install-lib.sh<br>   │    ├── install-xen.sh<br>   │    ├── mm.c<br>   │    ├── move.sh<br>   │    ├── privcmd.c<br>   │    ├── pv<br>   │    │  └── hypercall.c<br>   │    ├── x86<br>   │    │  └── hypercall.c<br>   │    └── xen.h</p>
+</blockquote>
+<h4 id="backup-sh"><a href="#backup-sh" class="headerlink" title="backup.sh"></a>backup.sh</h4><blockquote>
+<p>​        backup的目的是备份即将被修改的文件，目标文件的位置在xen文件夹内，<code>backup.sh</code> 文件在<code>xen-modify</code> 文件夹内，在获得当前目录后，需要依次进入目标文件所在目录，对文件进行备份。<br>​        因为是对原始文件进行备份，所以在执行此操作时，仅在首次备份时执行，以后不执行。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/include/public/</span><br><span class="line">cp xen.h xen-backup.h</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp hypercall.c hypercall-backup.c</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/pv/</span><br><span class="line">cp hypercall.c hypercall-backup.c</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/include/xen/</span><br><span class="line">cp hypercall.h hypercall-backup.h</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp mm.c mm-backup.c</span><br></pre></td></tr></table></figure>
+<h4 id="install-xen-sh"><a href="#install-xen-sh" class="headerlink" title="install-xen.sh"></a>install-xen.sh</h4><blockquote>
+<p>这里只需要进入<code>xen</code> 目录一次就可以进行操作，所以直接使用 <code>cd ../xen</code> 进入目标目录。</p>
+<p>这一步是在编译<code>xen</code> 源码的时候进行的。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd ../xen</span><br><span class="line">./configure</span><br><span class="line">make xen -j8</span><br><span class="line">make tools -j8</span><br><span class="line">make install-xen</span><br><span class="line">make install-tools</span><br><span class="line">update-grub</span><br></pre></td></tr></table></figure>
+<h4 id="install-lib-sh"><a href="#install-lib-sh" class="headerlink" title="install-lib.sh"></a>install-lib.sh</h4><blockquote>
+<p>搭建 <code>xen</code> 的依赖。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">apt-get install build-essential -y</span><br><span class="line">apt-get install bcc bin86 gawk bridge-utils iproute libcurl3 libcurl4-openssl-dev bzip2 transfig tgif  -y</span><br><span class="line">apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial -y</span><br><span class="line">apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev -y</span><br><span class="line">apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev -y</span><br><span class="line">apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc -y</span><br><span class="line">apt-get build-dep xen -y</span><br></pre></td></tr></table></figure>
+<h4 id="move-sh"><a href="#move-sh" class="headerlink" title="move.sh"></a>move.sh</h4><blockquote>
+<p>将<code>xen-modify</code> 文件夹下的文件依次覆盖原始文件。</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br><span class="line"></span><br><span class="line">cp xen.h /$&#123;workdir&#125;/../xen/xen/include/public/</span><br><span class="line">cp x86/hypercall.c /$&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp pv/hypercall.c /$&#123;workdir&#125;/../xen/xen/arch/x86/pv/</span><br><span class="line">cp hypercall.h /$&#123;workdir&#125;/../xen/xen/include/xen/</span><br><span class="line">cp mm.c /$&#123;workdir&#125;/../xen/xen/arch/x86/</span><br></pre></td></tr></table></figure>
+<hr>
+<p>modify log</p>
+<p>​    2020年8月5日      创建<br>​    2020年9月30日    增加<code>xen</code> 的脚本命令</p>
+]]></content>
+      <tags>
+        <tag>Xen log</tag>
+        <tag>Linux</tag>
+        <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>RAMBleed Reading Bits in Memory Without Accessing Them</title>
     <url>/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/</url>
     <content><![CDATA[<div class="table-container">
@@ -1944,47 +1988,13 @@
       </tags>
   </entry>
   <entry>
-    <title>Xen log modify 脚本简化操作</title>
-    <url>/2020/08/05/Xen-log-modify-%E8%84%9A%E6%9C%AC%E7%AE%80%E5%8C%96%E6%93%8D%E4%BD%9C/</url>
-    <content><![CDATA[<h3 id="基本命令"><a href="#基本命令" class="headerlink" title="基本命令"></a>基本命令</h3><p>目标用户ID与ip: </p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">root:101.101.101.10</span><br></pre></td></tr></table></figure>
-<p>第一个脚本文件</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">scp test.txt root@<span class="number">101.101</span><span class="number">.101</span><span class="number">.10</span>:/home/</span><br></pre></td></tr></table></figure>
-<h4 id="执行权限"><a href="#执行权限" class="headerlink" title="执行权限"></a>执行权限</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">chmod +x ./test.sh  <span class="comment">#使脚本具有执行权限</span></span><br><span class="line">./test.sh  <span class="comment">#执行脚本</span></span><br></pre></td></tr></table></figure>
-<h4 id="自动输入密码"><a href="#自动输入密码" class="headerlink" title="自动输入密码"></a>自动输入密码</h4><p>免密登陆</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ssh-copy-id -i ~&#x2F;.ssh&#x2F;id_rsa.pub user@ip</span><br></pre></td></tr></table></figure>
-<h4 id="获取当前目录"><a href="#获取当前目录" class="headerlink" title="获取当前目录"></a>获取当前目录</h4><p>获取当前目录</p>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br></pre></td></tr></table></figure>
-<h3 id="修改文件实战"><a href="#修改文件实战" class="headerlink" title="修改文件实战"></a>修改文件实战</h3><h4 id="目录说明"><a href="#目录说明" class="headerlink" title="目录说明"></a>目录说明</h4><blockquote>
-<p>脚本所在目录 /xen-modify/</p>
-<p>其中 <code>*.sh</code> 文件是要执行的脚本文件，<code>*.c *.h</code> 是在本地（最终文件是要覆盖在服务器上的）修改后的文件。</p>
-<p>└──xen<br>└── xen-modify<br>   │    ├── backup.sh<br>   │    ├── hypercall.h<br>   │    ├── install-lib.sh<br>   │    ├── install-xen.sh<br>   │    ├── mm.c<br>   │    ├── move.sh<br>   │    ├── privcmd.c<br>   │    ├── pv<br>   │    │  └── hypercall.c<br>   │    ├── x86<br>   │    │  └── hypercall.c<br>   │    └── xen.h</p>
-</blockquote>
-<h4 id="backup-sh"><a href="#backup-sh" class="headerlink" title="backup.sh"></a>backup.sh</h4><blockquote>
-<p>​        backup的目的是备份即将被修改的文件，目标文件的位置在xen文件夹内，<code>backup.sh</code> 文件在<code>xen-modify</code> 文件夹内，在获得当前目录后，需要依次进入目标文件所在目录，对文件进行备份。<br>​        因为是对原始文件进行备份，所以在执行此操作时，仅在首次备份时执行，以后不执行。</p>
-</blockquote>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/include/public/</span><br><span class="line">cp xen.h xen-backup.h</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp hypercall.c hypercall-backup.c</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/pv/</span><br><span class="line">cp hypercall.c hypercall-backup.c</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/include/xen/</span><br><span class="line">cp hypercall.h hypercall-backup.h</span><br><span class="line"></span><br><span class="line">cd $&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp mm.c mm-backup.c</span><br></pre></td></tr></table></figure>
-<h4 id="install-xen-sh"><a href="#install-xen-sh" class="headerlink" title="install-xen.sh"></a>install-xen.sh</h4><blockquote>
-<p>这里只需要进入<code>xen</code> 目录一次就可以进行操作，所以直接使用 <code>cd ../xen</code> 进入目标目录。</p>
-<p>这一步是在编译<code>xen</code> 源码的时候进行的。</p>
-</blockquote>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">cd ../xen</span><br><span class="line">./configure</span><br><span class="line">make xen -j8</span><br><span class="line">make tools -j8</span><br><span class="line">make install-xen</span><br><span class="line">make install-tools</span><br><span class="line">update-grub</span><br></pre></td></tr></table></figure>
-<h4 id="install-lib-sh"><a href="#install-lib-sh" class="headerlink" title="install-lib.sh"></a>install-lib.sh</h4><blockquote>
-<p>搭建 <code>xen</code> 的依赖。</p>
-</blockquote>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">apt-get install build-essential -y</span><br><span class="line">apt-get install bcc bin86 gawk bridge-utils iproute libcurl3 libcurl4-openssl-dev bzip2 transfig tgif  -y</span><br><span class="line">apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial -y</span><br><span class="line">apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev -y</span><br><span class="line">apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev -y</span><br><span class="line">apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc -y</span><br><span class="line">apt-get build-dep xen -y</span><br></pre></td></tr></table></figure>
-<h4 id="move-sh"><a href="#move-sh" class="headerlink" title="move.sh"></a>move.sh</h4><blockquote>
-<p>将<code>xen-modify</code> 文件夹下的文件依次覆盖原始文件。</p>
-</blockquote>
-<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">workdir=$(cd $(dirname $0); pwd)</span><br><span class="line"></span><br><span class="line">cp xen.h /$&#123;workdir&#125;/../xen/xen/include/public/</span><br><span class="line">cp x86/hypercall.c /$&#123;workdir&#125;/../xen/xen/arch/x86/</span><br><span class="line">cp pv/hypercall.c /$&#123;workdir&#125;/../xen/xen/arch/x86/pv/</span><br><span class="line">cp hypercall.h /$&#123;workdir&#125;/../xen/xen/include/xen/</span><br><span class="line">cp mm.c /$&#123;workdir&#125;/../xen/xen/arch/x86/</span><br></pre></td></tr></table></figure>
-<hr>
-<p>modify log</p>
-<p>​    2020年8月5日      创建<br>​    2020年9月30日    增加<code>xen</code> 的脚本命令</p>
-]]></content>
+    <title>云虚拟化安全攻防实践</title>
+    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
+<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
+<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
       <tags>
-        <tag>Xen log</tag>
-        <tag>Linux</tag>
-        <tag>Shell</tag>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -2004,13 +2014,36 @@
       </tags>
   </entry>
   <entry>
-    <title>云虚拟化安全攻防实践</title>
-    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
-<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
-<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
+    <title>安全计算</title>
+    <url>/2020/08/15/%E5%AE%89%E5%85%A8%E8%AE%A1%E7%AE%97/</url>
+    <content><![CDATA[<h3 id="什么是安全计算"><a href="#什么是安全计算" class="headerlink" title="什么是安全计算"></a>什么是安全计算</h3><h4 id="安全计算"><a href="#安全计算" class="headerlink" title="安全计算"></a>安全计算</h4><p>安全多方计算，Secure Multi-party Computation（SMC）在保护数据安全的前提下实现多方计算，即，多个参与者将各自的数据凑在一起，并在这个大数据集上进行一定的计算，并得到最后的结果。</p>
+<h4 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h4><h5 id="1-基于噪音"><a href="#1-基于噪音" class="headerlink" title="1.基于噪音"></a>1.基于噪音</h5><p>差分隐私（differential privacy）对计算过程利用噪声干扰，让原始数据淹没在噪音中，使得在引入噪声的数据中心无法推断出原始数据。（例如一张马赛克图片，无法推断出具体细节）</p>
+<p>优点：效率高<br>缺点：得到的结果不够准确</p>
+<h5 id="2-非噪音法"><a href="#2-非噪音法" class="headerlink" title="2.非噪音法"></a>2.非噪音法</h5><p>（这种方式一般通过密码学方法将数据编码或者加密，得到一些奇怪的数字，而且这些数字有一些性质，比如看上去很随机，但是保留了原始数据的线性关系，或者在打乱顺序的数据中心能够发现其与原始数据的映射关系。）</p>
+<p>a.混淆电路（Garbled Circuit）</p>
+<p>b.同态加密（Homomorphic Encryption）</p>
+<p>c.秘钥分享（Secret Sharing）</p>
+<p>以上提到的三种方式一般在源头将数据加密，计算操作看到的数据是密文，只要特定的假设条件满足，这类方法在计算过程中是不会泄露原始信息的。</p>
+<p>优点：不会对计算过程添加干扰，因此得到的是准确值，且运用密码学理论，保障安全性<br>缺点：由于运用很多密码学方法，整个过程的计算量、通讯量很大，对于一些复杂的任务（训练几十个上百层的CNN）短时间内很难完成。</p>
+<h3 id="差分隐私"><a href="#差分隐私" class="headerlink" title="差分隐私"></a>差分隐私</h3><h3 id="混淆电路"><a href="#混淆电路" class="headerlink" title="混淆电路"></a>混淆电路</h3><h3 id="同态加密"><a href="#同态加密" class="headerlink" title="同态加密"></a>同态加密</h3><h3 id="秘钥分享"><a href="#秘钥分享" class="headerlink" title="秘钥分享"></a>秘钥分享</h3>]]></content>
       <tags>
-        <tag>读书笔记</tag>
+        <tag>Homomorphic</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>本科毕业游记</title>
+    <url>/2020/07/16/%E6%9C%AC%E7%A7%91%E6%AF%95%E4%B8%9A%E6%B8%B8%E8%AE%B0/</url>
+    <content><![CDATA[<p>当自己满怀负面情绪的时候，出去走走吧</p>
+<p>18年毕业季，对我来说，可能用诸事不顺形容更加贴切。这里不想再回顾那个至暗时刻了~略过500字</p>
+<p>在提交了本科毕业论文之后，跟舍友选择了去旅游，去闲逛。回忆起来，真的挺感谢那次远足。在游玩的时候，有时内心会有一种很强烈的声音在表达：世间如此美好，请继续相信并热爱美好的事情。其实当别人跟你在一起生活了很长时间之后，你的一举一动背后所掩盖的事实都会多多少少的被察觉吧，或悲或喜。非常感谢舍友们对自己的包容与尊重，如果当时真的在某些言语或行为上伤害过你们，真的很抱歉，记住一个人的好总好过记住一个人的坏。</p>
+<p>现在想想，那次旅行是自己成长最迅速的一段时光。懂得了很多，也体会了很多。初到上海时的激动掩盖了自己内心的伤楚，甚至创下了迄今为止单日步数记录。是初到上海的下里巴人，第一次感受到了什么叫繁华。交大与复旦的学子，让我感受到这个城市在文化上的包容与开放。深入灵隐感受那里的绝美景色，站在苏堤眺望西湖两岸，数次跨越钱塘江大桥，亲自挤一挤杭州的地铁也让自己对杭州有了深刻的印象。在绍兴的一间民宿鼓起勇气跟老外谈天侃地，这睡前的卧谈也给自己增加了不少自信心。英语说的烂，到底是谁遭罪？苏州、绍兴的旅途，亲身体会到了什么是江南水乡，那种只会出现在电视画面上的景色，竟然就在自己眼前，脚下，所泛小舟之旁。也许电子设备能够记录下景色，但无法转达自己身临其境的感受。最后一站，品过南京大排档后，跟高中同学去了当时梦寐以求的南京大学，涉足在南大的各个角落，跟南大学子一起篮球，仿佛获得一天的南大身份体验卡。夜幕降临，远去之时，梦也该醒了~</p>
+<p>这次的旅途过后，大家都在匆匆忙忙准备毕业的时候，我选择了再战名校。虽然这时显得跟整个学校的节奏不符，但比起之前浑浑噩噩的生活，这种逐梦并筑梦的日子更能让人铭记，更能拨动生命中响亮的音符。毕业论文答辩结束，导师惊讶的问我怎么没在考研光荣榜上看到我的名字，我不知道该如何面对这样一个始终对我抱有最大希望的老师；离校前一个月，准备租房子；离校前三周，准备6级考试；离校前两周，买下了全新备考资料，参加了6级考试，并见到了大三对我印象深刻（不听她讲课却能考近满分成绩的坏学生）的专业课老师，想对她说声对不起，老师，在你课上不是故意气你的；离校前一周，拿到了双证，见到了导员，真的很想对她说声谢谢，老师再见，但终未说出口。离校前3天，我花光了3个月的积蓄，算是买醉吧，那一段时间，是我四年里第一次跟这么多同学侃侃而谈，有的甚至是四年来第一次交流，原来那时的我在他们眼里还不算差，现在想想已经够欣慰了。6月24号，与母校彻底再见了~</p>
+<p>其实二战也没有想得那么复杂，干就完了。但真正难的是做出那个决定，鼓起勇气面对未知的挑战。</p>
+<p>我始终怀念并感激当年出去撒欢的自己</p>
+<p>2020年7月16日01:27:26 于济宁</p>
+]]></content>
+      <tags>
+        <tag>essay</tag>
       </tags>
   </entry>
   <entry>
@@ -2064,39 +2097,6 @@
       </tags>
   </entry>
   <entry>
-    <title>安全计算</title>
-    <url>/2020/08/15/%E5%AE%89%E5%85%A8%E8%AE%A1%E7%AE%97/</url>
-    <content><![CDATA[<h3 id="什么是安全计算"><a href="#什么是安全计算" class="headerlink" title="什么是安全计算"></a>什么是安全计算</h3><h4 id="安全计算"><a href="#安全计算" class="headerlink" title="安全计算"></a>安全计算</h4><p>安全多方计算，Secure Multi-party Computation（SMC）在保护数据安全的前提下实现多方计算，即，多个参与者将各自的数据凑在一起，并在这个大数据集上进行一定的计算，并得到最后的结果。</p>
-<h4 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h4><h5 id="1-基于噪音"><a href="#1-基于噪音" class="headerlink" title="1.基于噪音"></a>1.基于噪音</h5><p>差分隐私（differential privacy）对计算过程利用噪声干扰，让原始数据淹没在噪音中，使得在引入噪声的数据中心无法推断出原始数据。（例如一张马赛克图片，无法推断出具体细节）</p>
-<p>优点：效率高<br>缺点：得到的结果不够准确</p>
-<h5 id="2-非噪音法"><a href="#2-非噪音法" class="headerlink" title="2.非噪音法"></a>2.非噪音法</h5><p>（这种方式一般通过密码学方法将数据编码或者加密，得到一些奇怪的数字，而且这些数字有一些性质，比如看上去很随机，但是保留了原始数据的线性关系，或者在打乱顺序的数据中心能够发现其与原始数据的映射关系。）</p>
-<p>a.混淆电路（Garbled Circuit）</p>
-<p>b.同态加密（Homomorphic Encryption）</p>
-<p>c.秘钥分享（Secret Sharing）</p>
-<p>以上提到的三种方式一般在源头将数据加密，计算操作看到的数据是密文，只要特定的假设条件满足，这类方法在计算过程中是不会泄露原始信息的。</p>
-<p>优点：不会对计算过程添加干扰，因此得到的是准确值，且运用密码学理论，保障安全性<br>缺点：由于运用很多密码学方法，整个过程的计算量、通讯量很大，对于一些复杂的任务（训练几十个上百层的CNN）短时间内很难完成。</p>
-<h3 id="差分隐私"><a href="#差分隐私" class="headerlink" title="差分隐私"></a>差分隐私</h3><h3 id="混淆电路"><a href="#混淆电路" class="headerlink" title="混淆电路"></a>混淆电路</h3><h3 id="同态加密"><a href="#同态加密" class="headerlink" title="同态加密"></a>同态加密</h3><h3 id="秘钥分享"><a href="#秘钥分享" class="headerlink" title="秘钥分享"></a>秘钥分享</h3>]]></content>
-      <tags>
-        <tag>Homomorphic</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>本科毕业游记</title>
-    <url>/2020/07/16/%E6%9C%AC%E7%A7%91%E6%AF%95%E4%B8%9A%E6%B8%B8%E8%AE%B0/</url>
-    <content><![CDATA[<p>当自己满怀负面情绪的时候，出去走走吧</p>
-<p>18年毕业季，对我来说，可能用诸事不顺形容更加贴切。这里不想再回顾那个至暗时刻了~略过500字</p>
-<p>在提交了本科毕业论文之后，跟舍友选择了去旅游，去闲逛。回忆起来，真的挺感谢那次远足。在游玩的时候，有时内心会有一种很强烈的声音在表达：世间如此美好，请继续相信并热爱美好的事情。其实当别人跟你在一起生活了很长时间之后，你的一举一动背后所掩盖的事实都会多多少少的被察觉吧，或悲或喜。非常感谢舍友们对自己的包容与尊重，如果当时真的在某些言语或行为上伤害过你们，真的很抱歉，记住一个人的好总好过记住一个人的坏。</p>
-<p>现在想想，那次旅行是自己成长最迅速的一段时光。懂得了很多，也体会了很多。初到上海时的激动掩盖了自己内心的伤楚，甚至创下了迄今为止单日步数记录。是初到上海的下里巴人，第一次感受到了什么叫繁华。交大与复旦的学子，让我感受到这个城市在文化上的包容与开放。深入灵隐感受那里的绝美景色，站在苏堤眺望西湖两岸，数次跨越钱塘江大桥，亲自挤一挤杭州的地铁也让自己对杭州有了深刻的印象。在绍兴的一间民宿鼓起勇气跟老外谈天侃地，这睡前的卧谈也给自己增加了不少自信心。英语说的烂，到底是谁遭罪？苏州、绍兴的旅途，亲身体会到了什么是江南水乡，那种只会出现在电视画面上的景色，竟然就在自己眼前，脚下，所泛小舟之旁。也许电子设备能够记录下景色，但无法转达自己身临其境的感受。最后一站，品过南京大排档后，跟高中同学去了当时梦寐以求的南京大学，涉足在南大的各个角落，跟南大学子一起篮球，仿佛获得一天的南大身份体验卡。夜幕降临，远去之时，梦也该醒了~</p>
-<p>这次的旅途过后，大家都在匆匆忙忙准备毕业的时候，我选择了再战名校。虽然这时显得跟整个学校的节奏不符，但比起之前浑浑噩噩的生活，这种逐梦并筑梦的日子更能让人铭记，更能拨动生命中响亮的音符。毕业论文答辩结束，导师惊讶的问我怎么没在考研光荣榜上看到我的名字，我不知道该如何面对这样一个始终对我抱有最大希望的老师；离校前一个月，准备租房子；离校前三周，准备6级考试；离校前两周，买下了全新备考资料，参加了6级考试，并见到了大三对我印象深刻（不听她讲课却能考近满分成绩的坏学生）的专业课老师，想对她说声对不起，老师，在你课上不是故意气你的；离校前一周，拿到了双证，见到了导员，真的很想对她说声谢谢，老师再见，但终未说出口。离校前3天，我花光了3个月的积蓄，算是买醉吧，那一段时间，是我四年里第一次跟这么多同学侃侃而谈，有的甚至是四年来第一次交流，原来那时的我在他们眼里还不算差，现在想想已经够欣慰了。6月24号，与母校彻底再见了~</p>
-<p>其实二战也没有想得那么复杂，干就完了。但真正难的是做出那个决定，鼓起勇气面对未知的挑战。</p>
-<p>我始终怀念并感激当年出去撒欢的自己</p>
-<p>2020年7月16日01:27:26 于济宁</p>
-]]></content>
-      <tags>
-        <tag>essay</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>泉城济南</title>
     <url>/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/</url>
     <content><![CDATA[<h3 id="泉城济南"><a href="#泉城济南" class="headerlink" title="泉城济南"></a>泉城济南</h3><p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-7.jpg" width="500px" height="400px"></p>
@@ -2138,6 +2138,14 @@
       </tags>
   </entry>
   <entry>
+    <title>虚拟机 系统与进程的通用平台</title>
+    <url>/2020/07/17/%E8%99%9A%E6%8B%9F%E6%9C%BA-%E7%B3%BB%E7%BB%9F%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E9%80%9A%E7%94%A8%E5%B9%B3%E5%8F%B0/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[转载]博士学历真的很重要吗</title>
     <url>/2020/04/19/%E8%BD%AC%E8%BD%BD-%E5%8D%9A%E5%A3%AB%E5%AD%A6%E5%8E%86%E7%9C%9F%E7%9A%84%E5%BE%88%E9%87%8D%E8%A6%81%E5%90%97/</url>
     <content><![CDATA[<div id="hexo-blog-encrypt" data-wpm="wrong password" data-whm="OOPS, these decrypted content may changed, but you can still have a look.">
@@ -2151,14 +2159,6 @@
 <script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
       <tags>
         <tag>essay</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>虚拟机 系统与进程的通用平台</title>
-    <url>/2020/07/17/%E8%99%9A%E6%8B%9F%E6%9C%BA-%E7%B3%BB%E7%BB%9F%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E9%80%9A%E7%94%A8%E5%B9%B3%E5%8F%B0/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>读书笔记</tag>
       </tags>
   </entry>
 </search>
