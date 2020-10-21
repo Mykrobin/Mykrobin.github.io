@@ -1,237 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>A FULLY HOMOMORPHIC ENCRYPTION SCHEME</title>
-    <url>/2020/08/13/A-FULLY-HOMOMORPHIC-ENCRYPTION-SCHEME/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>Applying TPM to Cloud</title>
-    <url>/2020/10/12/Applying-TPM-to-Cloud/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:left">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:left">原文PDF</td>
-<td style="text-align:center"><a href="https://onlinelibrary.wiley.com/doi/pdf/10.1002/spy2.93" target="_blank" rel="noopener">Survey</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:left">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:left">核心内容</td>
-<td style="text-align:center">调研了13年至18年的近120篇文献，且这些论文都利用TPM提高云计算安全。</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:left">研究领域</td>
-<td style="text-align:center">可信计算</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:left">全文总览</td>
-<td style="text-align:center">本文对TPM在云计算安全方面进行的细致的调研，并结合调研结果认为TPM在云计算安全的保护领域具有很大的趋势。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="Paper-Source"><a href="#Paper-Source" class="headerlink" title="Paper Source"></a>Paper Source</h3><p><img src="/2020/10/12/Applying-TPM-to-Cloud/sources.png" width="500"></p>
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/papercountry.png" width="500"></p>
-<font color="DodgerBlue"> Paper Structure </font>
-
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Summary.png" width="600"></p>
-<h3 id="Answering-the-Following-Question"><a href="#Answering-the-Following-Question" class="headerlink" title="Answering the Following Question"></a>Answering the Following Question</h3><h4 id="RQ1-For-what-purposes-is-TPM-used-in-the-cloud"><a href="#RQ1-For-what-purposes-is-TPM-used-in-the-cloud" class="headerlink" title="RQ1: For what purposes is TPM used in the cloud?"></a>RQ1: For what purposes is TPM used in the cloud?</h4><blockquote>
-<p><strong>TPM 在云中的作用是什么？为什么要用到TPM？</strong></p>
-</blockquote>
-<h4 id="RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud"><a href="#RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud" class="headerlink" title="RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?"></a>RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?</h4><blockquote>
-<p><strong>TPM的确缓解了的云中的哪些攻击？</strong></p>
-</blockquote>
-<h4 id="RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？"><a href="#RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？" class="headerlink" title="RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？"></a>RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？</h4><blockquote>
-<p><strong>完整性度量的组件到底是什么？云中完整性度量的解释是什么？</strong></p>
-</blockquote>
-<h4 id="RQ4-At-what-level-are-TPM-primitives-invoked"><a href="#RQ4-At-what-level-are-TPM-primitives-invoked" class="headerlink" title="RQ4: At what level are TPM primitives invoked?"></a>RQ4: At what level are TPM primitives invoked?</h4><blockquote>
-<p><strong>TPM被调用的级别是什么？</strong></p>
-</blockquote>
-<h4 id="RQ5-At-which-phase-are-the-TPM-features-used"><a href="#RQ5-At-which-phase-are-the-TPM-features-used" class="headerlink" title="RQ5: At which phase are the TPM features used?"></a>RQ5: At which phase are the TPM features used?</h4><blockquote>
-<p><strong>在什么阶段用到了TPM？</strong><br><strong>A：boot time, run time and both.</strong></p>
-</blockquote>
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Phase.png"></p>
-<h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>​        可信计算利用硬件信任根以及与之关联的软件构建可信环境，提供信任和隐私保护。TPM这个模块，提供安全启动、远程验证、完整性检测以及机密功能。2011年发布了TPM1.2版本，2016年公布了TPM2.0版本。</p>
-<p>​        远程证明是可信计算技术提供的主要功能，它将信任逐步从较低级别扩展到较高级别和应用程序。 这被称为信任链。 在信任链方案中，所有将要加载的组件都被认为是不可信的，因此，在加载之前需要对其进行测量。 TPM包含平台配置寄存器（PCR）受保护的内存位置，该位置存储敏感的安全信息（例如测量信息）。</p>
-<p>​        除了强大的隔离存储，TPM还拥有用于加密操作的唯一认可密钥（EK）。该密钥是在TPM制造时生成的，密钥的私有部分永远不会离开TPM。 在远程认证时，为了保护平台身份的私密性，使用了认证身份密钥（AIK）。 当平台（证明者）收到（来自验证者的）远程证明请求时，它会发送一个完整性报告，该报告由PCR值及其数字签名（由AIK计算）组成。 由于AIK的私有部分从未离开过TPM，因此可以保证报告的完整性和真实性。</p>
-<p>​        初步理解，TPM有几种存在模式，比如：以芯片方式存在电脑主板上或者以firmware形式存在于BIOS中。</p>
-<h4 id="The-Aims-of-TPM"><a href="#The-Aims-of-TPM" class="headerlink" title="The Aims of TPM"></a>The Aims of TPM</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TPMAims.png" width="500" height="280"></p>
-<font color="DodgerBlue"> 远程验证（Remote Attestation ）</font>
-
-<blockquote>
-<ol>
-<li>请求验证者向被验证者发送验证请求，这个请求中包括 <em>nonce</em><sup><a href="#fn_1" id="reffn_1">1</a></sup> ，目的是防止重播攻击（Replay attack）</li>
-<li>接收到验证请求的一方向自己的TPM提出验证请求，TPM验证自身需要度量的模块</li>
-<li>验证后的结果发送给远端的验证发起者（发起者要验证(a)TPM 的真实性(b) 发送数值的真实性）</li>
-</ol>
-</blockquote>
-<font color="DodgerBlue"> 完整性度量 （Integrity Measurement）</font>
-
-<blockquote>
-<p>TPM计算并存储不同组件的哈希值，并将这些哈希值在哈希链中进行转换，并将结果与已经存储的数值相比较。<br>完整性度量分为静态与动态两种类型：<br>        静态：保证在运行之前没有发生篡改<br>        动态：保证在运行过程中没有发生恶意篡改</p>
-</blockquote>
-<font color="DodgerBlue"> Generation and secure storage ofkeys</font>
-
-<blockquote>
-<p>生成随机秘钥的方法：种子、随机数生成器、直接导入TPM中。<br>生成的秘钥保存在TPM中</p>
-</blockquote>
-<font color="DodgerBlue"> Trusted boot</font>
-
-<blockquote>
-<p>在开机时，TPM会检查硬件、软件、固件组件的异同，保证在启动系统之前的环境是可信的。</p>
-<p>本文的参考文献 [14] 利用TPM的可信启动构造一个可信的环境，保证在开机过程中没有恶意入侵。<br>[15] 提出一个用于监控整个云平台的框架，可信启动保证被监控环境的完整性，既对云中租户也是针对云供应商。</p>
-</blockquote>
-<font color="DodgerBlue"> Hardware root of trust</font>
-
-<blockquote>
-<p>信任根是可以在密码系统中信任的来源，加密安全依赖于秘钥来进行加密解密与生成或者验证数字签名，因此，在这种系统中包括不易损坏的硬件模块，并且提供了一定程度的信任保障。<br>TPM可以提供硬件信任根、提供开机与运行时的完整性度量并且保护度量结果。</p>
-</blockquote>
-<h4 id="Security-Threats"><a href="#Security-Threats" class="headerlink" title="Security Threats"></a>Security Threats</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TopThreats.png" width="380" height="500"></p>
-<h4 id="The-level-of-TPM-invoking"><a href="#The-level-of-TPM-invoking" class="headerlink" title="The level of TPM invoking"></a>The level of TPM invoking</h4><font color="DodgerBlue"> Hardware </font>
-
-<blockquote>
-<p>在IoT和云计算等分布式系统模型中，主机平台的安全性至关重要，因为它托管着存储或处理（大量）数据。 TPM是一种用于平台身份验证以及验证其完整性的强大解决方案。在参考文献90中提出的解决方案中，扩展了HCloud（用于医疗保健数据的私有云），并且TPM嵌入在主机平台上以对客户端进行身份验证，并测量静态和动态完整性。讨论了可信云可以提供外部认证服务并进行内部可信调度。提供给外部的每个服务都有一个唯一的映像/进程在内存中运行。加载到内存时，需要验证此过程。可以使用TPM执行静态测量，以验证存储在物理存储库中的文件和软件包。同样，使用TPM签名保护数据库的完整性，以提供硬件级别的安全性。对于过程的动态完整性测量，TPM PCR用于存储和显示逐步的测量值。 Yang等[86]提出了一种设计，旨在为客户提供有关存储在云中的数据的新鲜度，有效性和完整性的保证。为了实现此目标，他们在不受信任的服务器上使用受信任的硬件设备，使客户端能够验证其数据的新鲜度和完整性。在系统运行之前，需要验证平台是否以受信任的方式启动。参考文献91讨论TPM是衡量启动过程和确定平台启动完整性的关键步骤的信任基础。在虚拟环境中，TPM提供了根植于硬件的信任链，该信任链将扩展到虚拟机管理程序。如果关键组件（例如BIOS，固件和虚拟机管理程序）已证明其完整性，则可以确保平台引导的完整性。为了确保启动组件的完整性，需要执行两个步骤：首先，测量引导过程，其次，进行证明，即保证和已执行的组件是受信任的组件。</p>
-</blockquote>
-<font color="DodgerBlue"> Hypervisor </font>
-
-<blockquote>
-<p>本文参考文献28构造了基于Xen的迁移框架：</p>
-<p>Xen虚拟机管理程序的安全迁移框架。该设计使用可信计算和相邻完整性度量来动态监视相邻虚拟机管理程序的完整性。更具体地说，为确保始终监视主机，当主机初始化时，TPM模块会验证虚拟机监控程序并将更新消息发送到完整性验证表（该表包含受信任的虚拟机监控程序列表），并将该虚拟机监控程序标记为受信任的。这意味着，如果未收到此类消息，则认为该特定的管理程序不可信。此外，系统会动态监控虚拟机监控程序的运行状态，如果虚拟机监控程序遭到破坏，则会发送相应的更新消息以报告受到破坏的情况。根据此完整性表的结果，确定源虚拟机管理程序是否受信任以及是否应启动VM迁移过程。</p>
-</blockquote>
-<h4 id="Phase-of-integrity-measurement"><a href="#Phase-of-integrity-measurement" class="headerlink" title="Phase of integrity measurement"></a>Phase of integrity measurement</h4><font color="DodgerBlue"> Boot time </font>
-
-<blockquote>
-<p>可信平台技术追求的原则之一是在关键组件加载和执行之前验证它们的信任和完整性。因此，在运行时完整性检查之前，需要确保正确引导了系统并且正在运行适当的操作系统。受信任的平台通过创建信任链来实现这种信任，该信任链以BIOS引导块中的受信任代码（CRTM）为核心信任根。 CRTM衡量其他实体的完整性价值，并且在平台的整个生命周期内保持不变。 CRTM是普通BIOS的补充，它首先运行以测量BIOS块和硬件，然后将控制权传递给引导加载程序。然后在将控件传递给OS之前测量OS内核映像。在此引导过程的每个步骤中，都会获取测量值，并据此扩展相关的TPM PCR值。该测量过程证明了系统的完整性，并确保引导和操作系统软件是制造商想要的版本，并且未被恶意第三方或恶意软件篡改。100Nanavati等人74指出，在虚拟环境中，可信引导技术允许用户证明基础启动平台的身份，并确保加载的虚拟化平台值得信赖。这为用户提供了有关可以向其提交关键数据的虚拟化平台的具体保证。 TPM通过使用加密原语为虚拟化平台提供此受信任的引导，并为其建立信任根。在ALIBI可信监视框架中，17 TPM用于在服务提供商平台上提供信任根。 TPM PCR记录平台上正在执行的软件的状态，并且由于PCR值仅是附加值，因此仅通过重新启动才能消除以前的记录。 TPM还拥有一个公共-私人密钥对。私钥仅保留在TPM的安全环境中，并用于计算TPM生成的证明值（从经过身份验证的启动累积的度量）的签名。使用TPM的公钥，外部验证程序可以检查签名的有效性，并推断出PCR值表示平台软件的状态。</p>
-</blockquote>
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>​        本文所统计并分析了120篇文献后，认为TPM技术在云中应用是一种趋势。在云中TPM技术的主要目标是远程验证以及完整性度量。本文主要分析了TPM的功能，TPM可应对云中的安全威胁，TPM提供完整性度量的阶段以及层次并指出了留有的研究空间，最后指出主要的研究差距。</p>
-<blockquote id="fn_1">
-<sup>1</sup>. 在加密技术中的初始向量和加密散列函数都发挥着重要作用，在各类验证协议的通信应用中确保验证信息不被重复使用以对抗重放攻击(Replay Attack)<a href="#reffn_1" title="Jump back to footnote [1] in the text."> &#8617;</a>
-</blockquote>
-<h3 id="引文延伸阅读"><a href="#引文延伸阅读" class="headerlink" title="引文延伸阅读"></a>引文延伸阅读</h3><p>Here are the papers worth reading further.</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>theme</th>
-<th>Reference Number &amp; Summary</th>
-<th>Reference Number &amp; Summary</th>
-<th>more</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>远程验证</td>
-<td>6：TPM进行远程验证VMs</td>
-<td>7：验证用户所在地理位置</td>
-<td></td>
-</tr>
-<tr>
-<td>完整性度量</td>
-<td>10：多用户环境中数据拥有完整性</td>
-<td>11：动态的完成性度量的模型（Xen）</td>
-<td>8、9</td>
-</tr>
-<tr>
-<td>生成秘钥安全存储</td>
-<td>12</td>
-<td>13</td>
-<td></td>
-</tr>
-<tr>
-<td>安全启动</td>
-<td><a href="https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=2969&amp;context=sis_research" target="_blank" rel="noopener">14</a>：protect the hypervisor</td>
-<td>15 ：monitoring the cloud platform</td>
-<td></td>
-</tr>
-<tr>
-<td>硬件信任根</td>
-<td>17 25 33 34 35</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://www.zhihu.com/question/19790488/answer/19290308" target="_blank" rel="noopener">什么是彩虹表？</a> </p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>TPM</tag>
-        <tag>Security</tag>
-        <tag>Cloud Computing</tag>
-        <tag>可信计算</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Attacks Directories, Not Caches</title>
-    <url>/2020/07/17/Attacks-Directories-Not-Caches/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href>Attack Directories, Not Caches: Side-Channel Attacks in a Non-Inclusive World</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">Side Channel Attack</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">Attack, Cache</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">基于缓存的侧信道攻击在新型缓存的攻击实践</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="0-Main-idea"><a href="#0-Main-idea" class="headerlink" title="0. Main idea"></a>0. Main idea</h3>]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>side channel attack</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
     <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
     <content><![CDATA[<div class="table-container">
@@ -336,9 +105,60 @@
       </tags>
   </entry>
   <entry>
-    <title>CloudVisor-D</title>
-    <url>/2020/10/17/CloudVisor-D/</url>
+    <title>A FULLY HOMOMORPHIC ENCRYPTION SCHEME</title>
+    <url>/2020/08/13/A-FULLY-HOMOMORPHIC-ENCRYPTION-SCHEME/</url>
     <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>Attacks Directories, Not Caches</title>
+    <url>/2020/07/17/Attacks-Directories-Not-Caches/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href>Attack Directories, Not Caches: Side-Channel Attacks in a Non-Inclusive World</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">Side Channel Attack</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">Attack, Cache</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">基于缓存的侧信道攻击在新型缓存的攻击实践</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="0-Main-idea"><a href="#0-Main-idea" class="headerlink" title="0. Main idea"></a>0. Main idea</h3>]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>side channel attack</tag>
+      </tags>
   </entry>
   <entry>
     <title>BatchCrypt</title>
@@ -563,6 +383,181 @@
       </tags>
   </entry>
   <entry>
+    <title>Applying TPM to Cloud</title>
+    <url>/2020/10/12/Applying-TPM-to-Cloud/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:left">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:left">原文PDF</td>
+<td style="text-align:center"><a href="https://onlinelibrary.wiley.com/doi/pdf/10.1002/spy2.93" target="_blank" rel="noopener">Survey</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:left">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:left">核心内容</td>
+<td style="text-align:center">调研了13年至18年的近120篇文献，且这些论文都利用TPM提高云计算安全。</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:left">研究领域</td>
+<td style="text-align:center">可信计算</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:left">全文总览</td>
+<td style="text-align:center">本文对TPM在云计算安全方面进行的细致的调研，并结合调研结果认为TPM在云计算安全的保护领域具有很大的趋势。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Paper-Source"><a href="#Paper-Source" class="headerlink" title="Paper Source"></a>Paper Source</h3><p><img src="/2020/10/12/Applying-TPM-to-Cloud/sources.png" width="500"></p>
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/papercountry.png" width="500"></p>
+<font color="DodgerBlue"> Paper Structure </font>
+
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Summary.png" width="600"></p>
+<h3 id="Answering-the-Following-Question"><a href="#Answering-the-Following-Question" class="headerlink" title="Answering the Following Question"></a>Answering the Following Question</h3><h4 id="RQ1-For-what-purposes-is-TPM-used-in-the-cloud"><a href="#RQ1-For-what-purposes-is-TPM-used-in-the-cloud" class="headerlink" title="RQ1: For what purposes is TPM used in the cloud?"></a>RQ1: For what purposes is TPM used in the cloud?</h4><blockquote>
+<p><strong>TPM 在云中的作用是什么？为什么要用到TPM？</strong></p>
+</blockquote>
+<h4 id="RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud"><a href="#RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud" class="headerlink" title="RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?"></a>RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?</h4><blockquote>
+<p><strong>TPM的确缓解了的云中的哪些攻击？</strong></p>
+</blockquote>
+<h4 id="RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？"><a href="#RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？" class="headerlink" title="RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？"></a>RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？</h4><blockquote>
+<p><strong>完整性度量的组件到底是什么？云中完整性度量的解释是什么？</strong></p>
+</blockquote>
+<h4 id="RQ4-At-what-level-are-TPM-primitives-invoked"><a href="#RQ4-At-what-level-are-TPM-primitives-invoked" class="headerlink" title="RQ4: At what level are TPM primitives invoked?"></a>RQ4: At what level are TPM primitives invoked?</h4><blockquote>
+<p><strong>TPM被调用的级别是什么？</strong></p>
+</blockquote>
+<h4 id="RQ5-At-which-phase-are-the-TPM-features-used"><a href="#RQ5-At-which-phase-are-the-TPM-features-used" class="headerlink" title="RQ5: At which phase are the TPM features used?"></a>RQ5: At which phase are the TPM features used?</h4><blockquote>
+<p><strong>在什么阶段用到了TPM？</strong><br><strong>A：boot time, run time and both.</strong></p>
+</blockquote>
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Phase.png"></p>
+<h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>​        可信计算利用硬件信任根以及与之关联的软件构建可信环境，提供信任和隐私保护。TPM这个模块，提供安全启动、远程验证、完整性检测以及机密功能。2011年发布了TPM1.2版本，2016年公布了TPM2.0版本。</p>
+<p>​        远程证明是可信计算技术提供的主要功能，它将信任逐步从较低级别扩展到较高级别和应用程序。 这被称为信任链。 在信任链方案中，所有将要加载的组件都被认为是不可信的，因此，在加载之前需要对其进行测量。 TPM包含平台配置寄存器（PCR）受保护的内存位置，该位置存储敏感的安全信息（例如测量信息）。</p>
+<p>​        除了强大的隔离存储，TPM还拥有用于加密操作的唯一认可密钥（EK）。该密钥是在TPM制造时生成的，密钥的私有部分永远不会离开TPM。 在远程认证时，为了保护平台身份的私密性，使用了认证身份密钥（AIK）。 当平台（证明者）收到（来自验证者的）远程证明请求时，它会发送一个完整性报告，该报告由PCR值及其数字签名（由AIK计算）组成。 由于AIK的私有部分从未离开过TPM，因此可以保证报告的完整性和真实性。</p>
+<p>​        初步理解，TPM有几种存在模式，比如：以芯片方式存在电脑主板上或者以firmware形式存在于BIOS中。</p>
+<h4 id="The-Aims-of-TPM"><a href="#The-Aims-of-TPM" class="headerlink" title="The Aims of TPM"></a>The Aims of TPM</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TPMAims.png" width="500" height="280"></p>
+<font color="DodgerBlue"> 远程验证（Remote Attestation ）</font>
+
+<blockquote>
+<ol>
+<li>请求验证者向被验证者发送验证请求，这个请求中包括 <em>nonce</em><sup><a href="#fn_1" id="reffn_1">1</a></sup> ，目的是防止重播攻击（Replay attack）</li>
+<li>接收到验证请求的一方向自己的TPM提出验证请求，TPM验证自身需要度量的模块</li>
+<li>验证后的结果发送给远端的验证发起者（发起者要验证(a)TPM 的真实性(b) 发送数值的真实性）</li>
+</ol>
+</blockquote>
+<font color="DodgerBlue"> 完整性度量 （Integrity Measurement）</font>
+
+<blockquote>
+<p>TPM计算并存储不同组件的哈希值，并将这些哈希值在哈希链中进行转换，并将结果与已经存储的数值相比较。<br>完整性度量分为静态与动态两种类型：<br>        静态：保证在运行之前没有发生篡改<br>        动态：保证在运行过程中没有发生恶意篡改</p>
+</blockquote>
+<font color="DodgerBlue"> Generation and secure storage ofkeys</font>
+
+<blockquote>
+<p>生成随机秘钥的方法：种子、随机数生成器、直接导入TPM中。<br>生成的秘钥保存在TPM中</p>
+</blockquote>
+<font color="DodgerBlue"> Trusted boot</font>
+
+<blockquote>
+<p>在开机时，TPM会检查硬件、软件、固件组件的异同，保证在启动系统之前的环境是可信的。</p>
+<p>本文的参考文献 [14] 利用TPM的可信启动构造一个可信的环境，保证在开机过程中没有恶意入侵。<br>[15] 提出一个用于监控整个云平台的框架，可信启动保证被监控环境的完整性，既对云中租户也是针对云供应商。</p>
+</blockquote>
+<font color="DodgerBlue"> Hardware root of trust</font>
+
+<blockquote>
+<p>信任根是可以在密码系统中信任的来源，加密安全依赖于秘钥来进行加密解密与生成或者验证数字签名，因此，在这种系统中包括不易损坏的硬件模块，并且提供了一定程度的信任保障。<br>TPM可以提供硬件信任根、提供开机与运行时的完整性度量并且保护度量结果。</p>
+</blockquote>
+<h4 id="Security-Threats"><a href="#Security-Threats" class="headerlink" title="Security Threats"></a>Security Threats</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TopThreats.png" width="380" height="500"></p>
+<h4 id="The-level-of-TPM-invoking"><a href="#The-level-of-TPM-invoking" class="headerlink" title="The level of TPM invoking"></a>The level of TPM invoking</h4><font color="DodgerBlue"> Hardware </font>
+
+<blockquote>
+<p>在IoT和云计算等分布式系统模型中，主机平台的安全性至关重要，因为它托管着存储或处理（大量）数据。 TPM是一种用于平台身份验证以及验证其完整性的强大解决方案。在参考文献90中提出的解决方案中，扩展了HCloud（用于医疗保健数据的私有云），并且TPM嵌入在主机平台上以对客户端进行身份验证，并测量静态和动态完整性。讨论了可信云可以提供外部认证服务并进行内部可信调度。提供给外部的每个服务都有一个唯一的映像/进程在内存中运行。加载到内存时，需要验证此过程。可以使用TPM执行静态测量，以验证存储在物理存储库中的文件和软件包。同样，使用TPM签名保护数据库的完整性，以提供硬件级别的安全性。对于过程的动态完整性测量，TPM PCR用于存储和显示逐步的测量值。 Yang等[86]提出了一种设计，旨在为客户提供有关存储在云中的数据的新鲜度，有效性和完整性的保证。为了实现此目标，他们在不受信任的服务器上使用受信任的硬件设备，使客户端能够验证其数据的新鲜度和完整性。在系统运行之前，需要验证平台是否以受信任的方式启动。参考文献91讨论TPM是衡量启动过程和确定平台启动完整性的关键步骤的信任基础。在虚拟环境中，TPM提供了根植于硬件的信任链，该信任链将扩展到虚拟机管理程序。如果关键组件（例如BIOS，固件和虚拟机管理程序）已证明其完整性，则可以确保平台引导的完整性。为了确保启动组件的完整性，需要执行两个步骤：首先，测量引导过程，其次，进行证明，即保证和已执行的组件是受信任的组件。</p>
+</blockquote>
+<font color="DodgerBlue"> Hypervisor </font>
+
+<blockquote>
+<p>本文参考文献28构造了基于Xen的迁移框架：</p>
+<p>Xen虚拟机管理程序的安全迁移框架。该设计使用可信计算和相邻完整性度量来动态监视相邻虚拟机管理程序的完整性。更具体地说，为确保始终监视主机，当主机初始化时，TPM模块会验证虚拟机监控程序并将更新消息发送到完整性验证表（该表包含受信任的虚拟机监控程序列表），并将该虚拟机监控程序标记为受信任的。这意味着，如果未收到此类消息，则认为该特定的管理程序不可信。此外，系统会动态监控虚拟机监控程序的运行状态，如果虚拟机监控程序遭到破坏，则会发送相应的更新消息以报告受到破坏的情况。根据此完整性表的结果，确定源虚拟机管理程序是否受信任以及是否应启动VM迁移过程。</p>
+</blockquote>
+<h4 id="Phase-of-integrity-measurement"><a href="#Phase-of-integrity-measurement" class="headerlink" title="Phase of integrity measurement"></a>Phase of integrity measurement</h4><font color="DodgerBlue"> Boot time </font>
+
+<blockquote>
+<p>可信平台技术追求的原则之一是在关键组件加载和执行之前验证它们的信任和完整性。因此，在运行时完整性检查之前，需要确保正确引导了系统并且正在运行适当的操作系统。受信任的平台通过创建信任链来实现这种信任，该信任链以BIOS引导块中的受信任代码（CRTM）为核心信任根。 CRTM衡量其他实体的完整性价值，并且在平台的整个生命周期内保持不变。 CRTM是普通BIOS的补充，它首先运行以测量BIOS块和硬件，然后将控制权传递给引导加载程序。然后在将控件传递给OS之前测量OS内核映像。在此引导过程的每个步骤中，都会获取测量值，并据此扩展相关的TPM PCR值。该测量过程证明了系统的完整性，并确保引导和操作系统软件是制造商想要的版本，并且未被恶意第三方或恶意软件篡改。100Nanavati等人74指出，在虚拟环境中，可信引导技术允许用户证明基础启动平台的身份，并确保加载的虚拟化平台值得信赖。这为用户提供了有关可以向其提交关键数据的虚拟化平台的具体保证。 TPM通过使用加密原语为虚拟化平台提供此受信任的引导，并为其建立信任根。在ALIBI可信监视框架中，17 TPM用于在服务提供商平台上提供信任根。 TPM PCR记录平台上正在执行的软件的状态，并且由于PCR值仅是附加值，因此仅通过重新启动才能消除以前的记录。 TPM还拥有一个公共-私人密钥对。私钥仅保留在TPM的安全环境中，并用于计算TPM生成的证明值（从经过身份验证的启动累积的度量）的签名。使用TPM的公钥，外部验证程序可以检查签名的有效性，并推断出PCR值表示平台软件的状态。</p>
+</blockquote>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>​        本文所统计并分析了120篇文献后，认为TPM技术在云中应用是一种趋势。在云中TPM技术的主要目标是远程验证以及完整性度量。本文主要分析了TPM的功能，TPM可应对云中的安全威胁，TPM提供完整性度量的阶段以及层次并指出了留有的研究空间，最后指出主要的研究差距。</p>
+<blockquote id="fn_1">
+<sup>1</sup>. 在加密技术中的初始向量和加密散列函数都发挥着重要作用，在各类验证协议的通信应用中确保验证信息不被重复使用以对抗重放攻击(Replay Attack)<a href="#reffn_1" title="Jump back to footnote [1] in the text."> &#8617;</a>
+</blockquote>
+<h3 id="引文延伸阅读"><a href="#引文延伸阅读" class="headerlink" title="引文延伸阅读"></a>引文延伸阅读</h3><p>Here are the papers worth reading further.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>theme</th>
+<th>Reference Number &amp; Summary</th>
+<th>Reference Number &amp; Summary</th>
+<th>more</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>远程验证</td>
+<td>6：TPM进行远程验证VMs</td>
+<td>7：验证用户所在地理位置</td>
+<td></td>
+</tr>
+<tr>
+<td>完整性度量</td>
+<td>10：多用户环境中数据拥有完整性</td>
+<td>11：动态的完成性度量的模型（Xen）</td>
+<td>8、9</td>
+</tr>
+<tr>
+<td>生成秘钥安全存储</td>
+<td>12</td>
+<td>13</td>
+<td></td>
+</tr>
+<tr>
+<td>安全启动</td>
+<td><a href="https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=2969&amp;context=sis_research" target="_blank" rel="noopener">14</a>：protect the hypervisor</td>
+<td>15 ：monitoring the cloud platform</td>
+<td></td>
+</tr>
+<tr>
+<td>硬件信任根</td>
+<td>17 25 33 34 35</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://www.zhihu.com/question/19790488/answer/19290308" target="_blank" rel="noopener">什么是彩虹表？</a> </p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>TPM</tag>
+        <tag>Security</tag>
+        <tag>Cloud Computing</tag>
+        <tag>可信计算</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CloudMon</title>
     <url>/2020/09/14/CloudMon/</url>
     <content><![CDATA[<div class="table-container">
@@ -666,6 +661,168 @@
         <tag>论文解读</tag>
         <tag>Virtual Machine</tag>
         <tag>System Security</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Dancing with Wolves</title>
+    <url>/2020/06/27/Dancing-with-Wolves/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://dl.acm.org/doi/pdf/10.1145/3050748.3050750" target="_blank" rel="noopener">Dancing with wolves</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Liang Deng,Nanjing University</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">对非可信的VMM进行事件监测</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">检测</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">通过ASR与IPR技术，ED-monitor可以及时、频繁地对VMM的监测</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Main-idea"><a href="#Main-idea" class="headerlink" title="Main idea"></a>Main idea</h3><p>&emsp;&emsp;VMM的执行权限最高，一旦VMM受到威胁，那么其所处的整个云环境都会受到威胁。因此本文目标是对云计算中非可信的VMM实时攻击进行事件驱动监控。为了保证VMM事件监控的可靠性，需要保证monitor自身的可靠。在具体实现过程中，将VMM的特权级指令清空，并转移到monitor执行。通过IPR实现对VMM特权级指令的拦截，通过ASR技术防止VMM篡改hook函数位置和VMM自身的代码。</p>
+<p>&emsp;&emsp;Q: 为什么要提供事件监测？</p>
+<p>&emsp;&emsp;A: 因为对于瞬时攻击而言，仅通过轮询的方式对VMM进行完整性监测，很难捕捉到攻击的踪迹，但是基于事件的方式则可以对攻击所触发的事件进行拦截。</p>
+<p>本文是国家自然基金项目支持，代码并未开源。</p>
+<h3 id="ED-monitor"><a href="#ED-monitor" class="headerlink" title="ED-monitor"></a>ED-monitor</h3><p>&emsp;&emsp;实现事件监控对monitor的要求：monitor与VMM具有相同的执行权限（避免了不同权限之间转换带来的性能损失），monitor需要及时频繁地被调用。</p>
+<p>&emsp;&emsp;读到这里，感觉再往下深入就是解决几个问题：</p>
+<ol>
+<li><p>如何实现ASR？</p>
+</li>
+<li><p>如何实现IPR？</p>
+</li>
+<li><p>如何触发monitor？</p>
+<p>当需要在VMM中调用特权级指令的时候，会对monitor进行调用。</p>
+</li>
+<li><p>如何保证monitor的完整性？</p>
+<p>分为monitor memory完整性、控制流完整性和定制VMM调用monitor接口实现。</p>
+</li>
+<li><p>如何保证VMM不对自身hook函数的篡改？对hypervisor所有事件添加hook？</p>
+<p>采用W+X mapping policy对code hook的保护；</p>
+<p>使用SPT保护data hook.</p>
+</li>
+<li><p>安全性分析？</p>
+<p>几种保护机制可以满足安全的需求。可以实现对特权级指令的拦截、对其验证、防止对monitor的篡改，从而保证了monitor的完整性。IPR与ASR可以实现对原型的保护。</p>
+</li>
+<li><p>原型实现？</p>
+</li>
+</ol>
+<h3 id="0-Abstract"><a href="#0-Abstract" class="headerlink" title="0 Abstract"></a>0 Abstract</h3><p>高风险漏洞可能会使VMMS完全受损</p>
+<p>（这里提出的目的是说明在非信任环境中进行检测是十分必要的）</p>
+<p>VMM拥有最高执行权限，如果它被攻击的话，将会威胁整个环境，因此对VMM进行检测是必要的。</p>
+<p>main idea: 对云计算中非可信的VMM进行事件监控，不需要比VMM更高的特权级别也不需要特殊硬件的支持。</p>
+<h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h3><p>监控器应与VMM 处于相同的特权级别，并且在之间的转换上不能产生大量的时间代价</p>
+<p>且为了实现通过监控器就能捕获VMM的事件，需要保证监控器本身的完整性以及能够获取到VMM的事件，此时认为VMM是处于非可信状态的。</p>
+<p>Q: SMM不能读取MMU的配置，所以不适格作为事件驱动器的实现，也就是事件驱动监控器必须要获得MMU的配置？</p>
+<p>Q：这种基于事件驱动的监控，与时间依赖的关系？</p>
+<p>瞬时攻击能不能进行？</p>
+<p>本意：如果及时并且频繁的调用该监控器，那么就可以阻止瞬时攻击？</p>
+<p>当事件被触发就可以调用monitor，从而对VMM进行保护？</p>
+<p>当VMM访问监控器数据的时候，将会及时地调用监控程序进行完整性评估</p>
+<h3 id="2-Overview"><a href="#2-Overview" class="headerlink" title="2 Overview"></a>2 Overview</h3><h4 id="2-1-Threat-model"><a href="#2-1-Threat-model" class="headerlink" title="2.1 Threat model"></a>2.1 Threat model</h4><p>&emsp;&emsp;认为威胁来自于VMM，VMM拥有最高的执行权限，而且能够获取到内存或者磁盘中任意数据。如果VMM受到攻击的话，则攻击者具备VMM的权限，威胁整个机器。不考虑硬件威胁，开机过程也受信任。</p>
+<h4 id="2-2-Eventdriven-VMM-Monitoring"><a href="#2-2-Eventdriven-VMM-Monitoring" class="headerlink" title="2.2 Eventdriven VMM Monitoring"></a>2.2 Eventdriven VMM Monitoring</h4><p>hook 函数</p>
+<p>做什么的？</p>
+<p>钩子函数是置于VMM中的触发函数，目的是捕获指定的VMM事件行为，当产生这些行为的时候，VMM会运行钩子函数，从而激发对VMM完整性的检测。</p>
+<p>钩子函数通常如何设置？</p>
+<p>这些钩子函数可以是插入VMM代码中任意位置的代码挂钩（跳转指令），调用表内的数据挂钩或任何其他可以传输控制流的技术。</p>
+<h4 id="2-3-Placing-the-Monitor-in-the-Same-World"><a href="#2-3-Placing-the-Monitor-in-the-Same-World" class="headerlink" title="2.3 Placing the Monitor in the Same World"></a>2.3 Placing the Monitor in the Same World</h4><h4 id="2-4-Requirements-and-Challenges"><a href="#2-4-Requirements-and-Challenges" class="headerlink" title="2.4 Requirements and Challenges"></a>2.4 Requirements and Challenges</h4><p>保证ED-monitor 是受信任的，即保证monitor自身的完整性，该monitor不能被VMM篡改</p>
+<ol>
+<li><p>内存、控制流、入口</p>
+</li>
+<li><p>hook 函数的位置不应该别VMM篡改（这个如何实现？）【因为VMM有 最高执行权限】</p>
+</li>
+</ol>
+<h4 id="2-5-Our-Approach-Multual-Protection"><a href="#2-5-Our-Approach-Multual-Protection" class="headerlink" title="2.5 Our Approach: Multual-Protection"></a>2.5 Our Approach: Multual-Protection</h4><p>Q:这里写的比较简略，地址空间随机化如何能保证code和data？但VMM具备了最高执行权限，会有效果吗？（应用级别攻击）</p>
+<p>下文提到，VMM的权限可以获取到随机化后的monitor的remap，因此目前的ASR对事件的监控可能是无效的。本文的想法是限制VMM的特权指令，并让monitor代替执行最高权限。（这样VMM中进行最高权限的操作将会被monitor捕获）</p>
+<p>本文的解决方法是：同时使用ASR和本文提出的IPR（基于工具的指令限制）方法，IPR通过ASR保证对VMM最高权限操作的拦截与验证，同时ASR基于IPR减轻部分威胁（来自于谁的威胁？）</p>
+<p>ASR：这种技术主要是对进程的表、堆、主程序代码、静态数据段、共享库等所在的地址进行随机化。如果某些代码的位置固定，那么一份攻击成功的话，就可以应用到其他机器继续进行攻击。因此ASR技术可以降低攻击成功的概率，并且使得攻击难以移植。</p>
+<p>另：一种技术叫做ALSR，Address space layout randomization，地址空间布局随机化</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>VEE</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>System Security</tag>
+        <tag>Detection</tag>
+        <tag>Event-driven</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CloudVisor-D</title>
+    <url>/2020/10/18/CloudVisor-D/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://rambleed.com/docs/20190603-rambleed-web.pdf" target="_blank" rel="noopener">CloudViso-D</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Shanghai Jiao Tong University</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">Untrusted Hypervisor，解耦是嵌套虚拟化技术</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">Virtualization， Cloud Platform</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">CloudVisor-D将传统嵌套虚拟化的架构分解为两个模块，能在无需引起虚拟机下陷的情况下将大多数虚拟机操作转交给可信的守卫模块处理，大幅度提升嵌套虚拟化技术的性能。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h3><h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><h4 id="为什么会出现这种问题"><a href="#为什么会出现这种问题" class="headerlink" title="为什么会出现这种问题"></a>为什么会出现这种问题</h4><h3 id="虚拟机退出？"><a href="#虚拟机退出？" class="headerlink" title="虚拟机退出？"></a>虚拟机退出？</h3><h3 id="嵌套虚拟化？"><a href="#嵌套虚拟化？" class="headerlink" title="嵌套虚拟化？"></a>嵌套虚拟化？</h3>]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Untrusted Hypervisor</tag>
+        <tag>Virtualization</tag>
       </tags>
   </entry>
   <entry>
@@ -780,124 +937,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Operating Systems</title>
-    <url>/2020/07/17/Operating-Systems/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Dancing with Wolves</title>
-    <url>/2020/06/27/Dancing-with-Wolves/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://dl.acm.org/doi/pdf/10.1145/3050748.3050750" target="_blank" rel="noopener">Dancing with wolves</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Liang Deng,Nanjing University</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">对非可信的VMM进行事件监测</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">检测</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">通过ASR与IPR技术，ED-monitor可以及时、频繁地对VMM的监测</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="Main-idea"><a href="#Main-idea" class="headerlink" title="Main idea"></a>Main idea</h3><p>&emsp;&emsp;VMM的执行权限最高，一旦VMM受到威胁，那么其所处的整个云环境都会受到威胁。因此本文目标是对云计算中非可信的VMM实时攻击进行事件驱动监控。为了保证VMM事件监控的可靠性，需要保证monitor自身的可靠。在具体实现过程中，将VMM的特权级指令清空，并转移到monitor执行。通过IPR实现对VMM特权级指令的拦截，通过ASR技术防止VMM篡改hook函数位置和VMM自身的代码。</p>
-<p>&emsp;&emsp;Q: 为什么要提供事件监测？</p>
-<p>&emsp;&emsp;A: 因为对于瞬时攻击而言，仅通过轮询的方式对VMM进行完整性监测，很难捕捉到攻击的踪迹，但是基于事件的方式则可以对攻击所触发的事件进行拦截。</p>
-<p>本文是国家自然基金项目支持，代码并未开源。</p>
-<h3 id="ED-monitor"><a href="#ED-monitor" class="headerlink" title="ED-monitor"></a>ED-monitor</h3><p>&emsp;&emsp;实现事件监控对monitor的要求：monitor与VMM具有相同的执行权限（避免了不同权限之间转换带来的性能损失），monitor需要及时频繁地被调用。</p>
-<p>&emsp;&emsp;读到这里，感觉再往下深入就是解决几个问题：</p>
-<ol>
-<li><p>如何实现ASR？</p>
-</li>
-<li><p>如何实现IPR？</p>
-</li>
-<li><p>如何触发monitor？</p>
-<p>当需要在VMM中调用特权级指令的时候，会对monitor进行调用。</p>
-</li>
-<li><p>如何保证monitor的完整性？</p>
-<p>分为monitor memory完整性、控制流完整性和定制VMM调用monitor接口实现。</p>
-</li>
-<li><p>如何保证VMM不对自身hook函数的篡改？对hypervisor所有事件添加hook？</p>
-<p>采用W+X mapping policy对code hook的保护；</p>
-<p>使用SPT保护data hook.</p>
-</li>
-<li><p>安全性分析？</p>
-<p>几种保护机制可以满足安全的需求。可以实现对特权级指令的拦截、对其验证、防止对monitor的篡改，从而保证了monitor的完整性。IPR与ASR可以实现对原型的保护。</p>
-</li>
-<li><p>原型实现？</p>
-</li>
-</ol>
-<h3 id="0-Abstract"><a href="#0-Abstract" class="headerlink" title="0 Abstract"></a>0 Abstract</h3><p>高风险漏洞可能会使VMMS完全受损</p>
-<p>（这里提出的目的是说明在非信任环境中进行检测是十分必要的）</p>
-<p>VMM拥有最高执行权限，如果它被攻击的话，将会威胁整个环境，因此对VMM进行检测是必要的。</p>
-<p>main idea: 对云计算中非可信的VMM进行事件监控，不需要比VMM更高的特权级别也不需要特殊硬件的支持。</p>
-<h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h3><p>监控器应与VMM 处于相同的特权级别，并且在之间的转换上不能产生大量的时间代价</p>
-<p>且为了实现通过监控器就能捕获VMM的事件，需要保证监控器本身的完整性以及能够获取到VMM的事件，此时认为VMM是处于非可信状态的。</p>
-<p>Q: SMM不能读取MMU的配置，所以不适格作为事件驱动器的实现，也就是事件驱动监控器必须要获得MMU的配置？</p>
-<p>Q：这种基于事件驱动的监控，与时间依赖的关系？</p>
-<p>瞬时攻击能不能进行？</p>
-<p>本意：如果及时并且频繁的调用该监控器，那么就可以阻止瞬时攻击？</p>
-<p>当事件被触发就可以调用monitor，从而对VMM进行保护？</p>
-<p>当VMM访问监控器数据的时候，将会及时地调用监控程序进行完整性评估</p>
-<h3 id="2-Overview"><a href="#2-Overview" class="headerlink" title="2 Overview"></a>2 Overview</h3><h4 id="2-1-Threat-model"><a href="#2-1-Threat-model" class="headerlink" title="2.1 Threat model"></a>2.1 Threat model</h4><p>&emsp;&emsp;认为威胁来自于VMM，VMM拥有最高的执行权限，而且能够获取到内存或者磁盘中任意数据。如果VMM受到攻击的话，则攻击者具备VMM的权限，威胁整个机器。不考虑硬件威胁，开机过程也受信任。</p>
-<h4 id="2-2-Eventdriven-VMM-Monitoring"><a href="#2-2-Eventdriven-VMM-Monitoring" class="headerlink" title="2.2 Eventdriven VMM Monitoring"></a>2.2 Eventdriven VMM Monitoring</h4><p>hook 函数</p>
-<p>做什么的？</p>
-<p>钩子函数是置于VMM中的触发函数，目的是捕获指定的VMM事件行为，当产生这些行为的时候，VMM会运行钩子函数，从而激发对VMM完整性的检测。</p>
-<p>钩子函数通常如何设置？</p>
-<p>这些钩子函数可以是插入VMM代码中任意位置的代码挂钩（跳转指令），调用表内的数据挂钩或任何其他可以传输控制流的技术。</p>
-<h4 id="2-3-Placing-the-Monitor-in-the-Same-World"><a href="#2-3-Placing-the-Monitor-in-the-Same-World" class="headerlink" title="2.3 Placing the Monitor in the Same World"></a>2.3 Placing the Monitor in the Same World</h4><h4 id="2-4-Requirements-and-Challenges"><a href="#2-4-Requirements-and-Challenges" class="headerlink" title="2.4 Requirements and Challenges"></a>2.4 Requirements and Challenges</h4><p>保证ED-monitor 是受信任的，即保证monitor自身的完整性，该monitor不能被VMM篡改</p>
-<ol>
-<li><p>内存、控制流、入口</p>
-</li>
-<li><p>hook 函数的位置不应该别VMM篡改（这个如何实现？）【因为VMM有 最高执行权限】</p>
-</li>
-</ol>
-<h4 id="2-5-Our-Approach-Multual-Protection"><a href="#2-5-Our-Approach-Multual-Protection" class="headerlink" title="2.5 Our Approach: Multual-Protection"></a>2.5 Our Approach: Multual-Protection</h4><p>Q:这里写的比较简略，地址空间随机化如何能保证code和data？但VMM具备了最高执行权限，会有效果吗？（应用级别攻击）</p>
-<p>下文提到，VMM的权限可以获取到随机化后的monitor的remap，因此目前的ASR对事件的监控可能是无效的。本文的想法是限制VMM的特权指令，并让monitor代替执行最高权限。（这样VMM中进行最高权限的操作将会被monitor捕获）</p>
-<p>本文的解决方法是：同时使用ASR和本文提出的IPR（基于工具的指令限制）方法，IPR通过ASR保证对VMM最高权限操作的拦截与验证，同时ASR基于IPR减轻部分威胁（来自于谁的威胁？）</p>
-<p>ASR：这种技术主要是对进程的表、堆、主程序代码、静态数据段、共享库等所在的地址进行随机化。如果某些代码的位置固定，那么一份攻击成功的话，就可以应用到其他机器继续进行攻击。因此ASR技术可以降低攻击成功的概率，并且使得攻击难以移植。</p>
-<p>另：一种技术叫做ALSR，Address space layout randomization，地址空间布局随机化</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>VEE</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>System Security</tag>
-        <tag>Detection</tag>
-        <tag>Event-driven</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
     <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
     <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
@@ -920,85 +959,11 @@
       </tags>
   </entry>
   <entry>
-    <title>PrivateEye</title>
-    <url>/2020/10/09/PrivateEye/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.usenix.org/system/files/nsdi20-paper-arzani.pdf" target="_blank" rel="noopener">PrivateEye</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">对部署在云上的虚拟机进行保护，而不是对hypervisor进行防护</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">保护云安全</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">通过对少数机器进行保护，得到攻击者特征，并利用此特征对云上全部机器进行保护。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h3><p>​        云中会部署一些可以检测VM是否受攻击的检测系统，但是往往都没有启用，这就使得VM在云上几乎在没有任何保护的情况下运行，这在安全的角度看是十分不可取的。让用户在不受保护的状态下运行或者完全在云供应商提供的检测系统的保护下运行，这两者似乎都不可取。如果不保护，则受攻击的VM可以攻击其余未被攻击的VM，并且不是所有的用户都需要在被严格保护的情况下运行。经过统计，约5%的用户愿意承担云供应商提供的安全监测系统的额外费用。本文基于此提出PrivateEye解决方案，它是一个可扩展、解决隐私保护的解决方案，能够对数据中心全部的VM进行防护。通过检测较少的机器，将检测后结果应用于云中其余的机器进行检测。</p>
-<p>保护的定位：<br>针对云上的VMs,而不是hypervisor本身。</p>
-<p>使用的方法：<br>利用机器学习的方法，根据已经存在的5%的少数用户特征，应用于云上全部主机检测。</p>
-<p>​        本文目标是提供给用户一个透明的（不需要用户权限）可以保护客户机隐私、数据中心级别的保护机制，并且无需进行广泛而昂贵的监控，目标是针对全部的VM进行防护。</p>
-<p><img src="/2020/10/09/PrivateEye/private_1.png" width="500px" height="300px"></p>
-<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        本文认为任何VM都不是可信的，因为他们可以运行任何的代码，但是，云供应商提供的hypervisor、网络以及硬件是可靠的。并且认为供应商提供的检测方式能够足够精确的保护供应商提供的VMs.其中恶意软件为了掩盖其攻击能够调整自身行为，但是恶意软件无法识别VM是否受到供应商的保护。并且云供应商的保护软件可以通过近期的检测重新训练PrivateEye，因此PrivateEye可以通过不断的训练起到保护云上主机安全的目的。</p>
-<p>​        供应商仅能要求使用他们所提供工作负载的第一方VM使用OBDs,但是不能要求全部的VM都使用，并且在Azure的统计显示，超过95%的用户不使用OBDs。正因为用户不愿意使用供应商提供的检测器，所以基于此受限，供应商只能使用非侵入式的检测来保证VM不受侵害。</p>
-<p>设计目标：</p>
-<ol>
-<li><p>GDPR（欧洲数据隐私法）： 要求可以追踪用户的个人隐私信息（PII），以便用户可以检查或者删除此信息。供应商需要在48小时内回答用户请求，这时供应商可以1. 使用原数据对数据进行连接和标记，2. 或者避免存储与PII相关的数据。这就要求VM的公共IP必须映射到用户账户，但公共IP 是动态及时分配的，因此GDPR 对PII的处理代价是十分昂贵的。（PrivateEye是如何处理的？）</p>
-</li>
-<li><p>较低的运行代价</p>
-</li>
-<li><p>OBD对大量的VM进行检测获取到充足的攻击数据集。</p>
-</li>
-<li><p>（OBDs 与PrivateEye关系：后者更宏观，前者更具有通用的保护性）</p>
-</li>
-</ol>
-<p>OBDs是一个广泛的监控器，PrivateEye对VM有着更加严格的监控，目的是避免大量用户没必要的损失。在不必要的更进一步的检测时无需客户机的许可就会对VM进行保护，一旦发现可疑攻击，就会对VM发出警告，以请求更深入的检测VM。</p>
-<p><img src="/2020/10/09/PrivateEye/architecture.png" width="500px" height="300px"></p>
-<h3 id="Evaluation"><a href="#Evaluation" class="headerlink" title="Evaluation"></a>Evaluation</h3><p>• What is PrivateEye’s accuracy? </p>
-<p>​        PrivateEye can detect 95.77% of compromised samples with 1% FPR.</p>
-<p>• What causes PrivateEye’s false positives/negatives? </p>
-<p>​        PrivateEye’s FNs were mostly OBD false positives.</p>
-<p>• How does PrivateEye’s RF compare to other models? </p>
-<p>​        PrivateEye’s FPs have similar flow-patterns to compro- mised VMs. </p>
-<p>• How does PrivateEye’s sampling limit affect accuracy? </p>
-<p>​        The choice of sampling limit is important.</p>
- <font color="green"> 蜜罐 </font>
-
-<p>​        本质上是一种对攻击方进行欺骗的技术，通过布置一些作为诱饵的主机、网络服务或者信息，诱使攻击方对它们实施攻击，从而可以对攻击行为进行捕获和分析，了解攻击方所使用的工具与方法，推测攻击意图和动机，能够让防御方清晰地了解他们所面对的安全威胁，并通过技术和管理手段来增强实际系统的安全防护能力。蜜罐好比是情报收集系统。蜜罐好像是故意让人攻击的目标，引诱黑客前来攻击。所以攻击者入侵后，你就可以知道他是如何得逞的，随时了解针对服务器发动的最新的攻击和漏洞。还可以通过窃听黑客之间的联系，收集黑客所用的种种工具，并且掌握他们的社交网络。</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>NSDI</category>
-      </categories>
+    <title>Operating Systems</title>
+    <url>/2020/07/17/Operating-Systems/</url>
+    <content><![CDATA[]]></content>
       <tags>
-        <tag>Virtual Machine</tag>
-        <tag>Hypervisor</tag>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -1116,18 +1081,6 @@
       </tags>
   </entry>
   <entry>
-    <title>RADAR</title>
-    <url>/2020/07/18/RADAR/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PUBG JNG</title>
     <url>/2020/04/18/PUBG-JNG/</url>
     <content><![CDATA[<h3 id="JNG战队发展历程回顾"><a href="#JNG战队发展历程回顾" class="headerlink" title="JNG战队发展历程回顾"></a>JNG战队发展历程回顾</h3><h4 id="JNG初次相遇"><a href="#JNG初次相遇" class="headerlink" title="JNG初次相遇"></a>JNG初次相遇</h4><p>很久很久以前，这支战队的几个骚年游荡在这样一个空旷的平原上</p>
@@ -1175,6 +1128,204 @@
       </tags>
   </entry>
   <entry>
+    <title>PrivateEye</title>
+    <url>/2020/10/09/PrivateEye/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.usenix.org/system/files/nsdi20-paper-arzani.pdf" target="_blank" rel="noopener">PrivateEye</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">对部署在云上的虚拟机进行保护，而不是对hypervisor进行防护</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">保护云安全</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">通过对少数机器进行保护，得到攻击者特征，并利用此特征对云上全部机器进行保护。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="总览"><a href="#总览" class="headerlink" title="总览"></a>总览</h3><p>​        云中会部署一些可以检测VM是否受攻击的检测系统，但是往往都没有启用，这就使得VM在云上几乎在没有任何保护的情况下运行，这在安全的角度看是十分不可取的。让用户在不受保护的状态下运行或者完全在云供应商提供的检测系统的保护下运行，这两者似乎都不可取。如果不保护，则受攻击的VM可以攻击其余未被攻击的VM，并且不是所有的用户都需要在被严格保护的情况下运行。经过统计，约5%的用户愿意承担云供应商提供的安全监测系统的额外费用。本文基于此提出PrivateEye解决方案，它是一个可扩展、解决隐私保护的解决方案，能够对数据中心全部的VM进行防护。通过检测较少的机器，将检测后结果应用于云中其余的机器进行检测。</p>
+<p>保护的定位：<br>针对云上的VMs,而不是hypervisor本身。</p>
+<p>使用的方法：<br>利用机器学习的方法，根据已经存在的5%的少数用户特征，应用于云上全部主机检测。</p>
+<p>​        本文目标是提供给用户一个透明的（不需要用户权限）可以保护客户机隐私、数据中心级别的保护机制，并且无需进行广泛而昂贵的监控，目标是针对全部的VM进行防护。</p>
+<p><img src="/2020/10/09/PrivateEye/private_1.png" width="500px" height="300px"></p>
+<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        本文认为任何VM都不是可信的，因为他们可以运行任何的代码，但是，云供应商提供的hypervisor、网络以及硬件是可靠的。并且认为供应商提供的检测方式能够足够精确的保护供应商提供的VMs.其中恶意软件为了掩盖其攻击能够调整自身行为，但是恶意软件无法识别VM是否受到供应商的保护。并且云供应商的保护软件可以通过近期的检测重新训练PrivateEye，因此PrivateEye可以通过不断的训练起到保护云上主机安全的目的。</p>
+<p>​        供应商仅能要求使用他们所提供工作负载的第一方VM使用OBDs,但是不能要求全部的VM都使用，并且在Azure的统计显示，超过95%的用户不使用OBDs。正因为用户不愿意使用供应商提供的检测器，所以基于此受限，供应商只能使用非侵入式的检测来保证VM不受侵害。</p>
+<p>设计目标：</p>
+<ol>
+<li><p>GDPR（欧洲数据隐私法）： 要求可以追踪用户的个人隐私信息（PII），以便用户可以检查或者删除此信息。供应商需要在48小时内回答用户请求，这时供应商可以1. 使用原数据对数据进行连接和标记，2. 或者避免存储与PII相关的数据。这就要求VM的公共IP必须映射到用户账户，但公共IP 是动态及时分配的，因此GDPR 对PII的处理代价是十分昂贵的。（PrivateEye是如何处理的？）</p>
+</li>
+<li><p>较低的运行代价</p>
+</li>
+<li><p>OBD对大量的VM进行检测获取到充足的攻击数据集。</p>
+</li>
+<li><p>（OBDs 与PrivateEye关系：后者更宏观，前者更具有通用的保护性）</p>
+</li>
+</ol>
+<p>OBDs是一个广泛的监控器，PrivateEye对VM有着更加严格的监控，目的是避免大量用户没必要的损失。在不必要的更进一步的检测时无需客户机的许可就会对VM进行保护，一旦发现可疑攻击，就会对VM发出警告，以请求更深入的检测VM。</p>
+<p><img src="/2020/10/09/PrivateEye/architecture.png" width="500px" height="300px"></p>
+<h3 id="Evaluation"><a href="#Evaluation" class="headerlink" title="Evaluation"></a>Evaluation</h3><p>• What is PrivateEye’s accuracy? </p>
+<p>​        PrivateEye can detect 95.77% of compromised samples with 1% FPR.</p>
+<p>• What causes PrivateEye’s false positives/negatives? </p>
+<p>​        PrivateEye’s FNs were mostly OBD false positives.</p>
+<p>• How does PrivateEye’s RF compare to other models? </p>
+<p>​        PrivateEye’s FPs have similar flow-patterns to compro- mised VMs. </p>
+<p>• How does PrivateEye’s sampling limit affect accuracy? </p>
+<p>​        The choice of sampling limit is important.</p>
+ <font color="green"> 蜜罐 </font>
+
+<p>​        本质上是一种对攻击方进行欺骗的技术，通过布置一些作为诱饵的主机、网络服务或者信息，诱使攻击方对它们实施攻击，从而可以对攻击行为进行捕获和分析，了解攻击方所使用的工具与方法，推测攻击意图和动机，能够让防御方清晰地了解他们所面对的安全威胁，并通过技术和管理手段来增强实际系统的安全防护能力。蜜罐好比是情报收集系统。蜜罐好像是故意让人攻击的目标，引诱黑客前来攻击。所以攻击者入侵后，你就可以知道他是如何得逞的，随时了解针对服务器发动的最新的攻击和漏洞。还可以通过窃听黑客之间的联系，收集黑客所用的种种工具，并且掌握他们的社交网络。</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>NSDI</category>
+      </categories>
+      <tags>
+        <tag>Virtual Machine</tag>
+        <tag>Hypervisor</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RADAR</title>
+    <url>/2020/07/18/RADAR/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SP&#39;15 Last-Level Cache Side-Channel Attacks are Practical</title>
+    <url>/2020/05/18/SP-15-Last-Level-Cache-Side-Channel-Attacks-are-Practical/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://mykrobin.github.io/files/docs/CSCA-004-SP2015.pdf" target="_blank" rel="noopener">Last Level Cache Side Channel Attacks are Practical</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Department of Electrical Engineering, Princeton University</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">side channel attacks</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">security cross VM</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文详细地讲解了跨虚拟机的侧信道攻击</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>side channel attack</tag>
+        <tag>cross VM</tag>
+        <tag>last level cache</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SecVisor</title>
+    <url>/2020/07/21/SecVisor/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="http://www.cs.cmu.edu/~arvinds/pubs/secvisor.pdf" target="_blank" rel="noopener">SecVisor</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">检测</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>SOSP</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Detection</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Socket编程基础总结</title>
     <url>/2020/10/19/Socket%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<p>Socket编程基础总结</p>
@@ -1194,7 +1345,7 @@
 </ul>
 <p>只要用 socket() 创建了连接，剩下的就是文件操作了！</p>
 <h4 id="Server-代码"><a href="#Server-代码" class="headerlink" title="Server 代码"></a><strong>Server 代码</strong></h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//创建套接字</span></span><br><span class="line">    <span class="keyword">int</span> serv_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//将套接字和IP、端口绑定</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">serv_addr</span>;</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;serv_addr, <span class="number">0</span>, <span class="keyword">sizeof</span>(serv_addr));  <span class="comment">//每个字节都用0填充</span></span><br><span class="line">    serv_addr.sin_family = AF_INET;  <span class="comment">//使用IPv4地址</span></span><br><span class="line">    serv_addr.sin_addr.s_addr = inet_addr(<span class="string">"127.0.0.1"</span>);  <span class="comment">//具体的IP地址</span></span><br><span class="line">    serv_addr.sin_port = htons(<span class="number">1234</span>);  <span class="comment">//端口</span></span><br><span class="line">    bind(serv_sock, (struct sockaddr*)&amp;serv_addr, <span class="keyword">sizeof</span>(serv_addr));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//进入监听状态，等待用户发起请求</span></span><br><span class="line">    <span class="built_in">listen</span>(serv_sock, <span class="number">20</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//接收客户端请求</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">clnt_addr</span>;</span></span><br><span class="line">    <span class="keyword">socklen_t</span> clnt_addr_size = <span class="keyword">sizeof</span>(clnt_addr);</span><br><span class="line">    <span class="keyword">int</span> clnt_sock = accept(serv_sock, (struct sockaddr*)&amp;clnt_addr, &amp;clnt_addr_size);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//向客户端发送数据</span></span><br><span class="line">    <span class="keyword">char</span> str[] = <span class="string">"Hello world!"</span>;</span><br><span class="line">    <span class="built_in">write</span>(clnt_sock, str, <span class="keyword">sizeof</span>(str));</span><br><span class="line">   </span><br><span class="line">    <span class="comment">//关闭套接字</span></span><br><span class="line">    <span class="built_in">close</span>(clnt_sock);</span><br><span class="line">    <span class="built_in">close</span>(serv_sock);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="Client-代码"><a href="#Client-代码" class="headerlink" title="Client 代码"></a><strong>Client 代码</strong></h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//创建套接字</span></span><br><span class="line">    <span class="keyword">int</span> sock = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//向服务器（特定的IP和端口）发起请求</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">serv_addr</span>;</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;serv_addr, <span class="number">0</span>, <span class="keyword">sizeof</span>(serv_addr));  <span class="comment">//每个字节都用0填充</span></span><br><span class="line">    serv_addr.sin_family = AF_INET;  <span class="comment">//使用IPv4地址</span></span><br><span class="line">    serv_addr.sin_addr.s_addr = inet_addr(<span class="string">"127.0.0.1"</span>);  <span class="comment">//具体的IP地址</span></span><br><span class="line">    serv_addr.sin_port = htons(<span class="number">1234</span>);  <span class="comment">//端口</span></span><br><span class="line">    <span class="built_in">connect</span>(sock, (struct sockaddr*)&amp;serv_addr, <span class="keyword">sizeof</span>(serv_addr));</span><br><span class="line">   </span><br><span class="line">    <span class="comment">//读取服务器传回的数据</span></span><br><span class="line">    <span class="keyword">char</span> <span class="built_in">buffer</span>[<span class="number">40</span>];</span><br><span class="line">    <span class="built_in">read</span>(sock, <span class="built_in">buffer</span>, <span class="keyword">sizeof</span>(<span class="built_in">buffer</span>)<span class="number">-1</span>);</span><br><span class="line">   </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Message form server: %s\n"</span>, <span class="built_in">buffer</span>);</span><br><span class="line">   </span><br><span class="line">    <span class="comment">//关闭套接字</span></span><br><span class="line">    <span class="built_in">close</span>(sock);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Client-代码"><a href="#Client-代码" class="headerlink" title="Client 代码"></a><strong>Client 代码</strong></h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//创建套接字</span></span><br><span class="line">    <span class="keyword">int</span> sock = socket(AF_INET, SOCK_STREAM, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//向服务器（特定的IP和端口）发起请求</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">serv_addr</span>;</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;serv_addr, <span class="number">0</span>, <span class="keyword">sizeof</span>(serv_addr));  <span class="comment">//每个字节都用0填充</span></span><br><span class="line">    serv_addr.sin_family = AF_INET;  <span class="comment">//使用IPv4地址</span></span><br><span class="line">    serv_addr.sin_addr.s_addr = inet_addr(<span class="string">"127.0.0.1"</span>);  <span class="comment">//具体的IP地址(server的IP)</span></span><br><span class="line">    serv_addr.sin_port = htons(<span class="number">1234</span>);  <span class="comment">//端口</span></span><br><span class="line">    <span class="built_in">connect</span>(sock, (struct sockaddr*)&amp;serv_addr, <span class="keyword">sizeof</span>(serv_addr));</span><br><span class="line">   </span><br><span class="line">    <span class="comment">//读取服务器传回的数据</span></span><br><span class="line">    <span class="keyword">char</span> <span class="built_in">buffer</span>[<span class="number">40</span>];</span><br><span class="line">    <span class="built_in">read</span>(sock, <span class="built_in">buffer</span>, <span class="keyword">sizeof</span>(<span class="built_in">buffer</span>)<span class="number">-1</span>);</span><br><span class="line">   </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"Message form server: %s\n"</span>, <span class="built_in">buffer</span>);</span><br><span class="line">   </span><br><span class="line">    <span class="comment">//关闭套接字</span></span><br><span class="line">    <span class="built_in">close</span>(sock);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <blockquote>
 <p>启动一个终端（Shell），先编译 server.cpp 并运行：</p>
 <p>[admin@localhost ~]$ g++ server.cpp -o server</p>
@@ -1290,8 +1441,8 @@
 <h4 id="read-的原型"><a href="#read-的原型" class="headerlink" title="read() 的原型"></a>read() 的原型</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">ssize_t</span> <span class="title">read</span><span class="params">(<span class="keyword">int</span> fd, <span class="keyword">void</span> *buf, <span class="keyword">size_t</span> nbytes)</span></span>;</span><br></pre></td></tr></table></figure>
 <p>fd 为要读取的文件的描述符，buf 为要接收数据的缓冲区地址，nbytes 为要读取的数据的字节数。</p>
 <p>read() 函数会从 fd 文件中读取 nbytes 个字节并保存到缓冲区 buf，成功则返回读取到的字节数（但遇到文件结尾则返回0），失败则返回 -1。</p>
-<h3 id="Socket代码Plus"><a href="#Socket代码Plus" class="headerlink" title="Socket代码Plus"></a>Socket代码Plus</h3><h4 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Created by ykma on 20-10-19.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> port 9080</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUF_SIZE 1024</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//create socket</span></span><br><span class="line">    <span class="keyword">int</span> serverSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// create socket (both server and client)</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">clientAddr</span>, <span class="title">serverAddr</span>;</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;clientAddr, <span class="number">0</span>, <span class="keyword">sizeof</span>(clientAddr));</span><br><span class="line">    <span class="built_in">memset</span>(&amp;serverAddr, <span class="number">0</span>, <span class="keyword">sizeof</span>(serverAddr));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// init sock</span></span><br><span class="line">    serverAddr.sin_family = AF_INET;</span><br><span class="line">    serverAddr.sin_port = htons(port);</span><br><span class="line">    serverAddr.sin_addr.s_addr = inet_addr(<span class="string">"127.0.0.1"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// bind socket</span></span><br><span class="line">    <span class="comment">// bind(serverSock, (struct sockaddr*)&amp;serverAddr, sizeof(serverAddr));</span></span><br><span class="line">    <span class="keyword">if</span> (bind(serverSock, (struct sockaddr*)&amp;serverAddr, <span class="keyword">sizeof</span>(serverAddr)) &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"bind error = %d (%s)\n"</span>, errno, strerror(errno));</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ready to listen</span></span><br><span class="line">    <span class="comment">// listen(serverSock, 10);</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">listen</span>(serverSock, <span class="number">10</span>) &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"listen error = %d (%s)\n"</span>, errno, strerror(errno));</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set buffer</span></span><br><span class="line">    <span class="keyword">char</span> RecvBuffer[BUF_SIZE] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">char</span> SendBuffer[BUF_SIZE] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">socklen_t</span> addrlen = <span class="keyword">sizeof</span>(struct sockaddr);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// wait to recieve from client</span></span><br><span class="line">        <span class="keyword">int</span> clientSock = accept(serverSock, (struct sockaddr*)&amp;clientAddr, &amp;addrlen);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// output IP address</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"output IP address\n"</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Client IP : %s \n"</span>, inet_ntoa(clientAddr.sin_addr));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// read from client</span></span><br><span class="line">        <span class="keyword">int</span> messagelen = <span class="built_in">read</span>(clientSock, RecvBuffer, BUF_SIZE);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Message from client : %s \n"</span>, RecvBuffer);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// sent to client</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Send to client: \n"</span>);</span><br><span class="line">        fgets(SendBuffer, <span class="keyword">sizeof</span>(SendBuffer), <span class="built_in">stdin</span>);</span><br><span class="line">        <span class="built_in">write</span>(clientSock, SendBuffer, messagelen);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// close socket</span></span><br><span class="line">        <span class="built_in">close</span>(clientSock);</span><br><span class="line">        <span class="built_in">memset</span>(RecvBuffer, <span class="number">0</span>, BUF_SIZE);</span><br><span class="line">        <span class="built_in">memset</span>(SendBuffer, <span class="number">0</span>, BUF_SIZE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="Client"><a href="#Client" class="headerlink" title="Client"></a>Client</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> port 9088  <span class="comment">// 定义通讯接口</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUF_SIZE 1024</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// create socket</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">clientAddr</span>;</span></span><br><span class="line">    <span class="comment">// init sock</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;clientAddr, <span class="number">0</span>, <span class="keyword">sizeof</span>(clientAddr));</span><br><span class="line">    clientAddr.sin_family = AF_INET;</span><br><span class="line">    clientAddr.sin_port = htons(port);</span><br><span class="line">    clientAddr.sin_addr.s_addr = inet_addr(<span class="string">"127.0.0.1"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> SendBuffer[BUF_SIZE] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">char</span> RecvBuffer[BUF_SIZE] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// create socket</span></span><br><span class="line">        <span class="keyword">int</span> clientSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);</span><br><span class="line">        <span class="comment">// connect to server</span></span><br><span class="line">        <span class="comment">//connect(clientSock, (struct sockaddr*)&amp;clientAddr, sizeof(clientAddr));</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">connect</span>(clientSock, (struct sockaddr*)&amp;clientAddr, <span class="keyword">sizeof</span>(clientAddr)) &lt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"%s %d\n"</span>,strerror(errno), errno);</span><br><span class="line">            <span class="comment">// perror("connect()");</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// input message and sent to server</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Input a string: "</span>);</span><br><span class="line">        fgets(SendBuffer, <span class="keyword">sizeof</span>(SendBuffer), <span class="built_in">stdin</span>);</span><br><span class="line">        <span class="built_in">write</span>(clientSock, SendBuffer, BUF_SIZE);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// receive message from server and print</span></span><br><span class="line">        <span class="built_in">read</span>(clientSock, RecvBuffer, BUF_SIZE);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Message from server: %s \n"</span>, RecvBuffer);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// reset buffer</span></span><br><span class="line">        <span class="built_in">memset</span>(SendBuffer, <span class="number">0</span>, BUF_SIZE);</span><br><span class="line">        <span class="built_in">memset</span>(RecvBuffer, <span class="number">0</span>, BUF_SIZE);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// close socket</span></span><br><span class="line">        <span class="built_in">close</span>(clientSock);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Socket代码Plus"><a href="#Socket代码Plus" class="headerlink" title="Socket代码Plus"></a>Socket代码Plus</h3><h4 id="Server"><a href="#Server" class="headerlink" title="Server"></a>Server</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// Created by ykma on 20-10-19.</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> port 9080</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUF_SIZE 1024</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//create socket</span></span><br><span class="line">    <span class="keyword">int</span> serverSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// create socket (both server and client)</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">clientAddr</span>, <span class="title">serverAddr</span>;</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;clientAddr, <span class="number">0</span>, <span class="keyword">sizeof</span>(clientAddr));</span><br><span class="line">    <span class="built_in">memset</span>(&amp;serverAddr, <span class="number">0</span>, <span class="keyword">sizeof</span>(serverAddr));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// init sock</span></span><br><span class="line">    serverAddr.sin_family = AF_INET;</span><br><span class="line">    serverAddr.sin_port = htons(port);</span><br><span class="line">    serverAddr.sin_addr.s_addr = inet_addr(<span class="string">"0.0.0.0"</span>); <span class="comment">// 在server端默认写该IP地址，本机所有IP！</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// bind socket</span></span><br><span class="line">    <span class="comment">// bind(serverSock, (struct sockaddr*)&amp;serverAddr, sizeof(serverAddr));</span></span><br><span class="line">    <span class="keyword">if</span> (bind(serverSock, (struct sockaddr*)&amp;serverAddr, <span class="keyword">sizeof</span>(serverAddr)) &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"bind error = %d (%s)\n"</span>, errno, strerror(errno));</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ready to listen</span></span><br><span class="line">    <span class="comment">// listen(serverSock, 10);</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">listen</span>(serverSock, <span class="number">10</span>) &lt; <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"listen error = %d (%s)\n"</span>, errno, strerror(errno));</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set buffer</span></span><br><span class="line">    <span class="keyword">char</span> RecvBuffer[BUF_SIZE] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">char</span> SendBuffer[BUF_SIZE] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">socklen_t</span> addrlen = <span class="keyword">sizeof</span>(struct sockaddr);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">// wait to recieve from client</span></span><br><span class="line">        <span class="keyword">int</span> clientSock = accept(serverSock, (struct sockaddr*)&amp;clientAddr, &amp;addrlen);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// output IP address</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"output IP address\n"</span>);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Client IP : %s \n"</span>, inet_ntoa(clientAddr.sin_addr));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// read from client</span></span><br><span class="line">        <span class="keyword">int</span> messagelen = <span class="built_in">read</span>(clientSock, RecvBuffer, BUF_SIZE);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Message from client : %s \n"</span>, RecvBuffer);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// sent to client</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Send to client: \n"</span>);</span><br><span class="line">        fgets(SendBuffer, <span class="keyword">sizeof</span>(SendBuffer), <span class="built_in">stdin</span>);</span><br><span class="line">        <span class="built_in">write</span>(clientSock, SendBuffer, messagelen);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// close socket</span></span><br><span class="line">        <span class="built_in">close</span>(clientSock);</span><br><span class="line">        <span class="built_in">memset</span>(RecvBuffer, <span class="number">0</span>, BUF_SIZE);</span><br><span class="line">        <span class="built_in">memset</span>(SendBuffer, <span class="number">0</span>, BUF_SIZE);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Client"><a href="#Client" class="headerlink" title="Client"></a>Client</h4><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;arpa/inet.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sys/socket.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;netinet/in.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;errno.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> port 9088  <span class="comment">// 定义通讯接口</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> BUF_SIZE 1024</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// create socket</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">sockaddr_in</span> <span class="title">clientAddr</span>;</span></span><br><span class="line">    <span class="comment">// init sock</span></span><br><span class="line">    <span class="built_in">memset</span>(&amp;clientAddr, <span class="number">0</span>, <span class="keyword">sizeof</span>(clientAddr));</span><br><span class="line">    clientAddr.sin_family = AF_INET;</span><br><span class="line">    clientAddr.sin_port = htons(port);</span><br><span class="line">    clientAddr.sin_addr.s_addr = inet_addr(<span class="string">"127.0.0.1"</span>); <span class="comment">// 主机IP地址</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span> SendBuffer[BUF_SIZE] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line">    <span class="keyword">char</span> RecvBuffer[BUF_SIZE] = &#123;<span class="number">0</span>&#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span>(<span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// create socket</span></span><br><span class="line">        <span class="keyword">int</span> clientSock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);</span><br><span class="line">        <span class="comment">// connect to server</span></span><br><span class="line">        <span class="comment">//connect(clientSock, (struct sockaddr*)&amp;clientAddr, sizeof(clientAddr));</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">connect</span>(clientSock, (struct sockaddr*)&amp;clientAddr, <span class="keyword">sizeof</span>(clientAddr)) &lt; <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">"%s %d\n"</span>,strerror(errno), errno);</span><br><span class="line">            <span class="comment">// perror("connect()");</span></span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// input message and sent to server</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Input a string: "</span>);</span><br><span class="line">        fgets(SendBuffer, <span class="keyword">sizeof</span>(SendBuffer), <span class="built_in">stdin</span>);</span><br><span class="line">        <span class="built_in">write</span>(clientSock, SendBuffer, BUF_SIZE);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// receive message from server and print</span></span><br><span class="line">        <span class="built_in">read</span>(clientSock, RecvBuffer, BUF_SIZE);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"Message from server: %s \n"</span>, RecvBuffer);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// reset buffer</span></span><br><span class="line">        <span class="built_in">memset</span>(SendBuffer, <span class="number">0</span>, BUF_SIZE);</span><br><span class="line">        <span class="built_in">memset</span>(RecvBuffer, <span class="number">0</span>, BUF_SIZE);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// close socket</span></span><br><span class="line">        <span class="built_in">close</span>(clientSock);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 ]]></content>
       <tags>
         <tag>总结</tag>
@@ -1302,59 +1453,6 @@
     <title>Systematic Review on FHE</title>
     <url>/2020/08/12/Systematic-Review-on-FHE/</url>
     <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>SP&#39;15 Last-Level Cache Side-Channel Attacks are Practical</title>
-    <url>/2020/05/18/SP-15-Last-Level-Cache-Side-Channel-Attacks-are-Practical/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://mykrobin.github.io/files/docs/CSCA-004-SP2015.pdf" target="_blank" rel="noopener">Last Level Cache Side Channel Attacks are Practical</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Department of Electrical Engineering, Princeton University</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">side channel attacks</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">security cross VM</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文详细地讲解了跨虚拟机的侧信道攻击</td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>side channel attack</tag>
-        <tag>cross VM</tag>
-        <tag>last level cache</tag>
-      </tags>
   </entry>
   <entry>
     <title>The first blog</title>
@@ -1372,54 +1470,19 @@
       </tags>
   </entry>
   <entry>
-    <title>SecVisor</title>
-    <url>/2020/07/21/SecVisor/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="http://www.cs.cmu.edu/~arvinds/pubs/secvisor.pdf" target="_blank" rel="noopener">SecVisor</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">检测</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center"></td>
-</tr>
-</tbody>
-</table>
-</div>
+    <title>The moment</title>
+    <url>/2020/07/14/The-moment/</url>
+    <content><![CDATA[<p>&emsp;&emsp;此时此刻，在家里敲代码+编辑文本，就在这一刻，我感觉电脑自带的键盘手感好棒，这种美妙的触感，爱了。</p>
+<p>&emsp;&emsp;不矫情了，就在享受这美妙触感的一刻，脑子里思绪万千，想到了一年前的自己，想到了在济南待过的一年多的时光，想到了从毕业到彻底离开济南遇到的人和事，想法没有太多，就是单纯的心怀感恩。</p>
+<p>&emsp;&emsp;这台笔记本是自己一块砖一块砖搬出来的，所以在体会到自己曾经的努力给现在的自己带来些许便利之时，这种感觉可能已经高于简单的五官感觉了，这一刻，我确想感恩，感恩从毕业那一刻决定咬牙拼一拼的自己，感恩当时陪伴自己身边的家人和朋友们，感恩在临近考研减缓我焦虑的人们，感恩提供自己一份工作的人们 ，也许需要感恩的人太多太多了，甚至连通济南大学到泉城广场的102路公交车都值得被记住，是它，让我可以在济南的市区流连忘返，也是它运行到凌晨可以让我好好欣赏泉城的夜景而不至于过分担心末班车，也是它让我可以跟济南的朋友们多次相聚，这是联通我与济南市区的主干路。如果还有一个公司在这期间值得被记住，可能就要算瑞幸咖啡了，这一份luckin真的在本命年里给自己带来了好运，从室友带我喝第一杯免费咖啡开始，整个假期，每见一位朋友，必须luckin一下，分享之后，一人一杯免费喝，满足了坐下来好好聊聊、过过慢生活的需求。</p>
+<p>&emsp;&emsp;与许多的学生接触过后，有时会暗暗的发现，其实教书这一行也没有自己想的那么无趣，至少我见到的同学们多多少少都给自己带来了许多的欢乐，那一年自己被一帮孩子治愈了。在我眼中，本科毕业的自己确实在某些方面还不如自己的学生，年轻，拥有的就是希望。有几个优秀的同学，我在他们眼里看到了对未来的憧憬，果然，出口不凡，省实验中学、山师附中，浙江大学等等，那一刻，我在内心低下了头。有时我已经不太会做梦了，在以教师的身份与他们相处之后，发现自己对教育这一行业有了新的思考，至少，对自己的求学生涯有了一些反思。</p>
+<p>&emsp;&emsp;暑假最让自己兴奋的，莫过于初次遇到大海，站在浅滩，任由波浪打湿裤腿，室友几人一起压海滩，去年那个暑假，想想都觉得像梦一样。</p>
+<p>&emsp;&emsp;去年的我抓住了这辈子剩下为数不多稍微一努力就可以改变自己生活轨迹的机会，未来已来，愿你们都可以在将来的某一天对自己心存感激。</p>
+<p> &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; 疫情期间于济宁</p>
+<p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;2020年2月18日</p>
 ]]></content>
-      <categories>
-        <category>paper</category>
-        <category>SOSP</category>
-      </categories>
       <tags>
-        <tag>论文解读</tag>
-        <tag>Detection</tag>
+        <tag>essay</tag>
       </tags>
   </entry>
   <entry>
@@ -1731,18 +1794,10 @@
 <p>现在，按照此方法就可以调用hypecall了~</p>
 ]]></content>
       <tags>
+        <tag>Virtualization</tag>
         <tag>Hypervisor</tag>
         <tag>Xen log</tag>
         <tag>Linux</tag>
-        <tag>Virtualization</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Xen虚拟化技术完全导读</title>
-    <url>/2020/07/19/Xen%E8%99%9A%E6%8B%9F%E5%8C%96%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E5%AF%BC%E8%AF%BB/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -1783,35 +1838,9 @@
 <h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">https://wiki.xenproject.org/wiki/Xen_Serial_Console</a><br>[2] <a href="** https://silentming.net/blog/2016/09/18/xen-log-5-debug-xen/**">Xen Log 5-Debug Xen on Physical Machine</a><br>[3] <a href="https://xenbits.xen.org/docs/unstable/misc/xen-command-line.html" target="_blank" rel="noopener">https://xenbits.xen.org/docs/unstable/misc/xen-command-line.html</a></p>
 ]]></content>
       <tags>
+        <tag>Virtualization</tag>
         <tag>Xen log</tag>
         <tag>Linux</tag>
-        <tag>Virtualization</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>The moment</title>
-    <url>/2020/07/14/The-moment/</url>
-    <content><![CDATA[<p>&emsp;&emsp;此时此刻，在家里敲代码+编辑文本，就在这一刻，我感觉电脑自带的键盘手感好棒，这种美妙的触感，爱了。</p>
-<p>&emsp;&emsp;不矫情了，就在享受这美妙触感的一刻，脑子里思绪万千，想到了一年前的自己，想到了在济南待过的一年多的时光，想到了从毕业到彻底离开济南遇到的人和事，想法没有太多，就是单纯的心怀感恩。</p>
-<p>&emsp;&emsp;这台笔记本是自己一块砖一块砖搬出来的，所以在体会到自己曾经的努力给现在的自己带来些许便利之时，这种感觉可能已经高于简单的五官感觉了，这一刻，我确想感恩，感恩从毕业那一刻决定咬牙拼一拼的自己，感恩当时陪伴自己身边的家人和朋友们，感恩在临近考研减缓我焦虑的人们，感恩提供自己一份工作的人们 ，也许需要感恩的人太多太多了，甚至连通济南大学到泉城广场的102路公交车都值得被记住，是它，让我可以在济南的市区流连忘返，也是它运行到凌晨可以让我好好欣赏泉城的夜景而不至于过分担心末班车，也是它让我可以跟济南的朋友们多次相聚，这是联通我与济南市区的主干路。如果还有一个公司在这期间值得被记住，可能就要算瑞幸咖啡了，这一份luckin真的在本命年里给自己带来了好运，从室友带我喝第一杯免费咖啡开始，整个假期，每见一位朋友，必须luckin一下，分享之后，一人一杯免费喝，满足了坐下来好好聊聊、过过慢生活的需求。</p>
-<p>&emsp;&emsp;与许多的学生接触过后，有时会暗暗的发现，其实教书这一行也没有自己想的那么无趣，至少我见到的同学们多多少少都给自己带来了许多的欢乐，那一年自己被一帮孩子治愈了。在我眼中，本科毕业的自己确实在某些方面还不如自己的学生，年轻，拥有的就是希望。有几个优秀的同学，我在他们眼里看到了对未来的憧憬，果然，出口不凡，省实验中学、山师附中，浙江大学等等，那一刻，我在内心低下了头。有时我已经不太会做梦了，在以教师的身份与他们相处之后，发现自己对教育这一行业有了新的思考，至少，对自己的求学生涯有了一些反思。</p>
-<p>&emsp;&emsp;暑假最让自己兴奋的，莫过于初次遇到大海，站在浅滩，任由波浪打湿裤腿，室友几人一起压海滩，去年那个暑假，想想都觉得像梦一样。</p>
-<p>&emsp;&emsp;去年的我抓住了这辈子剩下为数不多稍微一努力就可以改变自己生活轨迹的机会，未来已来，愿你们都可以在将来的某一天对自己心存感激。</p>
-<p> &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp; 疫情期间于济宁</p>
-<p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;2020年2月18日</p>
-]]></content>
-      <tags>
-        <tag>essay</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>云虚拟化安全攻防实践</title>
-    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
-<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
-<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
-      <tags>
-        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -1856,6 +1885,24 @@
         <tag>Xen log</tag>
         <tag>Linux</tag>
         <tag>Shell</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Xen虚拟化技术完全导读</title>
+    <url>/2020/07/19/Xen%E8%99%9A%E6%8B%9F%E5%8C%96%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E5%AF%BC%E8%AF%BB/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>云虚拟化安全攻防实践</title>
+    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
+<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
+<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
+      <tags>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -2000,29 +2047,6 @@
       </tags>
   </entry>
   <entry>
-    <title>泉城济南</title>
-    <url>/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/</url>
-    <content><![CDATA[<h3 id="泉城济南"><a href="#泉城济南" class="headerlink" title="泉城济南"></a>泉城济南</h3><p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-7.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-8.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-2.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-3.jpg" width="500px" height="350px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-4.jpg" width="500px" height="390px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-5.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-6.jpg" width="500px" height="400px"></p>
-]]></content>
-      <tags>
-        <tag>picture</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>虚拟机 系统与进程的通用平台</title>
-    <url>/2020/07/17/%E8%99%9A%E6%8B%9F%E6%9C%BA-%E7%B3%BB%E7%BB%9F%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E9%80%9A%E7%94%A8%E5%B9%B3%E5%8F%B0/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>求最大间隔分离超平面</title>
     <url>/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/</url>
     <content><![CDATA[<p>在利用向量机进行最大间隔分离超平面和分类决策函数的求解时，解题过程如下</p>
@@ -2073,6 +2097,21 @@
       </tags>
   </entry>
   <entry>
+    <title>泉城济南</title>
+    <url>/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/</url>
+    <content><![CDATA[<h3 id="泉城济南"><a href="#泉城济南" class="headerlink" title="泉城济南"></a>泉城济南</h3><p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-7.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-8.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-2.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-3.jpg" width="500px" height="350px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-4.jpg" width="500px" height="390px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-5.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-6.jpg" width="500px" height="400px"></p>
+]]></content>
+      <tags>
+        <tag>picture</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>疫情期间小确幸</title>
     <url>/2020/07/14/%E7%96%AB%E6%83%85%E6%9C%9F%E9%97%B4%E5%B0%8F%E7%A1%AE%E5%B9%B8/</url>
     <content><![CDATA[<p>&emsp;&emsp;与不完美的自己和解，事情正在变得越来越好。</p>
@@ -2096,6 +2135,14 @@
 ]]></content>
       <tags>
         <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>虚拟机 系统与进程的通用平台</title>
+    <url>/2020/07/17/%E8%99%9A%E6%8B%9F%E6%9C%BA-%E7%B3%BB%E7%BB%9F%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E9%80%9A%E7%94%A8%E5%B9%B3%E5%8F%B0/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
