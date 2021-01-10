@@ -76,7 +76,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">151</span>
+            <span class="post-count">2.4k</span>
         </span>
     </span>
 
@@ -85,7 +85,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-book-open-line"></i>
             <span class="post-meta-item-text"> Reading time≈</span>
-            <span class="post-count">1 min</span>
+            <span class="post-count">8 min</span>
         </span>
     </span>
 </div>
@@ -128,12 +128,12 @@
 <tr>
 <td style="text-align:center">2</td>
 <td style="text-align:center">作者信息</td>
-<td style="text-align:center">Shanghai Jiao Tong University</td>
+<td style="text-align:center">IPADS，Shanghai Jiao Tong University</td>
 </tr>
 <tr>
 <td style="text-align:center">3</td>
 <td style="text-align:center">核心内容</td>
-<td style="text-align:center">Untrusted Hypervisor，解耦是嵌套虚拟化技术</td>
+<td style="text-align:center">Untrusted Hypervisor，解耦是嵌套虚拟化技术，非可信平台保护VMs</td>
 </tr>
 <tr>
 <td style="text-align:center">4</td>
@@ -148,7 +148,74 @@
 </tbody>
 </table>
 </div>
-<h3 id="问题背景"><a href="#问题背景" class="headerlink" title="问题背景"></a>问题背景</h3><h4 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h4><h4 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h4><h4 id="为什么会出现这种问题"><a href="#为什么会出现这种问题" class="headerlink" title="为什么会出现这种问题"></a>为什么会出现这种问题</h4><h3 id="虚拟机退出？"><a href="#虚拟机退出？" class="headerlink" title="虚拟机退出？"></a>虚拟机退出？</h3><h3 id="嵌套虚拟化？"><a href="#嵌套虚拟化？" class="headerlink" title="嵌套虚拟化？"></a>嵌套虚拟化？</h3><h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3>
+<h3 id="全文概览"><a href="#全文概览" class="headerlink" title="全文概览"></a>全文概览</h3><p>​        本文首次提出解耦式嵌套虚拟化技术，可以在恶意虚拟机监控器环境下实现虚拟机隐私的高效保护，并基于此开发了 CloudVisor-D 系统。该技术将传统嵌套虚拟化的架构分解为两个模块，能在无需引起虚拟机下陷的情况下将大多数虚拟机操作转交给可信的守卫模块处理，大幅度提升嵌套虚拟化技术的性能。通过利用最新硬件的功能，使得VM多数的特权级别操作不需要触发<code>VM Exit</code>， 即无需退出到嵌套的<code>Hypervisor</code>中，这是先前<code>CloudVisor</code>设计中性能下降的主要原因。</p>
+<p>​        该工作是<code>IPADS</code>实验室<code>CloudVisor[SOSP&#39; 11]</code>系统的后续之作，也是继 CHAOS [ISTR’07]、HyperCoffer [HPCA’13]、TxIntro [HPCA’14]、CrossOver [ISCA’15]、SeCage [CCS’15]、Nexen [NDSS’17] 、EPTI [ATC’18]、SkyBridge [EuroSys’19]等系列工作之后，在虚拟化隔离与安全方面的延续工作。</p>
+<p><img src="/2020/10/18/CloudVisor-D/summary.png"></p>
+<h3 id="CloudVisor-D"><a href="#CloudVisor-D" class="headerlink" title="CloudVisor-D"></a>CloudVisor-D</h3><p>​        云中多租户的前提是云平台能够提供给用户隐私与完整性保护，然而提供这个前提的hypervisor 被其存在的漏洞严重的威胁。事实上，随着hypervisor代码量的不断增加，在Xen中发现的代码漏洞正在不断的增加。现有的方法是在软件以及硬件方面都有瑕疵，会导致性能的下降。</p>
+<p>​        本文利用嵌套虚拟化技术,目的是保护部署在同一个物理机上的客户虚拟机安全。CloudVisor-D解决了嵌套虚拟化的不足，并设计了一个分解的嵌套虚拟化管理器。通过分解，hypervisor分解为小型的管理程序，在非特权模式下，分解为一组guardian-VM（不是完整的VM，仅包含一些服务处理程序，对于商业虚拟机管理器是透明的），并为每一个客户虚拟机提供一个，因此消耗的资源很少。基于新硬件的特征，Guardian-VM能够在不退出VM的情况下执行卸载VM的操作，通过这种G-VM的帮助，客户VM可以直接调用超级调用命令，而且不需要陷入RootVisor中。常规EPT违规将在来宾模式下转换为异常，然后由Guardian-VM重定向到SubVisor进行处理。</p>
+<p>​        但是在客户模式下，VM或SubVisor可能会恶意切换EPT以绕过甚至攻击Guardian-VM。有一些工作在假设不能够修改CR3寄存器数值的前提的下解决上述问题，但本文并不基于此种假设。本文在CloudVisor-D中提供了一系列的技术来保护：</p>
+<ol>
+<li><p>RootVisor创建出一个隔离的环境使得Guardian-VM不会被篡改；</p>
+</li>
+<li><p>每个Guardian-VM都会强制其在客户VM和SubVisor之间以客户模式插入所有通信路径。</p>
+<p><img src="/2020/10/18/CloudVisor-D/comparison.jpg"></p>
+</li>
+</ol>
+<p>​        CloudVisor-D通过解耦合的设计来解决嵌套虚拟化(<strong>CloudVisor工作</strong> )的不足，方法是在特权模式下将嵌套的管理程序功能分解为微小的嵌套管理程序（RootVisor），在非特权模式下将其分解为一组Guardian-VM。这种分解的设计为每个来宾VM提供一个Guardian-VM，并将大多数保护逻辑卸载到每个Guardian-VM，而小型RootVisor负责将所有Guardian-VM与商业虚拟机管理程序（SubVisor）和来宾VM隔离。 Guardian-VM不是完整的VM，而仅包含一些服务处理程序，并且对于SubVisor是不可见的。 </p>
+<p>​        Guardian-VM可以处理VM操作，而无需信任来宾VM和SubVisor。 具体来说，Guardian-VM要求相应的VM只能调用跳转表中列出的有限范围内的功能。 此外，它为每个来宾VM向SubVisor提供了一个影子EPT，并在将其复制回真实EPT之前仔细检查了SubVisor对影子EPT所做的更新。 最后，Guardian-VM还可以保护其来宾VM的I / O数据的隐私和完整性。</p>
+<h3 id="虚拟机退出"><a href="#虚拟机退出" class="headerlink" title="虚拟机退出"></a>虚拟机退出</h3><p>VM响应某些指令而退出，并且事件（例如页面错误）是虚拟化系统中性能下降的关键来源。但是您是否想过为什么？无论如何，VM退出过程中到底会发生什么？</p>
+<p>VM出口标志着在当前运行的VM和必须出于特定原因而必须执行系统控制的VMM（管理程序）之间进行转换的点。通常，处理器必须在退出时保存VM运行时的状态快照。对于英特尔架构，以下是这些步骤的近似值：</p>
+<p>1.在VM退出信息字段中记录有关VM退出原因的信息（退出原因，来宾地址），并更新VM进入控制字段。</p>
+<p>2.将处理器状态保存在来宾状态区域中。其中包括控制寄存器，调试寄存器，MSR（请参见下一项），段寄存器，描述符表寄存器，RIP，RSP和RFLAGS，以及未注册状态（如未决的调试异常）。</p>
+<p>3.将MSR保存在VM退出MSR存储区中。如果您不熟悉，MSR代表机器专用寄存器。它们用于控制和报告处理器性能。</p>
+<p>4.根据主机状态区域和某些VM退出控件加载处理器状态。这包括主机控制寄存器，调试寄存器，MSR，主机表和描述符表寄存器，RIP，RSP和RFLAGS，页目录指针表条目以及非寄存器状态。</p>
+<p>5.从VM退出MSR加载区域加载MSR。</p>
+<p>在VMM执行其系统管理功能之后，将执行相应的VM条目，该条目将处理器控制从VMM过渡到VM！</p>
+<h3 id="嵌套虚拟化？"><a href="#嵌套虚拟化？" class="headerlink" title="嵌套虚拟化？"></a>嵌套虚拟化？</h3><h3 id="阅读时的问题："><a href="#阅读时的问题：" class="headerlink" title="阅读时的问题："></a>阅读时的问题：</h3><ol>
+<li><p>本文提到的硬件（SGX）与即将用到的硬件（TPM）分别都是什么，有什么区别、联系？</p>
+<p>TPM与SGX都是安全芯片，Intel SGX最关键的优势在于将程序以外的software stack如OS和BIOS都排除在了TCB（Trusted Computing Base）以外，在enclave里的code只信任自己和intel的CPU。TPM在开机过程中需要构建信任链，逐步确立信任。但是SGX仅仅在用户权限下使用，TPM则在特权级别下使用。</p>
+</li>
+<li><p>嵌套虚拟化需要VM退出？CloudVisor-D版本的嵌套虚拟化怎么就解决了前者的问题？</p>
+<p>嵌套虚拟化是指将原来的hypervisor转移到非特权模式下，命名为SubVisor，在特权模式下构建一个受信任的虚拟机管理器（RootVisor），VM与SubVisor的任何通讯都要经过RootVisor进行检查，从而避免漏洞注入到SubVisor中。</p>
+<p><a href="https://www.cnblogs.com/kelamoyujuzhen/p/10115167.html" target="_blank" rel="noopener">https://www.cnblogs.com/kelamoyujuzhen/p/10115167.html</a></p>
+</li>
+<li><p>文中出现的RootVisor、SubVisor是什么关系？</p>
+<p>RootVisor是新构建的一个特权级别的虚拟机管理，类似于修改前的hypervisor，对费特权级别的VM以及SubVisor进行管理。</p>
+<p>SubVisor是将原始的hypervisor移动到非特权级别下的名称，在非特权模式下，仍然保留了创建虚拟机的功能。</p>
+</li>
+<li><p>详细指出半虚拟化与全虚拟化的关系？<br>后者效率比较低下。</p>
+</li>
+<li><p>2.2节中为什么EPT有4层违规？介绍下EPT？</p>
+<p>Intel EPT应该有5级分页，经历4次地址拼接，所以在寻址的时候，最差情况下要经历4次地址miss，导致4次VM exit.</p>
+</li>
+<li><p>虚拟化异常是什么？</p>
+</li>
+<li><p>谈论虚拟化安全一般会从几个方面入手，分别都是什么？（性能？可靠性？）</p>
+</li>
+<li><p>Ring0与特权模式的关系、区别？</p>
+<p><a href="https://www.cnblogs.com/xusongwei/archive/2012/07/30/2615592.html" target="_blank" rel="noopener">https://www.cnblogs.com/xusongwei/archive/2012/07/30/2615592.html</a></p>
+</li>
+<li><p>本文用到的技术？</p>
+<ol>
+<li>TPM</li>
+<li>SSL</li>
+</ol>
+</li>
+<li><p>本文提到的加密是怎么回事？</p>
+<p>涉及到IO传输，对传输的数据进行加密，防止被恶意窃取。</p>
+</li>
+<li><p>以文中提到的虚拟机退出次数为例，本文只在Xen与CloudVisor间做了比较，说明后者产生更多的VM Exit，而CloudVisor-D是利用新硬件特性进行的部署，是所以VM Exit的次数明显减少，但是如果直接在CloudVisor上进行改进呢？</p>
+<p>​        本文所利用的指令，VMFUNC，是可以在非特权级别下进行操作并寻得EPTP表的，本文并未提到在特权模式下的转换会不会涉及到VM Exit（是会触发VM Exit的），这样的话，仅仅在CloudVisor架构基础上利用新硬件，并不能达到其最佳的效果。简言之，<code>利用VMFUNC指令在非特权模式下进行EPT Switching操作不会引发VM Exit 的特性</code>，进行优化，很大程度上减少了VM Exit的次数。又要保证这种更改之后的可靠性，所以加入了Guardian-VM.</p>
+</li>
+<li><p>虚拟化异常不会触发VM Exit吗?</p>
+</li>
+<li><p>文中指出的EPT存在哪里？</p>
+<p>指的是适配硬件虚拟化的 intel 扩展页表。</p>
+</li>
+</ol>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://www.cnblogs.com/ck1020/p/6043054.html" target="_blank" rel="noopener">intel EPT 机制详解</a></p>
+<p>[2] <a href="https://www.facebook.com/notes/intel/virtualization-and-performance-understanding-vm-exits/97103992067/" target="_blank" rel="noopener">Understanding VM Exits</a></p>
+
       
       <!-- reward -->
       
@@ -317,7 +384,7 @@
     <ul>
       <li>
         Copyrights &copy;
-        2020
+        2020-2021
         <i class="ri-heart-fill heart_icon"></i> Mykrobin
       </li>
     </ul>

@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    MIT-log-1-启动PC |  MYKRobin&#39;S BLOG
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  
+  
+  <link rel="shortcut icon" href="/favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    <main class="content on">
+      <section class="outer">
+  <article id="post-MIT-log-1-启动PC" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  MIT-log-1-启动PC
+</h1>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/" class="article-date">
+  <time datetime="2020-12-11T06:57:51.000Z" itemprop="datePublished">2020-12-11</time>
+</a>
+      
+      
+      
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">2.9k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">11 min</span>
+        </span>
+    </span>
+</div>
+
+      
+    </div>
+    
+
+    
+    
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <h3 id="Part-1-PC-BootStrap"><a href="#Part-1-PC-BootStrap" class="headerlink" title="Part 1: PC BootStrap"></a>Part 1: PC BootStrap</h3><p><strong>PC物理地址空间</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">+------------------+  &lt;- 0xFFFFFFFF (4GB)</span><br><span class="line">|      32-bit      |</span><br><span class="line">|  memory mapped   |</span><br><span class="line">|     devices      |</span><br><span class="line">|                  |</span><br><span class="line">/\/\/\/\/\/\/\/\/\/\</span><br><span class="line"></span><br><span class="line">/\/\/\/\/\/\/\/\/\/\</span><br><span class="line">|                  |</span><br><span class="line">|      Unused      |</span><br><span class="line">|                  |</span><br><span class="line">+------------------+  &lt;- depends on amount of RAM</span><br><span class="line">|                  |</span><br><span class="line">|                  |</span><br><span class="line">| Extended Memory  |</span><br><span class="line">|                  |</span><br><span class="line">|                  |</span><br><span class="line">+------------------+  &lt;- 0x00100000 (1MB)</span><br><span class="line">|     BIOS ROM     |</span><br><span class="line">+------------------+  &lt;- 0x000F0000 (960KB)</span><br><span class="line">|  16-bit devices, |</span><br><span class="line">|  expansion ROMs  |</span><br><span class="line">+------------------+  &lt;- 0x000C0000 (768KB)</span><br><span class="line">|   VGA Display    |</span><br><span class="line">+------------------+  &lt;- 0x000A0000 (640KB)</span><br><span class="line">|                  |</span><br><span class="line">|    Low Memory    |</span><br><span class="line">|                  |</span><br><span class="line">+------------------+  &lt;- 0x00000000</span><br></pre></td></tr></table></figure>
+<h4 id="利用Qemu和gdb实现对OS的debug"><a href="#利用Qemu和gdb实现对OS的debug" class="headerlink" title="利用Qemu和gdb实现对OS的debug"></a>利用Qemu和gdb实现对OS的debug</h4><h5 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h5><ol>
+<li><p>打开一个终端，在lab目录下输入 <code>make qemu-gdb</code></p>
+<p><img src="/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/gdb-1.png" height="100"></p>
+</li>
+<li><p>在另一个终端中进入lab目录下，输入<code>gdb</code>即可</p>
+<p><img src="/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/gdb-2.png" height="400"></p>
+</li>
+</ol>
+<p>此时，便可以进行调试了。</p>
+<p>&emsp; &emsp;在OS启动时，第一段加载的第一段程序是BIOS，BIOS的操作就是在控制、初始化、检测各种底层的设备，如：时钟，GDTR寄存器、设置中断向量表等，最重要的功能就是<strong>把操作系统从此磁盘中导入内存，然后把控制权交给操作系统。</strong>所以BIOS在运行的最后会去检测可以从当前系统的哪个设备中找到操作系统，通常来说是我们的磁盘。当BIOS确定操作系统位于磁盘中，那么它就会把这个磁盘的第一个扇区，通常把它叫做启动区（boot sector）先加载到内存中，这个启动区中包括一个非常重要的程序—<strong>boot loader，</strong>它会负责完成整个操作系统从磁盘导入内存的工作，以及一些其他的非常重要的配置工作。最后操作系统才会开始运行。</p>
+<p>可见PC启动后的运行顺序为<code>BIOS --&gt; boot loader--&gt; OS内核</code></p>
+<h5 id="Exercise-2"><a href="#Exercise-2" class="headerlink" title="Exercise 2:"></a>Exercise 2:</h5><p>在gdb窗口中显示出PC机启动后运行BIOS的第一条命令为</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1. [f000:fff0]    0xffff0: ljmp   $0xf000,$0xe05b</span><br></pre></td></tr></table></figure>
+<p>&emsp; &emsp; 这是运行的第一条指令，为跳转指令，目标是<code>0xfe05b</code>. 当PC机启动后，CPU运行在实模式(real mode)<sup><a href="#fn_实模式" id="reffn_实模式">实模式</a></sup>下，而当进入操作系统内核后，将会运行在保护模式(protected mode)下[2]。其中实模式是早期CPU（如8088处理器）的工作模式，这类处理器只有20根地址线，所以只能访问<code>1MB</code>的内存空间。但是，CPU不断的发展，之后的<code>80286/80386</code>已经具备32根地址线，能够访问<code>4GB</code>的内存空间，为了能够很好的管理内存空间，提出了保护模式。所以现在的处理器都是工作在保护模式下的，但为了向后兼容，即原来的8088处理器的软件仍能够运行在现代处理器上，现代处理器的CPU在启动过程中都处于实模式，启动完成后进入保护模式。<code>BIOS</code>就是PC刚启动时运行的软件，所以工作在实模式下。</p>
+<p>&emsp; &emsp; 实模式下的地址：<code>段基址：段内偏移</code>，其中这两个字段的值都存放在寄存器中，段基地址必须存放在段寄存器中，如CS(代码段), DS(数据段), SS(堆栈段), ES(扩展段)。</p>
+<p> &emsp; &emsp; 由于8088CPU 寄存器中都是16位，而CPU总线是20位，则需要通过16位的寄存器拼接得到20位的地址：把段寄存器中值左移4位，形成20位段基址，然后和16位段内偏移地址相加，得到20位的真实地址，如：<code>0xf000&lt;&lt;4+0xe05b=0xfe05b</code></p>
+<p>使用gdb进行调试：<code>si</code> 查看下一条指令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2. [f000:e05b]    0xfe05b: cmpl   $0x0,%cs:0x6ac8</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp; 把<code>0x0</code> 这个立即数 与 <code>%cs:0x6ac8</code>代表的内存地址处的值进行比较。其中<code>% cs</code>代表CS段寄存器中的值。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3. [f000:e062]    0xfe062: jne    0xfd2e1</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp; <code>jne</code>指令：如果ZF标志位为0的时候跳转，即上一条指令 <code>cmpl</code> 的结果不是0 的时候跳转，即 <code>%cs:0x6ac8</code> 地址处的值不是 <code>0x0</code>的时候跳转。</p>
+<blockquote>
+<p><code>cmpl</code>指令是将两个操作数相减，但计算结果不保存，只是更具计算结果改变<code>eflags</code>的标志位，如果两个操作数相同，则计算结果为0，ZF标志位为1 。</p>
+<p><code>gdb</code>查看寄存器中数值：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">(gdb) info registers</span><br><span class="line">eax            0x0      0</span><br><span class="line">ecx            0x0      0</span><br><span class="line">edx            0x663    1635</span><br><span class="line">ebx            0x0      0</span><br><span class="line">esp            0x0      0x0</span><br><span class="line">ebp            0x0      0x0</span><br><span class="line">esi            0x0      0</span><br><span class="line">edi            0x0      0</span><br><span class="line">eip            0xe062   0xe062</span><br><span class="line">eflags         0x46     [ PF ZF ]</span><br><span class="line">cs             0xf000   61440</span><br><span class="line">ss             0x0      0</span><br><span class="line">ds             0x0      0</span><br><span class="line">es             0x0      0</span><br><span class="line">fs             0x0      0</span><br><span class="line">gs             0x0      0</span><br></pre></td></tr></table></figure>
+<p><code>gdb</code>查看内存信息：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(gdb) x 0xfe05b</span><br><span class="line">   0xfe05b:     cmpl   $0x0,%cs:0x6ac8</span><br><span class="line">(gdb) x 0xfe062</span><br><span class="line">   0xfe062:     jne    0xfd2e1</span><br></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4. [f000:e066]    0xfe066: xor    %dx,%dx</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp; 下一条指令的地址为<code>0xfe066</code>，可见并没有发生指令跳转，该指令功能是把dx寄存器内容清零。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">5. [f000:e068]    0xfe068: mov    %dx,%ss</span><br><span class="line">6. [f000:e06a]    0xfe06a: mov    $0x7000,%esp</span><br><span class="line">7. [f000:e070]    0xfe070: mov    $0xf34c2,%edx</span><br><span class="line">8. [f000:e076]    0xfe076: jmp    0xfd15c  # 跳转到绝对地址</span><br><span class="line">9. [f000:d15c]    0xfd15c: mov    %eax,%ecx</span><br></pre></td></tr></table></figure>
+<p>&emsp; &emsp; 设置寄存器中的数值。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10. [f000:d15f]    0xfd15f: cli</span><br></pre></td></tr></table></figure>
+<p>&emsp;&emsp; 关闭中断指令。PC启动时的操作是比较关键的，关中断指令用于关闭那些可以屏蔽的中断。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">11. [f000:d160]    0xfd160: cld</span><br></pre></td></tr></table></figure>
+<p>&emsp; &emsp; 设置方向标识位为0，表示后续的串操作 [3] 比如MOVS操作，内存地址的变化方向，如果为0代表从低地址值变为高地址。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">12. [f000:d161]    0xfd161: mov    $0x8f,%eax</span><br><span class="line"><span class="meta">#</span><span class="bash"> (gdb) info register eax</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> eax            0x0      0</span></span><br><span class="line">13. [f000:d167]    0xfd167: out    %al,$0x70</span><br><span class="line"><span class="meta">#</span><span class="bash"> (gdb) info register eax</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> eax            0x8f     143</span></span><br><span class="line">14. [f000:d169]    0xfd169: in     $0x71,%al</span><br><span class="line"><span class="meta">#</span><span class="bash"> (gdb) info register al</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> al             0x8f     -113</span></span><br></pre></td></tr></table></figure>
+<p>&emsp; &emsp; CPU与外部设备通讯时，通常是通过访问、修改设备控制器中的寄存器来实现的。那么这些位于设备控制器当中的寄存器也叫做<strong>IO端口</strong>。为了方便管理，80x86CPU采用IO端口单独编址的方式，即所有设备的端口都被命名到一个IO端口地址空间中。这个空间是独立于内存地址空间的。所以必须采用和访问内存的指令不一样的指令来访问端口。</p>
+<blockquote>
+<p>在向0x70端口写入值后，必须对0x71端口有操作(这里正好选用了in操作)，否则RTC就会处于an unknown state之中.</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">out %al,PortAddress #把al寄存器中值写到端口PortAddress</span><br><span class="line">in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器</span><br><span class="line"><span class="meta">#</span><span class="bash"> 标准规定，端口操作必须用到al/ax寄存器作为缓冲</span></span><br></pre></td></tr></table></figure>
+<p>&emsp; &emsp; 三条命令就是要操作端口0x70，0x71，根据清单[4] 中内容，可以知道0x70端口和0x71端口是用于控制系统中一个叫做CMOS的设备，这个设备是一个低功耗的存储设备，它可以用于在计算机关闭时存储一些信息，它是由独立的电池供电的[5]。 这个CMOS中可以控制跟PC相关的多个功能，其中最重要的就是<strong>时钟设备（Real Time Clock）</strong>的 ，它还可以控制是否<strong>响应不可屏蔽中断NMI(Non-Maskable Interrupt)</strong>。操作CMOS存储器中的内容需要两个端口，一个是0x70另一个就是0x71。其中0x70可以叫做索引寄存器，<strong>这个8位寄存器的最高位是不可屏蔽中断(NMI)使能位。如果你把这个位置1，则NMI不会被响应。低7位用于指定CMOS存储器中的存储单元地址</strong>，所以如果你想访问第1号存储单元，并且在访问时，我要使能NMI，那么你就应该向端口0x70里面送入0b10000001 = 0x81。</p>
+<p>&emsp; &emsp; 这三条指令可以看出，它首先关闭了NMI中断，并且要访问存储单元0xF的值，并且把值读到al中，但是在后面我们发现这个值并没有被利用，所以可以认为<strong>这三条指令是用来关闭NMI中断的。</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">15. [f000:d16b]    0xfd16b: in     $0x92,%al </span><br><span class="line"><span class="meta">#</span><span class="bash"> (gdb) info register al</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> al             0x0      0</span></span><br><span class="line">16. [f000:d16d]    0xfd16d: or     $0x2,%al</span><br><span class="line">17. [f000:d16f]    0xfd16f: out    %al,$0x92</span><br><span class="line"><span class="meta">#</span><span class="bash"> (gdb) info register al</span></span><br><span class="line"><span class="meta">#</span><span class="bash"> al             0x2      2</span></span><br></pre></td></tr></table></figure>
+<p>&emsp; &emsp; 它控制的是 PS/2系统控制端口A，而第16，17步的操作是在把这个端口的1号bit置为1。这个端口的bit1的功能是<code>bit 1= 1 indicates A20 active</code>,即A20位，即第21个地址线被使能，如果A20地址线被激活，那么系统工作在保护模式下。但是在之后的boot loader程序中，计算机首先要工作在实模式下啊。所以这里的这个操作，根据[6]应该是去测试可用内存空间。在boot loader之前，它肯定还会转换回实模式。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">or # 只要有一个输入位是 1，则输出位就是 1</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">18. [f000:d171]    0xfd171: lidtw  %cs:0x6ab8</span><br></pre></td></tr></table></figure>
+<p>&emsp; &emsp; 加载中断向量表寄存器(IDTR)。这个指令会把从地址0xf6ab8起始的后面6个字节的数据读入到中断向量表寄存器(IDTR)中。中断是操作系统中非常重要的一部分，有了中断操作系统才能真正实现进程。每一种中断都有自己对应的中断处理程序，那么这个中断的处理程序的首地址就叫做这个中断的中断向量。中断向量表[7]是存放所有中断向量的表。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">19. [f000:d177]    0xfd177: lgdtw  %cs:0x6a74</span><br></pre></td></tr></table></figure>
+<p>&emsp; &emsp; 把从<code>0xf6a74</code>为起始地址处的6个字节的值加载到全局描述符表格寄存器中GDTR中.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">20. [f000:d17d]    0xfd17d: mov    %cr0,%eax</span><br><span class="line">21. [f000:d180]    0xfd180: or     $0x1,%eax</span><br><span class="line">22. [f000:d184]    0xfd184: mov    %eax,%cr0</span><br></pre></td></tr></table></figure>
+<p>&emsp; &emsp; 计算机中包含CR0-CR3四个控制寄存器，用来控制和确定处理器的操作模式。其中这三个语句的操作是要把CR0寄存器的最低位(0bit)置1。CR0寄存器的0bit是PE位，启动保护位，当该位被置1，代表开启了保护模式。但是这里出现了问题，我们刚刚说过BIOS是工作在实模式之下，后面的boot loader开始的时候也是工作在实模式下，所以这里把它切换为保护模式，显然是自相矛盾。所以只能推测它在检测机器是否能工作在保护模式下。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">23. [f000:d187]    0xfd187: ljmpl  $0x8,$0xfd18f</span><br><span class="line"><span class="meta">#</span><span class="bash"> The target architecture is assumed to be i386</span></span><br><span class="line">24. =&gt; 0xfd18f:     mov    $0x10,%eax</span><br><span class="line">25. =&gt; 0xfd194:     mov    %eax,%ds</span><br><span class="line">26. =&gt; 0xfd196:     mov    %eax,%es</span><br><span class="line">27. =&gt; 0xfd198:     mov    %eax,%ss</span><br><span class="line">28. =&gt; 0xfd19a:     mov    %eax,%fs</span><br><span class="line">29. =&gt; 0xfd19c:     mov    %eax,%gs</span><br></pre></td></tr></table></figure>
+<p>&emsp; &emsp; 这里的23~29步之所以这么做是按照规定来的，[8]中指出，如果刚刚加载完GDTR寄存器我们必须要重新加载所有的段寄存器的值，而其中CS段寄存器必须通过长跳转指令，即23号指令来进行加载。所以这些步骤是在第19步完成后必须要做的。这样才能是GDTR的值生效。</p>
+<h3 id="Part-2-引导加载程序"><a href="#Part-2-引导加载程序" class="headerlink" title="Part 2: 引导加载程序"></a>Part 2: 引导加载程序</h3><h3 id="Part-3-内核"><a href="#Part-3-内核" class="headerlink" title="Part 3: 内核"></a>Part 3: 内核</h3><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>[1] <a href="https://github.com/shishujuan/mit6.828-2017.git" target="_blank" rel="noopener">https://github.com/shishujuan/mit6.828-2017.git</a></p>
+<p>[2] <a href="https://blog.csdn.net/zdwzzu2006/article/details/4030948" target="_blank" rel="noopener">https://blog.csdn.net/zdwzzu2006/article/details/4030948</a></p>
+<p>[3] <a href="https://www.cnblogs.com/cykun/archive/2010/10/27/1862940.html" target="_blank" rel="noopener">https://www.cnblogs.com/cykun/archive/2010/10/27/1862940.html</a></p>
+<p>[4] <a href="http://bochs.sourceforge.net/techspec/PORTS.LST" target="_blank" rel="noopener">http://bochs.sourceforge.net/techspec/PORTS.LST</a></p>
+<p>[5] <a href="http://wiki.osdev.org/CMOS" target="_blank" rel="noopener">http://wiki.osdev.org/CMOS</a></p>
+<p>[6] <a href="http://kernelx.weebly.com/a20-address-line.html" target="_blank" rel="noopener">http://kernelx.weebly.com/a20-address-line.html</a></p>
+<p>[7] <a href="http://wiki.osdev.org/Interrupt_Descriptor_Table" target="_blank" rel="noopener">http://wiki.osdev.org/Interrupt_Descriptor_Table</a> </p>
+<p>[8] <a href="https://en.wikibooks.org/wiki/X86_Assembly/Global_Descriptor_Table" target="_blank" rel="noopener">https://en.wikibooks.org/wiki/X86_Assembly/Global_Descriptor_Table</a></p>
+<p>[9] <a href="https://blog.csdn.net/a747979985/article/details/94334901" target="_blank" rel="noopener">https://blog.csdn.net/a747979985/article/details/94334901</a></p>
+<p>[10] <a href="https://wenku.baidu.com/view/fe595521bb68a98271fefad4?pcf=2&amp;fromShare=1&amp;fr=copy&amp;copyfr=copylinkpop" target="_blank" rel="noopener">https://wenku.baidu.com/view/fe595521bb68a98271fefad4?pcf=2&amp;fromShare=1&amp;fr=copy&amp;copyfr=copylinkpop</a></p>
+<p> <sup><a href="#fn_实模式" id="reffn_实模式">实模式</a></sup>： 实模式采用 16 位寻址模式，在该模式中，最大寻址空间为 1MB，最大分段为 64KB。 由于处理器的设计需要考虑到兼容问题，8086 处理器地址总线扩展到 20 位，但CPU的ALU宽度(数据总线)却只有 16 位，也就是说直接参与运算的数值都是 16 位的。为支持 1MB 寻址空间，8086 处理器在实模式下引入了分段方法。在处理器中设置了四个 16 位的段寄存器:CS、DS、SS、ES，对 应于地址总线中的高 16 位。寻址时，采用以下公式计算实际访问的物理内存地址，这样，便实现了 16 位内存地址到 20 位物理地址的转换。</p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+        <div class="declare">
+          <ul class="post-copyright">
+            <li>
+              <i class="ri-copyright-line"></i>
+              <strong>Copyright： </strong>
+              Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+            </li>
+          </ul>
+        </div>
+        
+    <footer class="article-footer">
+      
+          
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        share
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ykma.gitee.io/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/lab/" rel="tag">lab</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+  
+  <nav class="article-nav">
+    
+      <a href="/2020/12/16/Xen-log-Extend-SPECCPU2006%E5%AE%89%E8%A3%85%E4%B8%8E%E8%BF%90%E8%A1%8C/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            Xen-log-Extend-SPECCPU2006安装与运行
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2020/12/09/%E7%B3%BB%E7%BB%9F%E8%99%9A%E6%8B%9F%E5%8C%96/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">系统虚拟化</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+  
+<!-- valine评论 -->
+<div id="vcomments-box">
+    <div id="vcomments">
+    </div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        app_id: '217p73TbcOV77pELx3QhCnHg-9Nh9j0Va',
+        app_key: 'E9ifcTuWLrryfvtqpSDE5dfb',
+        path: window.location.pathname,
+        notify: 'true',
+        verify: 'true',
+        avatar: 'monsterid',
+        placeholder: '给我的文章加点评论吧~',
+        recordIP: true
+    });
+    const infoEle = document.querySelector('#vcomments .info');
+    if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+        infoEle.childNodes.forEach(function (item) {
+            item.parentNode.removeChild(item);
+        });
+    }
+</script>
+<style>
+    #vcomments-box {
+        padding: 5px 30px;
+    }
+
+    @media screen and (max-width: 800px) {
+        #vcomments-box {
+            padding: 5px 0px;
+        }
+    }
+
+    #vcomments-box #vcomments {
+        background-color: #fff;
+    }
+
+    .v .vlist .vcard .vh {
+        padding-right: 20px;
+    }
+
+    .v .vlist .vcard {
+        padding-left: 10px;
+    }
+</style>
+
+  
+
+  
+  
+  
+  
+  
+
+</article>
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2020-2021
+        <i class="ri-heart-fill heart_icon"></i> Mykrobin
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>Visitors:<span id="busuanzi_value_site_uv"></span></s>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>Views:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+    <ul>
+			    <!-- 网站运行时间的设置 -->
+			<span id="timeDate">载入天数...</span>
+			<span id="times">载入时分秒...</span>
+			<script>
+			    var now = new Date();
+			    function createtime() {
+			        var grt= new Date("04/18/2020 10:00:00");//此处修改你的建站时间或者网站上线时间
+			        now.setTime(now.getTime()+250);
+			       // years = (now - grt) / 1000 / 60 /60 / 24 / 365;       
+			       // ynum = Math.floor(years);
+			        days = (now - grt ) / 1000 / 60 / 60 / 24; 
+			        dnum = Math.floor(days);
+			        restdnum = Math.floor(days);
+			        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); 
+			        hnum = Math.floor(hours);
+			        if(String(hnum).length ==1 )
+			        	{hnum = "0" + hnum;} 
+			        minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+			        mnum = Math.floor(minutes); 
+			        if(String(mnum).length ==1 )
+			        	{mnum = "0" + mnum;}
+			        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+			        snum = Math.round(seconds); 
+			        if(String(snum).length ==1 )
+			        	{snum = "0" + snum;}
+			        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+ " 天 ";
+			        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+			    }
+			setInterval("createtime()",250);
+			</script>
+    </ul>    
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="MYKRobin&#39;S BLOG"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/picture/">画廊</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories/">论文</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/homework/">课程</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/essay/">杂谈</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/game-for-peace/">娱乐</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i></p>
+  <div class="reward-box">
+    
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script>
+  try {
+    var typed = new Typed("#subtitle", {
+      strings: ['面朝大海，春暖花开', '愿你一生努力，一生被爱', ''],
+      startDelay: 1,
+      typeSpeed: 200,
+      loop: true,
+      backSpeed: 200,
+      showCursor: true
+    });
+  } catch (err) {
+  }
+
+</script>
+
+
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+  });
+
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for(i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.6/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+  var ayerConfig = {
+    mathjax: true
+  }
+</script>
+
+
+
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+        
+    
+
+
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://js.users.51.la/20544303.js"></script>
+
+  
+<script src="/js/clickLove.js"></script>
+
+
+
+<!-- 复制 -->
+
+  
+<link rel="stylesheet" href="/css/clipboard.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+
+
+    
+  </div>
+</body>
+
+</html>

@@ -72,7 +72,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">857</span>
+            <span class="post-count">890</span>
         </span>
     </span>
 
@@ -124,6 +124,8 @@
 <h3 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h3><p>解压之后进入Xen目录下</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure --<span class="built_in">enable</span>-systemd</span><br><span class="line">make dist // 也可以使用 make world(same like make clean &amp;&amp; make dist).</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
 <p>上两步make过程会等很久(使用 make dist -j8 可以加速，开启8个线程操作)</p>
+<p>或者参考Debain下的安装方法</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">./confiugre</span><br><span class="line">make xen -j8</span><br><span class="line">make tools -j8</span><br><span class="line">sudo make install-xen</span><br><span class="line">sudo make install-tools</span><br></pre></td></tr></table></figure>
 <p>ps：若在<code>make install</code> 时遇到error，可以先对下面的<code>xen-tools</code> 进行make.</p>
 <p><strong>可能会遇到的问题</strong></p>
 <p>如果遇到error信息如下，预编译器不识别<strong>sizeof</strong> 函数导致</p>
@@ -145,7 +147,8 @@
 <p>当前版本有一个小bug，需要删除一个xendomains文件</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm &#x2F;etc&#x2F;init.d&#x2F;xendomains</span><br></pre></td></tr></table></figure>
 <h3 id="安装-xen-tools"><a href="#安装-xen-tools" class="headerlink" title="安装 xen-tools"></a>安装 xen-tools</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt install lvm2 debootstrap libconfig-inifiles-perl libdata-validate-domain-perl libdata-validate-ip-perl libdata-validate-uri-perl libfile-slurp-perl libfile-which-perl libsort-versions-perl libterm-ui-perl libtext-template-perl openssh-client perl debian-archive-keyring rinse libtest-notabs-perl</span><br></pre></td></tr></table></figure>
-<h4 id="Download-and-make"><a href="#Download-and-make" class="headerlink" title="Download and make"></a>Download and make</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;xen-tools&#x2F;xen-tools.git</span><br><span class="line">cd xen-tools</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
+<h4 id="Download-and-make"><a href="#Download-and-make" class="headerlink" title="Download and make"></a>Download and make</h4><p>(最好是放在Xen目录下)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git clone https:&#x2F;&#x2F;github.com&#x2F;xen-tools&#x2F;xen-tools.git</span><br><span class="line">cd xen-tools</span><br><span class="line">make install</span><br></pre></td></tr></table></figure>
 <h3 id="开启xen-services"><a href="#开启xen-services" class="headerlink" title="开启xen services"></a>开启xen services</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">systemctl enable xen-qemu-dom0-disk-backend.service</span><br><span class="line">systemctl enable xen-init-dom0.service</span><br><span class="line">systemctl enable xenconsoled.service</span><br><span class="line">systemctl enable xenstored.service</span><br><span class="line">systemctl enable xendomains.service</span><br><span class="line">systemctl enable xen-watchdog.service</span><br></pre></td></tr></table></figure>
 <h3 id="Reboot"><a href="#Reboot" class="headerlink" title="Reboot"></a>Reboot</h3><p>重启选择带有xen-hypervisor 4.11 启动</p>
 <p><strong>安装成功与否测试</strong></p>
@@ -325,7 +328,7 @@
     <ul>
       <li>
         Copyrights &copy;
-        2020
+        2020-2021
         <i class="ri-heart-fill heart_icon"></i> Mykrobin
       </li>
     </ul>

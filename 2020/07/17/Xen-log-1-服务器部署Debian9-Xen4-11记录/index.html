@@ -72,7 +72,7 @@
         <span class="post-meta-item-icon">
             <i class="ri-quill-pen-line"></i>
             <span class="post-meta-item-text"> Word count:</span>
-            <span class="post-count">840</span>
+            <span class="post-count">981</span>
         </span>
     </span>
 
@@ -107,6 +107,16 @@
 
       
       <h3 id="服务器网络部署"><a href="#服务器网络部署" class="headerlink" title="服务器网络部署"></a>服务器网络部署</h3><p>目前遇到的这个问题可能不是普遍试用，但是在操作过程中的确遇到过。</p>
+<h4 id="固件问题"><a href="#固件问题" class="headerlink" title="固件问题"></a>固件问题</h4><p><img src="/2020/07/17/Xen-log-1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2Debian9-Xen4-11%E8%AE%B0%E5%BD%95/firmwareError.png"></p>
+<p><img src="/2020/07/17/Xen-log-1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2Debian9-Xen4-11%E8%AE%B0%E5%BD%95/firmwareIP.png"></p>
+<p>安装系统或者配置网络时报错：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">some of your hardware needs non-free firmware files to operate.</span><br><span class="line">The missing firmware files are： bnx2/bnx2-mips-09-6.2.1b.fw</span><br></pre></td></tr></table></figure>
+<p><strong>解决方法</strong></p>
+<p>在官方公布的固件中找到自己需要的内容 <a href="https://wiki.debian.org/Firmware" target="_blank" rel="noopener">https://wiki.debian.org/Firmware</a></p>
+<p><a href="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/" target="_blank" rel="noopener">http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/</a></p>
+<p><strong>ubuntu 下的解决方法</strong></p>
+<p><img src="/2020/07/17/Xen-log-1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2Debian9-Xen4-11%E8%AE%B0%E5%BD%95/firmwareSolution.png"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 在USB中创建路径 &#x2F;lib&#x2F;firmware&#x2F;bnx2&#x2F;,将固件移动到此目录下</span><br><span class="line">2. 如果安装系统是无法发现固件，则先忽略该步骤，安装好系统后再搞</span><br><span class="line">3. ip link set enp3s0f0 up</span><br></pre></td></tr></table></figure>
 <h4 id="网络接口设置"><a href="#网络接口设置" class="headerlink" title="网络接口设置"></a>网络接口设置</h4><p>目前，该服务器预设网络接口4个，但是，仔细查验后发现，只有一个网络接口连接了网线，因此如果没有恰当的设置后，会出现机器ping 不通网络的问题。</p>
 <p><strong>解决方法</strong></p>
 <p>在安装系统过程中，记录下四个网口的名称，如果安装完系统后，ping网关不成功的话，说明网口设置有问题，需要修改，否则不需要。</p>
@@ -122,15 +132,15 @@
 <p>清华源</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">https:&#x2F;&#x2F;mirrors.tuna.tsinghua.edu.cn&#x2F;help&#x2F;debian&#x2F;</span><br></pre></td></tr></table></figure>
 <p>修改 /etc/apt/sources.list  </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch-updates main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch-backports main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch-backports main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian-security&#x2F; stretch&#x2F;updates main non-free</span><br><span class="line">contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian-security&#x2F; stretch&#x2F;updates main non-free</span><br><span class="line">contrib</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch-updates main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch-backports main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch-updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian&#x2F; stretch-backports main non-free contrib</span><br><span class="line">deb http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian-security&#x2F; stretch&#x2F;updates main non-free contrib</span><br><span class="line">deb-src http:&#x2F;&#x2F;mirrors.163.com&#x2F;debian-security&#x2F; stretch&#x2F;updates main non-free contrib</span><br></pre></td></tr></table></figure>
 <p>更新操作</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt update &amp;&amp; apt upgrade</span><br></pre></td></tr></table></figure>
 <h3 id="部署Xen4-11"><a href="#部署Xen4-11" class="headerlink" title="部署Xen4.11"></a>部署Xen4.11</h3><h4 id="配置依赖环境"><a href="#配置依赖环境" class="headerlink" title="配置依赖环境"></a>配置依赖环境</h4><p>install the <em>build-essential</em> package:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># apt-get install build-essential</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install build-essential</span><br></pre></td></tr></table></figure>
 <p>install these additional debs:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># apt-get install bcc bin86 gawk bridge-utils iproute libcurl3 libcurl4-openssl-dev bzip2 transfig tgif </span><br><span class="line"># apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial</span><br><span class="line"># apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev </span><br><span class="line"># apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev</span><br><span class="line"># apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apt-get install bcc bin86 gawk bridge-utils iproute libcurl3 libcurl4-openssl-dev bzip2 transfig tgif </span><br><span class="line">apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial</span><br><span class="line">apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev </span><br><span class="line">apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev</span><br><span class="line">apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc</span><br></pre></td></tr></table></figure>
 <p>under Debian :</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># apt-get build-dep xen</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get build-dep xen</span><br></pre></td></tr></table></figure>
 <p>failed to install (不安装的话，暂时没啥影响)</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># apt-get module-init-tools libjpeg62-dev</span><br></pre></td></tr></table></figure>
 <h4 id="下载Xen"><a href="#下载Xen" class="headerlink" title="下载Xen"></a>下载Xen</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone git:&#x2F;&#x2F;xenbits.xen.org&#x2F;xen.git</span><br></pre></td></tr></table></figure>
@@ -317,7 +327,7 @@
     <ul>
       <li>
         Copyrights &copy;
-        2020
+        2020-2021
         <i class="ri-heart-fill heart_icon"></i> Mykrobin
       </li>
     </ul>
