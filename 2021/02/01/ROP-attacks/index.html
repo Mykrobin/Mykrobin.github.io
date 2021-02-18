@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+
+
+<html lang="en">
+
+
+<head>
+  <meta charset="utf-8" />
+    
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>
+    ROP attacks |  MYKRobin&#39;S BLOG
+  </title>
+  <meta name="generator" content="hexo-theme-ayer">
+  
+  
+  
+  <link rel="shortcut icon" href="/favicon.ico" />
+  
+  
+<link rel="stylesheet" href="/dist/main.css">
+
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Shen-Yu/cdn/css/remixicon.min.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+  
+<script src="https://cdn.jsdelivr.net/npm/pace-js@1.0.2/pace.min.js"></script>
+
+  
+  
+
+  
+
+
+</head>
+
+</html>
+
+<body>
+  <div id="app">
+    <main class="content on">
+      <section class="outer">
+  <article id="post-ROP-attacks" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+       
+<h1 class="article-title sea-center" style="border-left:0" itemprop="name">
+  ROP attacks
+</h1>
+ 
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2021/02/01/ROP-attacks/" class="article-date">
+  <time datetime="2021-02-01T12:45:02.000Z" itemprop="datePublished">2021-02-01</time>
+</a>
+      
+      
+      
+<div class="word_count">
+    <span class="post-time">
+        <span class="post-meta-item-icon">
+            <i class="ri-quill-pen-line"></i>
+            <span class="post-meta-item-text"> Word count:</span>
+            <span class="post-count">2.2k</span>
+        </span>
+    </span>
+
+    <span class="post-time">
+        &nbsp; | &nbsp;
+        <span class="post-meta-item-icon">
+            <i class="ri-book-open-line"></i>
+            <span class="post-meta-item-text"> Reading time≈</span>
+            <span class="post-count">8 min</span>
+        </span>
+    </span>
+</div>
+
+      
+    </div>
+    
+
+    
+    
+    <div class="tocbot"></div>
+
+
+
+
+
+    
+
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+
+      
+      <h3 id="栈溢出"><a href="#栈溢出" class="headerlink" title="栈溢出"></a>栈溢出</h3><p>由于<code>C</code> 语言对数组引用不做任何边界检查，从而导致缓冲区溢出<code>buffer overflow</code>，这成为一种常见的漏洞。根据溢出发生的内存位置，可以分为栈溢出和堆溢出。其中，由于栈上保存着局部变量和一些状态信息，例如寄存器值和返回地址等，一旦发生严重溢出，攻击者可以通过复写返回地址来执行任意代码，利用包括<code>shellcode</code>注入、ret2libc、<code>ROP</code>等。</p>
+<h3 id="What-is-ROP"><a href="#What-is-ROP" class="headerlink" title="What is ROP"></a>What is ROP</h3><p>最开始，要利用栈溢出只需将返回地址覆盖为 jmp esp 指令的地址，并在后面添加 shellcode 就可以执行。后来引入了 NX 缓解机制，数据所在的内存页被标记为不可执行，此时再执行 shellcode 就会抛出异常。既然注入新代码不可行，那么就复用程序中已有的代码。libc.so 几乎在每个程序执 行时都会加载，攻击者就开始考虑利用 libc 中的函数，这种技术就是 ret2libc。但是这种技术也有缺陷，首先，虽然攻击者可以一个接一个地调用 libc 中的函数，但这个执行流仍然是线性的，而不像代码注入那样任意执行，其次，攻击者只能使用程序 text 段和 libc 中已有的函数，通过移除这些特定的函数就可以限制此类攻击。</p>
+<p>论文 <code>The Geometry of Innocent Flesh on the Bone: Return-into-libc without Function Calls (on the x86)</code>提出了一种新的攻击技术——返回导向编程<code>（Return-Oriented Programming, ROP）</code>，无须调用任何函数即可执行任意代码。</p>
+<p>使用 ROP 攻击，首先需要扫描文件，提取出可用的 gadget 片段（通常以 ret 指令结尾），然后<br>将这些 gadget 根据所需要的功能进行组合，达到攻击者的目的。举个小例子，exit(0)的 shellcode 由<br>下面 4 条连续的指令组成。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">; <span class="built_in">exit</span>(<span class="number">0</span>) shellcode</span><br><span class="line"><span class="keyword">xor</span> eax, eax</span><br><span class="line"><span class="keyword">xor</span> ebx, ebx</span><br><span class="line">inc eax</span><br><span class="line"><span class="keyword">int</span> <span class="number">0x80</span></span><br></pre></td></tr></table></figure>
+<p>如果要将它改写成 ROP 链，则需要分别找到包含这些指令的 gadget，由于它们在地址上不一定<br>是连续的，所以需要通过 ret 指令进行连接，依次执行。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">; <span class="built_in">exit</span>(<span class="number">0</span>) ROP chain</span><br><span class="line"><span class="keyword">xor</span> eax, eax ; gadget <span class="number">1</span></span><br><span class="line">ret</span><br><span class="line"><span class="keyword">xor</span> ebx, ebx ; gadget <span class="number">2</span></span><br><span class="line">ret</span><br><span class="line">inc eax ; gadget <span class="number">3</span></span><br><span class="line">ret</span><br><span class="line"><span class="keyword">int</span> <span class="number">0x80</span> ; gadget <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<p>为了完成指令序列的构建，首先要找到这些以ret指令为结尾，并且在执行时必然以ret结束而不会跳转到其他地方的gadget，算法如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Algorithm GALILEO:</span><br><span class="line">	create a node, root, representing the ret instruction; </span><br><span class="line">	place root in the trie; </span><br><span class="line">	<span class="keyword">for</span> pos from <span class="number">1</span> to textseg_len <span class="keyword">do</span>:</span><br><span class="line">		<span class="keyword">if</span> the <span class="keyword">byte</span> at pos is c3, i.e., a ret instruction, then:</span><br><span class="line">			call BUILDFROM(pos, root).</span><br><span class="line"></span><br><span class="line"><span class="function">Procedure <span class="title">BuILDFROM</span><span class="params">(index pos, instruction parent_insn)</span>:</span></span><br><span class="line"><span class="function">	<span class="keyword">for</span> <span class="built_in">step</span> from 1 to max_insn_len <span class="keyword">do</span>:</span></span><br><span class="line">		if bytes [( pos-step )···(pos-1)] decode as a valid instruction insn then:</span><br><span class="line">			ensure insn is in the trie as a child of parent_insn; </span><br><span class="line">			<span class="keyword">if</span> insn isn<span class="number">'</span>t boring then:</span><br><span class="line">				call BUILDFROM (pos-step,insn).</span><br></pre></td></tr></table></figure>
+<p>扫描二进制找到 ret（c3）指令，将其作为 trie 的根节点，然后回溯解析前面的指令，如果是有效指令，将其添加为子节点，再判断是否 boring；如果不是，就继续递归回溯。举个例子，在一个 trie 中一个表示 pop %eax 的节点是表示 ret 的根节点的子节点，则这个 gadget 为 pop %eax; ret。<br>如此就能把有用的 gadgets 都找出来了。boring 指令则分为三种情况：<br>（1）该指令是 leave，后跟一个 ret 指令；<br>（2）该指令是一个 pop %ebp，后跟一个 ret 指令；<br>（3）该指令是返回或者非条件跳转。<br>实际上，有很多工具可以帮助我们完成 gadget 搜索的工作，常用的有 ROPgadget、Ropper 等，还可以直接在 ropshell 网站上搜索。gadgets 在多个体系架构上都是图灵完备的，允许任意复杂度的计算，也就是说基本上只要能想到的事情它都可以做。下面简单介绍几种用法。<br>（1）保存栈数据到寄存器。弹出栈顶数据到寄存器中，然后跳转到新的栈顶地址。所以当返回<br>地址被一个 gadget 的地址覆盖，程序将在返回后执行该指令序列。例如：pop eax; ret；<br>（2）保存内存数据到寄存器。例如：mov ecx,[eax]; ret；<br>（3）保存寄存器数据到内存。例如：mov [eax],ecx; ret；<br>（4）算数和逻辑运算。add、sub、mul、xor 等。例如：add eax,ebx; ret, xor edx,edx; ret；<br>（5）系统调用。执行内核中断。例如：int 0x80; ret, call gs:[0x10]; ret；<br>（6）会影响栈帧的 gadget。这些 gadget 会改变 ebp 的值，从而影响栈帧，在一些操作如 stack<br>pivot 时我们需要这样的指令来转移栈帧。例如：leave; ret, pop ebp; ret。</p>
+<h3 id="Analyse-ROP"><a href="#Analyse-ROP" class="headerlink" title="Analyse ROP"></a>Analyse ROP</h3><ol>
+<li><p>【<code>ROP</code>攻击】 攻击者预先扫描并识别系统中可以利用的gadgets（包含<code>ret</code> 指令并可以跳转到指定地址的代码片段），利用缓冲区溢出，通过对堆栈段的控制，控制访问控制流程（新的流程复用正常的代码段），从而得到攻击者想要的信息，达到攻击的目的；</p>
+</li>
+<li><p>【可行性】<code>Xen</code> 代码段中确实存在很多可以用于<code>ROP</code>攻击的<code>gadgets</code>，[1] 这篇文章是第一个实现在虚拟化领域的<code>ROP</code>攻击，攻击结果是实现对非特权<code>VM</code>的权限提升；</p>
+</li>
+<li><p>【ROP不影响代码完整性】[2] 在相关工作中指出，使用<code>ROP</code>攻击的攻击模型，不会对<code>hypervisor</code>代码产生影响，因此，仅检测代码完整性的机制不会检测到该攻击；在文中introduction介绍，非特权级客户机，会控制<code>hypervisor</code>的 <code>ToolStack</code>，从而提升自己的权限并且控制其他的客户机；[3] 在文中也明确提出<code>ROP</code>攻击可以完美的旁路掉代码完整性检测。</p>
+</li>
+<li><p>综上，我看过的几篇文章中没有提到<code>ROP</code>攻击会对code integrity 产生影响的说明，并且，在<code>Outlier</code>中，对比Checker 是扫描的 <code>Hypervisor</code> 的代码区域，那么这个提到的ROP攻击就会避开我们的检测，所以从理论上来看<code>Outlier</code>确实不会检测到ROP的攻击；ROP在攻击的过程中，会在内存中留下痕迹，但是，应该是在堆、栈段留下痕迹，在代码段没有影响。</p>
+</li>
+</ol>
+<h3 id="how-does-ROP-effect-the-OS"><a href="#how-does-ROP-effect-the-OS" class="headerlink" title="how does ROP effect the OS"></a>how does ROP effect the OS</h3><p>[6] 文中举的例子：</p>
+<p>攻击者扫描已有的动态链接库和可执行文件，提取出可以利用的指令片段(gadget)，这些指令片段均以ret指令结尾，即用ret指令实现指令片段执行流的衔接。操作系统通过栈来进行函数的调用和返回。函数的调用和返回就是通过压栈和出栈来实现的。每个程序都会维护一个程序运行栈，栈为所有函数共享，每次函数调用，系统会分配一个栈桢给当前被调用函数，用于参数的传递、局部变量的维护、返回地址的填入等。栈帧是程序运行栈的一部分 ，在<a href>Linux</a>中 ，通过%esp和 %ebp寄存器维护栈顶指针和栈帧的起始地址 ，%eip是<a href>程序计数器</a>寄存器 。而ROP攻击则是利用以ret结尾的程序片段 ，操作这些栈相关寄存器，控制程序的流程，执行相应的gadget，实施攻击者预设目标 。ROP不同于retum-to-libc攻击之处在于，<strong>ROP攻击以ret指令结尾的函数代码片段</strong> ，而不是整个函数本身去完成预定的操作。从广义角度讲 ，return-to-libc攻击是ROP攻的特例。最初ROP攻击实现在x86体系结构下，随后扩展到各种体系结构.。与以往攻击技术不同的是，<strong>ROP恶意代码不包含任何指令</strong>，将自己的恶意代码隐藏在正常代码中。因而，它可以绕过W⊕X的防御技术。</p>
+<p><img src="/2021/02/01/ROP-attacks/example.png" width="500"></p>
+<h3 id="how-can-we-detect"><a href="#how-can-we-detect" class="headerlink" title="how can we detect"></a>how can we detect</h3><h3 id="how-could-it-apply-on-Xen"><a href="#how-could-it-apply-on-Xen" class="headerlink" title="how could it apply on Xen"></a>how could it apply on Xen</h3><h3 id="Xen-hypervisor-and-ROP"><a href="#Xen-hypervisor-and-ROP" class="headerlink" title="Xen hypervisor and ROP"></a>Xen hypervisor and ROP</h3><p>Control-flow Enforcement Technology (CET) is a set of features in hardware designed to combat Return-oriented Programming (ROP, also call/jump COP/¯JOP) attacks. Xen 4.14 can use these hardware features, if available, to protect itself from ROP attacks.[5]</p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] Ding B, Wu Y, He Y, et al. Return-oriented programming attack on the xen hypervisor[C]//2012 Seventh International Conference on Availability, Reliability and Security. IEEE, 2012: 479-484.</p>
+<p>[2] Saeed A, Hussain S A, Garraghan P. Cross-VM Network Channel Attacks and Countermeasures within Cloud Computing Environments[J]. IEEE Transactions on Dependable and Secure Computing, 2020.</p>
+<p>[3] Jiang J, Jia X, Feng D, et al. HyperCrop: a hypervisor-based countermeasure for return oriented programming[C]//International Conference on Information and Communications Security. Springer, Berlin, Heidelberg, 2011: 360-373.</p>
+<p>[4] <a href="https://www.youtube.com/watch?v=n-_QkDek6jY" target="_blank" rel="noopener">https://www.youtube.com/watch?v=n-_QkDek6jY</a> </p>
+<p>[5] <a href="https://wiki.xenproject.org/wiki/Xen_Project_4.14_Feature_List" target="_blank" rel="noopener">https://wiki.xenproject.org/wiki/Xen_Project_4.14_Feature_List</a></p>
+<p>[6] Zhang J, Hou R, Song W, et al. RAGuard: An Efficient and User-Transparent Hardware Mechanism against ROP Attacks[J]. ACM Transactions on Architecture and Code Optimization (TACO), 2018, 15(4): 1-21.</p>
+
+      
+      <!-- reward -->
+      
+    </div>
+    
+    
+      <!-- copyright -->
+      
+        <div class="declare">
+          <ul class="post-copyright">
+            <li>
+              <i class="ri-copyright-line"></i>
+              <strong>Copyright： </strong>
+              Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source.
+            </li>
+          </ul>
+        </div>
+        
+    <footer class="article-footer">
+      
+          
+<div class="share-btn">
+      <span class="share-sns share-outer">
+        <i class="ri-share-forward-line"></i>
+        share
+      </span>
+      <div class="share-wrap">
+        <i class="arrow"></i>
+        <div class="share-icons">
+          
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="ri-weibo-fill"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="ri-wechat-fill"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="ri-qq-fill"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="ri-douban-line"></i>
+          </a>
+          <!-- <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a> -->
+          
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="ri-facebook-circle-fill"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="ri-twitter-fill"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="ri-google-fill"></i>
+          </a>
+        </div>
+      </div>
+</div>
+
+<div class="wx-share-modal">
+    <a class="modal-close" href="javascript:;"><i class="ri-close-circle-line"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://ykma.gitee.io/2021/02/01/ROP-attacks/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div id="share-mask"></div>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ROP/" rel="tag">ROP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/attacks/" rel="tag">attacks</a></li></ul>
+
+
+    </footer>
+
+  </div>
+
+  
+  
+  <nav class="article-nav">
+    
+      <a href="/2021/02/13/dp-01%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98/" class="article-nav-link">
+        <strong class="article-nav-caption">上一篇</strong>
+        <div class="article-nav-title">
+          
+            dp-01背包问题
+          
+        </div>
+      </a>
+    
+    
+      <a href="/2021/01/11/Untrusted-Hypervisor-AMD-Memory-Encryption/" class="article-nav-link">
+        <strong class="article-nav-caption">下一篇</strong>
+        <div class="article-nav-title">Untrusted Hypervisor AMD Memory Encryption</div>
+      </a>
+    
+  </nav>
+
+
+  
+
+  
+  
+<!-- valine评论 -->
+<div id="vcomments-box">
+    <div id="vcomments">
+    </div>
+</div>
+<script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+<script src='https://cdn.jsdelivr.net/npm/valine@1.3.10/dist/Valine.min.js'></script>
+<script>
+    new Valine({
+        el: '#vcomments',
+        app_id: '217p73TbcOV77pELx3QhCnHg-9Nh9j0Va',
+        app_key: 'E9ifcTuWLrryfvtqpSDE5dfb',
+        path: window.location.pathname,
+        notify: 'true',
+        verify: 'true',
+        avatar: 'monsterid',
+        placeholder: '给我的文章加点评论吧~',
+        recordIP: true
+    });
+    const infoEle = document.querySelector('#vcomments .info');
+    if (infoEle && infoEle.childNodes && infoEle.childNodes.length > 0) {
+        infoEle.childNodes.forEach(function (item) {
+            item.parentNode.removeChild(item);
+        });
+    }
+</script>
+<style>
+    #vcomments-box {
+        padding: 5px 30px;
+    }
+
+    @media screen and (max-width: 800px) {
+        #vcomments-box {
+            padding: 5px 0px;
+        }
+    }
+
+    #vcomments-box #vcomments {
+        background-color: #fff;
+    }
+
+    .v .vlist .vcard .vh {
+        padding-right: 20px;
+    }
+
+    .v .vlist .vcard {
+        padding-left: 10px;
+    }
+</style>
+
+  
+
+  
+  
+  
+  
+  
+
+</article>
+</section>
+      <footer class="footer">
+  <div class="outer">
+    <ul>
+      <li>
+        Copyrights &copy;
+        2020-2021
+        <i class="ri-heart-fill heart_icon"></i> Mykrobin
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+      </li>
+    </ul>
+    <ul>
+      <li>
+        
+        
+        <span>
+  <span><i class="ri-user-3-fill"></i>Visitors:<span id="busuanzi_value_site_uv"></span></s>
+  <span class="division">|</span>
+  <span><i class="ri-eye-fill"></i>Views:<span id="busuanzi_value_page_pv"></span></span>
+</span>
+        
+      </li>
+    </ul>
+    <ul>
+      
+    </ul>
+    <ul>
+      <li>
+        <!-- cnzz统计 -->
+        
+      </li>
+    </ul>
+    <ul>
+			    <!-- 网站运行时间的设置 -->
+			<span id="timeDate">载入天数...</span>
+			<span id="times">载入时分秒...</span>
+			<script>
+			    var now = new Date();
+			    function createtime() {
+			        var grt= new Date("04/18/2020 10:00:00");//此处修改你的建站时间或者网站上线时间
+			        now.setTime(now.getTime()+250);
+			       // years = (now - grt) / 1000 / 60 /60 / 24 / 365;       
+			       // ynum = Math.floor(years);
+			        days = (now - grt ) / 1000 / 60 / 60 / 24; 
+			        dnum = Math.floor(days);
+			        restdnum = Math.floor(days);
+			        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); 
+			        hnum = Math.floor(hours);
+			        if(String(hnum).length ==1 )
+			        	{hnum = "0" + hnum;} 
+			        minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum);
+			        mnum = Math.floor(minutes); 
+			        if(String(mnum).length ==1 )
+			        	{mnum = "0" + mnum;}
+			        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum);
+			        snum = Math.round(seconds); 
+			        if(String(snum).length ==1 )
+			        	{snum = "0" + snum;}
+			        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+ " 天 ";
+			        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒";
+			    }
+			setInterval("createtime()",250);
+			</script>
+    </ul>    
+  </div>
+</footer>
+      <div class="float_btns">
+        <div class="totop" id="totop">
+  <i class="ri-arrow-up-line"></i>
+</div>
+
+<div class="todark" id="todark">
+  <i class="ri-moon-line"></i>
+</div>
+
+      </div>
+    </main>
+    <aside class="sidebar on">
+      <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/ayer-side.svg" alt="MYKRobin&#39;S BLOG"></a>
+  </div>
+  
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">主页</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/picture/">画廊</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/categories/">论文</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/">标签</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/homework/">课程</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/essay/">杂谈</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/tags/game-for-peace/">娱乐</a>
+    </li>
+    
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      
+      <a class="nav-item-link nav-item-search"  title="Search">
+        <i class="ri-search-line"></i>
+      </a>
+      
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="ri-rss-line"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+    </aside>
+    <script>
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        document.querySelector('.content').classList.remove('on');
+        document.querySelector('.sidebar').classList.remove('on');
+      }
+    </script>
+    <div id="mask"></div>
+
+<!-- #reward -->
+<div id="reward">
+  <span class="close"><i class="ri-close-line"></i></span>
+  <p class="reward-p"><i class="ri-cup-line"></i></p>
+  <div class="reward-box">
+    
+    
+  </div>
+</div>
+    
+<script src="/js/jquery-2.0.3.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script>
+  try {
+    var typed = new Typed("#subtitle", {
+      strings: ['面朝大海，春暖花开', '愿你一生努力，一生被爱', ''],
+      startDelay: 1,
+      typeSpeed: 200,
+      loop: true,
+      backSpeed: 200,
+      showCursor: true
+    });
+  } catch (err) {
+  }
+
+</script>
+
+
+
+
+<script src="/js/tocbot.min.js"></script>
+
+<script>
+  // Tocbot_v4.7.0  http://tscanlin.github.io/tocbot/
+  tocbot.init({
+    tocSelector: '.tocbot',
+    contentSelector: '.article-entry',
+    headingSelector: 'h1, h2, h3, h4, h5, h6',
+    hasInnerContainers: true,
+    scrollSmooth: true,
+    scrollContainer: 'main',
+    positionFixedSelector: '.tocbot',
+    positionFixedClass: 'is-position-fixed',
+    fixedSidebarOffset: 'auto'
+  });
+</script>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-modal@0.9.2/jquery.modal.min.css">
+<script src="https://cdn.jsdelivr.net/npm/justifiedGallery@3.7.0/dist/js/jquery.justifiedGallery.min.js"></script>
+
+<script src="/dist/main.js"></script>
+
+
+
+<!-- Root element of PhotoSwipe. Must have class pswp. -->
+<div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+
+    <!-- Background of PhotoSwipe. 
+         It's a separate element as animating opacity is faster than rgba(). -->
+    <div class="pswp__bg"></div>
+
+    <!-- Slides wrapper with overflow:hidden. -->
+    <div class="pswp__scroll-wrap">
+
+        <!-- Container that holds slides. 
+            PhotoSwipe keeps only 3 of them in the DOM to save memory.
+            Don't modify these 3 pswp__item elements, data is added later on. -->
+        <div class="pswp__container">
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+            <div class="pswp__item"></div>
+        </div>
+
+        <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
+        <div class="pswp__ui pswp__ui--hidden">
+
+            <div class="pswp__top-bar">
+
+                <!--  Controls are self-explanatory. Order can be changed. -->
+
+                <div class="pswp__counter"></div>
+
+                <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+
+                <button class="pswp__button pswp__button--share" style="display:none" title="Share"></button>
+
+                <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+
+                <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+
+                <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
+                <!-- element will get class pswp__preloader--active when preloader is running -->
+                <div class="pswp__preloader">
+                    <div class="pswp__preloader__icn">
+                        <div class="pswp__preloader__cut">
+                            <div class="pswp__preloader__donut"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
+                <div class="pswp__share-tooltip"></div>
+            </div>
+
+            <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+            </button>
+
+            <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
+            </button>
+
+            <div class="pswp__caption">
+                <div class="pswp__caption__center"></div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css">
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js"></script>
+
+<script>
+    function viewer_init() {
+        let pswpElement = document.querySelectorAll('.pswp')[0];
+        let $imgArr = document.querySelectorAll(('.article-entry img:not(.reward-img)'))
+
+        $imgArr.forEach(($em, i) => {
+            $em.onclick = () => {
+                // slider展开状态
+                // todo: 这样不好，后面改成状态
+                if (document.querySelector('.left-col.show')) return
+                let items = []
+                $imgArr.forEach(($em2, i2) => {
+                    let img = $em2.getAttribute('data-idx', i2)
+                    let src = $em2.getAttribute('data-target') || $em2.getAttribute('src')
+                    let title = $em2.getAttribute('alt')
+                    // 获得原图尺寸
+                    const image = new Image()
+                    image.src = src
+                    items.push({
+                        src: src,
+                        w: image.width || $em2.width,
+                        h: image.height || $em2.height,
+                        title: title
+                    })
+                })
+                var gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, {
+                    index: parseInt(i)
+                });
+                gallery.init()
+            }
+        })
+    }
+    viewer_init()
+</script>
+
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+      tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+      }
+  });
+
+  MathJax.Hub.Queue(function() {
+      var all = MathJax.Hub.getAllJax(), i;
+      for(i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+      }
+  });
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/mathjax@2.7.6/unpacked/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+  var ayerConfig = {
+    mathjax: true
+  }
+</script>
+
+
+
+    
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/katex.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/katex@0.11.1/dist/contrib/auto-render.min.js"></script>
+        
+    
+
+
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+<script type="text/javascript" src="https://js.users.51.la/20544303.js"></script>
+
+  
+<script src="/js/clickLove.js"></script>
+
+
+
+<!-- 复制 -->
+
+  
+<link rel="stylesheet" href="/css/clipboard.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+  function wait(callback, seconds) {
+    var timelag = null;
+    timelag = window.setTimeout(callback, seconds);
+  }
+  !function (e, t, a) {
+    var initCopyCode = function(){
+      var copyHtml = '';
+      copyHtml += '<button class="btn-copy" data-clipboard-snippet="">';
+      copyHtml += '<i class="ri-file-copy-2-line"></i><span>COPY</span>';
+      copyHtml += '</button>';
+      $(".highlight .code pre").before(copyHtml);
+      $(".article pre code").before(copyHtml);
+      var clipboard = new ClipboardJS('.btn-copy', {
+        target: function(trigger) {
+          return trigger.nextElementSibling;
+        }
+      });
+      clipboard.on('success', function(e) {
+        let $btn = $(e.trigger);
+        $btn.addClass('copied');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-checkbox-circle-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPIED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-checkbox-circle-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+      clipboard.on('error', function(e) {
+        e.clearSelection();
+        let $btn = $(e.trigger);
+        $btn.addClass('copy-failed');
+        let $icon = $($btn.find('i'));
+        $icon.removeClass('ri-file-copy-2-line');
+        $icon.addClass('ri-time-line');
+        let $span = $($btn.find('span'));
+        $span[0].innerText = 'COPY FAILED';
+        
+        wait(function () { // 等待两秒钟后恢复
+          $icon.removeClass('ri-time-line');
+          $icon.addClass('ri-file-copy-2-line');
+          $span[0].innerText = 'COPY';
+        }, 2000);
+      });
+    }
+    initCopyCode();
+  }(window, document);
+</script>
+
+
+
+
+    
+  </div>
+</body>
+
+</html>
