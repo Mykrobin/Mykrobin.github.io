@@ -146,6 +146,57 @@
       </tags>
   </entry>
   <entry>
+    <title>Attacks Directories, Not Caches</title>
+    <url>/2020/07/17/Attacks-Directories-Not-Caches/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href>Attack Directories, Not Caches: Side-Channel Attacks in a Non-Inclusive World</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">Side Channel Attack</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">Attack, Cache</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">基于缓存的侧信道攻击在新型缓存的攻击实践</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="0-Main-idea"><a href="#0-Main-idea" class="headerlink" title="0. Main idea"></a>0. Main idea</h3>]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>side channel attack</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Applying TPM to Cloud</title>
     <url>/2020/10/12/Applying-TPM-to-Cloud/</url>
     <content><![CDATA[<div class="table-container">
@@ -318,279 +369,6 @@
         <tag>Security</tag>
         <tag>Cloud Computing</tag>
         <tag>可信计算</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Attacks Directories, Not Caches</title>
-    <url>/2020/07/17/Attacks-Directories-Not-Caches/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href>Attack Directories, Not Caches: Side-Channel Attacks in a Non-Inclusive World</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">Side Channel Attack</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">Attack, Cache</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">基于缓存的侧信道攻击在新型缓存的攻击实践</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="0-Main-idea"><a href="#0-Main-idea" class="headerlink" title="0. Main idea"></a>0. Main idea</h3>]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>side channel attack</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>DORY</title>
-    <url>/2021/01/08/DORY/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.usenix.org/system/files/osdi20-dauterman_dory.pdf" target="_blank" rel="noopener">DORY</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">加州大学伯克利分校 <a href="https://people.eecs.berkeley.edu/~edauterman/" target="_blank" rel="noopener">emma</a> <a href="https://people.eecs.berkeley.edu/~raluca/#Awards" target="_blank" rel="noopener">Raluca</a></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">保证在对加密数据查询时没有信息泄露</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">隐私防护</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">构造一个对加密数据进行高效的，无泄露的系统</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="全文总览"><a href="#全文总览" class="headerlink" title="全文总览"></a>全文总览</h3><p>$DORY:$ <strong>D</strong>ecentralized <strong>O</strong>blivious <strong>R</strong>etrieval s<strong>Y</strong>stem (分布式无记忆性检索系统)</p>
-<p>&emsp;&emsp;该系统实现加密查找并且能在服务端分散信任，它保证攻击者不会同时攻击全部的主机，并且无法从攻击的服务端学习到搜索访问模式。</p>
-<p>&emsp;&emsp;对加密数据进行高效，无泄漏的搜索仍然是过去二十年中一个尚未解决的问题。作者调研了5家提供端到端加密文件共享的公司，了解了他们对显示世界的需求并保护搜索访问模式<sup><a href="#fn_搜索访问模式" id="reffn_搜索访问模式">搜索访问模式</a></sup>。</p>
-<ol>
-<li>作者设计并实现了DORY系统，可以保护搜索访问模式；</li>
-<li>并且DORY在多个服务器之间分配信任，以防止控制其中除一台以外的全部主机；</li>
-<li>作者开发新的密码和系统技术，以满足查询的效率和信任模型需求。</li>
-</ol>
-<p>&emsp;&emsp;DORY的性能比 <a href="https://en.wikipedia.org/wiki/Oblivious_RAM" target="_blank" rel="noopener">Oblivious RAM</a> 好几个数量级。在8台服务器（每个服务器有16个CPU）上并行运行时，DORY花费116ms来搜索大约5万个文档，花费862ms来搜索100万个文档。</p>
-<h3 id="研究问题"><a href="#研究问题" class="headerlink" title="研究问题"></a>研究问题</h3><p>单词级别的泄露</p>
-<p><img src="/2021/01/08/DORY/attack.png" width="500px"></p>
-<h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><p>加密数据搜索目前存在两种</p>
-<ol>
-<li><p>泄漏搜索访问</p>
-<p>攻击者可以不断的向服务器发送单词级别的搜索，通过服务器的响应来判断该文本是否存在于，最终通过搜索全部单词，找到目标文本所包含的内容，重构出文本，实现攻击。</p>
-</li>
-<li><p>非泄露访问，但是十分昂贵</p>
-<p>ORAM 在服务器运行的时间代价是$2^{O(\sqrt{\log n \log \log n})}$，访问开销为 $O\left(\log ^{2} n\right)$ </p>
-<p>设计系统目标</p>
-<p><img src="/2021/01/08/DORY/dory.png" width="500px"></p>
-</li>
-</ol>
-<h3 id="调研结果"><a href="#调研结果" class="headerlink" title="调研结果"></a>调研结果</h3><p><strong>第一个调研文件共享中加密查询需求</strong></p>
-<p>亮点：切实的应用驱动创新</p>
-<p>&emsp;&emsp;这篇文章是第一个对实际的文件共享加密查询需求的调研，对目前主流的5家公司(Keybase, PreVeil, SpiderOak, Sync, and Tresorit)进行了实实在在的分析，并根据自己统计的信息总结出优化的方案，正是这项调研结果激发了DORY的设计动机。(Section 2)</p>
-<h4 id="系统需求"><a href="#系统需求" class="headerlink" title="系统需求"></a>系统需求</h4><p>&emsp;&emsp;在调研的过程中发现几家公司的共同点是都有对数据进行加密的需求，并且目前都有在服务端对加密数据进行查询的需求。那么在构建这样一个服务端的加密查询系统时要满足一下的要求：</p>
-<p><strong>搜索响应</strong>： 百万文档数量的搜索延迟在500ms到4s之间</p>
-<p><strong>用户花费</strong>： 用户每月的费用在 $0.7 左右</p>
-<p><strong>分布式一致性</strong>：多个用户（单用户多客户端）可以访问一个文件，因此搜索时要保证用户之间的一致性</p>
-<p><strong>撤销用户访问要廉价</strong>：公司目前采用的是懒惰撤销<sup><a href="#fn_懒惰撤销" id="reffn_懒惰撤销">懒惰撤销</a></sup>用户的访问权限，即为其他的用户创建新的秘钥，当其他用户访问文档时才使用新秘钥进行更新，而不是在撤销访问权限后，立马对全部文档进行更新，所以被撤销的用户依然可以使用原始秘钥访问从未更新过的文档内容。这些公司希望采用类似的搜索方法。</p>
-<p><strong>系统松弛性</strong>：这些公司不要求搜索结果是最新的（它们可能会持续几分钟的时间），并且他们也愿意接受少量的误报。</p>
-<p><strong>隐藏搜索访问模式</strong>：这些公司希望保证至少一个信任域是真诚的时候，攻击者将无法学习搜索访问模式。</p>
-<p><strong>搜索访问模式的分布式信任</strong>：公司希望通过确保将n个搜索索引放在一起不会轻易为攻击者提供纯文本搜索索引，来限制攻击者破坏所有n个信任域所造成的损害。例如，如果公司被传唤，并且每个信任域都必须从那时起移交其搜索索引和搜索访问模式，则公司可以选择暂停搜索服务以通过减少搜索访问模式泄漏来保护用户的隐私。</p>
-<h4 id="分布式信任"><a href="#分布式信任" class="headerlink" title="分布式信任"></a>分布式信任</h4><p><strong>跨云分裂</strong>：通过将不同的云视为不同的信任域，恶意云提供者（或可以利用一个云基础架构中的漏洞的攻击者）无法访问两个信任域。</p>
-<p><strong>跨机构拆分</strong>：通过在竞争性组织或公众普遍信任的非营利组织（例如，电子前沿基金会）中使用信任域，用户可以更有力地保证组织不太可能合谋。</p>
-<p><strong>跨地区划分</strong>：通过将司法管辖区（即不同的国家）分开来划分信任域，单个法律机构就无法访问整个系统。</p>
-<p>如果将信任域部署在云中，则我们可以利用以下事实：从金钱上激励云提供商以提供可用性。故障停止仍然可以自然发生，但是云提供商可以轻松检测故障并启动新服务器。客户可以报告缺乏信任域可用性的统计信息，部署系统的组织可以将其业务转移到其他地方。</p>
-<h3 id="DORY-设计"><a href="#DORY-设计" class="headerlink" title="DORY 设计"></a>DORY 设计</h3><h4 id="优化查询"><a href="#优化查询" class="headerlink" title="优化查询"></a>优化查询</h4><p>ORAM更新为DPFs <a href="https://en.wikipedia.org/wiki/Distributed_point_function" target="_blank" rel="noopener">分布点函数</a></p>
-<h4 id="设计并优化索引"><a href="#设计并优化索引" class="headerlink" title="设计并优化索引"></a>设计并优化索引</h4><p>构建位图索引并使用布隆过滤器优化 (Section 4.1)</p>
-<p><img src="/2021/01/08/DORY/update.png" width="500px"></p>
-<p><img src="/2021/01/08/DORY/search.png" width="500px"></p>
-<p><img src="/2021/01/08/DORY/bloom.png" width="500px"></p>
-<h4 id="加密并优化索引"><a href="#加密并优化索引" class="headerlink" title="加密并优化索引"></a>加密并优化索引</h4><p>采用随机一次填充优化加密方案 (Section 4.1)</p>
-<h4 id="阻止恶意攻击并减少代价"><a href="#阻止恶意攻击并减少代价" class="headerlink" title="阻止恶意攻击并减少代价"></a>阻止恶意攻击并减少代价</h4><p>采用聚合MAC <a href>3</a> <a href="https://ieeexplore.ieee.org/document/4594983">Aggregate MAC</a> 减少防御代价 (Section 4.3)</p>
-<h4 id="提供容错机制并减少代价"><a href="#提供容错机制并减少代价" class="headerlink" title="提供容错机制并减少代价"></a>提供容错机制并减少代价</h4><p>采用比拜占庭容错更加优异的容错算法 (Section 5)</p>
-<p>map 大小设置 [5]</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> numBlocksMap = <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>&#123;</span><br><span class="line">    <span class="number">1024</span>: <span class="number">16479</span>,</span><br><span class="line">    <span class="number">2048</span>: <span class="number">18187</span>,</span><br><span class="line">    <span class="number">4096</span>: <span class="number">20220</span>,</span><br><span class="line">    <span class="number">8192</span>: <span class="number">25782</span>,</span><br><span class="line">    <span class="number">16384</span>: <span class="number">37739</span>,</span><br><span class="line">    <span class="number">32768</span>: <span class="number">69029</span>,</span><br><span class="line">    <span class="number">65536</span>: <span class="number">104213</span>,</span><br><span class="line">    <span class="number">131072</span>: <span class="number">179095</span>,</span><br><span class="line">    <span class="number">262144</span>: <span class="number">344721</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>源码设置的bloomfilter大小 [4]</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">/* Set up config */</span></span><br><span class="line">    filename := flag.String(<span class="string">"config"</span>, <span class="string">"src/config/server1.config"</span>, <span class="string">"server config file"</span>)</span><br><span class="line">    maxDocs := flag.Int(<span class="string">"max_docs"</span>, <span class="number">256</span>, <span class="string">"max number of documents"</span>)</span><br><span class="line">    bloomFilterSz := flag.Int(<span class="string">"bf_sz"</span>, <span class="number">128</span>, <span class="string">"bloom filter size in bits"</span>)</span><br><span class="line">    flag.Parse()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> err error</span><br><span class="line">    config, err = setupConfig(*filename)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        log.Fatalln(<span class="string">"Error retrieving config file: "</span>, err)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Initialize server */</span></span><br><span class="line">    log.Println(<span class="string">"Starting initialization..."</span>)</span><br><span class="line">    C.setSystemParams(C.<span class="keyword">int</span>(*bloomFilterSz), C.<span class="keyword">int</span>(*maxDocs));</span><br><span class="line">    sOld = &amp;C.server&#123;&#125;</span><br><span class="line">    sNew = &amp;C.server&#123;&#125;</span><br><span class="line">    C.initializeServer((*C.server)(sOld), C.<span class="keyword">int</span>(kNumThreads))</span><br><span class="line">    C.initializeServer((*C.server)(sNew), C.<span class="keyword">int</span>(kNumThreads))</span><br><span class="line">    oldVersionNum = <span class="number">0</span></span><br><span class="line">    newVersionNum = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Start listening */</span></span><br><span class="line">    log.Println(<span class="string">"Listening..."</span>)</span><br><span class="line">    err = common.ListenLoop(config.Port, config.CertFile, config.KeyFile, handleConnection)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        log.Fatalln(err)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote id="fn_MAC">
-<sup>MAC</sup>.  <a href="https://sci-hub.se/10.1109/ISIT.2008.4594983" target="_blank" rel="noopener">[2]</a>  MAC讲解[3]<a href="#reffn_MAC" title="Jump back to footnote [MAC] in the text."> &#8617;</a>
-</blockquote>
-<blockquote id="fn_DPFs">
-<sup>DPFs</sup>.  在密码学中，分布式点函数是一种加密原语，它允许两个分布式进程共享一条信息，并计算它们共享信息的功能，而不会向任何一个进程透露信息本身。<a href="#reffn_DPFs" title="Jump back to footnote [DPFs] in the text."> &#8617;</a>
-</blockquote>
-<blockquote id="fn_懒惰撤销">
-<sup>懒惰撤销</sup>.  为了降低撤销的成本，可以将重新加密延迟到文件更新之前。懒惰撤销的概念最早是在Cepheus中提出的。这个想法是，如果被撤消的读者仍然可以读取未更改的文件，则不会在安全方面造成重大损失。仅当创建新数据时，才会进行昂贵的重新加密。仍然需要立即更改元数据，以防止被撤消的编写者进一步写入。<a href="#reffn_懒惰撤销" title="Jump back to footnote [懒惰撤销] in the text."> &#8617;</a>
-</blockquote>
-<blockquote id="fn_搜索访问模式">
-<sup>搜索访问模式</sup>.  在加密的搜索系统中，当用户在文件夹内的文件上搜索关键字时，服务器仅获悉用户在该文件夹中进行了搜索，而没有获悉与该搜索相匹配的文档，与之匹配的文档数量或有关该文档的其他信息或者关键词。<a href="#reffn_搜索访问模式" title="Jump back to footnote [搜索访问模式] in the text."> &#8617;</a>
-</blockquote>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://en.wikipedia.org/wiki/Oblivious_RAM" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Oblivious_RAM</a></p>
-<p>[2] Chan A C F, Castelluccia C. On the (im) possibility of aggregate message authentication codes[C]//2008 IEEE International Symposium on Information Theory. IEEE, 2008: 235-239.</p>
-<p>[3] <a href="https://blog.csdn.net/qq_30505673/article/details/82432454" target="_blank" rel="noopener">https://blog.csdn.net/qq_30505673/article/details/82432454</a></p>
-<p>[4] <a href="https://github.com/ucbrise/dory/blob/2617c2bbdfbdf4cd453c798fb6c7560dde59aaa4/src/server/server.go" target="_blank" rel="noopener">https://github.com/ucbrise/dory/blob/2617c2bbdfbdf4cd453c798fb6c7560dde59aaa4/src/server/server.go</a></p>
-<p>[5] <a href="https://github.com/ucbrise/dory/blob/2617c2bbdfbdf4cd453c798fb6c7560dde59aaa4/baseline/src/server/run_server.go" target="_blank" rel="noopener">https://github.com/ucbrise/dory/blob/2617c2bbdfbdf4cd453c798fb6c7560dde59aaa4/baseline/src/server/run_server.go</a></p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>OSDI</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CloudMon</title>
-    <url>/2020/09/14/CloudMon/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href>CloudMon</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"><a href="https://chuliangweng.github.io/" target="_blank" rel="noopener">Cl.W</a></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">这篇文章信任hypervisor并在此基础上对guestVM进行保护，主要是从内存角度出发，针对rootkit攻击进行运行时检测。</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">System Security; Virtual Machine</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文构造一个动态的监控架构，并在此基础上保证guest VM 运行时的安全性，主要功能是在客户虚拟机中检测出rootkits攻击。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>​        本文构建了一个动态的监控架构，运行在特权级别，通过对guestVM内存的扫描，检测客户机是否受到rootkit攻击，从而保证guestVM的运行时安全性。利用虚拟化技术对客户机内存进行实时监控，且这些监控对于客户机是透明的，为了实现检测的有效与高效，本系统在性能和安全之间权衡。</p>
-<h4 id="Rootkit-攻击"><a href="#Rootkit-攻击" class="headerlink" title="Rootkit 攻击 "></a><font color="blue"><strong>Rootkit 攻击</strong> </font></h4><p>​        rootkit 能够以特权级指令访问 host，并且可以通过对系统进行更改隐藏自己的存在。</p>
-<p>​        检测rootkit，最好是对客户机透明，不更改客户机系统的前提下对其进行检测。</p>
-<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        假设VMM（hypervisor）与priviliged VM  是可信的，guest VM 会受到攻击，在开机阶段的安全性受到VMM的保护，并且对guest VM的攻击不会对privileged VM 的安全性造成影响。</p>
-<p>（有些保护是针对VMM的，但是这不在本文的考虑范围内，本文聚焦在对客户机的保护上）</p>
-<h3 id="CloudMon-系统设计"><a href="#CloudMon-系统设计" class="headerlink" title="CloudMon 系统设计"></a>CloudMon 系统设计</h3><p>​        目的是实现一个可以访问较低权限级别内存信息、检测潜在的攻击并且可以保证检测的实时性与系统性能。访问内存的操作实现是基于 Xen的xenctrl 库，这个库能够读取较低权限的内存（如guest VM的内存信息）。</p>
-<p>​        构建一个guest VM 内存的监控器，目标是对VM透明、高效且是瞬时性的，这种方式可行性是因为攻击者对VM内存任何的更改都是可见的。CloudMon扫描内核memory与寄存器，从而可以实时的检测内存状态变化。这是一个特权级别的VM，能够通过VMM访问其他VMs的内存信息，而不是单纯的一个安全的guest VM。</p>
-<p><img src="/2020/09/14/CloudMon/CloudMonArchitecture.png" width="400px" height="240px"></p>
-<p>​        从云中大量的攻击实例中提取rootkit攻击特征，并将该特征记录在Feature Lib中，通过比较RT Value 与 SV Table 中数值的差异情况，可以检测出系统调用表中的攻击情况，设置较小的检测时间间隔，可以近似实时的检测嵌入内核的 rootkit ，通过设置检测的时间间隔，可以控制性能开销。并且CloudMon会直接检索其内存，因此，包括DKSM 和Shadow Walker 在内的任何来宾内核rootkit都不会欺骗CloudMon。 </p>
-<font color="green">**获取开始地址信息**</font>
-
-<p>​        KV Searcher查找 guest VM 系统调用的起始地址，SV generator 通过扫描，比对通过大量OS攻击实例中获取到的攻击特征，从而可以判断出被攻击者。</p>
-<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a><font color="blue"><strong>实验环境</strong></font></h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>Xen</th>
-<th>priviliged VM</th>
-<th>guest VM</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Xen-3.4.2</td>
-<td>Ubuntu 9.04</td>
-<td>Ubuntu 8.04</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>已经存在的检测方式：</p>
-<ol>
-<li><p>获取guest OS的system.map信息</p>
-</li>
-<li><p>one-on-one 运行在guest VM上</p>
-</li>
-</ol>
-<h3 id="相关工作介绍"><a href="#相关工作介绍" class="headerlink" title="相关工作介绍"></a>相关工作介绍</h3><p>本文将对VM的保护机制分为了 out-of-VM  与 in-VM两种</p>
-<p>A类：out-of-VM</p>
-<ol>
-<li><p>利用受信任的VM充当监控器。OSck,是一种one-on-one的监控模式</p>
-</li>
-<li><p>XenKIMONO 在VM中聚集信息时会暂停OS的执行</p>
-</li>
-<li><p>vIPS 通过预先设置，这种检测规则需要有固定的检测时间间隔</p>
-</li>
-</ol>
-<p>B类：in-VM</p>
-<ol>
-<li><p>硬件虚拟化技术</p>
-</li>
-<li><p>Lares 在guest VM 中内置hooks（钩子函数）实时的检测虚拟机的安全（事件检测）</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>TC</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>Virtual Machine</tag>
-        <tag>System Security</tag>
       </tags>
   </entry>
   <entry>
@@ -935,6 +713,228 @@
       </tags>
   </entry>
   <entry>
+    <title>CloudMon</title>
+    <url>/2020/09/14/CloudMon/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href>CloudMon</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"><a href="https://chuliangweng.github.io/" target="_blank" rel="noopener">Cl.W</a></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">这篇文章信任hypervisor并在此基础上对guestVM进行保护，主要是从内存角度出发，针对rootkit攻击进行运行时检测。</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">System Security; Virtual Machine</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文构造一个动态的监控架构，并在此基础上保证guest VM 运行时的安全性，主要功能是在客户虚拟机中检测出rootkits攻击。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>​        本文构建了一个动态的监控架构，运行在特权级别，通过对guestVM内存的扫描，检测客户机是否受到rootkit攻击，从而保证guestVM的运行时安全性。利用虚拟化技术对客户机内存进行实时监控，且这些监控对于客户机是透明的，为了实现检测的有效与高效，本系统在性能和安全之间权衡。</p>
+<h4 id="Rootkit-攻击"><a href="#Rootkit-攻击" class="headerlink" title="Rootkit 攻击 "></a><font color="blue"><strong>Rootkit 攻击</strong> </font></h4><p>​        rootkit 能够以特权级指令访问 host，并且可以通过对系统进行更改隐藏自己的存在。</p>
+<p>​        检测rootkit，最好是对客户机透明，不更改客户机系统的前提下对其进行检测。</p>
+<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        假设VMM（hypervisor）与priviliged VM  是可信的，guest VM 会受到攻击，在开机阶段的安全性受到VMM的保护，并且对guest VM的攻击不会对privileged VM 的安全性造成影响。</p>
+<p>（有些保护是针对VMM的，但是这不在本文的考虑范围内，本文聚焦在对客户机的保护上）</p>
+<h3 id="CloudMon-系统设计"><a href="#CloudMon-系统设计" class="headerlink" title="CloudMon 系统设计"></a>CloudMon 系统设计</h3><p>​        目的是实现一个可以访问较低权限级别内存信息、检测潜在的攻击并且可以保证检测的实时性与系统性能。访问内存的操作实现是基于 Xen的xenctrl 库，这个库能够读取较低权限的内存（如guest VM的内存信息）。</p>
+<p>​        构建一个guest VM 内存的监控器，目标是对VM透明、高效且是瞬时性的，这种方式可行性是因为攻击者对VM内存任何的更改都是可见的。CloudMon扫描内核memory与寄存器，从而可以实时的检测内存状态变化。这是一个特权级别的VM，能够通过VMM访问其他VMs的内存信息，而不是单纯的一个安全的guest VM。</p>
+<p><img src="/2020/09/14/CloudMon/CloudMonArchitecture.png" width="400px" height="240px"></p>
+<p>​        从云中大量的攻击实例中提取rootkit攻击特征，并将该特征记录在Feature Lib中，通过比较RT Value 与 SV Table 中数值的差异情况，可以检测出系统调用表中的攻击情况，设置较小的检测时间间隔，可以近似实时的检测嵌入内核的 rootkit ，通过设置检测的时间间隔，可以控制性能开销。并且CloudMon会直接检索其内存，因此，包括DKSM 和Shadow Walker 在内的任何来宾内核rootkit都不会欺骗CloudMon。 </p>
+<font color="green">**获取开始地址信息**</font>
+
+<p>​        KV Searcher查找 guest VM 系统调用的起始地址，SV generator 通过扫描，比对通过大量OS攻击实例中获取到的攻击特征，从而可以判断出被攻击者。</p>
+<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a><font color="blue"><strong>实验环境</strong></font></h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Xen</th>
+<th>priviliged VM</th>
+<th>guest VM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xen-3.4.2</td>
+<td>Ubuntu 9.04</td>
+<td>Ubuntu 8.04</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>已经存在的检测方式：</p>
+<ol>
+<li><p>获取guest OS的system.map信息</p>
+</li>
+<li><p>one-on-one 运行在guest VM上</p>
+</li>
+</ol>
+<h3 id="相关工作介绍"><a href="#相关工作介绍" class="headerlink" title="相关工作介绍"></a>相关工作介绍</h3><p>本文将对VM的保护机制分为了 out-of-VM  与 in-VM两种</p>
+<p>A类：out-of-VM</p>
+<ol>
+<li><p>利用受信任的VM充当监控器。OSck,是一种one-on-one的监控模式</p>
+</li>
+<li><p>XenKIMONO 在VM中聚集信息时会暂停OS的执行</p>
+</li>
+<li><p>vIPS 通过预先设置，这种检测规则需要有固定的检测时间间隔</p>
+</li>
+</ol>
+<p>B类：in-VM</p>
+<ol>
+<li><p>硬件虚拟化技术</p>
+</li>
+<li><p>Lares 在guest VM 中内置hooks（钩子函数）实时的检测虚拟机的安全（事件检测）</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>TC</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Virtual Machine</tag>
+        <tag>System Security</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DORY</title>
+    <url>/2021/01/08/DORY/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.usenix.org/system/files/osdi20-dauterman_dory.pdf" target="_blank" rel="noopener">DORY</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">加州大学伯克利分校 <a href="https://people.eecs.berkeley.edu/~edauterman/" target="_blank" rel="noopener">emma</a> <a href="https://people.eecs.berkeley.edu/~raluca/#Awards" target="_blank" rel="noopener">Raluca</a></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">保证在对加密数据查询时没有信息泄露</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">隐私防护</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">构造一个对加密数据进行高效的，无泄露的系统</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="全文总览"><a href="#全文总览" class="headerlink" title="全文总览"></a>全文总览</h3><p>$DORY:$ <strong>D</strong>ecentralized <strong>O</strong>blivious <strong>R</strong>etrieval s<strong>Y</strong>stem (分布式无记忆性检索系统)</p>
+<p>&emsp;&emsp;该系统实现加密查找并且能在服务端分散信任，它保证攻击者不会同时攻击全部的主机，并且无法从攻击的服务端学习到搜索访问模式。</p>
+<p>&emsp;&emsp;对加密数据进行高效，无泄漏的搜索仍然是过去二十年中一个尚未解决的问题。作者调研了5家提供端到端加密文件共享的公司，了解了他们对显示世界的需求并保护搜索访问模式<sup><a href="#fn_搜索访问模式" id="reffn_搜索访问模式">搜索访问模式</a></sup>。</p>
+<ol>
+<li>作者设计并实现了DORY系统，可以保护搜索访问模式；</li>
+<li>并且DORY在多个服务器之间分配信任，以防止控制其中除一台以外的全部主机；</li>
+<li>作者开发新的密码和系统技术，以满足查询的效率和信任模型需求。</li>
+</ol>
+<p>&emsp;&emsp;DORY的性能比 <a href="https://en.wikipedia.org/wiki/Oblivious_RAM" target="_blank" rel="noopener">Oblivious RAM</a> 好几个数量级。在8台服务器（每个服务器有16个CPU）上并行运行时，DORY花费116ms来搜索大约5万个文档，花费862ms来搜索100万个文档。</p>
+<h3 id="研究问题"><a href="#研究问题" class="headerlink" title="研究问题"></a>研究问题</h3><p>单词级别的泄露</p>
+<p><img src="/2021/01/08/DORY/attack.png" width="500px"></p>
+<h4 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h4><p>加密数据搜索目前存在两种</p>
+<ol>
+<li><p>泄漏搜索访问</p>
+<p>攻击者可以不断的向服务器发送单词级别的搜索，通过服务器的响应来判断该文本是否存在于，最终通过搜索全部单词，找到目标文本所包含的内容，重构出文本，实现攻击。</p>
+</li>
+<li><p>非泄露访问，但是十分昂贵</p>
+<p>ORAM 在服务器运行的时间代价是$2^{O(\sqrt{\log n \log \log n})}$，访问开销为 $O\left(\log ^{2} n\right)$ </p>
+<p>设计系统目标</p>
+<p><img src="/2021/01/08/DORY/dory.png" width="500px"></p>
+</li>
+</ol>
+<h3 id="调研结果"><a href="#调研结果" class="headerlink" title="调研结果"></a>调研结果</h3><p><strong>第一个调研文件共享中加密查询需求</strong></p>
+<p>亮点：切实的应用驱动创新</p>
+<p>&emsp;&emsp;这篇文章是第一个对实际的文件共享加密查询需求的调研，对目前主流的5家公司(Keybase, PreVeil, SpiderOak, Sync, and Tresorit)进行了实实在在的分析，并根据自己统计的信息总结出优化的方案，正是这项调研结果激发了DORY的设计动机。(Section 2)</p>
+<h4 id="系统需求"><a href="#系统需求" class="headerlink" title="系统需求"></a>系统需求</h4><p>&emsp;&emsp;在调研的过程中发现几家公司的共同点是都有对数据进行加密的需求，并且目前都有在服务端对加密数据进行查询的需求。那么在构建这样一个服务端的加密查询系统时要满足一下的要求：</p>
+<p><strong>搜索响应</strong>： 百万文档数量的搜索延迟在500ms到4s之间</p>
+<p><strong>用户花费</strong>： 用户每月的费用在 $0.7 左右</p>
+<p><strong>分布式一致性</strong>：多个用户（单用户多客户端）可以访问一个文件，因此搜索时要保证用户之间的一致性</p>
+<p><strong>撤销用户访问要廉价</strong>：公司目前采用的是懒惰撤销<sup><a href="#fn_懒惰撤销" id="reffn_懒惰撤销">懒惰撤销</a></sup>用户的访问权限，即为其他的用户创建新的秘钥，当其他用户访问文档时才使用新秘钥进行更新，而不是在撤销访问权限后，立马对全部文档进行更新，所以被撤销的用户依然可以使用原始秘钥访问从未更新过的文档内容。这些公司希望采用类似的搜索方法。</p>
+<p><strong>系统松弛性</strong>：这些公司不要求搜索结果是最新的（它们可能会持续几分钟的时间），并且他们也愿意接受少量的误报。</p>
+<p><strong>隐藏搜索访问模式</strong>：这些公司希望保证至少一个信任域是真诚的时候，攻击者将无法学习搜索访问模式。</p>
+<p><strong>搜索访问模式的分布式信任</strong>：公司希望通过确保将n个搜索索引放在一起不会轻易为攻击者提供纯文本搜索索引，来限制攻击者破坏所有n个信任域所造成的损害。例如，如果公司被传唤，并且每个信任域都必须从那时起移交其搜索索引和搜索访问模式，则公司可以选择暂停搜索服务以通过减少搜索访问模式泄漏来保护用户的隐私。</p>
+<h4 id="分布式信任"><a href="#分布式信任" class="headerlink" title="分布式信任"></a>分布式信任</h4><p><strong>跨云分裂</strong>：通过将不同的云视为不同的信任域，恶意云提供者（或可以利用一个云基础架构中的漏洞的攻击者）无法访问两个信任域。</p>
+<p><strong>跨机构拆分</strong>：通过在竞争性组织或公众普遍信任的非营利组织（例如，电子前沿基金会）中使用信任域，用户可以更有力地保证组织不太可能合谋。</p>
+<p><strong>跨地区划分</strong>：通过将司法管辖区（即不同的国家）分开来划分信任域，单个法律机构就无法访问整个系统。</p>
+<p>如果将信任域部署在云中，则我们可以利用以下事实：从金钱上激励云提供商以提供可用性。故障停止仍然可以自然发生，但是云提供商可以轻松检测故障并启动新服务器。客户可以报告缺乏信任域可用性的统计信息，部署系统的组织可以将其业务转移到其他地方。</p>
+<h3 id="DORY-设计"><a href="#DORY-设计" class="headerlink" title="DORY 设计"></a>DORY 设计</h3><h4 id="优化查询"><a href="#优化查询" class="headerlink" title="优化查询"></a>优化查询</h4><p>ORAM更新为DPFs <a href="https://en.wikipedia.org/wiki/Distributed_point_function" target="_blank" rel="noopener">分布点函数</a></p>
+<h4 id="设计并优化索引"><a href="#设计并优化索引" class="headerlink" title="设计并优化索引"></a>设计并优化索引</h4><p>构建位图索引并使用布隆过滤器优化 (Section 4.1)</p>
+<p><img src="/2021/01/08/DORY/update.png" width="500px"></p>
+<p><img src="/2021/01/08/DORY/search.png" width="500px"></p>
+<p><img src="/2021/01/08/DORY/bloom.png" width="500px"></p>
+<h4 id="加密并优化索引"><a href="#加密并优化索引" class="headerlink" title="加密并优化索引"></a>加密并优化索引</h4><p>采用随机一次填充优化加密方案 (Section 4.1)</p>
+<h4 id="阻止恶意攻击并减少代价"><a href="#阻止恶意攻击并减少代价" class="headerlink" title="阻止恶意攻击并减少代价"></a>阻止恶意攻击并减少代价</h4><p>采用聚合MAC <a href>3</a> <a href="https://ieeexplore.ieee.org/document/4594983">Aggregate MAC</a> 减少防御代价 (Section 4.3)</p>
+<h4 id="提供容错机制并减少代价"><a href="#提供容错机制并减少代价" class="headerlink" title="提供容错机制并减少代价"></a>提供容错机制并减少代价</h4><p>采用比拜占庭容错更加优异的容错算法 (Section 5)</p>
+<p>map 大小设置 [5]</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> numBlocksMap = <span class="keyword">map</span>[<span class="keyword">int</span>]<span class="keyword">int</span>&#123;</span><br><span class="line">    <span class="number">1024</span>: <span class="number">16479</span>,</span><br><span class="line">    <span class="number">2048</span>: <span class="number">18187</span>,</span><br><span class="line">    <span class="number">4096</span>: <span class="number">20220</span>,</span><br><span class="line">    <span class="number">8192</span>: <span class="number">25782</span>,</span><br><span class="line">    <span class="number">16384</span>: <span class="number">37739</span>,</span><br><span class="line">    <span class="number">32768</span>: <span class="number">69029</span>,</span><br><span class="line">    <span class="number">65536</span>: <span class="number">104213</span>,</span><br><span class="line">    <span class="number">131072</span>: <span class="number">179095</span>,</span><br><span class="line">    <span class="number">262144</span>: <span class="number">344721</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>源码设置的bloomfilter大小 [4]</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">/* Set up config */</span></span><br><span class="line">    filename := flag.String(<span class="string">"config"</span>, <span class="string">"src/config/server1.config"</span>, <span class="string">"server config file"</span>)</span><br><span class="line">    maxDocs := flag.Int(<span class="string">"max_docs"</span>, <span class="number">256</span>, <span class="string">"max number of documents"</span>)</span><br><span class="line">    bloomFilterSz := flag.Int(<span class="string">"bf_sz"</span>, <span class="number">128</span>, <span class="string">"bloom filter size in bits"</span>)</span><br><span class="line">    flag.Parse()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> err error</span><br><span class="line">    config, err = setupConfig(*filename)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        log.Fatalln(<span class="string">"Error retrieving config file: "</span>, err)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Initialize server */</span></span><br><span class="line">    log.Println(<span class="string">"Starting initialization..."</span>)</span><br><span class="line">    C.setSystemParams(C.<span class="keyword">int</span>(*bloomFilterSz), C.<span class="keyword">int</span>(*maxDocs));</span><br><span class="line">    sOld = &amp;C.server&#123;&#125;</span><br><span class="line">    sNew = &amp;C.server&#123;&#125;</span><br><span class="line">    C.initializeServer((*C.server)(sOld), C.<span class="keyword">int</span>(kNumThreads))</span><br><span class="line">    C.initializeServer((*C.server)(sNew), C.<span class="keyword">int</span>(kNumThreads))</span><br><span class="line">    oldVersionNum = <span class="number">0</span></span><br><span class="line">    newVersionNum = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/* Start listening */</span></span><br><span class="line">    log.Println(<span class="string">"Listening..."</span>)</span><br><span class="line">    err = common.ListenLoop(config.Port, config.CertFile, config.KeyFile, handleConnection)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        log.Fatalln(err)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote id="fn_MAC">
+<sup>MAC</sup>.  <a href="https://sci-hub.se/10.1109/ISIT.2008.4594983" target="_blank" rel="noopener">[2]</a>  MAC讲解[3]<a href="#reffn_MAC" title="Jump back to footnote [MAC] in the text."> &#8617;</a>
+</blockquote>
+<blockquote id="fn_DPFs">
+<sup>DPFs</sup>.  在密码学中，分布式点函数是一种加密原语，它允许两个分布式进程共享一条信息，并计算它们共享信息的功能，而不会向任何一个进程透露信息本身。<a href="#reffn_DPFs" title="Jump back to footnote [DPFs] in the text."> &#8617;</a>
+</blockquote>
+<blockquote id="fn_懒惰撤销">
+<sup>懒惰撤销</sup>.  为了降低撤销的成本，可以将重新加密延迟到文件更新之前。懒惰撤销的概念最早是在Cepheus中提出的。这个想法是，如果被撤消的读者仍然可以读取未更改的文件，则不会在安全方面造成重大损失。仅当创建新数据时，才会进行昂贵的重新加密。仍然需要立即更改元数据，以防止被撤消的编写者进一步写入。<a href="#reffn_懒惰撤销" title="Jump back to footnote [懒惰撤销] in the text."> &#8617;</a>
+</blockquote>
+<blockquote id="fn_搜索访问模式">
+<sup>搜索访问模式</sup>.  在加密的搜索系统中，当用户在文件夹内的文件上搜索关键字时，服务器仅获悉用户在该文件夹中进行了搜索，而没有获悉与该搜索相匹配的文档，与之匹配的文档数量或有关该文档的其他信息或者关键词。<a href="#reffn_搜索访问模式" title="Jump back to footnote [搜索访问模式] in the text."> &#8617;</a>
+</blockquote>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://en.wikipedia.org/wiki/Oblivious_RAM" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Oblivious_RAM</a></p>
+<p>[2] Chan A C F, Castelluccia C. On the (im) possibility of aggregate message authentication codes[C]//2008 IEEE International Symposium on Information Theory. IEEE, 2008: 235-239.</p>
+<p>[3] <a href="https://blog.csdn.net/qq_30505673/article/details/82432454" target="_blank" rel="noopener">https://blog.csdn.net/qq_30505673/article/details/82432454</a></p>
+<p>[4] <a href="https://github.com/ucbrise/dory/blob/2617c2bbdfbdf4cd453c798fb6c7560dde59aaa4/src/server/server.go" target="_blank" rel="noopener">https://github.com/ucbrise/dory/blob/2617c2bbdfbdf4cd453c798fb6c7560dde59aaa4/src/server/server.go</a></p>
+<p>[5] <a href="https://github.com/ucbrise/dory/blob/2617c2bbdfbdf4cd453c798fb6c7560dde59aaa4/baseline/src/server/run_server.go" target="_blank" rel="noopener">https://github.com/ucbrise/dory/blob/2617c2bbdfbdf4cd453c798fb6c7560dde59aaa4/baseline/src/server/run_server.go</a></p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>OSDI</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Dancing with Wolves</title>
     <url>/2020/06/27/Dancing-with-Wolves/</url>
     <content><![CDATA[<div class="table-container">
@@ -1096,6 +1096,56 @@
       </tags>
   </entry>
   <entry>
+    <title>Google Technology</title>
+    <url>/2020/11/23/Google-Technology/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/gfs-sosp2003.pdf" target="_blank" rel="noopener">GFS</a> <a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf" target="_blank" rel="noopener">MapReduce</a> <a href="https://storage.googleapis.com/pub-tools-public-publication-data/pdf/68a74a85e1662fe02ff3967497f31fda7f32225c.pdf" target="_blank" rel="noopener">Bigtable</a> <a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/spanner-osdi2012.pdf" target="_blank" rel="noopener">Spanner</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">google</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">分布式文件系统、数据存储系统等技术</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>SOSP</category>
+        <category>OSDI</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>HIMA</title>
     <url>/2020/12/02/HIMA/</url>
     <content><![CDATA[<div class="table-container">
@@ -1199,8 +1249,8 @@
       </tags>
   </entry>
   <entry>
-    <title>Google Technology</title>
-    <url>/2020/11/23/Google-Technology/</url>
+    <title>HyperLock</title>
+    <url>/2020/12/01/HyperLock/</url>
     <content><![CDATA[<div class="table-container">
 <table>
 <thead>
@@ -1214,38 +1264,43 @@
 <tr>
 <td style="text-align:center">1</td>
 <td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/gfs-sosp2003.pdf" target="_blank" rel="noopener">GFS</a> <a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf" target="_blank" rel="noopener">MapReduce</a> <a href="https://storage.googleapis.com/pub-tools-public-publication-data/pdf/68a74a85e1662fe02ff3967497f31fda7f32225c.pdf" target="_blank" rel="noopener">Bigtable</a> <a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/spanner-osdi2012.pdf" target="_blank" rel="noopener">Spanner</a></td>
+<td style="text-align:center"><a href="https://www.cs.fsu.edu/~zwang/files/EuroSys12.pdf" target="_blank" rel="noopener">HyperLock</a></td>
 </tr>
 <tr>
 <td style="text-align:center">2</td>
 <td style="text-align:center">作者信息</td>
-<td style="text-align:center">google</td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
 <td style="text-align:center">3</td>
 <td style="text-align:center">核心内容</td>
-<td style="text-align:center">分布式文件系统、数据存储系统等技术</td>
+<td style="text-align:center">保护Hypervisor</td>
 </tr>
 <tr>
 <td style="text-align:center">4</td>
 <td style="text-align:center">研究领域</td>
-<td style="text-align:center"></td>
+<td style="text-align:center">保护虚拟机安全</td>
 </tr>
 <tr>
 <td style="text-align:center">5</td>
 <td style="text-align:center">全文总览</td>
+<td style="text-align:center">1. 提出HyperLock保护Hypervisor和客户虚拟机；2. 提出Hypervisor 影子技术，为每个客户机分配一个Hypervisor，提高隔离性。</td>
 </tr>
 </tbody>
 </table>
 </div>
+<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>​        本文主要指出是对Hypervisor的保护，实验的平台是KVM。<br>​        即便是部署虚拟机之后会带来很大的便利，但是Hypervisor软件bug是有可能被利用并发起攻击的。本文认为，因为客户机与主机的联系如此紧密，如果一个Hypervisor被攻击了，那么部署在其上面的许多客户机很有可能受到威胁。<br>​        为了隔离Hypervisor与各个客户机，本文提出了HyperLock来提供严格的隔离保证。具体来说，Hypervisor在运行时被隔离，他有自己独立的地址空间和受限制的指令集；另一种技术是Hypervisor shadow，有效的为每个客户机创建单独的Hypervisor，从而将可能受到的影响降到最小。</p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>​        现有对Hypervisor的攻击表明攻击者可以从客户机逃脱并直接攻击主机OS，并且受攻击的Hypervisor能够轻松的读取其他客户机的内容或者窃取敏感信息。</p>
+<p>（为了说明xen的不安全性，需要介绍几个对xen的攻击实例）</p>
 ]]></content>
       <categories>
         <category>paper</category>
-        <category>SOSP</category>
-        <category>OSDI</category>
+        <category>EuroSys</category>
       </categories>
       <tags>
         <tag>论文解读</tag>
+        <tag>Detection</tag>
+        <tag>Isolation</tag>
       </tags>
   </entry>
   <entry>
@@ -1333,58 +1388,25 @@
       </tags>
   </entry>
   <entry>
-    <title>HyperLock</title>
-    <url>/2020/12/01/HyperLock/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.cs.fsu.edu/~zwang/files/EuroSys12.pdf" target="_blank" rel="noopener">HyperLock</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">保护Hypervisor</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">保护虚拟机安全</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">1. 提出HyperLock保护Hypervisor和客户虚拟机；2. 提出Hypervisor 影子技术，为每个客户机分配一个Hypervisor，提高隔离性。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>​        本文主要指出是对Hypervisor的保护，实验的平台是KVM。<br>​        即便是部署虚拟机之后会带来很大的便利，但是Hypervisor软件bug是有可能被利用并发起攻击的。本文认为，因为客户机与主机的联系如此紧密，如果一个Hypervisor被攻击了，那么部署在其上面的许多客户机很有可能受到威胁。<br>​        为了隔离Hypervisor与各个客户机，本文提出了HyperLock来提供严格的隔离保证。具体来说，Hypervisor在运行时被隔离，他有自己独立的地址空间和受限制的指令集；另一种技术是Hypervisor shadow，有效的为每个客户机创建单独的Hypervisor，从而将可能受到的影响降到最小。</p>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>​        现有对Hypervisor的攻击表明攻击者可以从客户机逃脱并直接攻击主机OS，并且受攻击的Hypervisor能够轻松的读取其他客户机的内容或者窃取敏感信息。</p>
-<p>（为了说明xen的不安全性，需要介绍几个对xen的攻击实例）</p>
+    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
+    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
+    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
+<ul>
+<li><strong>Active Monitoring（Synchronous）</strong></li>
+</ul>
+<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
+<ul>
+<li><strong>Passive Monitoring （Asynchronous）</strong></li>
+</ul>
+<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
 ]]></content>
       <categories>
         <category>paper</category>
-        <category>EuroSys</category>
+        <category>Security and Privacy</category>
       </categories>
       <tags>
         <tag>论文解读</tag>
-        <tag>Detection</tag>
-        <tag>Isolation</tag>
+        <tag>虚拟化安全</tag>
       </tags>
   </entry>
   <entry>
@@ -1507,6 +1529,14 @@
       </tags>
   </entry>
   <entry>
+    <title>Operating Systems</title>
+    <url>/2020/07/17/Operating-Systems/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PCA图像压缩</title>
     <url>/2020/05/20/PCA%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9/</url>
     <content><![CDATA[<center><font face="黑体" size="8">一种基于SVD原理的PCA图像压缩算法</font></center>
@@ -1621,102 +1651,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
-    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
-    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
-<ul>
-<li><strong>Active Monitoring（Synchronous）</strong></li>
-</ul>
-<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
-<ul>
-<li><strong>Passive Monitoring （Asynchronous）</strong></li>
-</ul>
-<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>虚拟化安全</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Operating Systems</title>
-    <url>/2020/07/17/Operating-Systems/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Pioneer</title>
-    <url>/2020/11/23/Pioneer/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.cs.princeton.edu/courses/archive/spr06/cos592/bib/pioneer-seshadri-sosp05.pdf" target="_blank" rel="noopener">Pioneer</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">CMU/CyLab</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">one-on-one 方式检测内存信息是否有差别</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">安全检测</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">通过one-on-one 的方法对非可信主机进行检测，从而构造出一个可信的执行环境。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="全文概览"><a href="#全文概览" class="headerlink" title="全文概览"></a>全文概览</h3><p>​        本文提出的pioneer是在不受信任的主机上执行可验证代码的第一步，无需任何硬件的支持，pioneer可以作为构建安全系统的基本构建块。并通过构建内核rootkit检测器来证明其可用性。Pioneer基于扩展的外部可信实体以及 challenge-response ptotocol 通过可信的通讯连接为非可信平台提供了运行时的验证，其中可信主机与非可信主机具有相同的验证函数，包括相同的代码序列和内存布局。</p>
-<h3 id="攻击假设"><a href="#攻击假设" class="headerlink" title="攻击假设"></a>攻击假设</h3><p>在非可信的平台执行代码往往会有几种威胁：</p>
-<ol>
-<li>在代码调用之前进行更改；</li>
-<li>引导程序执行备份代码；</li>
-<li>在代码执行过程中进行更改。</li>
-</ol>
-<p>假设：</p>
-<p>​        攻击者对其所在机器的软件有绝对的控制权，包括其上的应用程序和操作系统；</p>
-<p>​        攻击者不能对硬件进行更改（不能对磁盘或者网络加载恶意的固件），不能调用更快的CPU进行计算，不能够直接使用DMA攻击。</p>
-<h3 id="设计架构"><a href="#设计架构" class="headerlink" title="设计架构"></a>设计架构</h3><h4 id="Pioneer中的角色"><a href="#Pioneer中的角色" class="headerlink" title="Pioneer中的角色"></a>Pioneer中的角色</h4><p><strong>dispatcher</strong> ： 预先知道非可信平台的硬件配置信息；</p>
-<p><strong>untrusted platform</strong> ： 具有但CPU， 且CPU不支持对称多线程（保证运行时的稳定性，检测时间不会大幅度的变化）</p>
-<p><strong>communication channel</strong> : 消息源的认证，在检测时，非可信平台仅与<code>dispatcher</code>进行通讯。</p>
-<h4 id="检测协议流程"><a href="#检测协议流程" class="headerlink" title="检测协议流程"></a>检测协议流程</h4><p><img src="/2020/11/23/Pioneer/checkflow.png" height="260"></p>
-<p><strong>对rootkits进行检测</strong></p>
-<p><img src="/2020/11/23/Pioneer/kma.png" height="260"></p>
-<h3 id="检测方法"><a href="#检测方法" class="headerlink" title="检测方法"></a>检测方法</h3><h3 id="验证方法"><a href="#验证方法" class="headerlink" title="验证方法"></a>验证方法</h3><h3 id="本文是否能够回答审稿人的全部问题？"><a href="#本文是否能够回答审稿人的全部问题？" class="headerlink" title="本文是否能够回答审稿人的全部问题？"></a>本文是否能够回答审稿人的全部问题？</h3>]]></content>
-      <categories>
-        <category>paper</category>
-        <category>SOSP</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>PUBG JNG</title>
     <url>/2020/04/18/PUBG-JNG/</url>
     <content><![CDATA[<h3 id="JNG战队发展历程回顾"><a href="#JNG战队发展历程回顾" class="headerlink" title="JNG战队发展历程回顾"></a>JNG战队发展历程回顾</h3><h4 id="JNG初次相遇"><a href="#JNG初次相遇" class="headerlink" title="JNG初次相遇"></a>JNG初次相遇</h4><p>很久很久以前，这支战队的几个骚年游荡在这样一个空旷的平原上</p>
@@ -1761,110 +1695,6 @@
       <tags>
         <tag>game-for-peace</tag>
         <tag>JNG</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>RADAR</title>
-    <url>/2020/07/18/RADAR/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ROP attacks</title>
-    <url>/2021/02/01/ROP-attacks/</url>
-    <content><![CDATA[<h3 id="栈溢出"><a href="#栈溢出" class="headerlink" title="栈溢出"></a>栈溢出</h3><p>由于<code>C</code> 语言对数组引用不做任何边界检查，从而导致缓冲区溢出<code>buffer overflow</code>，这成为一种常见的漏洞。根据溢出发生的内存位置，可以分为栈溢出和堆溢出。其中，由于栈上保存着局部变量和一些状态信息，例如寄存器值和返回地址等，一旦发生严重溢出，攻击者可以通过复写返回地址来执行任意代码，利用包括<code>shellcode</code>注入、ret2libc、<code>ROP</code>等。</p>
-<h3 id="What-is-ROP"><a href="#What-is-ROP" class="headerlink" title="What is ROP"></a>What is ROP</h3><p>最开始，要利用栈溢出只需将返回地址覆盖为 jmp esp 指令的地址，并在后面添加 shellcode 就可以执行。后来引入了 NX 缓解机制，数据所在的内存页被标记为不可执行，此时再执行 shellcode 就会抛出异常。既然注入新代码不可行，那么就复用程序中已有的代码。libc.so 几乎在每个程序执 行时都会加载，攻击者就开始考虑利用 libc 中的函数，这种技术就是 ret2libc。但是这种技术也有缺陷，首先，虽然攻击者可以一个接一个地调用 libc 中的函数，但这个执行流仍然是线性的，而不像代码注入那样任意执行，其次，攻击者只能使用程序 text 段和 libc 中已有的函数，通过移除这些特定的函数就可以限制此类攻击。</p>
-<p>论文 <code>The Geometry of Innocent Flesh on the Bone: Return-into-libc without Function Calls (on the x86)</code>提出了一种新的攻击技术——返回导向编程<code>（Return-Oriented Programming, ROP）</code>，无须调用任何函数即可执行任意代码。</p>
-<p>使用 ROP 攻击，首先需要扫描文件，提取出可用的 gadget 片段（通常以 ret 指令结尾），然后<br>将这些 gadget 根据所需要的功能进行组合，达到攻击者的目的。举个小例子，exit(0)的 shellcode 由<br>下面 4 条连续的指令组成。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">; <span class="built_in">exit</span>(<span class="number">0</span>) shellcode</span><br><span class="line"><span class="keyword">xor</span> eax, eax</span><br><span class="line"><span class="keyword">xor</span> ebx, ebx</span><br><span class="line">inc eax</span><br><span class="line"><span class="keyword">int</span> <span class="number">0x80</span></span><br></pre></td></tr></table></figure>
-<p>如果要将它改写成 ROP 链，则需要分别找到包含这些指令的 gadget，由于它们在地址上不一定<br>是连续的，所以需要通过 ret 指令进行连接，依次执行。</p>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">; <span class="built_in">exit</span>(<span class="number">0</span>) ROP chain</span><br><span class="line"><span class="keyword">xor</span> eax, eax ; gadget <span class="number">1</span></span><br><span class="line">ret</span><br><span class="line"><span class="keyword">xor</span> ebx, ebx ; gadget <span class="number">2</span></span><br><span class="line">ret</span><br><span class="line">inc eax ; gadget <span class="number">3</span></span><br><span class="line">ret</span><br><span class="line"><span class="keyword">int</span> <span class="number">0x80</span> ; gadget <span class="number">4</span></span><br></pre></td></tr></table></figure>
-<p>为了完成指令序列的构建，首先要找到这些以ret指令为结尾，并且在执行时必然以ret结束而不会跳转到其他地方的gadget，算法如下：</p>
-<figure class="highlight"><table><tr><td class="code"><pre><span class="line">Algorithm GALILEO:</span><br><span class="line">	create a node, root, representing the ret instruction; </span><br><span class="line">	place root in the trie; </span><br><span class="line">	<span class="keyword">for</span> pos from <span class="number">1</span> to textseg_len <span class="keyword">do</span>:</span><br><span class="line">		<span class="keyword">if</span> the <span class="keyword">byte</span> at pos is c3, i.e., a ret instruction, then:</span><br><span class="line">			call BUILDFROM(pos, root).</span><br><span class="line"></span><br><span class="line"><span class="function">Procedure <span class="title">BuILDFROM</span><span class="params">(index pos, instruction parent_insn)</span>:</span></span><br><span class="line"><span class="function">	<span class="keyword">for</span> <span class="built_in">step</span> from 1 to max_insn_len <span class="keyword">do</span>:</span></span><br><span class="line">		if bytes [( pos-step )···(pos-1)] decode as a valid instruction insn then:</span><br><span class="line">			ensure insn is in the trie as a child of parent_insn; </span><br><span class="line">			<span class="keyword">if</span> insn isn<span class="number">'</span>t boring then:</span><br><span class="line">				call BUILDFROM (pos-step,insn).</span><br></pre></td></tr></table></figure>
-<p>扫描二进制找到 ret（c3）指令，将其作为 trie 的根节点，然后回溯解析前面的指令，如果是有效指令，将其添加为子节点，再判断是否 boring；如果不是，就继续递归回溯。举个例子，在一个 trie 中一个表示 pop %eax 的节点是表示 ret 的根节点的子节点，则这个 gadget 为 pop %eax; ret。<br>如此就能把有用的 gadgets 都找出来了。boring 指令则分为三种情况：<br>（1）该指令是 leave，后跟一个 ret 指令；<br>（2）该指令是一个 pop %ebp，后跟一个 ret 指令；<br>（3）该指令是返回或者非条件跳转。<br>实际上，有很多工具可以帮助我们完成 gadget 搜索的工作，常用的有 ROPgadget、Ropper 等，还可以直接在 ropshell 网站上搜索。gadgets 在多个体系架构上都是图灵完备的，允许任意复杂度的计算，也就是说基本上只要能想到的事情它都可以做。下面简单介绍几种用法。<br>（1）保存栈数据到寄存器。弹出栈顶数据到寄存器中，然后跳转到新的栈顶地址。所以当返回<br>地址被一个 gadget 的地址覆盖，程序将在返回后执行该指令序列。例如：pop eax; ret；<br>（2）保存内存数据到寄存器。例如：mov ecx,[eax]; ret；<br>（3）保存寄存器数据到内存。例如：mov [eax],ecx; ret；<br>（4）算数和逻辑运算。add、sub、mul、xor 等。例如：add eax,ebx; ret, xor edx,edx; ret；<br>（5）系统调用。执行内核中断。例如：int 0x80; ret, call gs:[0x10]; ret；<br>（6）会影响栈帧的 gadget。这些 gadget 会改变 ebp 的值，从而影响栈帧，在一些操作如 stack<br>pivot 时我们需要这样的指令来转移栈帧。例如：leave; ret, pop ebp; ret。</p>
-<h3 id="Analyse-ROP"><a href="#Analyse-ROP" class="headerlink" title="Analyse ROP"></a>Analyse ROP</h3><ol>
-<li><p>【<code>ROP</code>攻击】 攻击者预先扫描并识别系统中可以利用的gadgets（包含<code>ret</code> 指令并可以跳转到指定地址的代码片段），利用缓冲区溢出，通过对堆栈段的控制，控制访问控制流程（新的流程复用正常的代码段），从而得到攻击者想要的信息，达到攻击的目的；</p>
-</li>
-<li><p>【可行性】<code>Xen</code> 代码段中确实存在很多可以用于<code>ROP</code>攻击的<code>gadgets</code>，[1] 这篇文章是第一个实现在虚拟化领域的<code>ROP</code>攻击，攻击结果是实现对非特权<code>VM</code>的权限提升；</p>
-</li>
-<li><p>【ROP不影响代码完整性】[2] 在相关工作中指出，使用<code>ROP</code>攻击的攻击模型，不会对<code>hypervisor</code>代码产生影响，因此，仅检测代码完整性的机制不会检测到该攻击；在文中introduction介绍，非特权级客户机，会控制<code>hypervisor</code>的 <code>ToolStack</code>，从而提升自己的权限并且控制其他的客户机；[3] 在文中也明确提出<code>ROP</code>攻击可以完美的旁路掉代码完整性检测。</p>
-</li>
-<li><p>综上，我看过的几篇文章中没有提到<code>ROP</code>攻击会对code integrity 产生影响的说明，并且，在<code>Outlier</code>中，对比Checker 是扫描的 <code>Hypervisor</code> 的代码区域，那么这个提到的ROP攻击就会避开我们的检测，所以从理论上来看<code>Outlier</code>确实不会检测到ROP的攻击；ROP在攻击的过程中，会在内存中留下痕迹，但是，应该是在堆、栈段留下痕迹，在代码段没有影响。</p>
-</li>
-</ol>
-<h3 id="how-does-ROP-effect-the-OS"><a href="#how-does-ROP-effect-the-OS" class="headerlink" title="how does ROP effect the OS"></a>how does ROP effect the OS</h3><p>[6] 文中举的例子：</p>
-<p>攻击者扫描已有的动态链接库和可执行文件，提取出可以利用的指令片段(gadget)，这些指令片段均以ret指令结尾，即用ret指令实现指令片段执行流的衔接。操作系统通过栈来进行函数的调用和返回。函数的调用和返回就是通过压栈和出栈来实现的。每个程序都会维护一个程序运行栈，栈为所有函数共享，每次函数调用，系统会分配一个栈桢给当前被调用函数，用于参数的传递、局部变量的维护、返回地址的填入等。栈帧是程序运行栈的一部分 ，在<a href>Linux</a>中 ，通过%esp和 %ebp寄存器维护栈顶指针和栈帧的起始地址 ，%eip是<a href>程序计数器</a>寄存器 。而ROP攻击则是利用以ret结尾的程序片段 ，操作这些栈相关寄存器，控制程序的流程，执行相应的gadget，实施攻击者预设目标 。ROP不同于retum-to-libc攻击之处在于，<strong>ROP攻击以ret指令结尾的函数代码片段</strong> ，而不是整个函数本身去完成预定的操作。从广义角度讲 ，return-to-libc攻击是ROP攻的特例。最初ROP攻击实现在x86体系结构下，随后扩展到各种体系结构.。与以往攻击技术不同的是，<strong>ROP恶意代码不包含任何指令</strong>，将自己的恶意代码隐藏在正常代码中。因而，它可以绕过W⊕X的防御技术。</p>
-<p><img src="/2021/02/01/ROP-attacks/example.png" width="500"></p>
-<h3 id="how-can-we-detect"><a href="#how-can-we-detect" class="headerlink" title="how can we detect"></a>how can we detect</h3><h3 id="how-could-it-apply-on-Xen"><a href="#how-could-it-apply-on-Xen" class="headerlink" title="how could it apply on Xen"></a>how could it apply on Xen</h3><h3 id="Xen-hypervisor-and-ROP"><a href="#Xen-hypervisor-and-ROP" class="headerlink" title="Xen hypervisor and ROP"></a>Xen hypervisor and ROP</h3><p>Control-flow Enforcement Technology (CET) is a set of features in hardware designed to combat Return-oriented Programming (ROP, also call/jump COP/¯JOP) attacks. Xen 4.14 can use these hardware features, if available, to protect itself from ROP attacks.[5]</p>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] Ding B, Wu Y, He Y, et al. Return-oriented programming attack on the xen hypervisor[C]//2012 Seventh International Conference on Availability, Reliability and Security. IEEE, 2012: 479-484.</p>
-<p>[2] Saeed A, Hussain S A, Garraghan P. Cross-VM Network Channel Attacks and Countermeasures within Cloud Computing Environments[J]. IEEE Transactions on Dependable and Secure Computing, 2020.</p>
-<p>[3] Jiang J, Jia X, Feng D, et al. HyperCrop: a hypervisor-based countermeasure for return oriented programming[C]//International Conference on Information and Communications Security. Springer, Berlin, Heidelberg, 2011: 360-373.</p>
-<p>[4] <a href="https://www.youtube.com/watch?v=n-_QkDek6jY" target="_blank" rel="noopener">https://www.youtube.com/watch?v=n-_QkDek6jY</a> </p>
-<p>[5] <a href="https://wiki.xenproject.org/wiki/Xen_Project_4.14_Feature_List" target="_blank" rel="noopener">https://wiki.xenproject.org/wiki/Xen_Project_4.14_Feature_List</a></p>
-<p>[6] Zhang J, Hou R, Song W, et al. RAGuard: An Efficient and User-Transparent Hardware Mechanism against ROP Attacks[J]. ACM Transactions on Architecture and Code Optimization (TACO), 2018, 15(4): 1-21.</p>
-]]></content>
-      <tags>
-        <tag>attacks</tag>
-        <tag>ROP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Protocol-gossip</title>
-    <url>/2020/11/07/Protocol-gossip/</url>
-    <content><![CDATA[<h3 id="P2P-简介"><a href="#P2P-简介" class="headerlink" title="P2P 简介"></a>P2P 简介</h3><p>​        网络中节点数目的增加，使得传统的C/S计算模型不能满足用户对信息访问等要求，无法满足分布式应用的要求，其限制了网络资源的充分利用，可扩展性较差，无法支持不断增长的客户节点数量等问题越来越明显。</p>
-<p>​        P2P 主要解决网络负载不均衡的问题，用户有能力不通过服务器直接进行资源的的共享和交换。Napster是第一个被广泛应用的 Peer-to-Peer 音乐共享服务。</p>
-<h4 id="Peer-to-Peerr-分类"><a href="#Peer-to-Peerr-分类" class="headerlink" title="Peer-to-Peerr 分类"></a>Peer-to-Peerr 分类</h4><p>集中式P2P系统</p>
-<p>无结构P2P系统</p>
-<p>结构化P2P系统</p>
-<h3 id="分布式文件定位"><a href="#分布式文件定位" class="headerlink" title="分布式文件定位"></a>分布式文件定位</h3><h4 id="Useful-links"><a href="#Useful-links" class="headerlink" title="Useful links"></a>Useful links</h4><p><a href="https://www.cnblogs.com/zhufanyu/p/12101112.html" target="_blank" rel="noopener">RPC 远程调用</a></p>
-<p><a href="https://www.cnblogs.com/gzhcsu/p/11389235.html" target="_blank" rel="noopener">RPC </a></p>
-<p><a href="https://blog.csdn.net/daaikuaichuan/article/details/88595202?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare" target="_blank" rel="noopener">详解RPC </a></p>
-<p><a href="https://wiki.p2pfoundation.net/P2P_Computing" target="_blank" rel="noopener">https://wiki.p2pfoundation.net/P2P_Computing</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>RPC go</title>
-    <url>/2020/12/03/RPC-go/</url>
-    <content><![CDATA[<h3 id="单向单次通讯"><a href="#单向单次通讯" class="headerlink" title="单向单次通讯"></a>单向单次通讯</h3><p>注，Go语言中谨记：</p>
-<blockquote>
-<p>使用go时，以大写字母开头的字段和变量将被“导出”，并且对其他包可见。 以小写字母开头的字段是“<strong>未导出”</strong>（type main.CheckRemote <strong>has no exported fields</strong>）的，并且仅在其自己的包中可见。encoding / gob包依赖于反射来编码值，并且只能看到导出的struct字段。为了使事情变得可编码，请在stateNode结构中将要保存的每个字段名称的<strong>首字母大写</strong>。</p>
-</blockquote>
-<h4 id="构造通讯类型"><a href="#构造通讯类型" class="headerlink" title="构造通讯类型"></a>构造通讯类型</h4><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> sample <span class="keyword">struct</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *sample)</span> <span class="title">Echo</span> <span class="params">(request <span class="keyword">string</span>, reply * <span class="keyword">string</span>)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	*reply = <span class="string">"hello:"</span> + request</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在<code>Echo</code>方法中，第一个可以看做是输入值，第二个指针类型值看作是返回值，函数真正的返回值是<code>error</code></p>
-<h4 id="RPC-服务注册"><a href="#RPC-服务注册" class="headerlink" title="RPC 服务注册"></a>RPC 服务注册</h4><p>在构造了通讯类型之后，可以将 <code>sample</code>类型的对象注册为一个<code>RPC</code>服务：</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	rpc.RegisterName(<span class="string">"sample"</span>, <span class="built_in">new</span>(sample))</span><br><span class="line"></span><br><span class="line">	listener, err := net.Listen(<span class="string">"tcp"</span>, <span class="string">":10088"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">"ListenTCP  error:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	connect, err := listener.Accept() </span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">"Accept error:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	rpc.ServeConn(connect)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>​        其中<code>rpc.Register</code>函数调用会将对象类型中所有满足<code>RPC</code>规则的对象方法注册为<code>RPC</code>函数，所有注册的方法会放在<code>sample</code>服务空间之下。go在创建网络服务器时需要用到<code>net.Listen</code>生成一个监听器，使用<code>Accept()</code>阻塞处理连接到服务器的请求。然后建立一个唯一的<code>TCP</code>链接，并且通过<code>rpc.ServeConn</code>函数在该TCP链接上为对方提供<code>RPC</code>服务。</p>
-<h4 id="Client-端"><a href="#Client-端" class="headerlink" title="Client 端"></a>Client 端</h4><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line"></span><br><span class="line">	client, err := rpc.Dial(<span class="string">"tcp"</span>, <span class="string">"localhost:10088"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">"dailing:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> reply <span class="keyword">string</span></span><br><span class="line">	err = client.Call(<span class="string">"sample.Echo"</span>,<span class="string">"This is client"</span>, &amp;reply)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	fmt.Println(reply)                                         </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>​        首先通过<code>rpc.Dial</code>拨号<code>RPC</code>服务，然后通过<code>client.Call</code>调用具体的<code>RPC</code>方法。在调用<code>client.Call</code>时，第一个参数是用点号链接的RPC服务名字和方法名字，第二和第三个参数分别是<code>RPC</code>方法定义的两个参数。</p>
-<h3 id="单向多次通信"><a href="#单向多次通信" class="headerlink" title="单向多次通信"></a>单向多次通信</h3><p><strong>Server端处理</strong></p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	rpc.RegisterName(<span class="string">"sample"</span>, <span class="built_in">new</span>(sample))</span><br><span class="line">	fmt.Println(<span class="string">"register!"</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span> <span class="params">()</span></span>  &#123;</span><br><span class="line">		listener, err := net.Listen(<span class="string">"tcp"</span>, <span class="string">"0.0.0.0:10088"</span>)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(<span class="string">"ListenTCP  error:"</span>, err)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span> <span class="literal">true</span> &#123;</span><br><span class="line">			connect, err := listener.Accept()</span><br><span class="line">			<span class="keyword">go</span> <span class="function"><span class="keyword">func</span> <span class="params">()</span></span>  &#123;</span><br><span class="line">				<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">					log.Fatal(<span class="string">"Accept error:"</span>, err)</span><br><span class="line">				&#125;</span><br><span class="line">				rpc.ServeConn(connect) <span class="comment">// 对请求执行操作</span></span><br><span class="line">				fmt.Println(<span class="string">"q.message : "</span>, q.message)</span><br><span class="line">			&#125;()</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">		<span class="keyword">for</span> <span class="literal">true</span>&#123;  <span class="comment">// 为了防止主线程退出造成的子线程的中断      </span></span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>理解：</p>
-<p>​        在服务端需要进行的操作为 1. 注册， 2. 创建监听器， 3. 阻塞监听， 4. 处理访问请求</p>
-<p>​        其中 2,3 为基础创建步骤，4为执行步骤，第四步同时可能会有多个请求发送，因此要与之前的操作分离开，单独创建子线程。</p>
-<p><strong>client端</strong></p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line"></span><br><span class="line">	client, err := rpc.Dial(<span class="string">"tcp"</span>, <span class="string">"localhost:10088"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">"dailing:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> reply <span class="keyword">string</span></span><br><span class="line">	<span class="keyword">var</span> inputReader <span class="keyword">string</span> </span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span> <span class="literal">true</span> &#123;</span><br><span class="line">		fmt.Scanln(&amp;inputReader)</span><br><span class="line">		err = client.Call(<span class="string">"sample.Echo"</span>,inputReader, &amp;reply)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">	</span><br><span class="line">		fmt.Println(reply) </span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>理解：</p>
-<p>​        在client端进行的操作主要是 <code>dial</code> 和 <code>call</code> 操作，拨号操作仅进行一次即可，而发送消息可能要进行多次，因此，要实现多次数据传输操作，要在数据操作时进行循环操作。</p>
-<h3 id="双向通讯"><a href="#双向通讯" class="headerlink" title="双向通讯"></a>双向通讯</h3><p>注： 这仅仅是一个<code>sample</code> 程序，一般框架，如果要进行更复杂的操作，需要大量改进。</p>
-<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"net"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"net/rpc"</span></span><br><span class="line">	<span class="string">"log"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> sample <span class="keyword">struct</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *sample)</span> <span class="title">Echo</span> <span class="params">(request <span class="keyword">string</span>, reply * <span class="keyword">string</span>)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	*reply = <span class="string">"hello:"</span> + request</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	rpc.RegisterName(<span class="string">"sample"</span>, <span class="built_in">new</span>(sample))</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		listener, err := net.Listen(<span class="string">"tcp"</span>, <span class="string">"0.0.0.0:10082"</span>)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(<span class="string">"ListenTCP  error:"</span>, err)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span> <span class="literal">true</span> &#123;</span><br><span class="line">			connect, err := listener.Accept()</span><br><span class="line">			<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">				<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">					log.Fatal(<span class="string">"Accept error:"</span>, err)</span><br><span class="line">				&#125;</span><br><span class="line">				rpc.ServeConn(connect)</span><br><span class="line">			&#125;()</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	time.Sleep(time.Duration(<span class="number">3</span>) * time.Second)</span><br><span class="line"></span><br><span class="line">	client, err := rpc.Dial(<span class="string">"tcp"</span>, <span class="string">"localhost:10081"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">"dailing:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> reply <span class="keyword">string</span></span><br><span class="line">	<span class="keyword">var</span> inputReader <span class="keyword">string</span> </span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> <span class="literal">true</span> &#123;</span><br><span class="line">		fmt.Scanln(&amp;inputReader)</span><br><span class="line">		err = client.Call(<span class="string">"sample.Echo"</span>,inputReader, &amp;reply)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Println(reply)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>TODO：</strong></p>
-<blockquote>
-<p>1.在双向发送数据请求时，在terminal 输入指令进行传输；</p>
-<p>2.取消 sleep 的操作，实现运行时不中断。</p>
-</blockquote>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://chai2010.cn/advanced-go-programming-book/ch4-rpc/ch4-01-rpc-intro.html" target="_blank" rel="noopener">https://chai2010.cn/advanced-go-programming-book/ch4-rpc/ch4-01-rpc-intro.html</a></p>
-<p>[2] <a href="https://learnku.com/docs/build-web-application-with-golang/084-rpc/3206" target="_blank" rel="noopener">https://learnku.com/docs/build-web-application-with-golang/084-rpc/3206</a></p>
-<p>[3] <a href="https://smallnest.gitbooks.io/go-rpc-programming-guide/content/part1/client.html" target="_blank" rel="noopener">https://smallnest.gitbooks.io/go-rpc-programming-guide/content/part1/client.html</a></p>
-]]></content>
-      <tags>
-        <tag>go</tag>
-        <tag>RPC</tag>
       </tags>
   </entry>
   <entry>
@@ -1950,9 +1780,174 @@
       </tags>
   </entry>
   <entry>
-    <title>SOSP-Progress</title>
-    <url>/2021/02/18/SOSP-Progress/</url>
+    <title>Pioneer</title>
+    <url>/2020/11/23/Pioneer/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.cs.princeton.edu/courses/archive/spr06/cos592/bib/pioneer-seshadri-sosp05.pdf" target="_blank" rel="noopener">Pioneer</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">CMU/CyLab</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">one-on-one 方式检测内存信息是否有差别</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">安全检测</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">通过one-on-one 的方法对非可信主机进行检测，从而构造出一个可信的执行环境。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="全文概览"><a href="#全文概览" class="headerlink" title="全文概览"></a>全文概览</h3><p>​        本文提出的pioneer是在不受信任的主机上执行可验证代码的第一步，无需任何硬件的支持，pioneer可以作为构建安全系统的基本构建块。并通过构建内核rootkit检测器来证明其可用性。Pioneer基于扩展的外部可信实体以及 challenge-response ptotocol 通过可信的通讯连接为非可信平台提供了运行时的验证，其中可信主机与非可信主机具有相同的验证函数，包括相同的代码序列和内存布局。</p>
+<h3 id="攻击假设"><a href="#攻击假设" class="headerlink" title="攻击假设"></a>攻击假设</h3><p>在非可信的平台执行代码往往会有几种威胁：</p>
+<ol>
+<li>在代码调用之前进行更改；</li>
+<li>引导程序执行备份代码；</li>
+<li>在代码执行过程中进行更改。</li>
+</ol>
+<p>假设：</p>
+<p>​        攻击者对其所在机器的软件有绝对的控制权，包括其上的应用程序和操作系统；</p>
+<p>​        攻击者不能对硬件进行更改（不能对磁盘或者网络加载恶意的固件），不能调用更快的CPU进行计算，不能够直接使用DMA攻击。</p>
+<h3 id="设计架构"><a href="#设计架构" class="headerlink" title="设计架构"></a>设计架构</h3><h4 id="Pioneer中的角色"><a href="#Pioneer中的角色" class="headerlink" title="Pioneer中的角色"></a>Pioneer中的角色</h4><p><strong>dispatcher</strong> ： 预先知道非可信平台的硬件配置信息；</p>
+<p><strong>untrusted platform</strong> ： 具有但CPU， 且CPU不支持对称多线程（保证运行时的稳定性，检测时间不会大幅度的变化）</p>
+<p><strong>communication channel</strong> : 消息源的认证，在检测时，非可信平台仅与<code>dispatcher</code>进行通讯。</p>
+<h4 id="检测协议流程"><a href="#检测协议流程" class="headerlink" title="检测协议流程"></a>检测协议流程</h4><p><img src="/2020/11/23/Pioneer/checkflow.png" height="260"></p>
+<p><strong>对rootkits进行检测</strong></p>
+<p><img src="/2020/11/23/Pioneer/kma.png" height="260"></p>
+<h3 id="检测方法"><a href="#检测方法" class="headerlink" title="检测方法"></a>检测方法</h3><h3 id="验证方法"><a href="#验证方法" class="headerlink" title="验证方法"></a>验证方法</h3><h3 id="本文是否能够回答审稿人的全部问题？"><a href="#本文是否能够回答审稿人的全部问题？" class="headerlink" title="本文是否能够回答审稿人的全部问题？"></a>本文是否能够回答审稿人的全部问题？</h3>]]></content>
+      <categories>
+        <category>paper</category>
+        <category>SOSP</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Protocol-gossip</title>
+    <url>/2020/11/07/Protocol-gossip/</url>
+    <content><![CDATA[<h3 id="P2P-简介"><a href="#P2P-简介" class="headerlink" title="P2P 简介"></a>P2P 简介</h3><p>​        网络中节点数目的增加，使得传统的C/S计算模型不能满足用户对信息访问等要求，无法满足分布式应用的要求，其限制了网络资源的充分利用，可扩展性较差，无法支持不断增长的客户节点数量等问题越来越明显。</p>
+<p>​        P2P 主要解决网络负载不均衡的问题，用户有能力不通过服务器直接进行资源的的共享和交换。Napster是第一个被广泛应用的 Peer-to-Peer 音乐共享服务。</p>
+<h4 id="Peer-to-Peerr-分类"><a href="#Peer-to-Peerr-分类" class="headerlink" title="Peer-to-Peerr 分类"></a>Peer-to-Peerr 分类</h4><p>集中式P2P系统</p>
+<p>无结构P2P系统</p>
+<p>结构化P2P系统</p>
+<h3 id="分布式文件定位"><a href="#分布式文件定位" class="headerlink" title="分布式文件定位"></a>分布式文件定位</h3><h4 id="Useful-links"><a href="#Useful-links" class="headerlink" title="Useful links"></a>Useful links</h4><p><a href="https://www.cnblogs.com/zhufanyu/p/12101112.html" target="_blank" rel="noopener">RPC 远程调用</a></p>
+<p><a href="https://www.cnblogs.com/gzhcsu/p/11389235.html" target="_blank" rel="noopener">RPC </a></p>
+<p><a href="https://blog.csdn.net/daaikuaichuan/article/details/88595202?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare" target="_blank" rel="noopener">详解RPC </a></p>
+<p><a href="https://wiki.p2pfoundation.net/P2P_Computing" target="_blank" rel="noopener">https://wiki.p2pfoundation.net/P2P_Computing</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>RADAR</title>
+    <url>/2020/07/18/RADAR/</url>
     <content><![CDATA[]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ROP attacks</title>
+    <url>/2021/02/01/ROP-attacks/</url>
+    <content><![CDATA[<h3 id="栈溢出"><a href="#栈溢出" class="headerlink" title="栈溢出"></a>栈溢出</h3><p>由于<code>C</code> 语言对数组引用不做任何边界检查，从而导致缓冲区溢出<code>buffer overflow</code>，这成为一种常见的漏洞。根据溢出发生的内存位置，可以分为栈溢出和堆溢出。其中，由于栈上保存着局部变量和一些状态信息，例如寄存器值和返回地址等，一旦发生严重溢出，攻击者可以通过复写返回地址来执行任意代码，利用包括<code>shellcode</code>注入、ret2libc、<code>ROP</code>等。</p>
+<h3 id="What-is-ROP"><a href="#What-is-ROP" class="headerlink" title="What is ROP"></a>What is ROP</h3><p>最开始，要利用栈溢出只需将返回地址覆盖为 jmp esp 指令的地址，并在后面添加 shellcode 就可以执行。后来引入了 NX 缓解机制，数据所在的内存页被标记为不可执行，此时再执行 shellcode 就会抛出异常。既然注入新代码不可行，那么就复用程序中已有的代码。libc.so 几乎在每个程序执 行时都会加载，攻击者就开始考虑利用 libc 中的函数，这种技术就是 ret2libc。但是这种技术也有缺陷，首先，虽然攻击者可以一个接一个地调用 libc 中的函数，但这个执行流仍然是线性的，而不像代码注入那样任意执行，其次，攻击者只能使用程序 text 段和 libc 中已有的函数，通过移除这些特定的函数就可以限制此类攻击。</p>
+<p>论文 <code>The Geometry of Innocent Flesh on the Bone: Return-into-libc without Function Calls (on the x86)</code>提出了一种新的攻击技术——返回导向编程<code>（Return-Oriented Programming, ROP）</code>，无须调用任何函数即可执行任意代码。</p>
+<p>使用 ROP 攻击，首先需要扫描文件，提取出可用的 gadget 片段（通常以 ret 指令结尾），然后<br>将这些 gadget 根据所需要的功能进行组合，达到攻击者的目的。举个小例子，exit(0)的 shellcode 由<br>下面 4 条连续的指令组成。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">; <span class="built_in">exit</span>(<span class="number">0</span>) shellcode</span><br><span class="line"><span class="keyword">xor</span> eax, eax</span><br><span class="line"><span class="keyword">xor</span> ebx, ebx</span><br><span class="line">inc eax</span><br><span class="line"><span class="keyword">int</span> <span class="number">0x80</span></span><br></pre></td></tr></table></figure>
+<p>如果要将它改写成 ROP 链，则需要分别找到包含这些指令的 gadget，由于它们在地址上不一定<br>是连续的，所以需要通过 ret 指令进行连接，依次执行。</p>
+<figure class="highlight c"><table><tr><td class="code"><pre><span class="line">; <span class="built_in">exit</span>(<span class="number">0</span>) ROP chain</span><br><span class="line"><span class="keyword">xor</span> eax, eax ; gadget <span class="number">1</span></span><br><span class="line">ret</span><br><span class="line"><span class="keyword">xor</span> ebx, ebx ; gadget <span class="number">2</span></span><br><span class="line">ret</span><br><span class="line">inc eax ; gadget <span class="number">3</span></span><br><span class="line">ret</span><br><span class="line"><span class="keyword">int</span> <span class="number">0x80</span> ; gadget <span class="number">4</span></span><br></pre></td></tr></table></figure>
+<p>为了完成指令序列的构建，首先要找到这些以ret指令为结尾，并且在执行时必然以ret结束而不会跳转到其他地方的gadget，算法如下：</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">Algorithm GALILEO:</span><br><span class="line">	create a node, root, representing the ret instruction; </span><br><span class="line">	place root in the trie; </span><br><span class="line">	<span class="keyword">for</span> pos from <span class="number">1</span> to textseg_len <span class="keyword">do</span>:</span><br><span class="line">		<span class="keyword">if</span> the <span class="keyword">byte</span> at pos is c3, i.e., a ret instruction, then:</span><br><span class="line">			call BUILDFROM(pos, root).</span><br><span class="line"></span><br><span class="line"><span class="function">Procedure <span class="title">BuILDFROM</span><span class="params">(index pos, instruction parent_insn)</span>:</span></span><br><span class="line"><span class="function">	<span class="keyword">for</span> <span class="built_in">step</span> from 1 to max_insn_len <span class="keyword">do</span>:</span></span><br><span class="line">		if bytes [( pos-step )···(pos-1)] decode as a valid instruction insn then:</span><br><span class="line">			ensure insn is in the trie as a child of parent_insn; </span><br><span class="line">			<span class="keyword">if</span> insn isn<span class="number">'</span>t boring then:</span><br><span class="line">				call BUILDFROM (pos-step,insn).</span><br></pre></td></tr></table></figure>
+<p>扫描二进制找到 ret（c3）指令，将其作为 trie 的根节点，然后回溯解析前面的指令，如果是有效指令，将其添加为子节点，再判断是否 boring；如果不是，就继续递归回溯。举个例子，在一个 trie 中一个表示 pop %eax 的节点是表示 ret 的根节点的子节点，则这个 gadget 为 pop %eax; ret。<br>如此就能把有用的 gadgets 都找出来了。boring 指令则分为三种情况：<br>（1）该指令是 leave，后跟一个 ret 指令；<br>（2）该指令是一个 pop %ebp，后跟一个 ret 指令；<br>（3）该指令是返回或者非条件跳转。<br>实际上，有很多工具可以帮助我们完成 gadget 搜索的工作，常用的有 ROPgadget、Ropper 等，还可以直接在 ropshell 网站上搜索。gadgets 在多个体系架构上都是图灵完备的，允许任意复杂度的计算，也就是说基本上只要能想到的事情它都可以做。下面简单介绍几种用法。<br>（1）保存栈数据到寄存器。弹出栈顶数据到寄存器中，然后跳转到新的栈顶地址。所以当返回<br>地址被一个 gadget 的地址覆盖，程序将在返回后执行该指令序列。例如：pop eax; ret；<br>（2）保存内存数据到寄存器。例如：mov ecx,[eax]; ret；<br>（3）保存寄存器数据到内存。例如：mov [eax],ecx; ret；<br>（4）算数和逻辑运算。add、sub、mul、xor 等。例如：add eax,ebx; ret, xor edx,edx; ret；<br>（5）系统调用。执行内核中断。例如：int 0x80; ret, call gs:[0x10]; ret；<br>（6）会影响栈帧的 gadget。这些 gadget 会改变 ebp 的值，从而影响栈帧，在一些操作如 stack<br>pivot 时我们需要这样的指令来转移栈帧。例如：leave; ret, pop ebp; ret。</p>
+<h3 id="Analyse-ROP"><a href="#Analyse-ROP" class="headerlink" title="Analyse ROP"></a>Analyse ROP</h3><ol>
+<li><p>【<code>ROP</code>攻击】 攻击者预先扫描并识别系统中可以利用的gadgets（包含<code>ret</code> 指令并可以跳转到指定地址的代码片段），利用缓冲区溢出，通过对堆栈段的控制，控制访问控制流程（新的流程复用正常的代码段），从而得到攻击者想要的信息，达到攻击的目的；</p>
+</li>
+<li><p>【可行性】<code>Xen</code> 代码段中确实存在很多可以用于<code>ROP</code>攻击的<code>gadgets</code>，[1] 这篇文章是第一个实现在虚拟化领域的<code>ROP</code>攻击，攻击结果是实现对非特权<code>VM</code>的权限提升；</p>
+</li>
+<li><p>【ROP不影响代码完整性】[2] 在相关工作中指出，使用<code>ROP</code>攻击的攻击模型，不会对<code>hypervisor</code>代码产生影响，因此，仅检测代码完整性的机制不会检测到该攻击；在文中introduction介绍，非特权级客户机，会控制<code>hypervisor</code>的 <code>ToolStack</code>，从而提升自己的权限并且控制其他的客户机；[3] 在文中也明确提出<code>ROP</code>攻击可以完美的旁路掉代码完整性检测。</p>
+</li>
+<li><p>综上，我看过的几篇文章中没有提到<code>ROP</code>攻击会对code integrity 产生影响的说明，并且，在<code>Outlier</code>中，对比Checker 是扫描的 <code>Hypervisor</code> 的代码区域，那么这个提到的ROP攻击就会避开我们的检测，所以从理论上来看<code>Outlier</code>确实不会检测到ROP的攻击；ROP在攻击的过程中，会在内存中留下痕迹，但是，应该是在堆、栈段留下痕迹，在代码段没有影响。</p>
+</li>
+</ol>
+<h3 id="how-does-ROP-effect-the-OS"><a href="#how-does-ROP-effect-the-OS" class="headerlink" title="how does ROP effect the OS"></a>how does ROP effect the OS</h3><p>[6] 文中举的例子：</p>
+<p>攻击者扫描已有的动态链接库和可执行文件，提取出可以利用的指令片段(gadget)，这些指令片段均以ret指令结尾，即用ret指令实现指令片段执行流的衔接。操作系统通过栈来进行函数的调用和返回。函数的调用和返回就是通过压栈和出栈来实现的。每个程序都会维护一个程序运行栈，栈为所有函数共享，每次函数调用，系统会分配一个栈桢给当前被调用函数，用于参数的传递、局部变量的维护、返回地址的填入等。栈帧是程序运行栈的一部分 ，在<a href>Linux</a>中 ，通过%esp和 %ebp寄存器维护栈顶指针和栈帧的起始地址 ，%eip是<a href>程序计数器</a>寄存器 。而ROP攻击则是利用以ret结尾的程序片段 ，操作这些栈相关寄存器，控制程序的流程，执行相应的gadget，实施攻击者预设目标 。ROP不同于retum-to-libc攻击之处在于，<strong>ROP攻击以ret指令结尾的函数代码片段</strong> ，而不是整个函数本身去完成预定的操作。从广义角度讲 ，return-to-libc攻击是ROP攻的特例。最初ROP攻击实现在x86体系结构下，随后扩展到各种体系结构.。与以往攻击技术不同的是，<strong>ROP恶意代码不包含任何指令</strong>，将自己的恶意代码隐藏在正常代码中。因而，它可以绕过W⊕X的防御技术。</p>
+<p><img src="/2021/02/01/ROP-attacks/example.png" width="500"></p>
+<h3 id="how-can-we-detect"><a href="#how-can-we-detect" class="headerlink" title="how can we detect"></a>how can we detect</h3><h3 id="how-could-it-apply-on-Xen"><a href="#how-could-it-apply-on-Xen" class="headerlink" title="how could it apply on Xen"></a>how could it apply on Xen</h3><h3 id="Xen-hypervisor-and-ROP"><a href="#Xen-hypervisor-and-ROP" class="headerlink" title="Xen hypervisor and ROP"></a>Xen hypervisor and ROP</h3><p>Control-flow Enforcement Technology (CET) is a set of features in hardware designed to combat Return-oriented Programming (ROP, also call/jump COP/¯JOP) attacks. Xen 4.14 can use these hardware features, if available, to protect itself from ROP attacks.[5]</p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] Ding B, Wu Y, He Y, et al. Return-oriented programming attack on the xen hypervisor[C]//2012 Seventh International Conference on Availability, Reliability and Security. IEEE, 2012: 479-484.</p>
+<p>[2] Saeed A, Hussain S A, Garraghan P. Cross-VM Network Channel Attacks and Countermeasures within Cloud Computing Environments[J]. IEEE Transactions on Dependable and Secure Computing, 2020.</p>
+<p>[3] Jiang J, Jia X, Feng D, et al. HyperCrop: a hypervisor-based countermeasure for return oriented programming[C]//International Conference on Information and Communications Security. Springer, Berlin, Heidelberg, 2011: 360-373.</p>
+<p>[4] <a href="https://www.youtube.com/watch?v=n-_QkDek6jY" target="_blank" rel="noopener">https://www.youtube.com/watch?v=n-_QkDek6jY</a> </p>
+<p>[5] <a href="https://wiki.xenproject.org/wiki/Xen_Project_4.14_Feature_List" target="_blank" rel="noopener">https://wiki.xenproject.org/wiki/Xen_Project_4.14_Feature_List</a></p>
+<p>[6] Zhang J, Hou R, Song W, et al. RAGuard: An Efficient and User-Transparent Hardware Mechanism against ROP Attacks[J]. ACM Transactions on Architecture and Code Optimization (TACO), 2018, 15(4): 1-21.</p>
+]]></content>
+      <tags>
+        <tag>attacks</tag>
+        <tag>ROP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>RPC go</title>
+    <url>/2020/12/03/RPC-go/</url>
+    <content><![CDATA[<h3 id="单向单次通讯"><a href="#单向单次通讯" class="headerlink" title="单向单次通讯"></a>单向单次通讯</h3><p>注，Go语言中谨记：</p>
+<blockquote>
+<p>使用go时，以大写字母开头的字段和变量将被“导出”，并且对其他包可见。 以小写字母开头的字段是“<strong>未导出”</strong>（type main.CheckRemote <strong>has no exported fields</strong>）的，并且仅在其自己的包中可见。encoding / gob包依赖于反射来编码值，并且只能看到导出的struct字段。为了使事情变得可编码，请在stateNode结构中将要保存的每个字段名称的<strong>首字母大写</strong>。</p>
+</blockquote>
+<h4 id="构造通讯类型"><a href="#构造通讯类型" class="headerlink" title="构造通讯类型"></a>构造通讯类型</h4><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> sample <span class="keyword">struct</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *sample)</span> <span class="title">Echo</span> <span class="params">(request <span class="keyword">string</span>, reply * <span class="keyword">string</span>)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	*reply = <span class="string">"hello:"</span> + request</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在<code>Echo</code>方法中，第一个可以看做是输入值，第二个指针类型值看作是返回值，函数真正的返回值是<code>error</code></p>
+<h4 id="RPC-服务注册"><a href="#RPC-服务注册" class="headerlink" title="RPC 服务注册"></a>RPC 服务注册</h4><p>在构造了通讯类型之后，可以将 <code>sample</code>类型的对象注册为一个<code>RPC</code>服务：</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	rpc.RegisterName(<span class="string">"sample"</span>, <span class="built_in">new</span>(sample))</span><br><span class="line"></span><br><span class="line">	listener, err := net.Listen(<span class="string">"tcp"</span>, <span class="string">":10088"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">"ListenTCP  error:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	connect, err := listener.Accept() </span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">"Accept error:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	rpc.ServeConn(connect)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​        其中<code>rpc.Register</code>函数调用会将对象类型中所有满足<code>RPC</code>规则的对象方法注册为<code>RPC</code>函数，所有注册的方法会放在<code>sample</code>服务空间之下。go在创建网络服务器时需要用到<code>net.Listen</code>生成一个监听器，使用<code>Accept()</code>阻塞处理连接到服务器的请求。然后建立一个唯一的<code>TCP</code>链接，并且通过<code>rpc.ServeConn</code>函数在该TCP链接上为对方提供<code>RPC</code>服务。</p>
+<h4 id="Client-端"><a href="#Client-端" class="headerlink" title="Client 端"></a>Client 端</h4><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line"></span><br><span class="line">	client, err := rpc.Dial(<span class="string">"tcp"</span>, <span class="string">"localhost:10088"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">"dailing:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> reply <span class="keyword">string</span></span><br><span class="line">	err = client.Call(<span class="string">"sample.Echo"</span>,<span class="string">"This is client"</span>, &amp;reply)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	fmt.Println(reply)                                         </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>​        首先通过<code>rpc.Dial</code>拨号<code>RPC</code>服务，然后通过<code>client.Call</code>调用具体的<code>RPC</code>方法。在调用<code>client.Call</code>时，第一个参数是用点号链接的RPC服务名字和方法名字，第二和第三个参数分别是<code>RPC</code>方法定义的两个参数。</p>
+<h3 id="单向多次通信"><a href="#单向多次通信" class="headerlink" title="单向多次通信"></a>单向多次通信</h3><p><strong>Server端处理</strong></p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	rpc.RegisterName(<span class="string">"sample"</span>, <span class="built_in">new</span>(sample))</span><br><span class="line">	fmt.Println(<span class="string">"register!"</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span> <span class="params">()</span></span>  &#123;</span><br><span class="line">		listener, err := net.Listen(<span class="string">"tcp"</span>, <span class="string">"0.0.0.0:10088"</span>)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(<span class="string">"ListenTCP  error:"</span>, err)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span> <span class="literal">true</span> &#123;</span><br><span class="line">			connect, err := listener.Accept()</span><br><span class="line">			<span class="keyword">go</span> <span class="function"><span class="keyword">func</span> <span class="params">()</span></span>  &#123;</span><br><span class="line">				<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">					log.Fatal(<span class="string">"Accept error:"</span>, err)</span><br><span class="line">				&#125;</span><br><span class="line">				rpc.ServeConn(connect) <span class="comment">// 对请求执行操作</span></span><br><span class="line">				fmt.Println(<span class="string">"q.message : "</span>, q.message)</span><br><span class="line">			&#125;()</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">		<span class="keyword">for</span> <span class="literal">true</span>&#123;  <span class="comment">// 为了防止主线程退出造成的子线程的中断      </span></span><br><span class="line">		&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>理解：</p>
+<p>​        在服务端需要进行的操作为 1. 注册， 2. 创建监听器， 3. 阻塞监听， 4. 处理访问请求</p>
+<p>​        其中 2,3 为基础创建步骤，4为执行步骤，第四步同时可能会有多个请求发送，因此要与之前的操作分离开，单独创建子线程。</p>
+<p><strong>client端</strong></p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line"></span><br><span class="line">	client, err := rpc.Dial(<span class="string">"tcp"</span>, <span class="string">"localhost:10088"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">"dailing:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> reply <span class="keyword">string</span></span><br><span class="line">	<span class="keyword">var</span> inputReader <span class="keyword">string</span> </span><br><span class="line">	</span><br><span class="line">	<span class="keyword">for</span> <span class="literal">true</span> &#123;</span><br><span class="line">		fmt.Scanln(&amp;inputReader)</span><br><span class="line">		err = client.Call(<span class="string">"sample.Echo"</span>,inputReader, &amp;reply)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">	</span><br><span class="line">		fmt.Println(reply) </span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>理解：</p>
+<p>​        在client端进行的操作主要是 <code>dial</code> 和 <code>call</code> 操作，拨号操作仅进行一次即可，而发送消息可能要进行多次，因此，要实现多次数据传输操作，要在数据操作时进行循环操作。</p>
+<h3 id="双向通讯"><a href="#双向通讯" class="headerlink" title="双向通讯"></a>双向通讯</h3><p>注： 这仅仅是一个<code>sample</code> 程序，一般框架，如果要进行更复杂的操作，需要大量改进。</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"net"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"net/rpc"</span></span><br><span class="line">	<span class="string">"log"</span></span><br><span class="line">	<span class="string">"time"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> sample <span class="keyword">struct</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *sample)</span> <span class="title">Echo</span> <span class="params">(request <span class="keyword">string</span>, reply * <span class="keyword">string</span>)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	*reply = <span class="string">"hello:"</span> + request</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	rpc.RegisterName(<span class="string">"sample"</span>, <span class="built_in">new</span>(sample))</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		listener, err := net.Listen(<span class="string">"tcp"</span>, <span class="string">"0.0.0.0:10082"</span>)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(<span class="string">"ListenTCP  error:"</span>, err)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">for</span> <span class="literal">true</span> &#123;</span><br><span class="line">			connect, err := listener.Accept()</span><br><span class="line">			<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">				<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">					log.Fatal(<span class="string">"Accept error:"</span>, err)</span><br><span class="line">				&#125;</span><br><span class="line">				rpc.ServeConn(connect)</span><br><span class="line">			&#125;()</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	time.Sleep(time.Duration(<span class="number">3</span>) * time.Second)</span><br><span class="line"></span><br><span class="line">	client, err := rpc.Dial(<span class="string">"tcp"</span>, <span class="string">"localhost:10081"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(<span class="string">"dailing:"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> reply <span class="keyword">string</span></span><br><span class="line">	<span class="keyword">var</span> inputReader <span class="keyword">string</span> </span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> <span class="literal">true</span> &#123;</span><br><span class="line">		fmt.Scanln(&amp;inputReader)</span><br><span class="line">		err = client.Call(<span class="string">"sample.Echo"</span>,inputReader, &amp;reply)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">		fmt.Println(reply)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>TODO：</strong></p>
+<blockquote>
+<p>1.在双向发送数据请求时，在terminal 输入指令进行传输；</p>
+<p>2.取消 sleep 的操作，实现运行时不中断。</p>
+</blockquote>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://chai2010.cn/advanced-go-programming-book/ch4-rpc/ch4-01-rpc-intro.html" target="_blank" rel="noopener">https://chai2010.cn/advanced-go-programming-book/ch4-rpc/ch4-01-rpc-intro.html</a></p>
+<p>[2] <a href="https://learnku.com/docs/build-web-application-with-golang/084-rpc/3206" target="_blank" rel="noopener">https://learnku.com/docs/build-web-application-with-golang/084-rpc/3206</a></p>
+<p>[3] <a href="https://smallnest.gitbooks.io/go-rpc-programming-guide/content/part1/client.html" target="_blank" rel="noopener">https://smallnest.gitbooks.io/go-rpc-programming-guide/content/part1/client.html</a></p>
+]]></content>
+      <tags>
+        <tag>go</tag>
+        <tag>RPC</tag>
+      </tags>
   </entry>
   <entry>
     <title>SP&#39;15 Last-Level Cache Side-Channel Attacks are Practical</title>
@@ -2008,6 +2003,11 @@
       </tags>
   </entry>
   <entry>
+    <title>SOSP-Progress</title>
+    <url>/2021/02/18/SOSP-Progress/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>SecVisor</title>
     <url>/2020/07/21/SecVisor/</url>
     <content><![CDATA[<div class="table-container">
@@ -2056,22 +2056,6 @@
       <tags>
         <tag>论文解读</tag>
         <tag>Detection</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Systematic Review on FHE</title>
-    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>TPM overview</title>
-    <url>/2020/11/07/TPM-overview/</url>
-    <content><![CDATA[<h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>[1]  中不止包括TPM还有TOCTOU攻击讲解</p>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] 基于Xen的可信虚拟机系统体系结构设计与若干关键技术研究_孟璟 (TPM1.2)</p>
-<p>[2]   </p>
-]]></content>
-      <tags>
-        <tag>Technology Overview</tag>
       </tags>
   </entry>
   <entry>
@@ -2199,21 +2183,6 @@
       </tags>
   </entry>
   <entry>
-    <title>The first blog</title>
-    <url>/2020/04/18/The-first-blog/</url>
-    <content><![CDATA[<h3 id="The-first-bolg"><a href="#The-first-bolg" class="headerlink" title="The first bolg"></a>The first bolg</h3><p>Hello，this is my first bolg of github.io.</p>
-<p>I tried for about 12 hours to set up this simple website, right now, the author(me) still feel awsome.</p>
-<p>I have written some technology blogs in <a href="https://www.cnblogs.com/Robin5/" target="_blank" rel="noopener">Robin5</a>.</p>
-<p>Seize the time and face the bright future！</p>
-<p>I will work harder and harder!</p>
-<p>Witness me in github.io</p>
-]]></content>
-      <tags>
-        <tag>essay</tag>
-        <tag>英文</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Software ROT</title>
     <url>/2020/12/02/Software-ROT/</url>
     <content><![CDATA[<div class="table-container">
@@ -2263,6 +2232,37 @@
       </tags>
   </entry>
   <entry>
+    <title>Systematic Review on FHE</title>
+    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>TPM overview</title>
+    <url>/2020/11/07/TPM-overview/</url>
+    <content><![CDATA[<h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>[1]  中不止包括TPM还有TOCTOU攻击讲解</p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] 基于Xen的可信虚拟机系统体系结构设计与若干关键技术研究_孟璟 (TPM1.2)</p>
+<p>[2]   </p>
+]]></content>
+      <tags>
+        <tag>Technology Overview</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>The first blog</title>
+    <url>/2020/04/18/The-first-blog/</url>
+    <content><![CDATA[<h3 id="The-first-bolg"><a href="#The-first-bolg" class="headerlink" title="The first bolg"></a>The first bolg</h3><p>Hello，this is my first bolg of github.io.</p>
+<p>I tried for about 12 hours to set up this simple website, right now, the author(me) still feel awsome.</p>
+<p>I have written some technology blogs in <a href="https://www.cnblogs.com/Robin5/" target="_blank" rel="noopener">Robin5</a>.</p>
+<p>Seize the time and face the bright future！</p>
+<p>I will work harder and harder!</p>
+<p>Witness me in github.io</p>
+]]></content>
+      <tags>
+        <tag>essay</tag>
+        <tag>英文</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>The moment</title>
     <url>/2020/07/14/The-moment/</url>
     <content><![CDATA[<p>&emsp;&emsp;此时此刻，在家里敲代码+编辑文本，就在这一刻，我感觉电脑自带的键盘手感好棒，这种美妙的触感，爱了。</p>
@@ -2276,6 +2276,68 @@
 ]]></content>
       <tags>
         <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>The outline of Outlier</title>
+    <url>/2020/07/14/The-outline-of-Outlier/</url>
+    <content><![CDATA[<h3 id="The-Outline-of-Outlier"><a href="#The-Outline-of-Outlier" class="headerlink" title="The Outline of Outlier"></a>The Outline of Outlier</h3><h3 id="0-Abstract"><a href="#0-Abstract" class="headerlink" title="0 Abstract"></a>0 Abstract</h3><h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h3><ol>
+<li>指出虚拟化的多租户云平台优点；</li>
+<li>hypervisor对于云平台很重要；</li>
+</ol>
+<h3 id="2-Background"><a href="#2-Background" class="headerlink" title="2 Background"></a>2 Background</h3><h4 id="2-1-Quick-View-of-Xen-Hypervisor"><a href="#2-1-Quick-View-of-Xen-Hypervisor" class="headerlink" title="2.1 Quick View  of Xen Hypervisor"></a>2.1 Quick View  of Xen Hypervisor</h4><h4 id="2-2-Dynamic-Root-of-Trust"><a href="#2-2-Dynamic-Root-of-Trust" class="headerlink" title="2.2 Dynamic Root of Trust"></a>2.2 Dynamic Root of Trust</h4><h4 id="2-3-Byzantine-Fault-Tolerance"><a href="#2-3-Byzantine-Fault-Tolerance" class="headerlink" title="2.3 Byzantine Fault Tolerance"></a>2.3 Byzantine Fault Tolerance</h4><h3 id="3-Overview"><a href="#3-Overview" class="headerlink" title="3 Overview"></a>3 Overview</h3><h4 id="3-1-Threat-Model-and-Assumptions"><a href="#3-1-Threat-Model-and-Assumptions" class="headerlink" title="3.1 Threat Model and Assumptions"></a>3.1 Threat Model and Assumptions</h4><h4 id="3-2-Goals"><a href="#3-2-Goals" class="headerlink" title="3.2 Goals"></a>3.2 Goals</h4><h4 id="3-3-Design-and-Approaches"><a href="#3-3-Design-and-Approaches" class="headerlink" title="3.3 Design and Approaches"></a>3.3 Design and Approaches</h4><h3 id="4-Implementation"><a href="#4-Implementation" class="headerlink" title="4 Implementation"></a>4 Implementation</h3><h4 id="4-1-Co-protocol"><a href="#4-1-Co-protocol" class="headerlink" title="4.1 Co-protocol"></a>4.1 Co-protocol</h4><h4 id="4-2-Checker"><a href="#4-2-Checker" class="headerlink" title="4.2 Checker"></a>4.2 Checker</h4><h3 id="5-Security-Analysis"><a href="#5-Security-Analysis" class="headerlink" title="5 Security Analysis"></a>5 Security Analysis</h3><h4 id="5-1-Theorems-in-the-Co-protocol"><a href="#5-1-Theorems-in-the-Co-protocol" class="headerlink" title="5.1 Theorems in the Co-protocol"></a>5.1 Theorems in the Co-protocol</h4><h4 id="5-2-Subverting-Outlier"><a href="#5-2-Subverting-Outlier" class="headerlink" title="5.2 Subverting Outlier"></a>5.2 Subverting Outlier</h4><h4 id="5-3-Attacking-Hypervisor-Code-Integrity"><a href="#5-3-Attacking-Hypervisor-Code-Integrity" class="headerlink" title="5.3 Attacking Hypervisor Code Integrity"></a>5.3 Attacking Hypervisor Code Integrity</h4><h4 id="5-4-Limitations-and-Future-Work"><a href="#5-4-Limitations-and-Future-Work" class="headerlink" title="5.4 Limitations and Future Work"></a>5.4 Limitations and Future Work</h4><h3 id="6-Evaluation"><a href="#6-Evaluation" class="headerlink" title="6 Evaluation"></a>6 Evaluation</h3><h4 id="6-1-CPU-Overhead"><a href="#6-1-CPU-Overhead" class="headerlink" title="6.1 CPU Overhead"></a>6.1 CPU Overhead</h4><h4 id="6-2-Network-Overhead"><a href="#6-2-Network-Overhead" class="headerlink" title="6.2 Network Overhead"></a>6.2 Network Overhead</h4><h4 id="6-3-Detection-Time"><a href="#6-3-Detection-Time" class="headerlink" title="6.3 Detection Time"></a>6.3 Detection Time</h4><h3 id="7-Related-Work"><a href="#7-Related-Work" class="headerlink" title="7 Related Work"></a>7 Related Work</h3><h3 id="8-Conclusion"><a href="#8-Conclusion" class="headerlink" title="8 Conclusion"></a>8 Conclusion</h3>]]></content>
+      <tags>
+        <tag>paper</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Transient Execution Attacks</title>
+    <url>/2020/12/30/Transient-Execution-Attacks/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.cs.princeton.edu/courses/archive/spr06/cos592/bib/pioneer-seshadri-sosp05.pdf" target="_blank" rel="noopener">Pioneer</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">CMU/CyLab</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">one-on-one 方式检测内存信息是否有差别</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">安全检测</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">通过one-on-one 的方法对非可信主机进行检测，从而构造出一个可信的执行环境。</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>OSDI</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -2416,120 +2478,6 @@
       </tags>
   </entry>
   <entry>
-    <title>The outline of Outlier</title>
-    <url>/2020/07/14/The-outline-of-Outlier/</url>
-    <content><![CDATA[<h3 id="The-Outline-of-Outlier"><a href="#The-Outline-of-Outlier" class="headerlink" title="The Outline of Outlier"></a>The Outline of Outlier</h3><h3 id="0-Abstract"><a href="#0-Abstract" class="headerlink" title="0 Abstract"></a>0 Abstract</h3><h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h3><ol>
-<li>指出虚拟化的多租户云平台优点；</li>
-<li>hypervisor对于云平台很重要；</li>
-</ol>
-<h3 id="2-Background"><a href="#2-Background" class="headerlink" title="2 Background"></a>2 Background</h3><h4 id="2-1-Quick-View-of-Xen-Hypervisor"><a href="#2-1-Quick-View-of-Xen-Hypervisor" class="headerlink" title="2.1 Quick View  of Xen Hypervisor"></a>2.1 Quick View  of Xen Hypervisor</h4><h4 id="2-2-Dynamic-Root-of-Trust"><a href="#2-2-Dynamic-Root-of-Trust" class="headerlink" title="2.2 Dynamic Root of Trust"></a>2.2 Dynamic Root of Trust</h4><h4 id="2-3-Byzantine-Fault-Tolerance"><a href="#2-3-Byzantine-Fault-Tolerance" class="headerlink" title="2.3 Byzantine Fault Tolerance"></a>2.3 Byzantine Fault Tolerance</h4><h3 id="3-Overview"><a href="#3-Overview" class="headerlink" title="3 Overview"></a>3 Overview</h3><h4 id="3-1-Threat-Model-and-Assumptions"><a href="#3-1-Threat-Model-and-Assumptions" class="headerlink" title="3.1 Threat Model and Assumptions"></a>3.1 Threat Model and Assumptions</h4><h4 id="3-2-Goals"><a href="#3-2-Goals" class="headerlink" title="3.2 Goals"></a>3.2 Goals</h4><h4 id="3-3-Design-and-Approaches"><a href="#3-3-Design-and-Approaches" class="headerlink" title="3.3 Design and Approaches"></a>3.3 Design and Approaches</h4><h3 id="4-Implementation"><a href="#4-Implementation" class="headerlink" title="4 Implementation"></a>4 Implementation</h3><h4 id="4-1-Co-protocol"><a href="#4-1-Co-protocol" class="headerlink" title="4.1 Co-protocol"></a>4.1 Co-protocol</h4><h4 id="4-2-Checker"><a href="#4-2-Checker" class="headerlink" title="4.2 Checker"></a>4.2 Checker</h4><h3 id="5-Security-Analysis"><a href="#5-Security-Analysis" class="headerlink" title="5 Security Analysis"></a>5 Security Analysis</h3><h4 id="5-1-Theorems-in-the-Co-protocol"><a href="#5-1-Theorems-in-the-Co-protocol" class="headerlink" title="5.1 Theorems in the Co-protocol"></a>5.1 Theorems in the Co-protocol</h4><h4 id="5-2-Subverting-Outlier"><a href="#5-2-Subverting-Outlier" class="headerlink" title="5.2 Subverting Outlier"></a>5.2 Subverting Outlier</h4><h4 id="5-3-Attacking-Hypervisor-Code-Integrity"><a href="#5-3-Attacking-Hypervisor-Code-Integrity" class="headerlink" title="5.3 Attacking Hypervisor Code Integrity"></a>5.3 Attacking Hypervisor Code Integrity</h4><h4 id="5-4-Limitations-and-Future-Work"><a href="#5-4-Limitations-and-Future-Work" class="headerlink" title="5.4 Limitations and Future Work"></a>5.4 Limitations and Future Work</h4><h3 id="6-Evaluation"><a href="#6-Evaluation" class="headerlink" title="6 Evaluation"></a>6 Evaluation</h3><h4 id="6-1-CPU-Overhead"><a href="#6-1-CPU-Overhead" class="headerlink" title="6.1 CPU Overhead"></a>6.1 CPU Overhead</h4><h4 id="6-2-Network-Overhead"><a href="#6-2-Network-Overhead" class="headerlink" title="6.2 Network Overhead"></a>6.2 Network Overhead</h4><h4 id="6-3-Detection-Time"><a href="#6-3-Detection-Time" class="headerlink" title="6.3 Detection Time"></a>6.3 Detection Time</h4><h3 id="7-Related-Work"><a href="#7-Related-Work" class="headerlink" title="7 Related Work"></a>7 Related Work</h3><h3 id="8-Conclusion"><a href="#8-Conclusion" class="headerlink" title="8 Conclusion"></a>8 Conclusion</h3>]]></content>
-      <tags>
-        <tag>paper</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Untrusted Hypervisor AMD Memory Encryption</title>
-    <url>/2021/01/11/Untrusted-Hypervisor-AMD-Memory-Encryption/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://ipads.se.sjtu.edu.cn/_media/publications/fidelius_hpca18.pdf" target="_blank" rel="noopener">Fidelius</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"><a href="https://ipads.se.sjtu.edu.cn/" target="_blank" rel="noopener">IPADS</a></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">在非可信的Hypervisor上通过加密内存对VM进行保护</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">系统安全</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文提出了系统Fidelius，该系统利用AMD硬件特性，在非可信Hypervisor上对内存进行加密处理，从而对客户机提供保护</td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>HPCA</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>Untrusted Hypervisor</tag>
-        <tag>Virtualization</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Transient Execution Attacks</title>
-    <url>/2020/12/30/Transient-Execution-Attacks/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.cs.princeton.edu/courses/archive/spr06/cos592/bib/pioneer-seshadri-sosp05.pdf" target="_blank" rel="noopener">Pioneer</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">CMU/CyLab</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">one-on-one 方式检测内存信息是否有差别</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">安全检测</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">通过one-on-one 的方法对非可信主机进行检测，从而构造出一个可信的执行环境。</td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>OSDI</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Xen log 0 Ubuntu18源码安装Xen4.11</title>
     <url>/2020/05/22/Xen-log-0-Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/</url>
     <content><![CDATA[<p>在部署Xen的时候采用的是Ubuntu18.04(英文版) + Xen4.11</p>
@@ -2589,6 +2537,58 @@
       <tags>
         <tag>虚拟机</tag>
         <tag>Xen log</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Untrusted Hypervisor AMD Memory Encryption</title>
+    <url>/2021/01/11/Untrusted-Hypervisor-AMD-Memory-Encryption/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://ipads.se.sjtu.edu.cn/_media/publications/fidelius_hpca18.pdf" target="_blank" rel="noopener">Fidelius</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"><a href="https://ipads.se.sjtu.edu.cn/" target="_blank" rel="noopener">IPADS</a></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">在非可信的Hypervisor上通过加密内存对VM进行保护</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">系统安全</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文提出了系统Fidelius，该系统利用AMD硬件特性，在非可信Hypervisor上对内存进行加密处理，从而对客户机提供保护</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>HPCA</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Untrusted Hypervisor</tag>
+        <tag>Virtualization</tag>
       </tags>
   </entry>
   <entry>
@@ -3217,13 +3217,13 @@
       </tags>
   </entry>
   <entry>
-    <title>内嵌汇编学习</title>
-    <url>/2020/11/30/%E5%86%85%E5%B5%8C%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/</url>
+    <title>从硬件层认识计算机</title>
+    <url>/2020/11/23/%E4%BB%8E%E7%A1%AC%E4%BB%B6%E5%B1%82%E8%AE%A4%E8%AF%86%E8%AE%A1%E7%AE%97%E6%9C%BA/</url>
     <content><![CDATA[]]></content>
   </entry>
   <entry>
-    <title>从硬件层认识计算机</title>
-    <url>/2020/11/23/%E4%BB%8E%E7%A1%AC%E4%BB%B6%E5%B1%82%E8%AE%A4%E8%AF%86%E8%AE%A1%E7%AE%97%E6%9C%BA/</url>
+    <title>内嵌汇编学习</title>
+    <url>/2020/11/30/%E5%86%85%E5%B5%8C%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/</url>
     <content><![CDATA[]]></content>
   </entry>
   <entry>
@@ -3373,14 +3373,6 @@
       </tags>
   </entry>
   <entry>
-    <title>虚拟机 系统与进程的通用平台</title>
-    <url>/2020/07/17/%E8%99%9A%E6%8B%9F%E6%9C%BA-%E7%B3%BB%E7%BB%9F%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E9%80%9A%E7%94%A8%E5%B9%B3%E5%8F%B0/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>系统虚拟化</title>
     <url>/2020/12/09/%E7%B3%BB%E7%BB%9F%E8%99%9A%E6%8B%9F%E5%8C%96/</url>
     <content><![CDATA[<h3 id="第1章-开篇"><a href="#第1章-开篇" class="headerlink" title="第1章 开篇"></a>第1章 开篇</h3><p>1.1 形形色色的虚拟化<br>1.2 系统虚拟化<br>1.3 系统虚拟化简史<br>1.4 系统虚拟化的好处</p>
@@ -3399,6 +3391,14 @@
 ]]></content>
       <tags>
         <tag>虚拟化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>虚拟机 系统与进程的通用平台</title>
+    <url>/2020/07/17/%E8%99%9A%E6%8B%9F%E6%9C%BA-%E7%B3%BB%E7%BB%9F%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E9%80%9A%E7%94%A8%E5%B9%B3%E5%8F%B0/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
