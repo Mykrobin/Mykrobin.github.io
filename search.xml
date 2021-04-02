@@ -1347,7 +1347,15 @@
   <entry>
     <title>Information theoretic framework</title>
     <url>/2021/03/15/Information-theoretic-framework/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h2 id="四条公理"><a href="#四条公理" class="headerlink" title="四条公理"></a>四条公理</h2><h2 id="两种模型"><a href="#两种模型" class="headerlink" title="两种模型"></a>两种模型</h2>]]></content>
+      <categories>
+        <category>paper</category>
+        <category>JSAC</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Protocol</tag>
+      </tags>
   </entry>
   <entry>
     <title>Language-go-goroutine</title>
@@ -1905,7 +1913,8 @@ in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
   <entry>
     <title>MuonTrap-Preventing Cross-Domain Spectre-Like</title>
     <url>/2021/03/15/MuonTrap-Preventing-Cross-Domain-Spectre-Like/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<p>清华安全公众号推荐</p>
+]]></content>
   </entry>
   <entry>
     <title>Operating Systems</title>
@@ -3334,6 +3343,7 @@ int main(void)
 </tbody>
 </table>
 </div>
+<p>瞬时攻击</p>
 ]]></content>
       <categories>
         <category>paper</category>
@@ -4684,6 +4694,250 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
 ]]></content>
       <tags>
         <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>概率图模型</title>
+    <url>/2021/03/22/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<h1 id="概率图模型"><a href="#概率图模型" class="headerlink" title="概率图模型"></a>概率图模型</h1><p><img src="/2021/03/22/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210326100944404.png" alt="image-20210326100944404"></p>
+<p>可能用到的点：</p>
+<blockquote>
+<p>1、贝叶斯网络-&gt; 动态贝叶斯网络（时间序列）-&gt; 混沌时间序列模型</p>
+<p>2、贝叶斯网络独立性</p>
+<p>3、马尔科夫链</p>
+<p>4、信念传播</p>
+<p>5、信息论，信任传播衰减，边际效应递减</p>
+<p>6、 边缘概率问题</p>
+<p>7、 信任置信区间？</p>
+</blockquote>
+<p>按照概率图中变量关系的不同，概率图模型可以大致分为两类：</p>
+<ul>
+<li>贝叶斯网络：有向图模型，使用有向无环图表达关系（通常，变量间存在显式的因果关系）</li>
+<li>马尔科夫网络：无向图模型，使用无图表达关系（通常，变量间存有关系，但是难以显式表达）</li>
+</ul>
+<h2 id="贝叶斯网络"><a href="#贝叶斯网络" class="headerlink" title="贝叶斯网络"></a>贝叶斯网络</h2><p>概率图模型作为一类有力的工具,能够简洁地表示复杂的概率分布,有效地(近似)计算边缘分布和条件分布,方便地学习概率模型中的参数和超参数.因此,它作为一种处理不确定性的形式化方法,被广泛应用于需要进行自动的概率推理的场合.</p>
+<p>将知识陈述式地表示为概率模型,通过计算我们所关心变量的概率分布实现推理的途径具有独特优势: 首先,它提供了一个描述框架,使我们能够将不同领域的知识抽象为概率模型,将各种应用中的问题都归结为计算概率模型里某些变量的概率分布,从而将知识表示和推理分离开来.模型的设计主要关心如何根据领域知识设计出反映问题本质的概率模型,同时兼顾有效推理的可行性,而推理算法的设计只需关心如何有效地在一般的或者特定的概率模型中进行推理。这种一定程度上的正交性极大地扩展了概率模型的应用,也加快了它的发展速度. 其次,它能够评估未知量取值的可能性,对不同取值的概率给出量化的估计.这在涉及风险的决策系统中非常重要.</p>
+<p><img src="/2021/03/22/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/贝叶斯网络.png"></p>
+<p>贝叶斯网络中的三种独立性[2]</p>
+<blockquote>
+<ol>
+<li><p>head-to-head</p>
+</li>
+<li><p>head-to-tail</p>
+</li>
+<li>tail-to-tail</li>
+</ol>
+</blockquote>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p>[1] <a href="https://www.cnblogs.com/leoo2sk/archive/2010/09/18/bayes-network.html" target="_blank" rel="noopener">https://www.cnblogs.com/leoo2sk/archive/2010/09/18/bayes-network.html</a></p>
+<p>[2] <a href="https://zhuanlan.zhihu.com/p/30139208" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30139208</a></p>
+]]></content>
+      <tags>
+        <tag>贝叶斯网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CITM attacks</title>
+    <url>/2021/03/23/CITM-attacks/</url>
+    <content><![CDATA[<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:left">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:left">原文PDF</td>
+<td style="text-align:center"><a href="https://dl.acm.org/doi/pdf/10.1145/3372297.3417886" target="_blank" rel="noopener">cache-in-the-middle</a> <a href>CITM-slides</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:left">作者信息</td>
+<td style="text-align:center">中科院，乔治梅森大学 <a href="https://csis.gmu.edu/ksun/" target="_blank" rel="noopener">home-page</a></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:left">核心内容</td>
+<td style="text-align:center">基于ARM的CITM攻击原因分析</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:left">研究领域</td>
+<td style="text-align:center">TEE 可信计算环境</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:left">全文总览</td>
+<td style="text-align:center">本文发现了三种基于缓存的攻击（CITM），针对IEE数据保护模型和ARM缓存属性，分析了CITM的攻击原因并给出对策。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="研究动机"><a href="#研究动机" class="headerlink" title="研究动机"></a>研究动机</h2><p>本文聚焦在ARM TrustZone中的一个冲突矛盾点：</p>
+<p>在开发者眼中，想要通过在可信执行环境中约束第三方软件的安装起到最小化可信计算基的目的，而第三方软想要将其安装在可信环境中。</p>
+<p>已有的解决方案： IEE </p>
+<p>为了解决上述的矛盾点，研究者们在普通的执行环境中创建了一个隔离的执行环境，这样可以为安全敏感型应用提供保护。</p>
+<p>现有的IEE系统更多地关注于保护IEE敏感数据的主存，而在IEE系统中缓存的安全性还没有很好的研究。</p>
+<p>本文系统的研究了 IEE 的数据保护模型和 ARM cache的特征，发现了三种可以成为CITM的攻击能够泄露在IEE中保护的敏感数据。</p>
+<p>作者在三种IEE系统中测试了CITM攻击，最后分析了CITM攻击的根本原因，并提出了防御机制。</p>
+<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><p>TrustZone作为一种硬件辅助技术，将平台划分为两个执行环境： <strong>正常世界</strong> (非安全世界)和 <strong>安全世界</strong> ，其中</p>
+<ul>
+<li><strong>正常世界</strong> (NW)负责在rich Os上运行正常的应用程序</li>
+<li><strong>安全世界</strong> (SW)保护安全敏感的代码和数据</li>
+</ul>
+<p>对于支持TrustZone的ARM处理器，所有级别的缓存都扩展了一个额外的标记位(NS位)来记录它们的安全状态</p>
+<ul>
+<li><p>当从正常世界访问内存时，相应的cache line将设置为非安全的</p>
+</li>
+<li><p>当从安全世界访问内存时，相应的cache line将被设置为安全的</p>
+</li>
+<li><p>另外，cache line的NS位是由硬件自动设置的，软件不能修改</p>
+</li>
+<li><p>TZASC 硬件可以区分memory为 Secure 与 Non-secure</p>
+</li>
+<li><p>ARM 处理器配置了两级缓存</p>
+<p><img src="/2021/03/23/CITM-attacks/image-20210330093949863.png" width="400"></p>
+</li>
+</ul>
+<p>TrustZone的传统用法是在安全的环境中运行安全敏感的应用程序并存储它们的敏感数据，(也就是把这些敏感操作都放到安全世界中)，</p>
+<p><img src="/2021/03/23/CITM-attacks/image-20210330091547211.png" width="400"></p>
+<ul>
+<li><p>这便是可信执行环境 ( TEE )系统，其中安全敏感的应用程序在这里被实现为 可信应用程序 ( TA )，运行在安全世界(SW)中。</p>
+<ul>
+<li>(例：三星KNOX、OP-TEE、高通QSEE、华为安全操作系统)</li>
+</ul>
+</li>
+<li><p>TEE解决方案依赖于内置的硬件支持 来实施安全隔离，并防范来自不可信的rich Os的攻击。</p>
+<ul>
+<li>问题：设备制造商和第三方安全敏感的应用程序开发人员存在需求冲突 （制造商不想打开SW让你安第三方APP，他们更信任自己的应用，但第三方APP想进入SW以求安全可信）</li>
+</ul>
+</li>
+<li><p>为此，研究人员建议在正常世界中创建 <strong>孤立的执行环境</strong> (称为 <strong>IEE</strong> )</p>
+</li>
+</ul>
+<p><img src="/2021/03/23/CITM-attacks/image-20210330091804383.png" width="400"></p>
+<ul>
+<li><p>关键点：在安全的世界中使用可信参考监视器(例： <strong>IEE监视器</strong> )，确保只有经过授权的运行在IEE中的安全敏感应用程序才能访问相关的IEE敏感资源，从而保护一个IEE中的安全敏感应用程序不受其他IEEs和rich OS的影响。</p>
+<ul>
+<li>TrustICE 依赖于IEE监视器，通过动态控制IEE内存的安全属性来保护IEE内存。</li>
+<li>Ginseng 构建了IEEs来保护正常世界中的第三方应用程序的秘密，而不需要在安全世界中部署任何特定于应用程序的逻辑。</li>
+<li>SANCTUARY 将其IEE分配为per-core环境，以确保在正常世界中，为IEE指定的内存(以下简称IEE内存)不被任何其他非安全的内核访问。</li>
+</ul>
+</li>
+<li><p>IEE 优缺点：</p>
+<ul>
+<li><p>用“ <strong>switch out</strong> ”来表示一个内核的上下文从IEE切换到不可信的rich OS的进程；用“ <strong>switch in</strong> ”来表示每个内核上的逆向进程。</p>
+</li>
+<li><p>IEE系统能够最大限度地 <strong>减小SW的TCB</strong> ：仅在SW中安装IEE监视器即可将安全敏感应用程序转移到NW中。</p>
+</li>
+<li><p>IEE系统具有<strong>可移植性</strong> ，表现在：安全敏感的应用程序是在NW中安装和执行的。</p>
+</li>
+<li><p>但安全敏感的应用程序是由<strong>软件</strong>组件(例：IEE监视器)隔离和保护的，故IEE系统可能<strong>无法达到</strong>与TEE系统相同的安全保护级别。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="现存系统及CITM攻击"><a href="#现存系统及CITM攻击" class="headerlink" title="现存系统及CITM攻击"></a>现存系统及CITM攻击</h2><ul>
+<li>CITM可以操纵IEE保护的敏感数据：<ul>
+<li>在并发执行时，通过 <strong>跨核缓存</strong> [4] [5] 操作来操纵IEE数据<ul>
+<li>在多核平台上，防范并发运行的不可信的rich OS，仅确保在IEE内存上进行core-wise isolation是不安全的，因为缓存可能仍然对跨核访问开放，从而受到攻击者的操纵</li>
+<li><strong>SANCTUARY</strong> ：在并发执行过程中，攻击者通过跨核L1缓存操作成功窃取和修改SANCTUARY系统的IEE数据</li>
+</ul>
+</li>
+<li>操纵IEE内存的 <strong>非安全缓存映射</strong> 绕过其安全保护措施<ul>
+<li>当一个安全敏感的应用程序被挂起或完成时(即在“switch out”过程中)，IEE系统必须采取一些安全措施来保护IEE数据，防止以后被rich OS访问，攻击者可以通过操纵到用于安全措施的IEE内存的非安全缓存映射来绕过这些安全措施</li>
+<li><strong>Ginseng</strong> ：绕过“switch out”过程中强制执行的安全措施，窃取Ginseng系统的IEE数据</li>
+</ul>
+</li>
+<li>在“ <strong>switch out</strong> ”过程中 <strong>窃取</strong> IEE敏感数据，并在“ <strong>switch in</strong> ”过程中 <strong>篡改</strong> IEE数据<ul>
+<li>当IEE内存保护是通过动态地控制内存的安全属性(例如，配置它在“switch in”前不安全，而在“switch out”前安全)，缓存存在不完整的安全保护</li>
+<li><strong>TrustICE</strong> ：利用在环境交换过程中没有得到很好保护的环境交换内存的非安全缓存，窃取和篡改TrustICE系统的环境交换数据</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>CITM存在的根本原因：缓存和内存之间的安全相关属性不一致，缓存和内存之间的读写操作不同步。</li>
+<li>解决方案：安全配置IEE内存的缓存属性；在环境切换期间，清除到IEE内存的缓存映射</li>
+</ul>
+<p><strong>IEE的保护措施：</strong></p>
+<p>Model1: 非可信程序与敏感型应用并存的方式</p>
+<blockquote>
+<p>1.为每个安全敏感型应用分配内核隔离存储，处理在并发期间的敏感数据；</p>
+<p>2.当安全敏感应用程序的执行被暂停或完成时，在“切出”过程中清理内核隔离的存储，可以保护所有敏感数据免受不信任程序的侵害；</p>
+<p>3.在恢复或启动对安全敏感的应用程序的执行时，IEE监视器负责在“切入”过程中还原核心隔离的存储或分配空白的核心隔离的存储。</p>
+</blockquote>
+<p>Model2：不允许非可信程序与敏感型应用并存：</p>
+<blockquote>
+<p>单核情况下，运行敏感型应用，直接挂起非可信程序；</p>
+<p>多核情况下，即使有空闲核，也将非可信程序挂起。</p>
+</blockquote>
+<p><strong>本文发现的攻击方式：</strong></p>
+<p>可以通过在normal-world OS中操纵cache实现对IEE环境的威胁。以攻击者的视角出发，可以通过一下两种方式入侵IEE:</p>
+<blockquote>
+<p>1、并发执行期间操纵隔离的内存；</p>
+<p>2、篡改IEE中上下文的切换<sup><a href="#fn_switching" id="reffn_switching">switching</a></sup>。</p>
+</blockquote>
+<h2 id="攻击方法与防御方法"><a href="#攻击方法与防御方法" class="headerlink" title="攻击方法与防御方法"></a>攻击方法与防御方法</h2><h3 id="1-Type-I-并发执行时操纵核间隔离的内存"><a href="#1-Type-I-并发执行时操纵核间隔离的内存" class="headerlink" title="1. Type I 并发执行时操纵核间隔离的内存"></a>1. Type I 并发执行时操纵核间隔离的内存</h3><p><strong>攻击原理：</strong></p>
+<p>多核系统中，当主存用作安全敏感型应用程序的核心隔离存储时，并发运行的恶意程序会通过在正常情况下操纵缓存窃取或者修改核心隔离内存中IEE数据。</p>
+<p>具体过程：当核心隔离出的内存设置为cacheable时，IEE在内存中的数据将会映射到cache中，因为是在normal-world中的安全敏感型应用访问，所以该cache标记为不安全，并且可能由不受信任的OS操纵。TZC-400 可以用来对主存进行隔离，但是这个硬件不会对cache进行隔离。所以存在被攻击的可能。</p>
+<p><strong>SANCTUARY[6] 系统保护机制</strong></p>
+<p><code>该系统的核心隔离存储默认禁用L2 cache.</code></p>
+<p>IEE 结束后，需要switch out，这时在IEE 中运行的微内核会将属于IEE的内存中数据全置为0，通过这种方式清除敏感数据，同时会设置L1 cache为无效。</p>
+<p>IEE启动前，需要switch in，在secure world中的监控器会在IEE中构造一个纯净的执行环境，并且在敏感型应用加载之前设置L1 cache为无效。</p>
+<p><strong>SANCTUARY 面临的Type I 攻击</strong></p>
+<p><strong>攻击流程：</strong></p>
+<p><img src="/2021/03/23/CITM-attacks/image-20210325141138970.png" width="400"></p>
+<h3 id="2-Type-II-在换出过程中绕过安全措施"><a href="#2-Type-II-在换出过程中绕过安全措施" class="headerlink" title="2. Type II 在换出过程中绕过安全措施"></a>2. Type II 在换出过程中绕过安全措施</h3><p><strong>攻击原理：</strong></p>
+<p>攻击者目标是绕过在IEE上下文切换时的安全保护措施。</p>
+<p>因为运行在normal world 中的OS是非信任的，因此切入时的安全措施始终由安全环境中的IEE监视器启动和完成。这些相应的cache line被标记为secure，因此在normal world中无法对其进行更改。攻击者可以利用<strong>cache锁定技术</strong>阻止cache的替换，则IEE 内存中的数据将不会在安全敏感型应用挂起或结束后被清除。从而会被攻击者利用，实现攻击。</p>
+<p>【这里指出的切出程序，主要是在两种world间的切换】</p>
+<p>为了解决此问题，某些IEE系统选择通过有意从安全敏感的应用程序访问安全内存来引发安全环境中的外部异常中止，从而触发上下文切换。在这过程中，接入到normal world且映射到secure memory的cache lines不是安全的，恶意的OS将可能会操作相应的cache line绕过安全保护措施。(Ginseng [7] )</p>
+<p><strong>攻击示意图：</strong></p>
+<p><img src="/2021/03/23/CITM-attacks/image-20210326155423911.png" width="400"></p>
+<h3 id="3-Type-III-在上下文切换时误用安全性不完整的措施"><a href="#3-Type-III-在上下文切换时误用安全性不完整的措施" class="headerlink" title="3. Type III 在上下文切换时误用安全性不完整的措施"></a>3. Type III 在上下文切换时误用安全性不完整的措施</h3><p><strong>攻击原理：</strong></p>
+<p>IEE动态标记Switching程序的安全属性，换出（secure）换入（non-secure）</p>
+<p>这是针对的不完整的安全措施，那么就有可能存在切出泄露，切入覆盖原数据的情况。</p>
+<p><strong>攻击示意图：</strong></p>
+<p><img src="/2021/03/23/CITM-attacks/image-20210326155450688.png" width="400"></p>
+<h2 id="Cache-操作—-补充背景知识"><a href="#Cache-操作—-补充背景知识" class="headerlink" title="Cache 操作—- 补充背景知识"></a>Cache 操作—- 补充背景知识</h2><p><img src="/2021/03/23/CITM-attacks/image-20210303110802982.png" width="600"></p>
+<p><strong>non-cacheability</strong></p>
+<p>[1] 中详细介绍了cacheability与non-cacheability两者的区别</p>
+<p>Cache，就是一种缓存机制，它位于CPU和DDR之间，为CPU和DDR之间的读写提供一段内存缓冲区。cache一般是SRAM，它采用了和制作CPU相同的半导体工艺，它的价格比DDR要高，但读写速度要比DDR快不少。例如CPU要执行DDR里的指令，可以一次性的读一块区域的指令到cache里，下次就可以直接从cache里获取指令，而不用反复的去访问速度较慢的DDR。又例如，CPU要写一块数据到DDR里，它可以将数据快速地写到cache里，然后手动执行一条刷新cache的指令就可以将这片数据都更新到DDR里，或者干脆就不刷新，待cache到合适的时候，自己再将内容flush到DDR里。总之一句话，cache的存在意义就是拉近CPU和DDR直接的性能差异，提高整个系统性能。</p>
+<p>对于单CPU，不操作外设，只对DDR的读写，可以放心的使用cache。对于其它情况，有两种办法：<br>1 手动更新cache，这需要对外设的机制较为了解，且要找到合适的时机刷新(将cache里的数据flush到内存里)或无效(Invalidate，将cache里的内容清掉，下次再读取的时候需要去DDR里读最新的内容)<br>2 将内存设置为non-cache的，更准确的说是non-cacheable的</p>
+<p>在ARM处理器中，一般是采用编译链接时预设的方法来区分cache区域和non-cache区域，在链接脚本或者scatter file里定义不同的section，将需要设为non-cacheable的内存块放置到特定的section里。CPU在启动时会读取这些配置文件，在启动代码里对不同的section配置MMU或MPU，对non-cache的section映射到CPU认识的特拟地址。此后，CPU再访问内存的时候，经过MMU或者MPU，就会知道这块内存是cacheable还是non-cacheable的了。</p>
+<p><strong>write-back</strong></p>
+<p>CPU更新cache时，只是把更新的cache区标记一下，并不同步更新memory，在被替换时才写回下一级存储层次（memory）中。</p>
+<p>[2] 对比了write-through 和 write-back</p>
+<p><strong>write-through</strong></p>
+<p>CPU向cache写入数据时，同时向memory也写一份，使cache和memory的数据保持一致。</p>
+<p><strong>write-allocate</strong></p>
+<p>先把要写的数据载入到Cache中，写Cache，然后再通过flush方式写入到内存中。</p>
+<p>ARM缓存的状态还会受到其他维护操作的影响，比如 <strong>invalidation</strong> 和 <strong>cleaning</strong> 指令。</p>
+<ul>
+<li>当执行 <strong>invalidation</strong> 指令时，它直接使保存在缓存中的数据无效。</li>
+<li><strong>cleaning</strong> 指令将目标缓存的内容转发到下一级缓存或主存。</li>
+</ul>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://blog.csdn.net/wbwwf8685/article/details/52091900" target="_blank" rel="noopener">https://blog.csdn.net/wbwwf8685/article/details/52091900</a></p>
+<p>[2] <a href="http://witmax.cn/cache-writing-policies.html" target="_blank" rel="noopener">http://witmax.cn/cache-writing-policies.html</a></p>
+<p>[3] <a href="https://azeria-labs.com/trusted-execution-environments-tee-and-trustzone/" target="_blank" rel="noopener">https://azeria-labs.com/trusted-execution-environments-tee-and-trustzone/</a></p>
+<p>[4] <a href="https://segmentfault.com/a/1190000000387993" target="_blank" rel="noopener">https://segmentfault.com/a/1190000000387993</a></p>
+<p>[5] <a href="https://segmentfault.com/a/1190000000387968?utm_source=sf-similar-article" target="_blank" rel="noopener">https://segmentfault.com/a/1190000000387968?utm_source=sf-similar-article</a></p>
+<p>[6] Ferdinand Brasser, David Gens, Patrick Jauernig, Ahmad-Reza Sadeghi, and Emmanuel Stapf. 2019. SANCTUARY: ARMing TrustZone with User-space Enclaves.. In NDSS.</p>
+<p>[7] Min Hong Yun and Lin Zhong. 2019. Ginseng: Keeping Secrets in Registers When You Distrust the Operating System.. In NDSS.</p>
+<blockquote id="fn_switching">
+<sup>switching</sup>. 本文指出的换入换出指的是从IEE内部视角看，换出：上下文的切换由IEE到普通OS，换入：上下文切换从OS到IEE.<a href="#reffn_switching" title="Jump back to footnote [switching] in the text."> &#8617;</a>
+</blockquote>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>CCS</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>TEE</tag>
       </tags>
   </entry>
 </search>
