@@ -42,6 +42,336 @@
       </tags>
   </entry>
   <entry>
+    <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
+    <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://dl.acm.org/doi/epdf/10.1145/3035918.3056101" target="_blank" rel="noopener">Aurora</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Amazon</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">分布式数据库</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">数据库</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">致力于构建一个分布式数据库</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="0-研究背景-为什么出现Aurora？"><a href="#0-研究背景-为什么出现Aurora？" class="headerlink" title="0 研究背景 为什么出现Aurora？"></a>0 研究背景 为什么出现Aurora？</h3><p>&emsp; &emsp; Aurora是亚马逊云服务AWS中的关系型数据库服务，主要面向OLTP场景。 <strong>Aurora</strong>基本设计理念是在云上环境下，数据库的最大瓶颈不再是计算或者存储资源，而是网络，因此基于一套存储计算分离架构，将日志处理下推到分布式存储层，通过架构上的优化来解决网络瓶颈。 </p>
+<p>&emsp; &emsp; 在云上环境下，存储计算分离作为解决系统弹性和伸缩性的方案越来越普遍。广义来说，任何数据库，底下文件系统挂一个分布式存储，即可以认为做到了存储计算分离。通过存储计算分离，可以透明添加存储节点，剔除故障节点，进行故障切换，扩展存储空间等。在这个背景下，IO不再成为数据库的瓶颈，因为IO压力可以打散在多个存储节点上，反而是<strong>网络成为瓶颈</strong>，因为数据库实例与所有存储节点的交互都需要通过网络，尤其是为了提升数据库性能，数据库实例与存储节点可能是并行交互的，这进一步加重了网络压力。</p>
+<p>&emsp; &emsp; 传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。比如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。另外一个我们熟悉场景是事务提交操作(IO写操作)，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。 <strong>传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的。</strong></p>
+<p>&emsp; &emsp; 本文介绍的Aurora是一个云上环境全新的数据库服务可以很好的解决上述传统数据库遇到的问题。 <strong>它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。</strong> Aurora体系下的数据库实例仍然包含了大部分核心功能，比如查询处理，事务，锁，缓存管理，访问接口和undo日志管理等；但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
+<h3 id="1-面临问题"><a href="#1-面临问题" class="headerlink" title="1 面临问题"></a>1 面临问题</h3><p>&emsp;&emsp;在云环境中，将存储和计算分离已经成为解决系统弹性和可伸缩性的方案。实现存储计算分离，可以进行故障切换，扩展存储空间等。因此磁盘IO压力可以打散在多个存储节点上，所以IO不再成为数据库的瓶颈。存储和计算分离之后，数据库实例与所有存储节点的交互都需要通过网络，加重了网络带宽压力，从而网络成为瓶颈。</p>
+<h3 id="2-问题带来的挑战"><a href="#2-问题带来的挑战" class="headerlink" title="2 问题带来的挑战"></a>2 问题带来的挑战</h3><p>&emsp;&emsp;在云环境中数据库的瓶颈不再是计算或者是资源存储，而是网络。基于此，Aurora设计了存储和计算分离的架构，与传统数据库相比较，这些问题带来的挑战如下。</p>
+<p>&emsp;&emsp;传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。云环境中的IO操作与传统数据库中的操作是不同的，这带来了IO操作的挑战。</p>
+<p>&emsp;&emsp;事务提交操作，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的，这又是一大挑战。</p>
+<h3 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3 解决方法"></a>3 解决方法</h3><p>&emsp;&emsp;Aurora是一个云上环境全新的数据库服务可以很好的解决上述问题带来的挑战。它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。Aurora体系下的数据库实例仍然包含了大部分核心功能，但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
+<h5 id="3-1-数据存储"><a href="#3-1-数据存储" class="headerlink" title="3.1 数据存储"></a><strong>3.1</strong> <strong>数据存储</strong></h5><p>&emsp;&emsp;Aurora存储层的复制基于Quorum协议，假设复制拓扑中有V个节点，每个节点有一个投票权，读或写必须拿到Vr 或 Vw个投票才能返回。为了满足一致性，需要满足两个条件，首先Vr + Vw &gt; V，这个保证了每次读都能读到拥有最新数据的节点；第二，Vw &gt; V/2，每次写都要保证能获取到上次写的最新数据，避免写冲突。</p>
+<p>&emsp;&emsp;结合Quorum模型，V=6 ，Vw=4，Vr=3，Aurora可以容忍任何一个AZ出现故障，不会影响写服务；任何一个AZ出现故障，以及另外一个AZ中的一个节点出现故障，不会影响读服务且不会丢失数据。通过Quorum协议，Aurora可以保证只要AZ级别的故障(火灾，洪水，网络故障)和节点故障(磁盘故障，掉电，机器损坏)不同时发生，就不会破坏协议本身，数据库可用性和正确性就能得到保证。</p>
+<h5 id="3-2-日志即数据"><a href="#3-2-日志即数据" class="headerlink" title="3.2 日志即数据"></a><strong>3.2</strong> <strong>日志即数据</strong></h5><p>&emsp;&emsp;以MySQL为例，考虑主备复制，如图1所示，AZ1和AZ2分别部署一个MySQL实例做同步镜像复制，底层存储采用EBS，并且每个EBS还有自己的一份镜像，另外部署S3进行redo日志和binlog日志归档，以支持基于时间点的恢复。每个步骤都需要传递5种类型的数据，包括redo，binlog，data-page，double-write和frm元数据。图中的1，3，5步骤是顺序的，要进行4次网络IO，且其中3次是同步串行的。从存储角度来看，数据在EBS上存了4份，需要4份都写成功才能返回。所以在这种架构下，无论是IO量还是串行化模型都会导致性能损耗。</p>
+<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/1.png" width="300px" height="300px"></p>
+<p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图1. Mirrored MySQL写操作流程</p>
+<p>&emsp;&emsp;在Aurora中，所有的写类型只有一种，那就是redo日志。修改一个数据页，会同步产生对应的redo日志。事务提交时，需要事务对应的redo日志都落盘成功后才能返回。存储节点接收redo日志，基于旧版本数据页回放日志，可以得到新版本的数据页。为了避免每次都从头开始回放数据页变更产生的redo日志，存储节点会定期物化数据页版本。Aurora由跨AZ的一个主实例和多个副本实例组成，主实例与副本实例或者存储节点间只传递redo日志和元信息。主实例并发向6个存储节点和副本实例发送日志，当4/6的存储节点应答后，则认为日志已经持久化。传统数据库宕机重启后，恢复从最近的一个检查点开始，读取检查点后的所有redo日志进行回放，确保已经提交的事务对应的数据页得到更新。</p>
+<p>&emsp;&emsp;在Aurora中，redo日志相关的功能下推到存储层，回放日志的工作可以一直在后台做。真正进行故障恢复时，需要做的事情很少，所以故障恢复的速度非常快。Aurora存储服务设计的一个关键原则是减少前台用户写的响应时间，因此将尽可能多的操作移到后台异步执行，并且存储节点会根据前台的请求压力，自适应分配资源做不同的工作。对于Aurora而言，分离的存储服务层使得后台线程推进检查点动作完全不影响数据库实例，并且是推进地越快，越有利于前台的磁盘IO读操作。Aurora写基于Quorum模型，存储分片后，按片达成多数即可返回，由于分布足够离散，少数的磁盘IO压力大也不会影响到整体的写性能。</p>
+<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/2.png" width="400px" height="300px"></p>
+<p>如上图所示，图中详细介绍了主要的写流程，</p>
+<p>1).存储节点接收数据库实例的日志，并追加到内存队列；</p>
+<p>2).将日志在本地持久化成功后，给实例应答；</p>
+<p>3).按分片归类日志，并确认丢失了哪些日志；</p>
+<p>4).与其它存储节点交互，填充丢失的日志；</p>
+<p>5).回放日志生成新的数据页；</p>
+<p>6).周期性地备份数据页和日志到S3系统；</p>
+<p>7).周期性地回收过期的数据页版本；</p>
+<p>8).周期性地对数据页进行CRC校验。</p>
+<p>&emsp;&emsp;上述所有写相关的操作，只有第1)和第2)步是串行同步的，会直接影响前台请求的响应时间，其它操作都是异步的。</p>
+<h4 id="3-3-事务提交"><a href="#3-3-事务提交" class="headerlink" title="3.3 事务提交"></a><strong>3.3</strong> <strong>事务提交</strong></h4><p>&emsp;&emsp;在Aurora中，数据库实例向存储节点传递redo日志，达成多数派后将事务标记为提交状态，然后推进VDL，使数据库进入一个新的一致状态。每个事务的每条redo日志都会分配一个唯一的LSN，这个LSN一定大于当前最新的VDL。由于底层存储按segment分片，每个分片管理一部分页面，当一个事务涉及的修改跨多个分片时，事务对应的日志被打散，每个分片只能看到这个事务的部分日志。为了确保各个分片日志的完整性，每条日志都记录前一条日志的链接，通过前向链接确保分片拥有了完整的日志。Segment Complete LSN(SCL)表示分片拥有完整日志的位点，存储节点相互间通过gossip协议来弥补本地日志空洞，推进SCL。</p>
+<p>&emsp;&emsp;在Aurora中，事务提交是完全异步的。每个事务由若干个日志组成，并包含有一个唯一的“commit LSN”，工作线程处理事务提交请求时，将事务相关的日志提交到持久化队列并将事务挂起，并继续处理其它数据库请求。当VDL的位点大于事务的LSN时，表示这个事务redo日志都已经持久化，可以向客户端回包，通知事务已经成功执行。在Aurora中，有一个独立的线程处理事务成功执行的回包工作，因此，从整个提交流程来看，所有工作线程不会因为事务提交等待日志推进而堵塞，他们会继续处理新的请求，通过这种异步提交方式，大大提高了系统的吞吐。</p>
+<h4 id="3-4-故障恢复"><a href="#3-4-故障恢复" class="headerlink" title="3.4 故障恢复"></a><strong>3.4</strong> <strong>故障恢复</strong></h4><p>&emsp;&emsp;大多数数据库系统通常会周期性地做检查点，并将检查点信息计入日志。故障时，数据页中同时可能包含了提交和未提交的数据，因此，在故障恢复时，系统首先需要从上一个检查点开始回放日志，将数据页恢复到故障时的状态，然后根据undo日志回滚未交事务。从故障恢复的过程来看，故障恢复是一个比较耗时的操作，并且与检查点操作频率强相关。通过提高检查点频率，可以减少故障恢复时间，但是这直接会影响系统处理前台请求吞吐，所以需要在检查点频率和故障恢复时间做一个权衡，而在Aurora中不需要做这种权衡。</p>
+<p>&emsp;&emsp;Aurora将回放日志逻辑下推到存储节点，并且在数据库在线提供服务时在后台常态运行。因此，当出现故障重启时，存储服务能快速恢复。数据库实例宕机重启后，需要故障恢复来获得运行时的一致状态，实例与仲裁协议确定的N个存储节点通信，这样确保能读到最新的数据，并重新计算新的VDL，超过VDL部分的日志都可以被截断丢弃。在Aurora中，对于新分配的LSN范围做了限制，这个主要是为了避免数据库实例上堆积过多的未提交事务。</p>
+<h3 id="4-实验验证"><a href="#4-实验验证" class="headerlink" title="4 实验验证"></a>4 实验验证</h3><p>&emsp;&emsp;本文的实验对Aurora的读写能力，吞吐量大小，以及部署后用户的使用数据对Aurora进行了分析。</p>
+<p>&emsp;&emsp;从sysbench测试的数据来看，Aurora是基于镜像MySQL吞吐能力的35倍，每个事务的日志量比基于镜像MySQL日志量要少7.7倍。从用户的使用数据来看，某游戏公司使用后web应用响应时间明显降低，由之前的15ms降低到5.5ms,性能提高了近3倍，而且时间延迟明显降低。</p>
+<p>&emsp;&emsp;基于实验验证，Aurora相对于传统数据库的优势如下：</p>
+<p>&emsp;&emsp;第一，底层数据库存储是一个分布式存储服务，可以轻松应对故障；</p>
+<p>&emsp;&emsp;第二，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；</p>
+<p>&emsp;&emsp;第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
+<h3 id="5-相关工作"><a href="#5-相关工作" class="headerlink" title="5 相关工作"></a>5 相关工作</h3><p>&emsp;&emsp;本文的相关工作主要是在分布式存储的将存储与计算解耦、分布式系统、并发控制、日志结构的存储与数据恢复等几个方面分别进行描述的。在描述的过程中，首先通过对Aurora面临的问题进行逐个层面的分析，并对相关工作进行总结，在分析之后，将已有工作与Aurora相结合，并通过Aurora与先有工作进行比较说明，进一步阐述Aurora的实现原理。</p>
+<p>&emsp;&emsp;将存储与计算解耦：在此处本文提出与传统系统通常作为整体不同的数据库系统，介绍了有一些关于将内核分解为不同组件的数据库的研究。Deuteronomy 将提供并发控制和恢复的事务组件（TC）与提供LLAMA访问方法的数据组件（DC）分开，结构化缓存和存储管理器。Sinfonia和Hyder是在横向扩展服务上抽象事务访问方法的系统，并且可以使用这些抽象来实现数据库系统。Yesquel系统实现了多版本分布式平衡树，并将并发控制与查询处理器分离。在Aurora中，将查询处理、事务、并发、缓冲区高速缓存和访问方法与作为横向扩展服务实现的日志记录，存储和恢复分离。</p>
+<p>&emsp;&emsp;分布式系统：首先指出已经证明过的Brewer CAP定理，指出高度可用的系统无法在存在网络分区的情况下提供“强”的一致性保证。这个结果激发了作者对一致性目标的追求。并对相关工作进行总结，Bailis等人研究了提供高可用事务（HATs）的问题，该事务既不会在分区期间遭受不可用，也不会导致高网络延迟。他们表明可串行性，快照隔离和可重复读取隔离不符合HAT的要求，而大多数其他隔离级别都可以通过高可用性实现。Aurora通过简化假设，即在任何时候只有一个写入器使用从单个有序域分配的LSN生成日志更新来提供所有这些隔离级别。Google的Spanner提供外部一致的读写操作，并在一个时间戳上跨数据库提供全局一致的读取信息。这些功能使Spanner支持一致的备份，一致的分布式查询处理以及原子模式更新，所有这些都是在全球范围内进行的，甚至在正在进行的事务存在的情况下也是如此。Spanner专门针对Google的繁重工作负载，并依靠两阶段提交和两阶段锁定来进行读/写事务。</p>
+<p>&emsp;&emsp;并发控制：本文指出较弱的一致性和隔离模型在分布式数据库中是众所周知的，并导致了乐观的复制技术以及最终的一致性系统。集中式系统中的其他方法包括基于锁定的经典悲观方案，Hekaton中的多方案并发控制之类的乐观方案，VoltDB等分片方法和HyPer中的时间戳排序和Deuteronomy . Aurora的存储服务为数据库引擎提供了持久保留的本地磁盘的抽象，并允许引擎确定隔离和并发控制。</p>
+<p>&emsp;&emsp;日志结构存储：先介绍日志结构的起源，日志结构的存储系统由LFS 在1992年引入。并对最近的日志结构存储的相关工作进行总结，Deuteronomy 以及LLAMA 和Bw-Tree 的相关工作在存储引擎堆栈中以多种方式使用日志结构化技术。最后对本文提出的Aurora与Deuteronomy 进行横向比较说明。Aurora，通过编写增量而不是整个页面来减少写放大，Deuteronomy 和Aurora都实现纯重做日志记录，并跟踪最高稳定的LSN以确认提交。</p>
+<p>&emsp;&emsp;恢复：尽管传统数据库依赖于基于ARIES 的恢复协议，但是一些最近的系统已经选择了其他途径来提高性能。例如，Hekaton和VoltDB在崩溃后使用某种形式的更新日志来重建其内存状态。像Sinfonia这样的系统通过使用诸如进程对和状态机复制之类的技术来避免恢复。Graefe 描述了一种具有每页日志记录链的系统，该系统可以按需进行逐页重做，从而可以快速恢复。与Aurora一样，Deuteronomy 不需要重做恢复。这是因为Deuteronomy 会延迟事务，因此只有已提交的更新才会发布到持久存储中。结果，与Aurora不同，Deuteronomy 中的交易规模可能受到限制。</p>
+<h3 id="6-总结建议"><a href="#6-总结建议" class="headerlink" title="6 总结建议"></a>6 总结建议</h3><p>&emsp;&emsp;在计算与存储分离的云基础设施之上，通过仅传输redo log，大幅减少跨网络的IO数据传输，将产生大量IO的数据页合并和持久化交由本地存储来解决，大幅减缓了网络延迟对数据库性能的影响。即使网络传输的速度不再是分布式数据库的瓶颈，这种“日志即数据“的思想也是有意义的，因为在分布式数据库中的计算，存储，网络中，网络通信的功耗是最大的。</p>
+<p>&emsp;&emsp;Aurora诞生的原因是在弹性伸缩的云环境下，传统的高吞吐<strong>OLTP</strong>数据库既不能保证可用性，又不能保证持久性。 <strong>Aurora</strong>的关键点在于将传统数据库中的存储与计算分离，具体而言，将日志部分下推到一个独立的分布式存储服务层。由于这种分离架构下，所有IO操作都是通过网络，网络将成为最大的瓶颈，因此Aurora集中精力优化网络以便提高系统吞吐能力。Aurora依靠Quorum模型，在性能影响可控的前提下，解决云环境下的各种异常错误。在Aurora中，日志处理技术减少了I/O写放大，异步提交协议避免了同步等待，同时分离的存储服务层还避免了离线故障恢复和检查点操作。</p>
+<p>&emsp; &emsp;Aurora相对于传统数据库有三大优势，首先，底层数据库存储是一个分布式存储服务，可以轻松应对故障；其次，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
+<p>&emsp;&emsp;批评性建议：</p>
+<p>&emsp;&emsp;1.在存储结构方面，论文中没有给出caching很明确的细节说明，Caching是位于了存储层内还是计算层内？读者只能靠猜测。如果在文中给出了具体的细节说明，可能对读者理解本文具有很大的帮助。</p>
+<p>&emsp;&emsp;2.Amazon Aurora是基于开源MySQL的数据库，理论上修改GPL协议的开源软件再开发一个新软件是需要开源的，但它本身没有开放源代码，是一个闭源数据库。</p>
+<p>&emsp;&emsp;3.为什么备机节点可以多达15个呢？是为了应对数据库的读负载还是作为故障转移的目标，需要这么多备机做备选？本文在15个备份节点的解释上不是很清楚，读后存有疑惑。</p>
+<p>下面引用两位专家对Aurora的评价：</p>
+<p>Percona Vadim Tkachenko: Aurora没有解决写拓展和分库分表的问题。（2017）</p>
+<p>Bill Karwin：Aurora不适合对具有二级索引的表进行大量写操作的场景。（2017）</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>SIGMOD</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Applying TPM to Cloud</title>
+    <url>/2020/10/12/Applying-TPM-to-Cloud/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:left">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:left">原文PDF</td>
+<td style="text-align:center"><a href="https://sci-hub.se/10.1002/spy2.93" target="_blank" rel="noopener">Survey</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:left">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:left">核心内容</td>
+<td style="text-align:center">调研了13年至18年的近120篇文献，且这些论文都利用TPM提高云计算安全。</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:left">研究领域</td>
+<td style="text-align:center">可信计算</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:left">全文总览</td>
+<td style="text-align:center">本文对TPM在云计算安全方面进行的细致的调研，并结合调研结果认为TPM在云计算安全的保护领域具有很大的趋势。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Paper-Source"><a href="#Paper-Source" class="headerlink" title="Paper Source"></a>Paper Source</h3><p><img src="/2020/10/12/Applying-TPM-to-Cloud/sources.png" width="500"></p>
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/papercountry.png" width="500"></p>
+<font color="DodgerBlue"> Paper Structure </font>
+
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Summary.png" width="600"></p>
+<h3 id="Answering-the-Following-Question"><a href="#Answering-the-Following-Question" class="headerlink" title="Answering the Following Question"></a>Answering the Following Question</h3><h4 id="RQ1-For-what-purposes-is-TPM-used-in-the-cloud"><a href="#RQ1-For-what-purposes-is-TPM-used-in-the-cloud" class="headerlink" title="RQ1: For what purposes is TPM used in the cloud?"></a>RQ1: For what purposes is TPM used in the cloud?</h4><blockquote>
+<p><strong>TPM 在云中的作用是什么？为什么要用到TPM？</strong></p>
+</blockquote>
+<h4 id="RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud"><a href="#RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud" class="headerlink" title="RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?"></a>RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?</h4><blockquote>
+<p><strong>TPM的确缓解了的云中的哪些攻击？</strong></p>
+</blockquote>
+<h4 id="RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？"><a href="#RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？" class="headerlink" title="RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？"></a>RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？</h4><blockquote>
+<p><strong>完整性度量的组件到底是什么？云中完整性度量的解释是什么？</strong></p>
+</blockquote>
+<h4 id="RQ4-At-what-level-are-TPM-primitives-invoked"><a href="#RQ4-At-what-level-are-TPM-primitives-invoked" class="headerlink" title="RQ4: At what level are TPM primitives invoked?"></a>RQ4: At what level are TPM primitives invoked?</h4><blockquote>
+<p><strong>TPM被调用的级别是什么？</strong></p>
+</blockquote>
+<h4 id="RQ5-At-which-phase-are-the-TPM-features-used"><a href="#RQ5-At-which-phase-are-the-TPM-features-used" class="headerlink" title="RQ5: At which phase are the TPM features used?"></a>RQ5: At which phase are the TPM features used?</h4><blockquote>
+<p><strong>在什么阶段用到了TPM？</strong><br><strong>A：boot time, run time and both.</strong></p>
+</blockquote>
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Phase.png"></p>
+<h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>​        可信计算利用硬件信任根以及与之关联的软件构建可信环境，提供信任和隐私保护。TPM这个模块，提供安全启动、远程验证、完整性检测以及机密功能。2011年发布了TPM1.2版本，2016年公布了TPM2.0版本。</p>
+<p>​        远程证明是可信计算技术提供的主要功能，它将信任逐步从较低级别扩展到较高级别和应用程序。 这被称为信任链。 在信任链方案中，所有将要加载的组件都被认为是不可信的，因此，在加载之前需要对其进行测量。 TPM包含平台配置寄存器（PCR）受保护的内存位置，该位置存储敏感的安全信息（例如测量信息）。</p>
+<p>​        除了强大的隔离存储，TPM还拥有用于加密操作的唯一认可密钥（EK）。该密钥是在TPM制造时生成的，密钥的私有部分永远不会离开TPM。 在远程认证时，为了保护平台身份的私密性，使用了认证身份密钥（AIK）。 当平台（证明者）收到（来自验证者的）远程证明请求时，它会发送一个完整性报告，该报告由PCR值及其数字签名（由AIK计算）组成。 由于AIK的私有部分从未离开过TPM，因此可以保证报告的完整性和真实性。</p>
+<p>​        初步理解，TPM有几种存在模式，比如：以芯片方式存在电脑主板上或者以firmware形式存在于BIOS中。</p>
+<h4 id="The-Aims-of-TPM"><a href="#The-Aims-of-TPM" class="headerlink" title="The Aims of TPM"></a>The Aims of TPM</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TPMAims.png" width="500" height="280"></p>
+<font color="DodgerBlue"> 远程验证（Remote Attestation ）</font>
+
+<blockquote>
+<ol>
+<li>请求验证者向被验证者发送验证请求，这个请求中包括 <em>nonce</em><sup><a href="#fn_1" id="reffn_1">1</a></sup> ，目的是防止重播攻击（Replay attack）</li>
+<li>接收到验证请求的一方向自己的TPM提出验证请求，TPM验证自身需要度量的模块</li>
+<li>验证后的结果发送给远端的验证发起者（发起者要验证(a)TPM 的真实性(b) 发送数值的真实性）</li>
+</ol>
+</blockquote>
+<font color="DodgerBlue"> 完整性度量 （Integrity Measurement）</font>
+
+<blockquote>
+<p>TPM计算并存储不同组件的哈希值，并将这些哈希值在哈希链中进行转换，并将结果与已经存储的数值相比较。<br>完整性度量分为静态与动态两种类型：<br>        静态：保证在运行之前没有发生篡改<br>        动态：保证在运行过程中没有发生恶意篡改</p>
+</blockquote>
+<font color="DodgerBlue"> Generation and secure storage ofkeys</font>
+
+<blockquote>
+<p>生成随机秘钥的方法：种子、随机数生成器、直接导入TPM中。<br>生成的秘钥保存在TPM中</p>
+</blockquote>
+<font color="DodgerBlue"> Trusted boot</font>
+
+<blockquote>
+<p>在开机时，TPM会检查硬件、软件、固件组件的异同，保证在启动系统之前的环境是可信的。</p>
+<p>本文的参考文献 [14] 利用TPM的可信启动构造一个可信的环境，保证在开机过程中没有恶意入侵。<br>[15] 提出一个用于监控整个云平台的框架，可信启动保证被监控环境的完整性，既对云中租户也是针对云供应商。</p>
+</blockquote>
+<font color="DodgerBlue"> Hardware root of trust</font>
+
+<blockquote>
+<p>信任根是可以在密码系统中信任的来源，加密安全依赖于秘钥来进行加密解密与生成或者验证数字签名，因此，在这种系统中包括不易损坏的硬件模块，并且提供了一定程度的信任保障。<br>TPM可以提供硬件信任根、提供开机与运行时的完整性度量并且保护度量结果。</p>
+</blockquote>
+<h4 id="Security-Threats"><a href="#Security-Threats" class="headerlink" title="Security Threats"></a>Security Threats</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TopThreats.png" width="380" height="500"></p>
+<h4 id="The-level-of-TPM-invoking"><a href="#The-level-of-TPM-invoking" class="headerlink" title="The level of TPM invoking"></a>The level of TPM invoking</h4><font color="DodgerBlue"> Hardware </font>
+
+<blockquote>
+<p>在IoT和云计算等分布式系统模型中，主机平台的安全性至关重要，因为它托管着存储或处理（大量）数据。 TPM是一种用于平台身份验证以及验证其完整性的强大解决方案。在参考文献90中提出的解决方案中，扩展了HCloud（用于医疗保健数据的私有云），并且TPM嵌入在主机平台上以对客户端进行身份验证，并测量静态和动态完整性。讨论了可信云可以提供外部认证服务并进行内部可信调度。提供给外部的每个服务都有一个唯一的映像/进程在内存中运行。加载到内存时，需要验证此过程。可以使用TPM执行静态测量，以验证存储在物理存储库中的文件和软件包。同样，使用TPM签名保护数据库的完整性，以提供硬件级别的安全性。对于过程的动态完整性测量，TPM PCR用于存储和显示逐步的测量值。 Yang等[86]提出了一种设计，旨在为客户提供有关存储在云中的数据的新鲜度，有效性和完整性的保证。为了实现此目标，他们在不受信任的服务器上使用受信任的硬件设备，使客户端能够验证其数据的新鲜度和完整性。在系统运行之前，需要验证平台是否以受信任的方式启动。参考文献91讨论TPM是衡量启动过程和确定平台启动完整性的关键步骤的信任基础。在虚拟环境中，TPM提供了根植于硬件的信任链，该信任链将扩展到虚拟机管理程序。如果关键组件（例如BIOS，固件和虚拟机管理程序）已证明其完整性，则可以确保平台引导的完整性。为了确保启动组件的完整性，需要执行两个步骤：首先，测量引导过程，其次，进行证明，即保证和已执行的组件是受信任的组件。</p>
+</blockquote>
+<font color="DodgerBlue"> Hypervisor </font>
+
+<blockquote>
+<p>本文参考文献28构造了基于Xen的迁移框架：</p>
+<p>Xen虚拟机管理程序的安全迁移框架。该设计使用可信计算和相邻完整性度量来动态监视相邻虚拟机管理程序的完整性。更具体地说，为确保始终监视主机，当主机初始化时，TPM模块会验证虚拟机监控程序并将更新消息发送到完整性验证表（该表包含受信任的虚拟机监控程序列表），并将该虚拟机监控程序标记为受信任的。这意味着，如果未收到此类消息，则认为该特定的管理程序不可信。此外，系统会动态监控虚拟机监控程序的运行状态，如果虚拟机监控程序遭到破坏，则会发送相应的更新消息以报告受到破坏的情况。根据此完整性表的结果，确定源虚拟机管理程序是否受信任以及是否应启动VM迁移过程。</p>
+</blockquote>
+<h4 id="Phase-of-integrity-measurement"><a href="#Phase-of-integrity-measurement" class="headerlink" title="Phase of integrity measurement"></a>Phase of integrity measurement</h4><font color="DodgerBlue"> Boot time </font>
+
+<blockquote>
+<p>可信平台技术追求的原则之一是在关键组件加载和执行之前验证它们的信任和完整性。因此，在运行时完整性检查之前，需要确保正确引导了系统并且正在运行适当的操作系统。受信任的平台通过创建信任链来实现这种信任，该信任链以BIOS引导块中的受信任代码（CRTM）为核心信任根。 CRTM衡量其他实体的完整性价值，并且在平台的整个生命周期内保持不变。 CRTM是普通BIOS的补充，它首先运行以测量BIOS块和硬件，然后将控制权传递给引导加载程序。然后在将控件传递给OS之前测量OS内核映像。在此引导过程的每个步骤中，都会获取测量值，并据此扩展相关的TPM PCR值。该测量过程证明了系统的完整性，并确保引导和操作系统软件是制造商想要的版本，并且未被恶意第三方或恶意软件篡改。100Nanavati等人74指出，在虚拟环境中，可信引导技术允许用户证明基础启动平台的身份，并确保加载的虚拟化平台值得信赖。这为用户提供了有关可以向其提交关键数据的虚拟化平台的具体保证。 TPM通过使用加密原语为虚拟化平台提供此受信任的引导，并为其建立信任根。在ALIBI可信监视框架中，17 TPM用于在服务提供商平台上提供信任根。 TPM PCR记录平台上正在执行的软件的状态，并且由于PCR值仅是附加值，因此仅通过重新启动才能消除以前的记录。 TPM还拥有一个公共-私人密钥对。私钥仅保留在TPM的安全环境中，并用于计算TPM生成的证明值（从经过身份验证的启动累积的度量）的签名。使用TPM的公钥，外部验证程序可以检查签名的有效性，并推断出PCR值表示平台软件的状态。</p>
+</blockquote>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>​        本文所统计并分析了120篇文献后，认为TPM技术在云中应用是一种趋势。在云中TPM技术的主要目标是远程验证以及完整性度量。本文主要分析了TPM的功能，TPM可应对云中的安全威胁，TPM提供完整性度量的阶段以及层次并指出了留有的研究空间，最后指出主要的研究差距。</p>
+<blockquote id="fn_1">
+<sup>1</sup>. 在加密技术中的初始向量和加密散列函数都发挥着重要作用，在各类验证协议的通信应用中确保验证信息不被重复使用以对抗重放攻击(Replay Attack)<a href="#reffn_1" title="Jump back to footnote [1] in the text."> &#8617;</a>
+</blockquote>
+<h3 id="引文延伸阅读"><a href="#引文延伸阅读" class="headerlink" title="引文延伸阅读"></a>引文延伸阅读</h3><p>Here are the papers worth reading further.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>theme</th>
+<th>Reference Number &amp; Summary</th>
+<th>Reference Number &amp; Summary</th>
+<th>more</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>远程验证</td>
+<td>6：TPM进行远程验证VMs</td>
+<td>7：验证用户所在地理位置</td>
+<td></td>
+</tr>
+<tr>
+<td>完整性度量</td>
+<td>10：多用户环境中数据拥有完整性</td>
+<td>11：动态的完成性度量的模型（Xen）</td>
+<td>8、9</td>
+</tr>
+<tr>
+<td>生成秘钥安全存储</td>
+<td>12</td>
+<td>13</td>
+<td></td>
+</tr>
+<tr>
+<td>安全启动</td>
+<td><a href="https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=2969&amp;context=sis_research" target="_blank" rel="noopener">14</a>：protect the hypervisor</td>
+<td>15 ：monitoring the cloud platform</td>
+<td></td>
+</tr>
+<tr>
+<td>硬件信任根</td>
+<td>17 25 33 34 35</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://www.zhihu.com/question/19790488/answer/19290308" target="_blank" rel="noopener">什么是彩虹表？</a> </p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>TPM</tag>
+        <tag>Security</tag>
+        <tag>Cloud Computing</tag>
+        <tag>可信计算</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Attacks Directories, Not Caches</title>
+    <url>/2020/07/17/Attacks-Directories-Not-Caches/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href>Attack Directories, Not Caches: Side-Channel Attacks in a Non-Inclusive World</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">Side Channel Attack</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">Attack, Cache</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">基于缓存的侧信道攻击在新型缓存的攻击实践</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="0-Main-idea"><a href="#0-Main-idea" class="headerlink" title="0. Main idea"></a>0. Main idea</h3>]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>side channel attack</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>BatchCrypt</title>
     <url>/2020/09/13/BatchCrypt/</url>
     <content><![CDATA[<div class="table-container">
@@ -261,442 +591,6 @@
         <tag>论文解读</tag>
         <tag>Federal Learning</tag>
         <tag>Homomorphic</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Applying TPM to Cloud</title>
-    <url>/2020/10/12/Applying-TPM-to-Cloud/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:left">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:left">原文PDF</td>
-<td style="text-align:center"><a href="https://sci-hub.se/10.1002/spy2.93" target="_blank" rel="noopener">Survey</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:left">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:left">核心内容</td>
-<td style="text-align:center">调研了13年至18年的近120篇文献，且这些论文都利用TPM提高云计算安全。</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:left">研究领域</td>
-<td style="text-align:center">可信计算</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:left">全文总览</td>
-<td style="text-align:center">本文对TPM在云计算安全方面进行的细致的调研，并结合调研结果认为TPM在云计算安全的保护领域具有很大的趋势。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="Paper-Source"><a href="#Paper-Source" class="headerlink" title="Paper Source"></a>Paper Source</h3><p><img src="/2020/10/12/Applying-TPM-to-Cloud/sources.png" width="500"></p>
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/papercountry.png" width="500"></p>
-<font color="DodgerBlue"> Paper Structure </font>
-
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Summary.png" width="600"></p>
-<h3 id="Answering-the-Following-Question"><a href="#Answering-the-Following-Question" class="headerlink" title="Answering the Following Question"></a>Answering the Following Question</h3><h4 id="RQ1-For-what-purposes-is-TPM-used-in-the-cloud"><a href="#RQ1-For-what-purposes-is-TPM-used-in-the-cloud" class="headerlink" title="RQ1: For what purposes is TPM used in the cloud?"></a>RQ1: For what purposes is TPM used in the cloud?</h4><blockquote>
-<p><strong>TPM 在云中的作用是什么？为什么要用到TPM？</strong></p>
-</blockquote>
-<h4 id="RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud"><a href="#RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud" class="headerlink" title="RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?"></a>RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?</h4><blockquote>
-<p><strong>TPM的确缓解了的云中的哪些攻击？</strong></p>
-</blockquote>
-<h4 id="RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？"><a href="#RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？" class="headerlink" title="RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？"></a>RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？</h4><blockquote>
-<p><strong>完整性度量的组件到底是什么？云中完整性度量的解释是什么？</strong></p>
-</blockquote>
-<h4 id="RQ4-At-what-level-are-TPM-primitives-invoked"><a href="#RQ4-At-what-level-are-TPM-primitives-invoked" class="headerlink" title="RQ4: At what level are TPM primitives invoked?"></a>RQ4: At what level are TPM primitives invoked?</h4><blockquote>
-<p><strong>TPM被调用的级别是什么？</strong></p>
-</blockquote>
-<h4 id="RQ5-At-which-phase-are-the-TPM-features-used"><a href="#RQ5-At-which-phase-are-the-TPM-features-used" class="headerlink" title="RQ5: At which phase are the TPM features used?"></a>RQ5: At which phase are the TPM features used?</h4><blockquote>
-<p><strong>在什么阶段用到了TPM？</strong><br><strong>A：boot time, run time and both.</strong></p>
-</blockquote>
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Phase.png"></p>
-<h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>​        可信计算利用硬件信任根以及与之关联的软件构建可信环境，提供信任和隐私保护。TPM这个模块，提供安全启动、远程验证、完整性检测以及机密功能。2011年发布了TPM1.2版本，2016年公布了TPM2.0版本。</p>
-<p>​        远程证明是可信计算技术提供的主要功能，它将信任逐步从较低级别扩展到较高级别和应用程序。 这被称为信任链。 在信任链方案中，所有将要加载的组件都被认为是不可信的，因此，在加载之前需要对其进行测量。 TPM包含平台配置寄存器（PCR）受保护的内存位置，该位置存储敏感的安全信息（例如测量信息）。</p>
-<p>​        除了强大的隔离存储，TPM还拥有用于加密操作的唯一认可密钥（EK）。该密钥是在TPM制造时生成的，密钥的私有部分永远不会离开TPM。 在远程认证时，为了保护平台身份的私密性，使用了认证身份密钥（AIK）。 当平台（证明者）收到（来自验证者的）远程证明请求时，它会发送一个完整性报告，该报告由PCR值及其数字签名（由AIK计算）组成。 由于AIK的私有部分从未离开过TPM，因此可以保证报告的完整性和真实性。</p>
-<p>​        初步理解，TPM有几种存在模式，比如：以芯片方式存在电脑主板上或者以firmware形式存在于BIOS中。</p>
-<h4 id="The-Aims-of-TPM"><a href="#The-Aims-of-TPM" class="headerlink" title="The Aims of TPM"></a>The Aims of TPM</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TPMAims.png" width="500" height="280"></p>
-<font color="DodgerBlue"> 远程验证（Remote Attestation ）</font>
-
-<blockquote>
-<ol>
-<li>请求验证者向被验证者发送验证请求，这个请求中包括 <em>nonce</em><sup><a href="#fn_1" id="reffn_1">1</a></sup> ，目的是防止重播攻击（Replay attack）</li>
-<li>接收到验证请求的一方向自己的TPM提出验证请求，TPM验证自身需要度量的模块</li>
-<li>验证后的结果发送给远端的验证发起者（发起者要验证(a)TPM 的真实性(b) 发送数值的真实性）</li>
-</ol>
-</blockquote>
-<font color="DodgerBlue"> 完整性度量 （Integrity Measurement）</font>
-
-<blockquote>
-<p>TPM计算并存储不同组件的哈希值，并将这些哈希值在哈希链中进行转换，并将结果与已经存储的数值相比较。<br>完整性度量分为静态与动态两种类型：<br>        静态：保证在运行之前没有发生篡改<br>        动态：保证在运行过程中没有发生恶意篡改</p>
-</blockquote>
-<font color="DodgerBlue"> Generation and secure storage ofkeys</font>
-
-<blockquote>
-<p>生成随机秘钥的方法：种子、随机数生成器、直接导入TPM中。<br>生成的秘钥保存在TPM中</p>
-</blockquote>
-<font color="DodgerBlue"> Trusted boot</font>
-
-<blockquote>
-<p>在开机时，TPM会检查硬件、软件、固件组件的异同，保证在启动系统之前的环境是可信的。</p>
-<p>本文的参考文献 [14] 利用TPM的可信启动构造一个可信的环境，保证在开机过程中没有恶意入侵。<br>[15] 提出一个用于监控整个云平台的框架，可信启动保证被监控环境的完整性，既对云中租户也是针对云供应商。</p>
-</blockquote>
-<font color="DodgerBlue"> Hardware root of trust</font>
-
-<blockquote>
-<p>信任根是可以在密码系统中信任的来源，加密安全依赖于秘钥来进行加密解密与生成或者验证数字签名，因此，在这种系统中包括不易损坏的硬件模块，并且提供了一定程度的信任保障。<br>TPM可以提供硬件信任根、提供开机与运行时的完整性度量并且保护度量结果。</p>
-</blockquote>
-<h4 id="Security-Threats"><a href="#Security-Threats" class="headerlink" title="Security Threats"></a>Security Threats</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TopThreats.png" width="380" height="500"></p>
-<h4 id="The-level-of-TPM-invoking"><a href="#The-level-of-TPM-invoking" class="headerlink" title="The level of TPM invoking"></a>The level of TPM invoking</h4><font color="DodgerBlue"> Hardware </font>
-
-<blockquote>
-<p>在IoT和云计算等分布式系统模型中，主机平台的安全性至关重要，因为它托管着存储或处理（大量）数据。 TPM是一种用于平台身份验证以及验证其完整性的强大解决方案。在参考文献90中提出的解决方案中，扩展了HCloud（用于医疗保健数据的私有云），并且TPM嵌入在主机平台上以对客户端进行身份验证，并测量静态和动态完整性。讨论了可信云可以提供外部认证服务并进行内部可信调度。提供给外部的每个服务都有一个唯一的映像/进程在内存中运行。加载到内存时，需要验证此过程。可以使用TPM执行静态测量，以验证存储在物理存储库中的文件和软件包。同样，使用TPM签名保护数据库的完整性，以提供硬件级别的安全性。对于过程的动态完整性测量，TPM PCR用于存储和显示逐步的测量值。 Yang等[86]提出了一种设计，旨在为客户提供有关存储在云中的数据的新鲜度，有效性和完整性的保证。为了实现此目标，他们在不受信任的服务器上使用受信任的硬件设备，使客户端能够验证其数据的新鲜度和完整性。在系统运行之前，需要验证平台是否以受信任的方式启动。参考文献91讨论TPM是衡量启动过程和确定平台启动完整性的关键步骤的信任基础。在虚拟环境中，TPM提供了根植于硬件的信任链，该信任链将扩展到虚拟机管理程序。如果关键组件（例如BIOS，固件和虚拟机管理程序）已证明其完整性，则可以确保平台引导的完整性。为了确保启动组件的完整性，需要执行两个步骤：首先，测量引导过程，其次，进行证明，即保证和已执行的组件是受信任的组件。</p>
-</blockquote>
-<font color="DodgerBlue"> Hypervisor </font>
-
-<blockquote>
-<p>本文参考文献28构造了基于Xen的迁移框架：</p>
-<p>Xen虚拟机管理程序的安全迁移框架。该设计使用可信计算和相邻完整性度量来动态监视相邻虚拟机管理程序的完整性。更具体地说，为确保始终监视主机，当主机初始化时，TPM模块会验证虚拟机监控程序并将更新消息发送到完整性验证表（该表包含受信任的虚拟机监控程序列表），并将该虚拟机监控程序标记为受信任的。这意味着，如果未收到此类消息，则认为该特定的管理程序不可信。此外，系统会动态监控虚拟机监控程序的运行状态，如果虚拟机监控程序遭到破坏，则会发送相应的更新消息以报告受到破坏的情况。根据此完整性表的结果，确定源虚拟机管理程序是否受信任以及是否应启动VM迁移过程。</p>
-</blockquote>
-<h4 id="Phase-of-integrity-measurement"><a href="#Phase-of-integrity-measurement" class="headerlink" title="Phase of integrity measurement"></a>Phase of integrity measurement</h4><font color="DodgerBlue"> Boot time </font>
-
-<blockquote>
-<p>可信平台技术追求的原则之一是在关键组件加载和执行之前验证它们的信任和完整性。因此，在运行时完整性检查之前，需要确保正确引导了系统并且正在运行适当的操作系统。受信任的平台通过创建信任链来实现这种信任，该信任链以BIOS引导块中的受信任代码（CRTM）为核心信任根。 CRTM衡量其他实体的完整性价值，并且在平台的整个生命周期内保持不变。 CRTM是普通BIOS的补充，它首先运行以测量BIOS块和硬件，然后将控制权传递给引导加载程序。然后在将控件传递给OS之前测量OS内核映像。在此引导过程的每个步骤中，都会获取测量值，并据此扩展相关的TPM PCR值。该测量过程证明了系统的完整性，并确保引导和操作系统软件是制造商想要的版本，并且未被恶意第三方或恶意软件篡改。100Nanavati等人74指出，在虚拟环境中，可信引导技术允许用户证明基础启动平台的身份，并确保加载的虚拟化平台值得信赖。这为用户提供了有关可以向其提交关键数据的虚拟化平台的具体保证。 TPM通过使用加密原语为虚拟化平台提供此受信任的引导，并为其建立信任根。在ALIBI可信监视框架中，17 TPM用于在服务提供商平台上提供信任根。 TPM PCR记录平台上正在执行的软件的状态，并且由于PCR值仅是附加值，因此仅通过重新启动才能消除以前的记录。 TPM还拥有一个公共-私人密钥对。私钥仅保留在TPM的安全环境中，并用于计算TPM生成的证明值（从经过身份验证的启动累积的度量）的签名。使用TPM的公钥，外部验证程序可以检查签名的有效性，并推断出PCR值表示平台软件的状态。</p>
-</blockquote>
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>​        本文所统计并分析了120篇文献后，认为TPM技术在云中应用是一种趋势。在云中TPM技术的主要目标是远程验证以及完整性度量。本文主要分析了TPM的功能，TPM可应对云中的安全威胁，TPM提供完整性度量的阶段以及层次并指出了留有的研究空间，最后指出主要的研究差距。</p>
-<blockquote id="fn_1">
-<sup>1</sup>. 在加密技术中的初始向量和加密散列函数都发挥着重要作用，在各类验证协议的通信应用中确保验证信息不被重复使用以对抗重放攻击(Replay Attack)<a href="#reffn_1" title="Jump back to footnote [1] in the text."> &#8617;</a>
-</blockquote>
-<h3 id="引文延伸阅读"><a href="#引文延伸阅读" class="headerlink" title="引文延伸阅读"></a>引文延伸阅读</h3><p>Here are the papers worth reading further.</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>theme</th>
-<th>Reference Number &amp; Summary</th>
-<th>Reference Number &amp; Summary</th>
-<th>more</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>远程验证</td>
-<td>6：TPM进行远程验证VMs</td>
-<td>7：验证用户所在地理位置</td>
-<td></td>
-</tr>
-<tr>
-<td>完整性度量</td>
-<td>10：多用户环境中数据拥有完整性</td>
-<td>11：动态的完成性度量的模型（Xen）</td>
-<td>8、9</td>
-</tr>
-<tr>
-<td>生成秘钥安全存储</td>
-<td>12</td>
-<td>13</td>
-<td></td>
-</tr>
-<tr>
-<td>安全启动</td>
-<td><a href="https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=2969&amp;context=sis_research" target="_blank" rel="noopener">14</a>：protect the hypervisor</td>
-<td>15 ：monitoring the cloud platform</td>
-<td></td>
-</tr>
-<tr>
-<td>硬件信任根</td>
-<td>17 25 33 34 35</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://www.zhihu.com/question/19790488/answer/19290308" target="_blank" rel="noopener">什么是彩虹表？</a> </p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>TPM</tag>
-        <tag>Security</tag>
-        <tag>Cloud Computing</tag>
-        <tag>可信计算</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
-    <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://dl.acm.org/doi/epdf/10.1145/3035918.3056101" target="_blank" rel="noopener">Aurora</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Amazon</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">分布式数据库</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">数据库</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">致力于构建一个分布式数据库</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="0-研究背景-为什么出现Aurora？"><a href="#0-研究背景-为什么出现Aurora？" class="headerlink" title="0 研究背景 为什么出现Aurora？"></a>0 研究背景 为什么出现Aurora？</h3><p>&emsp; &emsp; Aurora是亚马逊云服务AWS中的关系型数据库服务，主要面向OLTP场景。 <strong>Aurora</strong>基本设计理念是在云上环境下，数据库的最大瓶颈不再是计算或者存储资源，而是网络，因此基于一套存储计算分离架构，将日志处理下推到分布式存储层，通过架构上的优化来解决网络瓶颈。 </p>
-<p>&emsp; &emsp; 在云上环境下，存储计算分离作为解决系统弹性和伸缩性的方案越来越普遍。广义来说，任何数据库，底下文件系统挂一个分布式存储，即可以认为做到了存储计算分离。通过存储计算分离，可以透明添加存储节点，剔除故障节点，进行故障切换，扩展存储空间等。在这个背景下，IO不再成为数据库的瓶颈，因为IO压力可以打散在多个存储节点上，反而是<strong>网络成为瓶颈</strong>，因为数据库实例与所有存储节点的交互都需要通过网络，尤其是为了提升数据库性能，数据库实例与存储节点可能是并行交互的，这进一步加重了网络压力。</p>
-<p>&emsp; &emsp; 传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。比如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。另外一个我们熟悉场景是事务提交操作(IO写操作)，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。 <strong>传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的。</strong></p>
-<p>&emsp; &emsp; 本文介绍的Aurora是一个云上环境全新的数据库服务可以很好的解决上述传统数据库遇到的问题。 <strong>它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。</strong> Aurora体系下的数据库实例仍然包含了大部分核心功能，比如查询处理，事务，锁，缓存管理，访问接口和undo日志管理等；但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
-<h3 id="1-面临问题"><a href="#1-面临问题" class="headerlink" title="1 面临问题"></a>1 面临问题</h3><p>&emsp;&emsp;在云环境中，将存储和计算分离已经成为解决系统弹性和可伸缩性的方案。实现存储计算分离，可以进行故障切换，扩展存储空间等。因此磁盘IO压力可以打散在多个存储节点上，所以IO不再成为数据库的瓶颈。存储和计算分离之后，数据库实例与所有存储节点的交互都需要通过网络，加重了网络带宽压力，从而网络成为瓶颈。</p>
-<h3 id="2-问题带来的挑战"><a href="#2-问题带来的挑战" class="headerlink" title="2 问题带来的挑战"></a>2 问题带来的挑战</h3><p>&emsp;&emsp;在云环境中数据库的瓶颈不再是计算或者是资源存储，而是网络。基于此，Aurora设计了存储和计算分离的架构，与传统数据库相比较，这些问题带来的挑战如下。</p>
-<p>&emsp;&emsp;传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。云环境中的IO操作与传统数据库中的操作是不同的，这带来了IO操作的挑战。</p>
-<p>&emsp;&emsp;事务提交操作，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的，这又是一大挑战。</p>
-<h3 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3 解决方法"></a>3 解决方法</h3><p>&emsp;&emsp;Aurora是一个云上环境全新的数据库服务可以很好的解决上述问题带来的挑战。它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。Aurora体系下的数据库实例仍然包含了大部分核心功能，但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
-<h5 id="3-1-数据存储"><a href="#3-1-数据存储" class="headerlink" title="3.1 数据存储"></a><strong>3.1</strong> <strong>数据存储</strong></h5><p>&emsp;&emsp;Aurora存储层的复制基于Quorum协议，假设复制拓扑中有V个节点，每个节点有一个投票权，读或写必须拿到Vr 或 Vw个投票才能返回。为了满足一致性，需要满足两个条件，首先Vr + Vw &gt; V，这个保证了每次读都能读到拥有最新数据的节点；第二，Vw &gt; V/2，每次写都要保证能获取到上次写的最新数据，避免写冲突。</p>
-<p>&emsp;&emsp;结合Quorum模型，V=6 ，Vw=4，Vr=3，Aurora可以容忍任何一个AZ出现故障，不会影响写服务；任何一个AZ出现故障，以及另外一个AZ中的一个节点出现故障，不会影响读服务且不会丢失数据。通过Quorum协议，Aurora可以保证只要AZ级别的故障(火灾，洪水，网络故障)和节点故障(磁盘故障，掉电，机器损坏)不同时发生，就不会破坏协议本身，数据库可用性和正确性就能得到保证。</p>
-<h5 id="3-2-日志即数据"><a href="#3-2-日志即数据" class="headerlink" title="3.2 日志即数据"></a><strong>3.2</strong> <strong>日志即数据</strong></h5><p>&emsp;&emsp;以MySQL为例，考虑主备复制，如图1所示，AZ1和AZ2分别部署一个MySQL实例做同步镜像复制，底层存储采用EBS，并且每个EBS还有自己的一份镜像，另外部署S3进行redo日志和binlog日志归档，以支持基于时间点的恢复。每个步骤都需要传递5种类型的数据，包括redo，binlog，data-page，double-write和frm元数据。图中的1，3，5步骤是顺序的，要进行4次网络IO，且其中3次是同步串行的。从存储角度来看，数据在EBS上存了4份，需要4份都写成功才能返回。所以在这种架构下，无论是IO量还是串行化模型都会导致性能损耗。</p>
-<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/1.png" width="300px" height="300px"></p>
-<p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图1. Mirrored MySQL写操作流程</p>
-<p>&emsp;&emsp;在Aurora中，所有的写类型只有一种，那就是redo日志。修改一个数据页，会同步产生对应的redo日志。事务提交时，需要事务对应的redo日志都落盘成功后才能返回。存储节点接收redo日志，基于旧版本数据页回放日志，可以得到新版本的数据页。为了避免每次都从头开始回放数据页变更产生的redo日志，存储节点会定期物化数据页版本。Aurora由跨AZ的一个主实例和多个副本实例组成，主实例与副本实例或者存储节点间只传递redo日志和元信息。主实例并发向6个存储节点和副本实例发送日志，当4/6的存储节点应答后，则认为日志已经持久化。传统数据库宕机重启后，恢复从最近的一个检查点开始，读取检查点后的所有redo日志进行回放，确保已经提交的事务对应的数据页得到更新。</p>
-<p>&emsp;&emsp;在Aurora中，redo日志相关的功能下推到存储层，回放日志的工作可以一直在后台做。真正进行故障恢复时，需要做的事情很少，所以故障恢复的速度非常快。Aurora存储服务设计的一个关键原则是减少前台用户写的响应时间，因此将尽可能多的操作移到后台异步执行，并且存储节点会根据前台的请求压力，自适应分配资源做不同的工作。对于Aurora而言，分离的存储服务层使得后台线程推进检查点动作完全不影响数据库实例，并且是推进地越快，越有利于前台的磁盘IO读操作。Aurora写基于Quorum模型，存储分片后，按片达成多数即可返回，由于分布足够离散，少数的磁盘IO压力大也不会影响到整体的写性能。</p>
-<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/2.png" width="400px" height="300px"></p>
-<p>如上图所示，图中详细介绍了主要的写流程，</p>
-<p>1).存储节点接收数据库实例的日志，并追加到内存队列；</p>
-<p>2).将日志在本地持久化成功后，给实例应答；</p>
-<p>3).按分片归类日志，并确认丢失了哪些日志；</p>
-<p>4).与其它存储节点交互，填充丢失的日志；</p>
-<p>5).回放日志生成新的数据页；</p>
-<p>6).周期性地备份数据页和日志到S3系统；</p>
-<p>7).周期性地回收过期的数据页版本；</p>
-<p>8).周期性地对数据页进行CRC校验。</p>
-<p>&emsp;&emsp;上述所有写相关的操作，只有第1)和第2)步是串行同步的，会直接影响前台请求的响应时间，其它操作都是异步的。</p>
-<h4 id="3-3-事务提交"><a href="#3-3-事务提交" class="headerlink" title="3.3 事务提交"></a><strong>3.3</strong> <strong>事务提交</strong></h4><p>&emsp;&emsp;在Aurora中，数据库实例向存储节点传递redo日志，达成多数派后将事务标记为提交状态，然后推进VDL，使数据库进入一个新的一致状态。每个事务的每条redo日志都会分配一个唯一的LSN，这个LSN一定大于当前最新的VDL。由于底层存储按segment分片，每个分片管理一部分页面，当一个事务涉及的修改跨多个分片时，事务对应的日志被打散，每个分片只能看到这个事务的部分日志。为了确保各个分片日志的完整性，每条日志都记录前一条日志的链接，通过前向链接确保分片拥有了完整的日志。Segment Complete LSN(SCL)表示分片拥有完整日志的位点，存储节点相互间通过gossip协议来弥补本地日志空洞，推进SCL。</p>
-<p>&emsp;&emsp;在Aurora中，事务提交是完全异步的。每个事务由若干个日志组成，并包含有一个唯一的“commit LSN”，工作线程处理事务提交请求时，将事务相关的日志提交到持久化队列并将事务挂起，并继续处理其它数据库请求。当VDL的位点大于事务的LSN时，表示这个事务redo日志都已经持久化，可以向客户端回包，通知事务已经成功执行。在Aurora中，有一个独立的线程处理事务成功执行的回包工作，因此，从整个提交流程来看，所有工作线程不会因为事务提交等待日志推进而堵塞，他们会继续处理新的请求，通过这种异步提交方式，大大提高了系统的吞吐。</p>
-<h4 id="3-4-故障恢复"><a href="#3-4-故障恢复" class="headerlink" title="3.4 故障恢复"></a><strong>3.4</strong> <strong>故障恢复</strong></h4><p>&emsp;&emsp;大多数数据库系统通常会周期性地做检查点，并将检查点信息计入日志。故障时，数据页中同时可能包含了提交和未提交的数据，因此，在故障恢复时，系统首先需要从上一个检查点开始回放日志，将数据页恢复到故障时的状态，然后根据undo日志回滚未交事务。从故障恢复的过程来看，故障恢复是一个比较耗时的操作，并且与检查点操作频率强相关。通过提高检查点频率，可以减少故障恢复时间，但是这直接会影响系统处理前台请求吞吐，所以需要在检查点频率和故障恢复时间做一个权衡，而在Aurora中不需要做这种权衡。</p>
-<p>&emsp;&emsp;Aurora将回放日志逻辑下推到存储节点，并且在数据库在线提供服务时在后台常态运行。因此，当出现故障重启时，存储服务能快速恢复。数据库实例宕机重启后，需要故障恢复来获得运行时的一致状态，实例与仲裁协议确定的N个存储节点通信，这样确保能读到最新的数据，并重新计算新的VDL，超过VDL部分的日志都可以被截断丢弃。在Aurora中，对于新分配的LSN范围做了限制，这个主要是为了避免数据库实例上堆积过多的未提交事务。</p>
-<h3 id="4-实验验证"><a href="#4-实验验证" class="headerlink" title="4 实验验证"></a>4 实验验证</h3><p>&emsp;&emsp;本文的实验对Aurora的读写能力，吞吐量大小，以及部署后用户的使用数据对Aurora进行了分析。</p>
-<p>&emsp;&emsp;从sysbench测试的数据来看，Aurora是基于镜像MySQL吞吐能力的35倍，每个事务的日志量比基于镜像MySQL日志量要少7.7倍。从用户的使用数据来看，某游戏公司使用后web应用响应时间明显降低，由之前的15ms降低到5.5ms,性能提高了近3倍，而且时间延迟明显降低。</p>
-<p>&emsp;&emsp;基于实验验证，Aurora相对于传统数据库的优势如下：</p>
-<p>&emsp;&emsp;第一，底层数据库存储是一个分布式存储服务，可以轻松应对故障；</p>
-<p>&emsp;&emsp;第二，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；</p>
-<p>&emsp;&emsp;第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
-<h3 id="5-相关工作"><a href="#5-相关工作" class="headerlink" title="5 相关工作"></a>5 相关工作</h3><p>&emsp;&emsp;本文的相关工作主要是在分布式存储的将存储与计算解耦、分布式系统、并发控制、日志结构的存储与数据恢复等几个方面分别进行描述的。在描述的过程中，首先通过对Aurora面临的问题进行逐个层面的分析，并对相关工作进行总结，在分析之后，将已有工作与Aurora相结合，并通过Aurora与先有工作进行比较说明，进一步阐述Aurora的实现原理。</p>
-<p>&emsp;&emsp;将存储与计算解耦：在此处本文提出与传统系统通常作为整体不同的数据库系统，介绍了有一些关于将内核分解为不同组件的数据库的研究。Deuteronomy 将提供并发控制和恢复的事务组件（TC）与提供LLAMA访问方法的数据组件（DC）分开，结构化缓存和存储管理器。Sinfonia和Hyder是在横向扩展服务上抽象事务访问方法的系统，并且可以使用这些抽象来实现数据库系统。Yesquel系统实现了多版本分布式平衡树，并将并发控制与查询处理器分离。在Aurora中，将查询处理、事务、并发、缓冲区高速缓存和访问方法与作为横向扩展服务实现的日志记录，存储和恢复分离。</p>
-<p>&emsp;&emsp;分布式系统：首先指出已经证明过的Brewer CAP定理，指出高度可用的系统无法在存在网络分区的情况下提供“强”的一致性保证。这个结果激发了作者对一致性目标的追求。并对相关工作进行总结，Bailis等人研究了提供高可用事务（HATs）的问题，该事务既不会在分区期间遭受不可用，也不会导致高网络延迟。他们表明可串行性，快照隔离和可重复读取隔离不符合HAT的要求，而大多数其他隔离级别都可以通过高可用性实现。Aurora通过简化假设，即在任何时候只有一个写入器使用从单个有序域分配的LSN生成日志更新来提供所有这些隔离级别。Google的Spanner提供外部一致的读写操作，并在一个时间戳上跨数据库提供全局一致的读取信息。这些功能使Spanner支持一致的备份，一致的分布式查询处理以及原子模式更新，所有这些都是在全球范围内进行的，甚至在正在进行的事务存在的情况下也是如此。Spanner专门针对Google的繁重工作负载，并依靠两阶段提交和两阶段锁定来进行读/写事务。</p>
-<p>&emsp;&emsp;并发控制：本文指出较弱的一致性和隔离模型在分布式数据库中是众所周知的，并导致了乐观的复制技术以及最终的一致性系统。集中式系统中的其他方法包括基于锁定的经典悲观方案，Hekaton中的多方案并发控制之类的乐观方案，VoltDB等分片方法和HyPer中的时间戳排序和Deuteronomy . Aurora的存储服务为数据库引擎提供了持久保留的本地磁盘的抽象，并允许引擎确定隔离和并发控制。</p>
-<p>&emsp;&emsp;日志结构存储：先介绍日志结构的起源，日志结构的存储系统由LFS 在1992年引入。并对最近的日志结构存储的相关工作进行总结，Deuteronomy 以及LLAMA 和Bw-Tree 的相关工作在存储引擎堆栈中以多种方式使用日志结构化技术。最后对本文提出的Aurora与Deuteronomy 进行横向比较说明。Aurora，通过编写增量而不是整个页面来减少写放大，Deuteronomy 和Aurora都实现纯重做日志记录，并跟踪最高稳定的LSN以确认提交。</p>
-<p>&emsp;&emsp;恢复：尽管传统数据库依赖于基于ARIES 的恢复协议，但是一些最近的系统已经选择了其他途径来提高性能。例如，Hekaton和VoltDB在崩溃后使用某种形式的更新日志来重建其内存状态。像Sinfonia这样的系统通过使用诸如进程对和状态机复制之类的技术来避免恢复。Graefe 描述了一种具有每页日志记录链的系统，该系统可以按需进行逐页重做，从而可以快速恢复。与Aurora一样，Deuteronomy 不需要重做恢复。这是因为Deuteronomy 会延迟事务，因此只有已提交的更新才会发布到持久存储中。结果，与Aurora不同，Deuteronomy 中的交易规模可能受到限制。</p>
-<h3 id="6-总结建议"><a href="#6-总结建议" class="headerlink" title="6 总结建议"></a>6 总结建议</h3><p>&emsp;&emsp;在计算与存储分离的云基础设施之上，通过仅传输redo log，大幅减少跨网络的IO数据传输，将产生大量IO的数据页合并和持久化交由本地存储来解决，大幅减缓了网络延迟对数据库性能的影响。即使网络传输的速度不再是分布式数据库的瓶颈，这种“日志即数据“的思想也是有意义的，因为在分布式数据库中的计算，存储，网络中，网络通信的功耗是最大的。</p>
-<p>&emsp;&emsp;Aurora诞生的原因是在弹性伸缩的云环境下，传统的高吞吐<strong>OLTP</strong>数据库既不能保证可用性，又不能保证持久性。 <strong>Aurora</strong>的关键点在于将传统数据库中的存储与计算分离，具体而言，将日志部分下推到一个独立的分布式存储服务层。由于这种分离架构下，所有IO操作都是通过网络，网络将成为最大的瓶颈，因此Aurora集中精力优化网络以便提高系统吞吐能力。Aurora依靠Quorum模型，在性能影响可控的前提下，解决云环境下的各种异常错误。在Aurora中，日志处理技术减少了I/O写放大，异步提交协议避免了同步等待，同时分离的存储服务层还避免了离线故障恢复和检查点操作。</p>
-<p>&emsp; &emsp;Aurora相对于传统数据库有三大优势，首先，底层数据库存储是一个分布式存储服务，可以轻松应对故障；其次，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
-<p>&emsp;&emsp;批评性建议：</p>
-<p>&emsp;&emsp;1.在存储结构方面，论文中没有给出caching很明确的细节说明，Caching是位于了存储层内还是计算层内？读者只能靠猜测。如果在文中给出了具体的细节说明，可能对读者理解本文具有很大的帮助。</p>
-<p>&emsp;&emsp;2.Amazon Aurora是基于开源MySQL的数据库，理论上修改GPL协议的开源软件再开发一个新软件是需要开源的，但它本身没有开放源代码，是一个闭源数据库。</p>
-<p>&emsp;&emsp;3.为什么备机节点可以多达15个呢？是为了应对数据库的读负载还是作为故障转移的目标，需要这么多备机做备选？本文在15个备份节点的解释上不是很清楚，读后存有疑惑。</p>
-<p>下面引用两位专家对Aurora的评价：</p>
-<p>Percona Vadim Tkachenko: Aurora没有解决写拓展和分库分表的问题。（2017）</p>
-<p>Bill Karwin：Aurora不适合对具有二级索引的表进行大量写操作的场景。（2017）</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>SIGMOD</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Attacks Directories, Not Caches</title>
-    <url>/2020/07/17/Attacks-Directories-Not-Caches/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href>Attack Directories, Not Caches: Side-Channel Attacks in a Non-Inclusive World</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">Side Channel Attack</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">Attack, Cache</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">基于缓存的侧信道攻击在新型缓存的攻击实践</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="0-Main-idea"><a href="#0-Main-idea" class="headerlink" title="0. Main idea"></a>0. Main idea</h3>]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>side channel attack</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CloudMon</title>
-    <url>/2020/09/14/CloudMon/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href>CloudMon</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"><a href="https://chuliangweng.github.io/" target="_blank" rel="noopener">Cl.W</a></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">这篇文章信任hypervisor并在此基础上对guestVM进行保护，主要是从内存角度出发，针对rootkit攻击进行运行时检测。</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">System Security; Virtual Machine</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文构造一个动态的监控架构，并在此基础上保证guest VM 运行时的安全性，主要功能是在客户虚拟机中检测出rootkits攻击。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>​        本文构建了一个动态的监控架构，运行在特权级别，通过对guestVM内存的扫描，检测客户机是否受到rootkit攻击，从而保证guestVM的运行时安全性。利用虚拟化技术对客户机内存进行实时监控，且这些监控对于客户机是透明的，为了实现检测的有效与高效，本系统在性能和安全之间权衡。</p>
-<h4 id="Rootkit-攻击"><a href="#Rootkit-攻击" class="headerlink" title="Rootkit 攻击 "></a><font color="blue"><strong>Rootkit 攻击</strong> </font></h4><p>​        rootkit 能够以特权级指令访问 host，并且可以通过对系统进行更改隐藏自己的存在。</p>
-<p>​        检测rootkit，最好是对客户机透明，不更改客户机系统的前提下对其进行检测。</p>
-<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        假设VMM（hypervisor）与priviliged VM  是可信的，guest VM 会受到攻击，在开机阶段的安全性受到VMM的保护，并且对guest VM的攻击不会对privileged VM 的安全性造成影响。</p>
-<p>（有些保护是针对VMM的，但是这不在本文的考虑范围内，本文聚焦在对客户机的保护上）</p>
-<h3 id="CloudMon-系统设计"><a href="#CloudMon-系统设计" class="headerlink" title="CloudMon 系统设计"></a>CloudMon 系统设计</h3><p>​        目的是实现一个可以访问较低权限级别内存信息、检测潜在的攻击并且可以保证检测的实时性与系统性能。访问内存的操作实现是基于 Xen的xenctrl 库，这个库能够读取较低权限的内存（如guest VM的内存信息）。</p>
-<p>​        构建一个guest VM 内存的监控器，目标是对VM透明、高效且是瞬时性的，这种方式可行性是因为攻击者对VM内存任何的更改都是可见的。CloudMon扫描内核memory与寄存器，从而可以实时的检测内存状态变化。这是一个特权级别的VM，能够通过VMM访问其他VMs的内存信息，而不是单纯的一个安全的guest VM。</p>
-<p><img src="/2020/09/14/CloudMon/CloudMonArchitecture.png" width="400px" height="240px"></p>
-<p>​        从云中大量的攻击实例中提取rootkit攻击特征，并将该特征记录在Feature Lib中，通过比较RT Value 与 SV Table 中数值的差异情况，可以检测出系统调用表中的攻击情况，设置较小的检测时间间隔，可以近似实时的检测嵌入内核的 rootkit ，通过设置检测的时间间隔，可以控制性能开销。并且CloudMon会直接检索其内存，因此，包括DKSM 和Shadow Walker 在内的任何来宾内核rootkit都不会欺骗CloudMon。 </p>
-<font color="green">**获取开始地址信息**</font>
-
-<p>​        KV Searcher查找 guest VM 系统调用的起始地址，SV generator 通过扫描，比对通过大量OS攻击实例中获取到的攻击特征，从而可以判断出被攻击者。</p>
-<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a><font color="blue"><strong>实验环境</strong></font></h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>Xen</th>
-<th>priviliged VM</th>
-<th>guest VM</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Xen-3.4.2</td>
-<td>Ubuntu 9.04</td>
-<td>Ubuntu 8.04</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>已经存在的检测方式：</p>
-<ol>
-<li><p>获取guest OS的system.map信息</p>
-</li>
-<li><p>one-on-one 运行在guest VM上</p>
-</li>
-</ol>
-<h3 id="相关工作介绍"><a href="#相关工作介绍" class="headerlink" title="相关工作介绍"></a>相关工作介绍</h3><p>本文将对VM的保护机制分为了 out-of-VM  与 in-VM两种</p>
-<p>A类：out-of-VM</p>
-<ol>
-<li><p>利用受信任的VM充当监控器。OSck,是一种one-on-one的监控模式</p>
-</li>
-<li><p>XenKIMONO 在VM中聚集信息时会暂停OS的执行</p>
-</li>
-<li><p>vIPS 通过预先设置，这种检测规则需要有固定的检测时间间隔</p>
-</li>
-</ol>
-<p>B类：in-VM</p>
-<ol>
-<li><p>硬件虚拟化技术</p>
-</li>
-<li><p>Lares 在guest VM 中内置hooks（钩子函数）实时的检测虚拟机的安全（事件检测）</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>TC</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>Virtual Machine</tag>
-        <tag>System Security</tag>
       </tags>
   </entry>
   <entry>
@@ -1024,116 +918,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Dancing with Wolves</title>
-    <url>/2020/06/27/Dancing-with-Wolves/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://dl.acm.org/doi/pdf/10.1145/3050748.3050750" target="_blank" rel="noopener">Dancing with wolves</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Liang Deng,Nanjing University</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">对非可信的VMM进行事件监测</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">检测</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">通过ASR与IPR技术，ED-monitor可以及时、频繁地对VMM的监测</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="Main-idea"><a href="#Main-idea" class="headerlink" title="Main idea"></a>Main idea</h3><p>&emsp;&emsp;VMM的执行权限最高，一旦VMM受到威胁，那么其所处的整个云环境都会受到威胁。因此本文目标是对云计算中非可信的VMM实时攻击进行事件驱动监控。为了保证VMM事件监控的可靠性，需要保证monitor自身的可靠。在具体实现过程中，将VMM的特权级指令清空，并转移到monitor执行。通过IPR实现对VMM特权级指令的拦截，通过ASR技术防止VMM篡改hook函数位置和VMM自身的代码。</p>
-<p>&emsp;&emsp;Q: 为什么要提供事件监测？</p>
-<p>&emsp;&emsp;A: 因为对于瞬时攻击而言，仅通过轮询的方式对VMM进行完整性监测，很难捕捉到攻击的踪迹，但是基于事件的方式则可以对攻击所触发的事件进行拦截。</p>
-<p>本文是国家自然基金项目支持，代码并未开源。</p>
-<h3 id="ED-monitor"><a href="#ED-monitor" class="headerlink" title="ED-monitor"></a>ED-monitor</h3><p>&emsp;&emsp;实现事件监控对monitor的要求：monitor与VMM具有相同的执行权限（避免了不同权限之间转换带来的性能损失），monitor需要及时频繁地被调用。</p>
-<p>&emsp;&emsp;读到这里，感觉再往下深入就是解决几个问题：</p>
-<ol>
-<li><p>如何实现ASR？</p>
-</li>
-<li><p>如何实现IPR？</p>
-</li>
-<li><p>如何触发monitor？</p>
-<p>当需要在VMM中调用特权级指令的时候，会对monitor进行调用。</p>
-</li>
-<li><p>如何保证monitor的完整性？</p>
-<p>分为monitor memory完整性、控制流完整性和定制VMM调用monitor接口实现。</p>
-</li>
-<li><p>如何保证VMM不对自身hook函数的篡改？对hypervisor所有事件添加hook？</p>
-<p>采用W+X mapping policy对code hook的保护；</p>
-<p>使用SPT保护data hook.</p>
-</li>
-<li><p>安全性分析？</p>
-<p>几种保护机制可以满足安全的需求。可以实现对特权级指令的拦截、对其验证、防止对monitor的篡改，从而保证了monitor的完整性。IPR与ASR可以实现对原型的保护。</p>
-</li>
-<li><p>原型实现？</p>
-</li>
-</ol>
-<h3 id="0-Abstract"><a href="#0-Abstract" class="headerlink" title="0 Abstract"></a>0 Abstract</h3><p>高风险漏洞可能会使VMMS完全受损</p>
-<p>（这里提出的目的是说明在非信任环境中进行检测是十分必要的）</p>
-<p>VMM拥有最高执行权限，如果它被攻击的话，将会威胁整个环境，因此对VMM进行检测是必要的。</p>
-<p>main idea: 对云计算中非可信的VMM进行事件监控，不需要比VMM更高的特权级别也不需要特殊硬件的支持。</p>
-<h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h3><p>监控器应与VMM 处于相同的特权级别，并且在之间的转换上不能产生大量的时间代价</p>
-<p>且为了实现通过监控器就能捕获VMM的事件，需要保证监控器本身的完整性以及能够获取到VMM的事件，此时认为VMM是处于非可信状态的。</p>
-<p>Q: SMM不能读取MMU的配置，所以不适格作为事件驱动器的实现，也就是事件驱动监控器必须要获得MMU的配置？</p>
-<p>Q：这种基于事件驱动的监控，与时间依赖的关系？</p>
-<p>瞬时攻击能不能进行？</p>
-<p>本意：如果及时并且频繁的调用该监控器，那么就可以阻止瞬时攻击？</p>
-<p>当事件被触发就可以调用monitor，从而对VMM进行保护？</p>
-<p>当VMM访问监控器数据的时候，将会及时地调用监控程序进行完整性评估</p>
-<h3 id="2-Overview"><a href="#2-Overview" class="headerlink" title="2 Overview"></a>2 Overview</h3><h4 id="2-1-Threat-model"><a href="#2-1-Threat-model" class="headerlink" title="2.1 Threat model"></a>2.1 Threat model</h4><p>&emsp;&emsp;认为威胁来自于VMM，VMM拥有最高的执行权限，而且能够获取到内存或者磁盘中任意数据。如果VMM受到攻击的话，则攻击者具备VMM的权限，威胁整个机器。不考虑硬件威胁，开机过程也受信任。</p>
-<h4 id="2-2-Eventdriven-VMM-Monitoring"><a href="#2-2-Eventdriven-VMM-Monitoring" class="headerlink" title="2.2 Eventdriven VMM Monitoring"></a>2.2 Eventdriven VMM Monitoring</h4><p>hook 函数</p>
-<p>做什么的？</p>
-<p>钩子函数是置于VMM中的触发函数，目的是捕获指定的VMM事件行为，当产生这些行为的时候，VMM会运行钩子函数，从而激发对VMM完整性的检测。</p>
-<p>钩子函数通常如何设置？</p>
-<p>这些钩子函数可以是插入VMM代码中任意位置的代码挂钩（跳转指令），调用表内的数据挂钩或任何其他可以传输控制流的技术。</p>
-<h4 id="2-3-Placing-the-Monitor-in-the-Same-World"><a href="#2-3-Placing-the-Monitor-in-the-Same-World" class="headerlink" title="2.3 Placing the Monitor in the Same World"></a>2.3 Placing the Monitor in the Same World</h4><h4 id="2-4-Requirements-and-Challenges"><a href="#2-4-Requirements-and-Challenges" class="headerlink" title="2.4 Requirements and Challenges"></a>2.4 Requirements and Challenges</h4><p>保证ED-monitor 是受信任的，即保证monitor自身的完整性，该monitor不能被VMM篡改</p>
-<ol>
-<li><p>内存、控制流、入口</p>
-</li>
-<li><p>hook 函数的位置不应该别VMM篡改（这个如何实现？）【因为VMM有 最高执行权限】</p>
-</li>
-</ol>
-<h4 id="2-5-Our-Approach-Multual-Protection"><a href="#2-5-Our-Approach-Multual-Protection" class="headerlink" title="2.5 Our Approach: Multual-Protection"></a>2.5 Our Approach: Multual-Protection</h4><p>Q:这里写的比较简略，地址空间随机化如何能保证code和data？但VMM具备了最高执行权限，会有效果吗？（应用级别攻击）</p>
-<p>下文提到，VMM的权限可以获取到随机化后的monitor的remap，因此目前的ASR对事件的监控可能是无效的。本文的想法是限制VMM的特权指令，并让monitor代替执行最高权限。（这样VMM中进行最高权限的操作将会被monitor捕获）</p>
-<p>本文的解决方法是：同时使用ASR和本文提出的IPR（基于工具的指令限制）方法，IPR通过ASR保证对VMM最高权限操作的拦截与验证，同时ASR基于IPR减轻部分威胁（来自于谁的威胁？）</p>
-<p>ASR：这种技术主要是对进程的表、堆、主程序代码、静态数据段、共享库等所在的地址进行随机化。如果某些代码的位置固定，那么一份攻击成功的话，就可以应用到其他机器继续进行攻击。因此ASR技术可以降低攻击成功的概率，并且使得攻击难以移植。</p>
-<p>另：一种技术叫做ALSR，Address space layout randomization，地址空间布局随机化</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>VEE</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>System Security</tag>
-        <tag>Detection</tag>
-        <tag>Event-driven</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>DORY</title>
     <url>/2021/01/08/DORY/</url>
     <content><![CDATA[<div class="table-container">
@@ -1291,8 +1075,8 @@
       </tags>
   </entry>
   <entry>
-    <title>FHEW</title>
-    <url>/2020/08/13/FHEW/</url>
+    <title>CloudMon</title>
+    <url>/2020/09/14/CloudMon/</url>
     <content><![CDATA[<div class="table-container">
 <table>
 <thead>
@@ -1306,39 +1090,204 @@
 <tr>
 <td style="text-align:center">1</td>
 <td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://eprint.iacr.org/2014/816.pdf" target="_blank" rel="noopener">FHEW</a></td>
+<td style="text-align:center"><a href>CloudMon</a></td>
 </tr>
 <tr>
 <td style="text-align:center">2</td>
 <td style="text-align:center">作者信息</td>
-<td style="text-align:center">Centrum Wiskunde &amp; Informatica, Amsterdam</td>
+<td style="text-align:center"><a href="https://chuliangweng.github.io/" target="_blank" rel="noopener">Cl.W</a></td>
 </tr>
 <tr>
 <td style="text-align:center">3</td>
 <td style="text-align:center">核心内容</td>
-<td style="text-align:center">对全同态加密中 bootstraping 进行优化</td>
+<td style="text-align:center">这篇文章信任hypervisor并在此基础上对guestVM进行保护，主要是从内存角度出发，针对rootkit攻击进行运行时检测。</td>
 </tr>
 <tr>
 <td style="text-align:center">4</td>
 <td style="text-align:center">研究领域</td>
-<td style="text-align:center">同态加密</td>
+<td style="text-align:center">System Security; Virtual Machine</td>
 </tr>
 <tr>
 <td style="text-align:center">5</td>
 <td style="text-align:center">全文总览</td>
-<td style="text-align:center">优化影响同态加密效率的主要瓶颈——Gentry 的引导程序</td>
+<td style="text-align:center">本文构造一个动态的监控架构，并在此基础上保证guest VM 运行时的安全性，主要功能是在客户虚拟机中检测出rootkits攻击。</td>
 </tr>
 </tbody>
 </table>
 </div>
-<h3 id><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
+<p>​        本文构建了一个动态的监控架构，运行在特权级别，通过对guestVM内存的扫描，检测客户机是否受到rootkit攻击，从而保证guestVM的运行时安全性。利用虚拟化技术对客户机内存进行实时监控，且这些监控对于客户机是透明的，为了实现检测的有效与高效，本系统在性能和安全之间权衡。</p>
+<h4 id="Rootkit-攻击"><a href="#Rootkit-攻击" class="headerlink" title="Rootkit 攻击 "></a><font color="blue"><strong>Rootkit 攻击</strong> </font></h4><p>​        rootkit 能够以特权级指令访问 host，并且可以通过对系统进行更改隐藏自己的存在。</p>
+<p>​        检测rootkit，最好是对客户机透明，不更改客户机系统的前提下对其进行检测。</p>
+<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        假设VMM（hypervisor）与priviliged VM  是可信的，guest VM 会受到攻击，在开机阶段的安全性受到VMM的保护，并且对guest VM的攻击不会对privileged VM 的安全性造成影响。</p>
+<p>（有些保护是针对VMM的，但是这不在本文的考虑范围内，本文聚焦在对客户机的保护上）</p>
+<h3 id="CloudMon-系统设计"><a href="#CloudMon-系统设计" class="headerlink" title="CloudMon 系统设计"></a>CloudMon 系统设计</h3><p>​        目的是实现一个可以访问较低权限级别内存信息、检测潜在的攻击并且可以保证检测的实时性与系统性能。访问内存的操作实现是基于 Xen的xenctrl 库，这个库能够读取较低权限的内存（如guest VM的内存信息）。</p>
+<p>​        构建一个guest VM 内存的监控器，目标是对VM透明、高效且是瞬时性的，这种方式可行性是因为攻击者对VM内存任何的更改都是可见的。CloudMon扫描内核memory与寄存器，从而可以实时的检测内存状态变化。这是一个特权级别的VM，能够通过VMM访问其他VMs的内存信息，而不是单纯的一个安全的guest VM。</p>
+<p><img src="/2020/09/14/CloudMon/CloudMonArchitecture.png" width="400px" height="240px"></p>
+<p>​        从云中大量的攻击实例中提取rootkit攻击特征，并将该特征记录在Feature Lib中，通过比较RT Value 与 SV Table 中数值的差异情况，可以检测出系统调用表中的攻击情况，设置较小的检测时间间隔，可以近似实时的检测嵌入内核的 rootkit ，通过设置检测的时间间隔，可以控制性能开销。并且CloudMon会直接检索其内存，因此，包括DKSM 和Shadow Walker 在内的任何来宾内核rootkit都不会欺骗CloudMon。 </p>
+<font color="green">**获取开始地址信息**</font>
+
+<p>​        KV Searcher查找 guest VM 系统调用的起始地址，SV generator 通过扫描，比对通过大量OS攻击实例中获取到的攻击特征，从而可以判断出被攻击者。</p>
+<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a><font color="blue"><strong>实验环境</strong></font></h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Xen</th>
+<th>priviliged VM</th>
+<th>guest VM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xen-3.4.2</td>
+<td>Ubuntu 9.04</td>
+<td>Ubuntu 8.04</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>已经存在的检测方式：</p>
+<ol>
+<li><p>获取guest OS的system.map信息</p>
+</li>
+<li><p>one-on-one 运行在guest VM上</p>
+</li>
+</ol>
+<h3 id="相关工作介绍"><a href="#相关工作介绍" class="headerlink" title="相关工作介绍"></a>相关工作介绍</h3><p>本文将对VM的保护机制分为了 out-of-VM  与 in-VM两种</p>
+<p>A类：out-of-VM</p>
+<ol>
+<li><p>利用受信任的VM充当监控器。OSck,是一种one-on-one的监控模式</p>
+</li>
+<li><p>XenKIMONO 在VM中聚集信息时会暂停OS的执行</p>
+</li>
+<li><p>vIPS 通过预先设置，这种检测规则需要有固定的检测时间间隔</p>
+</li>
+</ol>
+<p>B类：in-VM</p>
+<ol>
+<li><p>硬件虚拟化技术</p>
+</li>
+<li><p>Lares 在guest VM 中内置hooks（钩子函数）实时的检测虚拟机的安全（事件检测）</p>
+</li>
+</ol>
+]]></content>
       <categories>
         <category>paper</category>
-        <category>Cryptographic Techniques</category>
+        <category>TC</category>
       </categories>
       <tags>
         <tag>论文解读</tag>
-        <tag>Homomorphic</tag>
+        <tag>Virtual Machine</tag>
+        <tag>System Security</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Dancing with Wolves</title>
+    <url>/2020/06/27/Dancing-with-Wolves/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://dl.acm.org/doi/pdf/10.1145/3050748.3050750" target="_blank" rel="noopener">Dancing with wolves</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Liang Deng,Nanjing University</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">对非可信的VMM进行事件监测</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">检测</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">通过ASR与IPR技术，ED-monitor可以及时、频繁地对VMM的监测</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Main-idea"><a href="#Main-idea" class="headerlink" title="Main idea"></a>Main idea</h3><p>&emsp;&emsp;VMM的执行权限最高，一旦VMM受到威胁，那么其所处的整个云环境都会受到威胁。因此本文目标是对云计算中非可信的VMM实时攻击进行事件驱动监控。为了保证VMM事件监控的可靠性，需要保证monitor自身的可靠。在具体实现过程中，将VMM的特权级指令清空，并转移到monitor执行。通过IPR实现对VMM特权级指令的拦截，通过ASR技术防止VMM篡改hook函数位置和VMM自身的代码。</p>
+<p>&emsp;&emsp;Q: 为什么要提供事件监测？</p>
+<p>&emsp;&emsp;A: 因为对于瞬时攻击而言，仅通过轮询的方式对VMM进行完整性监测，很难捕捉到攻击的踪迹，但是基于事件的方式则可以对攻击所触发的事件进行拦截。</p>
+<p>本文是国家自然基金项目支持，代码并未开源。</p>
+<h3 id="ED-monitor"><a href="#ED-monitor" class="headerlink" title="ED-monitor"></a>ED-monitor</h3><p>&emsp;&emsp;实现事件监控对monitor的要求：monitor与VMM具有相同的执行权限（避免了不同权限之间转换带来的性能损失），monitor需要及时频繁地被调用。</p>
+<p>&emsp;&emsp;读到这里，感觉再往下深入就是解决几个问题：</p>
+<ol>
+<li><p>如何实现ASR？</p>
+</li>
+<li><p>如何实现IPR？</p>
+</li>
+<li><p>如何触发monitor？</p>
+<p>当需要在VMM中调用特权级指令的时候，会对monitor进行调用。</p>
+</li>
+<li><p>如何保证monitor的完整性？</p>
+<p>分为monitor memory完整性、控制流完整性和定制VMM调用monitor接口实现。</p>
+</li>
+<li><p>如何保证VMM不对自身hook函数的篡改？对hypervisor所有事件添加hook？</p>
+<p>采用W+X mapping policy对code hook的保护；</p>
+<p>使用SPT保护data hook.</p>
+</li>
+<li><p>安全性分析？</p>
+<p>几种保护机制可以满足安全的需求。可以实现对特权级指令的拦截、对其验证、防止对monitor的篡改，从而保证了monitor的完整性。IPR与ASR可以实现对原型的保护。</p>
+</li>
+<li><p>原型实现？</p>
+</li>
+</ol>
+<h3 id="0-Abstract"><a href="#0-Abstract" class="headerlink" title="0 Abstract"></a>0 Abstract</h3><p>高风险漏洞可能会使VMMS完全受损</p>
+<p>（这里提出的目的是说明在非信任环境中进行检测是十分必要的）</p>
+<p>VMM拥有最高执行权限，如果它被攻击的话，将会威胁整个环境，因此对VMM进行检测是必要的。</p>
+<p>main idea: 对云计算中非可信的VMM进行事件监控，不需要比VMM更高的特权级别也不需要特殊硬件的支持。</p>
+<h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h3><p>监控器应与VMM 处于相同的特权级别，并且在之间的转换上不能产生大量的时间代价</p>
+<p>且为了实现通过监控器就能捕获VMM的事件，需要保证监控器本身的完整性以及能够获取到VMM的事件，此时认为VMM是处于非可信状态的。</p>
+<p>Q: SMM不能读取MMU的配置，所以不适格作为事件驱动器的实现，也就是事件驱动监控器必须要获得MMU的配置？</p>
+<p>Q：这种基于事件驱动的监控，与时间依赖的关系？</p>
+<p>瞬时攻击能不能进行？</p>
+<p>本意：如果及时并且频繁的调用该监控器，那么就可以阻止瞬时攻击？</p>
+<p>当事件被触发就可以调用monitor，从而对VMM进行保护？</p>
+<p>当VMM访问监控器数据的时候，将会及时地调用监控程序进行完整性评估</p>
+<h3 id="2-Overview"><a href="#2-Overview" class="headerlink" title="2 Overview"></a>2 Overview</h3><h4 id="2-1-Threat-model"><a href="#2-1-Threat-model" class="headerlink" title="2.1 Threat model"></a>2.1 Threat model</h4><p>&emsp;&emsp;认为威胁来自于VMM，VMM拥有最高的执行权限，而且能够获取到内存或者磁盘中任意数据。如果VMM受到攻击的话，则攻击者具备VMM的权限，威胁整个机器。不考虑硬件威胁，开机过程也受信任。</p>
+<h4 id="2-2-Eventdriven-VMM-Monitoring"><a href="#2-2-Eventdriven-VMM-Monitoring" class="headerlink" title="2.2 Eventdriven VMM Monitoring"></a>2.2 Eventdriven VMM Monitoring</h4><p>hook 函数</p>
+<p>做什么的？</p>
+<p>钩子函数是置于VMM中的触发函数，目的是捕获指定的VMM事件行为，当产生这些行为的时候，VMM会运行钩子函数，从而激发对VMM完整性的检测。</p>
+<p>钩子函数通常如何设置？</p>
+<p>这些钩子函数可以是插入VMM代码中任意位置的代码挂钩（跳转指令），调用表内的数据挂钩或任何其他可以传输控制流的技术。</p>
+<h4 id="2-3-Placing-the-Monitor-in-the-Same-World"><a href="#2-3-Placing-the-Monitor-in-the-Same-World" class="headerlink" title="2.3 Placing the Monitor in the Same World"></a>2.3 Placing the Monitor in the Same World</h4><h4 id="2-4-Requirements-and-Challenges"><a href="#2-4-Requirements-and-Challenges" class="headerlink" title="2.4 Requirements and Challenges"></a>2.4 Requirements and Challenges</h4><p>保证ED-monitor 是受信任的，即保证monitor自身的完整性，该monitor不能被VMM篡改</p>
+<ol>
+<li><p>内存、控制流、入口</p>
+</li>
+<li><p>hook 函数的位置不应该别VMM篡改（这个如何实现？）【因为VMM有 最高执行权限】</p>
+</li>
+</ol>
+<h4 id="2-5-Our-Approach-Multual-Protection"><a href="#2-5-Our-Approach-Multual-Protection" class="headerlink" title="2.5 Our Approach: Multual-Protection"></a>2.5 Our Approach: Multual-Protection</h4><p>Q:这里写的比较简略，地址空间随机化如何能保证code和data？但VMM具备了最高执行权限，会有效果吗？（应用级别攻击）</p>
+<p>下文提到，VMM的权限可以获取到随机化后的monitor的remap，因此目前的ASR对事件的监控可能是无效的。本文的想法是限制VMM的特权指令，并让monitor代替执行最高权限。（这样VMM中进行最高权限的操作将会被monitor捕获）</p>
+<p>本文的解决方法是：同时使用ASR和本文提出的IPR（基于工具的指令限制）方法，IPR通过ASR保证对VMM最高权限操作的拦截与验证，同时ASR基于IPR减轻部分威胁（来自于谁的威胁？）</p>
+<p>ASR：这种技术主要是对进程的表、堆、主程序代码、静态数据段、共享库等所在的地址进行随机化。如果某些代码的位置固定，那么一份攻击成功的话，就可以应用到其他机器继续进行攻击。因此ASR技术可以降低攻击成功的概率，并且使得攻击难以移植。</p>
+<p>另：一种技术叫做ALSR，Address space layout randomization，地址空间布局随机化</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>VEE</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>System Security</tag>
+        <tag>Detection</tag>
+        <tag>Event-driven</tag>
       </tags>
   </entry>
   <entry>
@@ -1389,6 +1338,57 @@
       </categories>
       <tags>
         <tag>论文解读</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>FHEW</title>
+    <url>/2020/08/13/FHEW/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://eprint.iacr.org/2014/816.pdf" target="_blank" rel="noopener">FHEW</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Centrum Wiskunde &amp; Informatica, Amsterdam</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">对全同态加密中 bootstraping 进行优化</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">同态加密</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">优化影响同态加密效率的主要瓶颈——Gentry 的引导程序</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Cryptographic Techniques</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Homomorphic</tag>
       </tags>
   </entry>
   <entry>
@@ -1560,253 +1560,6 @@
       <tags>
         <tag>论文解读</tag>
         <tag>Protocol</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
-    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
-    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
-<ul>
-<li><strong>Active Monitoring（Synchronous）</strong></li>
-</ul>
-<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
-<ul>
-<li><strong>Passive Monitoring （Asynchronous）</strong></li>
-</ul>
-<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>虚拟化安全</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MIT-log-1-启动PC</title>
-    <url>/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/</url>
-    <content><![CDATA[<h3 id="Part-1-PC-BootStrap"><a href="#Part-1-PC-BootStrap" class="headerlink" title="Part 1: PC BootStrap"></a>Part 1: PC BootStrap</h3><p><strong>PC物理地址空间</strong></p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">+------------------+  <- 0xFFFFFFFF (4GB)
-|      32-bit      |
-|  memory mapped   |
-|     devices      |
-|                  |
-/\/\/\/\/\/\/\/\/\/\
-
-/\/\/\/\/\/\/\/\/\/\
-|                  |
-|      Unused      |
-|                  |
-+------------------+  <- depends on amount of RAM
-|                  |
-|                  |
-| Extended Memory  |
-|                  |
-|                  |
-+------------------+  <- 0x00100000 (1MB)
-|     BIOS ROM     |
-+------------------+  <- 0x000F0000 (960KB)
-|  16-bit devices, |
-|  expansion ROMs  |
-+------------------+  <- 0x000C0000 (768KB)
-|   VGA Display    |
-+------------------+  <- 0x000A0000 (640KB)
-|                  |
-|    Low Memory    |
-|                  |
-+------------------+  <- 0x00000000
-</code></pre>
-<h4 id="利用Qemu和gdb实现对OS的debug"><a href="#利用Qemu和gdb实现对OS的debug" class="headerlink" title="利用Qemu和gdb实现对OS的debug"></a>利用Qemu和gdb实现对OS的debug</h4><h5 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h5><ol>
-<li><p>打开一个终端，在lab目录下输入 <code>make qemu-gdb</code></p>
-<p><img src="/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/gdb-1.png" height="100"></p>
-</li>
-<li><p>在另一个终端中进入lab目录下，输入<code>gdb</code>即可</p>
-<p><img src="/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/gdb-2.png" height="400"></p>
-</li>
-</ol>
-<p>此时，便可以进行调试了。</p>
-<p>&emsp; &emsp;在OS启动时，第一段加载的第一段程序是BIOS，BIOS的操作就是在控制、初始化、检测各种底层的设备，如：时钟，GDTR寄存器、设置中断向量表等，最重要的功能就是<strong>把操作系统从此磁盘中导入内存，然后把控制权交给操作系统。</strong>所以BIOS在运行的最后会去检测可以从当前系统的哪个设备中找到操作系统，通常来说是我们的磁盘。当BIOS确定操作系统位于磁盘中，那么它就会把这个磁盘的第一个扇区，通常把它叫做启动区（boot sector）先加载到内存中，这个启动区中包括一个非常重要的程序—<strong>boot loader，</strong>它会负责完成整个操作系统从磁盘导入内存的工作，以及一些其他的非常重要的配置工作。最后操作系统才会开始运行。</p>
-<p>可见PC启动后的运行顺序为<code>BIOS --&gt; boot loader--&gt; OS内核</code></p>
-<h5 id="Exercise-2"><a href="#Exercise-2" class="headerlink" title="Exercise 2:"></a>Exercise 2:</h5><p>在gdb窗口中显示出PC机启动后运行BIOS的第一条命令为</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">1. [f000:fff0]    0xffff0: ljmp   $0xf000,$0xe05b
-</code></pre>
-<p>&emsp; &emsp; 这是运行的第一条指令，为跳转指令，目标是<code>0xfe05b</code>. 当PC机启动后，CPU运行在实模式(real mode)<sup><a href="#fn_实模式" id="reffn_实模式">实模式</a></sup>下，而当进入操作系统内核后，将会运行在保护模式(protected mode)下[2]。其中实模式是早期CPU（如8088处理器）的工作模式，这类处理器只有20根地址线，所以只能访问<code>1MB</code>的内存空间。但是，CPU不断的发展，之后的<code>80286/80386</code>已经具备32根地址线，能够访问<code>4GB</code>的内存空间，为了能够很好的管理内存空间，提出了保护模式。所以现在的处理器都是工作在保护模式下的，但为了向后兼容，即原来的8088处理器的软件仍能够运行在现代处理器上，现代处理器的CPU在启动过程中都处于实模式，启动完成后进入保护模式。<code>BIOS</code>就是PC刚启动时运行的软件，所以工作在实模式下。</p>
-<p>&emsp; &emsp; 实模式下的地址：<code>段基址：段内偏移</code>，其中这两个字段的值都存放在寄存器中，段基地址必须存放在段寄存器中，如CS(代码段), DS(数据段), SS(堆栈段), ES(扩展段)。</p>
-<p> &emsp; &emsp; 由于8088CPU 寄存器中都是16位，而CPU总线是20位，则需要通过16位的寄存器拼接得到20位的地址：把段寄存器中值左移4位，形成20位段基址，然后和16位段内偏移地址相加，得到20位的真实地址，如：<code>0xf000&lt;&lt;4+0xe05b=0xfe05b</code></p>
-<p>使用gdb进行调试：<code>si</code> 查看下一条指令</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">2. [f000:e05b]    0xfe05b: cmpl   $0x0,%cs:0x6ac8
-</code></pre>
-<p>&emsp;&emsp; 把<code>0x0</code> 这个立即数 与 <code>%cs:0x6ac8</code>代表的内存地址处的值进行比较。其中<code>% cs</code>代表CS段寄存器中的值。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">3. [f000:e062]    0xfe062: jne    0xfd2e1
-</code></pre>
-<p>&emsp;&emsp; <code>jne</code>指令：如果ZF标志位为0的时候跳转，即上一条指令 <code>cmpl</code> 的结果不是0 的时候跳转，即 <code>%cs:0x6ac8</code> 地址处的值不是 <code>0x0</code>的时候跳转。</p>
-<blockquote>
-<p><code>cmpl</code>指令是将两个操作数相减，但计算结果不保存，只是更具计算结果改变<code>eflags</code>的标志位，如果两个操作数相同，则计算结果为0，ZF标志位为1 。</p>
-<p><code>gdb</code>查看寄存器中数值：</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">(gdb) info registers
-eax            0x0      0
-ecx            0x0      0
-edx            0x663    1635
-ebx            0x0      0
-esp            0x0      0x0
-ebp            0x0      0x0
-esi            0x0      0
-edi            0x0      0
-eip            0xe062   0xe062
-eflags         0x46     [ PF ZF ]
-cs             0xf000   61440
-ss             0x0      0
-ds             0x0      0
-es             0x0      0
-fs             0x0      0
-gs             0x0      0
-</code></pre>
-<p><code>gdb</code>查看内存信息：</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">(gdb) x 0xfe05b
-   0xfe05b:     cmpl   $0x0,%cs:0x6ac8
-(gdb) x 0xfe062
-   0xfe062:     jne    0xfd2e1
-</code></pre>
-</blockquote>
-<pre class=" language-lang-shell"><code class="language-lang-shell">4. [f000:e066]    0xfe066: xor    %dx,%dx
-</code></pre>
-<p>&emsp;&emsp; 下一条指令的地址为<code>0xfe066</code>，可见并没有发生指令跳转，该指令功能是把dx寄存器内容清零。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">5. [f000:e068]    0xfe068: mov    %dx,%ss
-6. [f000:e06a]    0xfe06a: mov    $0x7000,%esp
-7. [f000:e070]    0xfe070: mov    $0xf34c2,%edx
-8. [f000:e076]    0xfe076: jmp    0xfd15c  # 跳转到绝对地址
-9. [f000:d15c]    0xfd15c: mov    %eax,%ecx
-</code></pre>
-<p>&emsp; &emsp; 设置寄存器中的数值。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">10. [f000:d15f]    0xfd15f: cli
-</code></pre>
-<p>&emsp;&emsp; 关闭中断指令。PC启动时的操作是比较关键的，关中断指令用于关闭那些可以屏蔽的中断。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">11. [f000:d160]    0xfd160: cld
-</code></pre>
-<p>&emsp; &emsp; 设置方向标识位为0，表示后续的串操作 [3] 比如MOVS操作，内存地址的变化方向，如果为0代表从低地址值变为高地址。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">12. [f000:d161]    0xfd161: mov    $0x8f,%eax
-# (gdb) info register eax
-# eax            0x0      0
-13. [f000:d167]    0xfd167: out    %al,$0x70
-# (gdb) info register eax
-# eax            0x8f     143
-14. [f000:d169]    0xfd169: in     $0x71,%al
-# (gdb) info register al
-# al             0x8f     -113
-</code></pre>
-<p>&emsp; &emsp; CPU与外部设备通讯时，通常是通过访问、修改设备控制器中的寄存器来实现的。那么这些位于设备控制器当中的寄存器也叫做<strong>IO端口</strong>。为了方便管理，80x86CPU采用IO端口单独编址的方式，即所有设备的端口都被命名到一个IO端口地址空间中。这个空间是独立于内存地址空间的。所以必须采用和访问内存的指令不一样的指令来访问端口。</p>
-<blockquote>
-<p>在向0x70端口写入值后，必须对0x71端口有操作(这里正好选用了in操作)，否则RTC就会处于an unknown state之中.</p>
-</blockquote>
-<pre class=" language-lang-shell"><code class="language-lang-shell">out %al,PortAddress #把al寄存器中值写到端口PortAddress
-in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
-# 标准规定，端口操作必须用到al/ax寄存器作为缓冲
-</code></pre>
-<p>&emsp; &emsp; 三条命令就是要操作端口0x70，0x71，根据清单[4] 中内容，可以知道0x70端口和0x71端口是用于控制系统中一个叫做CMOS的设备，这个设备是一个低功耗的存储设备，它可以用于在计算机关闭时存储一些信息，它是由独立的电池供电的[5]。 这个CMOS中可以控制跟PC相关的多个功能，其中最重要的就是<strong>时钟设备（Real Time Clock）</strong>的 ，它还可以控制是否<strong>响应不可屏蔽中断NMI(Non-Maskable Interrupt)</strong>。操作CMOS存储器中的内容需要两个端口，一个是0x70另一个就是0x71。其中0x70可以叫做索引寄存器，<strong>这个8位寄存器的最高位是不可屏蔽中断(NMI)使能位。如果你把这个位置1，则NMI不会被响应。低7位用于指定CMOS存储器中的存储单元地址</strong>，所以如果你想访问第1号存储单元，并且在访问时，我要使能NMI，那么你就应该向端口0x70里面送入0b10000001 = 0x81。</p>
-<p>&emsp; &emsp; 这三条指令可以看出，它首先关闭了NMI中断，并且要访问存储单元0xF的值，并且把值读到al中，但是在后面我们发现这个值并没有被利用，所以可以认为<strong>这三条指令是用来关闭NMI中断的。</strong></p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">15. [f000:d16b]    0xfd16b: in     $0x92,%al 
-# (gdb) info register al
-# al             0x0      0
-16. [f000:d16d]    0xfd16d: or     $0x2,%al
-17. [f000:d16f]    0xfd16f: out    %al,$0x92
-# (gdb) info register al
-# al             0x2      2
-</code></pre>
-<p>&emsp; &emsp; 它控制的是 PS/2系统控制端口A，而第16，17步的操作是在把这个端口的1号bit置为1。这个端口的bit1的功能是<code>bit 1= 1 indicates A20 active</code>,即A20位，即第21个地址线被使能，如果A20地址线被激活，那么系统工作在保护模式下。但是在之后的boot loader程序中，计算机首先要工作在实模式下啊。所以这里的这个操作，根据[6]应该是去测试可用内存空间。在boot loader之前，它肯定还会转换回实模式。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">or # 只要有一个输入位是 1，则输出位就是 1
-</code></pre>
-<pre class=" language-lang-shell"><code class="language-lang-shell">18. [f000:d171]    0xfd171: lidtw  %cs:0x6ab8
-</code></pre>
-<p>&emsp; &emsp; 加载中断向量表寄存器(IDTR)。这个指令会把从地址0xf6ab8起始的后面6个字节的数据读入到中断向量表寄存器(IDTR)中。中断是操作系统中非常重要的一部分，有了中断操作系统才能真正实现进程。每一种中断都有自己对应的中断处理程序，那么这个中断的处理程序的首地址就叫做这个中断的中断向量。中断向量表[7]是存放所有中断向量的表。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">19. [f000:d177]    0xfd177: lgdtw  %cs:0x6a74
-</code></pre>
-<p>&emsp; &emsp; 把从<code>0xf6a74</code>为起始地址处的6个字节的值加载到全局描述符表格寄存器中GDTR中.</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">20. [f000:d17d]    0xfd17d: mov    %cr0,%eax
-21. [f000:d180]    0xfd180: or     $0x1,%eax
-22. [f000:d184]    0xfd184: mov    %eax,%cr0
-</code></pre>
-<p>&emsp; &emsp; 计算机中包含CR0-CR3四个控制寄存器，用来控制和确定处理器的操作模式。其中这三个语句的操作是要把CR0寄存器的最低位(0bit)置1。CR0寄存器的0bit是PE位，启动保护位，当该位被置1，代表开启了保护模式。但是这里出现了问题，我们刚刚说过BIOS是工作在实模式之下，后面的boot loader开始的时候也是工作在实模式下，所以这里把它切换为保护模式，显然是自相矛盾。所以只能推测它在检测机器是否能工作在保护模式下。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">23. [f000:d187]    0xfd187: ljmpl  $0x8,$0xfd18f
-# The target architecture is assumed to be i386
-24. => 0xfd18f:     mov    $0x10,%eax
-25. => 0xfd194:     mov    %eax,%ds
-26. => 0xfd196:     mov    %eax,%es
-27. => 0xfd198:     mov    %eax,%ss
-28. => 0xfd19a:     mov    %eax,%fs
-29. => 0xfd19c:     mov    %eax,%gs
-</code></pre>
-<p>&emsp; &emsp; 这里的23~29步之所以这么做是按照规定来的，[8]中指出，如果刚刚加载完GDTR寄存器我们必须要重新加载所有的段寄存器的值，而其中CS段寄存器必须通过长跳转指令，即23号指令来进行加载。所以这些步骤是在第19步完成后必须要做的。这样才能是GDTR的值生效。</p>
-<h3 id="Part-2-引导加载程序"><a href="#Part-2-引导加载程序" class="headerlink" title="Part 2: 引导加载程序"></a>Part 2: 引导加载程序</h3><h3 id="Part-3-内核"><a href="#Part-3-内核" class="headerlink" title="Part 3: 内核"></a>Part 3: 内核</h3><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>[1] <a href="https://github.com/shishujuan/mit6.828-2017.git" target="_blank" rel="noopener">https://github.com/shishujuan/mit6.828-2017.git</a></p>
-<p>[2] <a href="https://blog.csdn.net/zdwzzu2006/article/details/4030948" target="_blank" rel="noopener">https://blog.csdn.net/zdwzzu2006/article/details/4030948</a></p>
-<p>[3] <a href="https://www.cnblogs.com/cykun/archive/2010/10/27/1862940.html" target="_blank" rel="noopener">https://www.cnblogs.com/cykun/archive/2010/10/27/1862940.html</a></p>
-<p>[4] <a href="http://bochs.sourceforge.net/techspec/PORTS.LST" target="_blank" rel="noopener">http://bochs.sourceforge.net/techspec/PORTS.LST</a></p>
-<p>[5] <a href="http://wiki.osdev.org/CMOS" target="_blank" rel="noopener">http://wiki.osdev.org/CMOS</a></p>
-<p>[6] <a href="http://kernelx.weebly.com/a20-address-line.html" target="_blank" rel="noopener">http://kernelx.weebly.com/a20-address-line.html</a></p>
-<p>[7] <a href="http://wiki.osdev.org/Interrupt_Descriptor_Table" target="_blank" rel="noopener">http://wiki.osdev.org/Interrupt_Descriptor_Table</a> </p>
-<p>[8] <a href="https://en.wikibooks.org/wiki/X86_Assembly/Global_Descriptor_Table" target="_blank" rel="noopener">https://en.wikibooks.org/wiki/X86_Assembly/Global_Descriptor_Table</a></p>
-<p>[9] <a href="https://blog.csdn.net/a747979985/article/details/94334901" target="_blank" rel="noopener">https://blog.csdn.net/a747979985/article/details/94334901</a></p>
-<p>[10] <a href="https://wenku.baidu.com/view/fe595521bb68a98271fefad4?pcf=2&amp;fromShare=1&amp;fr=copy&amp;copyfr=copylinkpop" target="_blank" rel="noopener">https://wenku.baidu.com/view/fe595521bb68a98271fefad4?pcf=2&amp;fromShare=1&amp;fr=copy&amp;copyfr=copylinkpop</a></p>
-<p> <sup><a href="#fn_实模式" id="reffn_实模式">实模式</a></sup>： 实模式采用 16 位寻址模式，在该模式中，最大寻址空间为 1MB，最大分段为 64KB。 由于处理器的设计需要考虑到兼容问题，8086 处理器地址总线扩展到 20 位，但CPU的ALU宽度(数据总线)却只有 16 位，也就是说直接参与运算的数值都是 16 位的。为支持 1MB 寻址空间，8086 处理器在实模式下引入了分段方法。在处理器中设置了四个 16 位的段寄存器:CS、DS、SS、ES，对 应于地址总线中的高 16 位。寻址时，采用以下公式计算实际访问的物理内存地址，这样，便实现了 16 位内存地址到 20 位物理地址的转换。</p>
-]]></content>
-      <tags>
-        <tag>lab</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MIT log 0 内存管理实验环境</title>
-    <url>/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/</url>
-    <content><![CDATA[<h3 id="内存实验环境搭建"><a href="#内存实验环境搭建" class="headerlink" title="内存实验环境搭建"></a>内存实验环境搭建</h3><p><strong>操作系统</strong>是计算机科学中十分重要的一门基础学科，是一名计算机专业毕业生必须要具备的基础知识。但是在学习这门课时，如果仅仅把目光停留在课本上一些关于操作系统概念上的叙述，并不能对操作系统有着深层次的理解。必须要结合动手实践，才能真正掌握核心的知识。<br>MIT的操作系统课程6.828是一门被广泛好评的入门课程。它最重要的特点就是它实践第一的教学原则。在这门课程中会涉及到非常丰富的实验，也会有非常多的动手机会。而且授课者更是亲自构建了一个简化的基于Unix内核的操作系统xv6。所有的实验都是在这个操作系统上完成。虽然它功能很简单，但是它能够帮助我们真正的了解操作系统在做什么[3]。<br>因此，以博客的形式记录自己学习6.828的过程，本系列博文尽量包括以下几个内容：</p>
-<ul>
-<li>所有实验的实验报告(Lab)</li>
-<li>所有实验中的练习(Exercise)</li>
-</ul>
-<p>下面开始实验环境的搭建：</p>
-<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h4><p>本次实验在ubuntu18系统上进行，所有的操作步骤都在Linux 操作系统上进行。</p>
-<h3 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h3><p>因为本实验的  操作系统是比较新的 Ubuntu18，其自带的软件版本可能比较新，对于此lab可能不太适配，所以需要对需要的软件进行一些配置。</p>
-<h4 id="gcc版本降级"><a href="#gcc版本降级" class="headerlink" title="gcc版本降级"></a>gcc版本降级</h4><p>目的： 将gcc 版本降级到 4.8 版本</p>
-<p>(1). 下载 <code>gcc/g++ 4.8</code></p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">apt-get install -y gcc-4.8
-apt-get install -y g++-4.8
-</code></pre>
-<p>(2). 链接gcc/g++实现降级</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">cd /usr/bin
-sudo rm gcc
-sudo ln -s gcc-4.8 gcc
-sudo rm g++
-sudo ln -s g++-4.8 g++
-</code></pre>
-<h4 id="编译qemu"><a href="#编译qemu" class="headerlink" title="编译qemu"></a>编译qemu</h4><p><strong>安装依赖</strong> [4]</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">apt-get install git build-essential binutils g++-multilib libgtk2.0-dev libtool-bin libsdl-dev -y
-</code></pre>
-<p><strong>下载qemu源码</strong></p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">git clone https://github.com/mit-pdos/6.828-qemu.git qemu
-</code></pre>
-<p><strong>下载 lab 源码</strong></p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">git clone https://pdos.csail.mit.edu/6.828/2018/jos.git lab # 只有第一实验的检查脚本
-</code></pre>
-<p><strong>安装步骤</strong></p>
-<p>进入<code>qemu</code>目录下</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">./configure --disable-kvm --target-list="i386-softmmu x86_64-softmmu"
-sudo make && make install
-</code></pre>
-<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu.png" height="260xp"></p>
-<p>它生成的最后一个信息 <code>mk obj/kern/kernel.img</code>，这个<code>kernel.img</code>就是内核映像文件，另外obj目录在make之前是没有的，它是make指令生成的，它里面将会有许多的文件我们之后会重点观察。编译完内核源码，我们就可以把它运行在<code>QEMU</code>上啦！[3]</p>
-<p><strong>安装结果测试</strong></p>
-<p>输入<code>/usr/local/bin/qemu-system-i386</code> 出现以下窗口则安装ok</p>
-<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu-test.png" height="300xp"></p>
-<p>在<code>lab</code>目录下输入  <code>make qemu</code> 出现如下结果</p>
-<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/make-qemu.png" height="300xp"></p>
-<p>至此，实验环境搭建完成！</p>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://os.vampire.rip/" target="_blank" rel="noopener">https://os.vampire.rip/</a></p>
-<p>[2] <a href="https://zhuanlan.zhihu.com/p/74028717" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/74028717</a></p>
-<p>[3] <a href="https://www.cnblogs.com/fatsheep9146/p/5060292.html" target="_blank" rel="noopener">https://www.cnblogs.com/fatsheep9146/p/5060292.html</a></p>
-<p>[4] <a href="https://www.cnblogs.com/gatsby123/p/9746193.html" target="_blank" rel="noopener">https://www.cnblogs.com/gatsby123/p/9746193.html</a></p>
-]]></content>
-      <tags>
-        <tag>lab</tag>
-        <tag>OS Memory</tag>
       </tags>
   </entry>
   <entry>
@@ -2116,6 +1869,267 @@ func main()  {
       </tags>
   </entry>
   <entry>
+    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
+    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
+    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
+<ul>
+<li><strong>Active Monitoring（Synchronous）</strong></li>
+</ul>
+<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
+<ul>
+<li><strong>Passive Monitoring （Asynchronous）</strong></li>
+</ul>
+<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>虚拟化安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MIT log 0 内存管理实验环境</title>
+    <url>/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/</url>
+    <content><![CDATA[<h3 id="内存实验环境搭建"><a href="#内存实验环境搭建" class="headerlink" title="内存实验环境搭建"></a>内存实验环境搭建</h3><p><strong>操作系统</strong>是计算机科学中十分重要的一门基础学科，是一名计算机专业毕业生必须要具备的基础知识。但是在学习这门课时，如果仅仅把目光停留在课本上一些关于操作系统概念上的叙述，并不能对操作系统有着深层次的理解。必须要结合动手实践，才能真正掌握核心的知识。<br>MIT的操作系统课程6.828是一门被广泛好评的入门课程。它最重要的特点就是它实践第一的教学原则。在这门课程中会涉及到非常丰富的实验，也会有非常多的动手机会。而且授课者更是亲自构建了一个简化的基于Unix内核的操作系统xv6。所有的实验都是在这个操作系统上完成。虽然它功能很简单，但是它能够帮助我们真正的了解操作系统在做什么[3]。<br>因此，以博客的形式记录自己学习6.828的过程，本系列博文尽量包括以下几个内容：</p>
+<ul>
+<li>所有实验的实验报告(Lab)</li>
+<li>所有实验中的练习(Exercise)</li>
+</ul>
+<p>下面开始实验环境的搭建：</p>
+<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h4><p>本次实验在ubuntu18系统上进行，所有的操作步骤都在Linux 操作系统上进行。</p>
+<h3 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h3><p>因为本实验的  操作系统是比较新的 Ubuntu18，其自带的软件版本可能比较新，对于此lab可能不太适配，所以需要对需要的软件进行一些配置。</p>
+<h4 id="gcc版本降级"><a href="#gcc版本降级" class="headerlink" title="gcc版本降级"></a>gcc版本降级</h4><p>目的： 将gcc 版本降级到 4.8 版本</p>
+<p>(1). 下载 <code>gcc/g++ 4.8</code></p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">apt-get install -y gcc-4.8
+apt-get install -y g++-4.8
+</code></pre>
+<p>(2). 链接gcc/g++实现降级</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">cd /usr/bin
+sudo rm gcc
+sudo ln -s gcc-4.8 gcc
+sudo rm g++
+sudo ln -s g++-4.8 g++
+</code></pre>
+<h4 id="编译qemu"><a href="#编译qemu" class="headerlink" title="编译qemu"></a>编译qemu</h4><p><strong>安装依赖</strong> [4]</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">apt-get install git build-essential binutils g++-multilib libgtk2.0-dev libtool-bin libsdl-dev -y
+</code></pre>
+<p><strong>下载qemu源码</strong></p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">git clone https://github.com/mit-pdos/6.828-qemu.git qemu
+</code></pre>
+<p><strong>下载 lab 源码</strong></p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">git clone https://pdos.csail.mit.edu/6.828/2018/jos.git lab # 只有第一实验的检查脚本
+</code></pre>
+<p><strong>安装步骤</strong></p>
+<p>进入<code>qemu</code>目录下</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">./configure --disable-kvm --target-list="i386-softmmu x86_64-softmmu"
+sudo make && make install
+</code></pre>
+<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu.png" height="260xp"></p>
+<p>它生成的最后一个信息 <code>mk obj/kern/kernel.img</code>，这个<code>kernel.img</code>就是内核映像文件，另外obj目录在make之前是没有的，它是make指令生成的，它里面将会有许多的文件我们之后会重点观察。编译完内核源码，我们就可以把它运行在<code>QEMU</code>上啦！[3]</p>
+<p><strong>安装结果测试</strong></p>
+<p>输入<code>/usr/local/bin/qemu-system-i386</code> 出现以下窗口则安装ok</p>
+<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu-test.png" height="300xp"></p>
+<p>在<code>lab</code>目录下输入  <code>make qemu</code> 出现如下结果</p>
+<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/make-qemu.png" height="300xp"></p>
+<p>至此，实验环境搭建完成！</p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://os.vampire.rip/" target="_blank" rel="noopener">https://os.vampire.rip/</a></p>
+<p>[2] <a href="https://zhuanlan.zhihu.com/p/74028717" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/74028717</a></p>
+<p>[3] <a href="https://www.cnblogs.com/fatsheep9146/p/5060292.html" target="_blank" rel="noopener">https://www.cnblogs.com/fatsheep9146/p/5060292.html</a></p>
+<p>[4] <a href="https://www.cnblogs.com/gatsby123/p/9746193.html" target="_blank" rel="noopener">https://www.cnblogs.com/gatsby123/p/9746193.html</a></p>
+]]></content>
+      <tags>
+        <tag>lab</tag>
+        <tag>OS Memory</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MIT-log-1-启动PC</title>
+    <url>/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/</url>
+    <content><![CDATA[<h3 id="Part-1-PC-BootStrap"><a href="#Part-1-PC-BootStrap" class="headerlink" title="Part 1: PC BootStrap"></a>Part 1: PC BootStrap</h3><p><strong>PC物理地址空间</strong></p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">+------------------+  <- 0xFFFFFFFF (4GB)
+|      32-bit      |
+|  memory mapped   |
+|     devices      |
+|                  |
+/\/\/\/\/\/\/\/\/\/\
+
+/\/\/\/\/\/\/\/\/\/\
+|                  |
+|      Unused      |
+|                  |
++------------------+  <- depends on amount of RAM
+|                  |
+|                  |
+| Extended Memory  |
+|                  |
+|                  |
++------------------+  <- 0x00100000 (1MB)
+|     BIOS ROM     |
++------------------+  <- 0x000F0000 (960KB)
+|  16-bit devices, |
+|  expansion ROMs  |
++------------------+  <- 0x000C0000 (768KB)
+|   VGA Display    |
++------------------+  <- 0x000A0000 (640KB)
+|                  |
+|    Low Memory    |
+|                  |
++------------------+  <- 0x00000000
+</code></pre>
+<h4 id="利用Qemu和gdb实现对OS的debug"><a href="#利用Qemu和gdb实现对OS的debug" class="headerlink" title="利用Qemu和gdb实现对OS的debug"></a>利用Qemu和gdb实现对OS的debug</h4><h5 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h5><ol>
+<li><p>打开一个终端，在lab目录下输入 <code>make qemu-gdb</code></p>
+<p><img src="/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/gdb-1.png" height="100"></p>
+</li>
+<li><p>在另一个终端中进入lab目录下，输入<code>gdb</code>即可</p>
+<p><img src="/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/gdb-2.png" height="400"></p>
+</li>
+</ol>
+<p>此时，便可以进行调试了。</p>
+<p>&emsp; &emsp;在OS启动时，第一段加载的第一段程序是BIOS，BIOS的操作就是在控制、初始化、检测各种底层的设备，如：时钟，GDTR寄存器、设置中断向量表等，最重要的功能就是<strong>把操作系统从此磁盘中导入内存，然后把控制权交给操作系统。</strong>所以BIOS在运行的最后会去检测可以从当前系统的哪个设备中找到操作系统，通常来说是我们的磁盘。当BIOS确定操作系统位于磁盘中，那么它就会把这个磁盘的第一个扇区，通常把它叫做启动区（boot sector）先加载到内存中，这个启动区中包括一个非常重要的程序—<strong>boot loader，</strong>它会负责完成整个操作系统从磁盘导入内存的工作，以及一些其他的非常重要的配置工作。最后操作系统才会开始运行。</p>
+<p>可见PC启动后的运行顺序为<code>BIOS --&gt; boot loader--&gt; OS内核</code></p>
+<h5 id="Exercise-2"><a href="#Exercise-2" class="headerlink" title="Exercise 2:"></a>Exercise 2:</h5><p>在gdb窗口中显示出PC机启动后运行BIOS的第一条命令为</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">1. [f000:fff0]    0xffff0: ljmp   $0xf000,$0xe05b
+</code></pre>
+<p>&emsp; &emsp; 这是运行的第一条指令，为跳转指令，目标是<code>0xfe05b</code>. 当PC机启动后，CPU运行在实模式(real mode)<sup><a href="#fn_实模式" id="reffn_实模式">实模式</a></sup>下，而当进入操作系统内核后，将会运行在保护模式(protected mode)下[2]。其中实模式是早期CPU（如8088处理器）的工作模式，这类处理器只有20根地址线，所以只能访问<code>1MB</code>的内存空间。但是，CPU不断的发展，之后的<code>80286/80386</code>已经具备32根地址线，能够访问<code>4GB</code>的内存空间，为了能够很好的管理内存空间，提出了保护模式。所以现在的处理器都是工作在保护模式下的，但为了向后兼容，即原来的8088处理器的软件仍能够运行在现代处理器上，现代处理器的CPU在启动过程中都处于实模式，启动完成后进入保护模式。<code>BIOS</code>就是PC刚启动时运行的软件，所以工作在实模式下。</p>
+<p>&emsp; &emsp; 实模式下的地址：<code>段基址：段内偏移</code>，其中这两个字段的值都存放在寄存器中，段基地址必须存放在段寄存器中，如CS(代码段), DS(数据段), SS(堆栈段), ES(扩展段)。</p>
+<p> &emsp; &emsp; 由于8088CPU 寄存器中都是16位，而CPU总线是20位，则需要通过16位的寄存器拼接得到20位的地址：把段寄存器中值左移4位，形成20位段基址，然后和16位段内偏移地址相加，得到20位的真实地址，如：<code>0xf000&lt;&lt;4+0xe05b=0xfe05b</code></p>
+<p>使用gdb进行调试：<code>si</code> 查看下一条指令</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">2. [f000:e05b]    0xfe05b: cmpl   $0x0,%cs:0x6ac8
+</code></pre>
+<p>&emsp;&emsp; 把<code>0x0</code> 这个立即数 与 <code>%cs:0x6ac8</code>代表的内存地址处的值进行比较。其中<code>% cs</code>代表CS段寄存器中的值。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">3. [f000:e062]    0xfe062: jne    0xfd2e1
+</code></pre>
+<p>&emsp;&emsp; <code>jne</code>指令：如果ZF标志位为0的时候跳转，即上一条指令 <code>cmpl</code> 的结果不是0 的时候跳转，即 <code>%cs:0x6ac8</code> 地址处的值不是 <code>0x0</code>的时候跳转。</p>
+<blockquote>
+<p><code>cmpl</code>指令是将两个操作数相减，但计算结果不保存，只是更具计算结果改变<code>eflags</code>的标志位，如果两个操作数相同，则计算结果为0，ZF标志位为1 。</p>
+<p><code>gdb</code>查看寄存器中数值：</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">(gdb) info registers
+eax            0x0      0
+ecx            0x0      0
+edx            0x663    1635
+ebx            0x0      0
+esp            0x0      0x0
+ebp            0x0      0x0
+esi            0x0      0
+edi            0x0      0
+eip            0xe062   0xe062
+eflags         0x46     [ PF ZF ]
+cs             0xf000   61440
+ss             0x0      0
+ds             0x0      0
+es             0x0      0
+fs             0x0      0
+gs             0x0      0
+</code></pre>
+<p><code>gdb</code>查看内存信息：</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">(gdb) x 0xfe05b
+   0xfe05b:     cmpl   $0x0,%cs:0x6ac8
+(gdb) x 0xfe062
+   0xfe062:     jne    0xfd2e1
+</code></pre>
+</blockquote>
+<pre class=" language-lang-shell"><code class="language-lang-shell">4. [f000:e066]    0xfe066: xor    %dx,%dx
+</code></pre>
+<p>&emsp;&emsp; 下一条指令的地址为<code>0xfe066</code>，可见并没有发生指令跳转，该指令功能是把dx寄存器内容清零。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">5. [f000:e068]    0xfe068: mov    %dx,%ss
+6. [f000:e06a]    0xfe06a: mov    $0x7000,%esp
+7. [f000:e070]    0xfe070: mov    $0xf34c2,%edx
+8. [f000:e076]    0xfe076: jmp    0xfd15c  # 跳转到绝对地址
+9. [f000:d15c]    0xfd15c: mov    %eax,%ecx
+</code></pre>
+<p>&emsp; &emsp; 设置寄存器中的数值。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">10. [f000:d15f]    0xfd15f: cli
+</code></pre>
+<p>&emsp;&emsp; 关闭中断指令。PC启动时的操作是比较关键的，关中断指令用于关闭那些可以屏蔽的中断。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">11. [f000:d160]    0xfd160: cld
+</code></pre>
+<p>&emsp; &emsp; 设置方向标识位为0，表示后续的串操作 [3] 比如MOVS操作，内存地址的变化方向，如果为0代表从低地址值变为高地址。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">12. [f000:d161]    0xfd161: mov    $0x8f,%eax
+# (gdb) info register eax
+# eax            0x0      0
+13. [f000:d167]    0xfd167: out    %al,$0x70
+# (gdb) info register eax
+# eax            0x8f     143
+14. [f000:d169]    0xfd169: in     $0x71,%al
+# (gdb) info register al
+# al             0x8f     -113
+</code></pre>
+<p>&emsp; &emsp; CPU与外部设备通讯时，通常是通过访问、修改设备控制器中的寄存器来实现的。那么这些位于设备控制器当中的寄存器也叫做<strong>IO端口</strong>。为了方便管理，80x86CPU采用IO端口单独编址的方式，即所有设备的端口都被命名到一个IO端口地址空间中。这个空间是独立于内存地址空间的。所以必须采用和访问内存的指令不一样的指令来访问端口。</p>
+<blockquote>
+<p>在向0x70端口写入值后，必须对0x71端口有操作(这里正好选用了in操作)，否则RTC就会处于an unknown state之中.</p>
+</blockquote>
+<pre class=" language-lang-shell"><code class="language-lang-shell">out %al,PortAddress #把al寄存器中值写到端口PortAddress
+in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
+# 标准规定，端口操作必须用到al/ax寄存器作为缓冲
+</code></pre>
+<p>&emsp; &emsp; 三条命令就是要操作端口0x70，0x71，根据清单[4] 中内容，可以知道0x70端口和0x71端口是用于控制系统中一个叫做CMOS的设备，这个设备是一个低功耗的存储设备，它可以用于在计算机关闭时存储一些信息，它是由独立的电池供电的[5]。 这个CMOS中可以控制跟PC相关的多个功能，其中最重要的就是<strong>时钟设备（Real Time Clock）</strong>的 ，它还可以控制是否<strong>响应不可屏蔽中断NMI(Non-Maskable Interrupt)</strong>。操作CMOS存储器中的内容需要两个端口，一个是0x70另一个就是0x71。其中0x70可以叫做索引寄存器，<strong>这个8位寄存器的最高位是不可屏蔽中断(NMI)使能位。如果你把这个位置1，则NMI不会被响应。低7位用于指定CMOS存储器中的存储单元地址</strong>，所以如果你想访问第1号存储单元，并且在访问时，我要使能NMI，那么你就应该向端口0x70里面送入0b10000001 = 0x81。</p>
+<p>&emsp; &emsp; 这三条指令可以看出，它首先关闭了NMI中断，并且要访问存储单元0xF的值，并且把值读到al中，但是在后面我们发现这个值并没有被利用，所以可以认为<strong>这三条指令是用来关闭NMI中断的。</strong></p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">15. [f000:d16b]    0xfd16b: in     $0x92,%al 
+# (gdb) info register al
+# al             0x0      0
+16. [f000:d16d]    0xfd16d: or     $0x2,%al
+17. [f000:d16f]    0xfd16f: out    %al,$0x92
+# (gdb) info register al
+# al             0x2      2
+</code></pre>
+<p>&emsp; &emsp; 它控制的是 PS/2系统控制端口A，而第16，17步的操作是在把这个端口的1号bit置为1。这个端口的bit1的功能是<code>bit 1= 1 indicates A20 active</code>,即A20位，即第21个地址线被使能，如果A20地址线被激活，那么系统工作在保护模式下。但是在之后的boot loader程序中，计算机首先要工作在实模式下啊。所以这里的这个操作，根据[6]应该是去测试可用内存空间。在boot loader之前，它肯定还会转换回实模式。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">or # 只要有一个输入位是 1，则输出位就是 1
+</code></pre>
+<pre class=" language-lang-shell"><code class="language-lang-shell">18. [f000:d171]    0xfd171: lidtw  %cs:0x6ab8
+</code></pre>
+<p>&emsp; &emsp; 加载中断向量表寄存器(IDTR)。这个指令会把从地址0xf6ab8起始的后面6个字节的数据读入到中断向量表寄存器(IDTR)中。中断是操作系统中非常重要的一部分，有了中断操作系统才能真正实现进程。每一种中断都有自己对应的中断处理程序，那么这个中断的处理程序的首地址就叫做这个中断的中断向量。中断向量表[7]是存放所有中断向量的表。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">19. [f000:d177]    0xfd177: lgdtw  %cs:0x6a74
+</code></pre>
+<p>&emsp; &emsp; 把从<code>0xf6a74</code>为起始地址处的6个字节的值加载到全局描述符表格寄存器中GDTR中.</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">20. [f000:d17d]    0xfd17d: mov    %cr0,%eax
+21. [f000:d180]    0xfd180: or     $0x1,%eax
+22. [f000:d184]    0xfd184: mov    %eax,%cr0
+</code></pre>
+<p>&emsp; &emsp; 计算机中包含CR0-CR3四个控制寄存器，用来控制和确定处理器的操作模式。其中这三个语句的操作是要把CR0寄存器的最低位(0bit)置1。CR0寄存器的0bit是PE位，启动保护位，当该位被置1，代表开启了保护模式。但是这里出现了问题，我们刚刚说过BIOS是工作在实模式之下，后面的boot loader开始的时候也是工作在实模式下，所以这里把它切换为保护模式，显然是自相矛盾。所以只能推测它在检测机器是否能工作在保护模式下。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">23. [f000:d187]    0xfd187: ljmpl  $0x8,$0xfd18f
+# The target architecture is assumed to be i386
+24. => 0xfd18f:     mov    $0x10,%eax
+25. => 0xfd194:     mov    %eax,%ds
+26. => 0xfd196:     mov    %eax,%es
+27. => 0xfd198:     mov    %eax,%ss
+28. => 0xfd19a:     mov    %eax,%fs
+29. => 0xfd19c:     mov    %eax,%gs
+</code></pre>
+<p>&emsp; &emsp; 这里的23~29步之所以这么做是按照规定来的，[8]中指出，如果刚刚加载完GDTR寄存器我们必须要重新加载所有的段寄存器的值，而其中CS段寄存器必须通过长跳转指令，即23号指令来进行加载。所以这些步骤是在第19步完成后必须要做的。这样才能是GDTR的值生效。</p>
+<h3 id="Part-2-引导加载程序"><a href="#Part-2-引导加载程序" class="headerlink" title="Part 2: 引导加载程序"></a>Part 2: 引导加载程序</h3><h3 id="Part-3-内核"><a href="#Part-3-内核" class="headerlink" title="Part 3: 内核"></a>Part 3: 内核</h3><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>[1] <a href="https://github.com/shishujuan/mit6.828-2017.git" target="_blank" rel="noopener">https://github.com/shishujuan/mit6.828-2017.git</a></p>
+<p>[2] <a href="https://blog.csdn.net/zdwzzu2006/article/details/4030948" target="_blank" rel="noopener">https://blog.csdn.net/zdwzzu2006/article/details/4030948</a></p>
+<p>[3] <a href="https://www.cnblogs.com/cykun/archive/2010/10/27/1862940.html" target="_blank" rel="noopener">https://www.cnblogs.com/cykun/archive/2010/10/27/1862940.html</a></p>
+<p>[4] <a href="http://bochs.sourceforge.net/techspec/PORTS.LST" target="_blank" rel="noopener">http://bochs.sourceforge.net/techspec/PORTS.LST</a></p>
+<p>[5] <a href="http://wiki.osdev.org/CMOS" target="_blank" rel="noopener">http://wiki.osdev.org/CMOS</a></p>
+<p>[6] <a href="http://kernelx.weebly.com/a20-address-line.html" target="_blank" rel="noopener">http://kernelx.weebly.com/a20-address-line.html</a></p>
+<p>[7] <a href="http://wiki.osdev.org/Interrupt_Descriptor_Table" target="_blank" rel="noopener">http://wiki.osdev.org/Interrupt_Descriptor_Table</a> </p>
+<p>[8] <a href="https://en.wikibooks.org/wiki/X86_Assembly/Global_Descriptor_Table" target="_blank" rel="noopener">https://en.wikibooks.org/wiki/X86_Assembly/Global_Descriptor_Table</a></p>
+<p>[9] <a href="https://blog.csdn.net/a747979985/article/details/94334901" target="_blank" rel="noopener">https://blog.csdn.net/a747979985/article/details/94334901</a></p>
+<p>[10] <a href="https://wenku.baidu.com/view/fe595521bb68a98271fefad4?pcf=2&amp;fromShare=1&amp;fr=copy&amp;copyfr=copylinkpop" target="_blank" rel="noopener">https://wenku.baidu.com/view/fe595521bb68a98271fefad4?pcf=2&amp;fromShare=1&amp;fr=copy&amp;copyfr=copylinkpop</a></p>
+<p> <sup><a href="#fn_实模式" id="reffn_实模式">实模式</a></sup>： 实模式采用 16 位寻址模式，在该模式中，最大寻址空间为 1MB，最大分段为 64KB。 由于处理器的设计需要考虑到兼容问题，8086 处理器地址总线扩展到 20 位，但CPU的ALU宽度(数据总线)却只有 16 位，也就是说直接参与运算的数值都是 16 位的。为支持 1MB 寻址空间，8086 处理器在实模式下引入了分段方法。在处理器中设置了四个 16 位的段寄存器:CS、DS、SS、ES，对 应于地址总线中的高 16 位。寻址时，采用以下公式计算实际访问的物理内存地址，这样，便实现了 16 位内存地址到 20 位物理地址的转换。</p>
+]]></content>
+      <tags>
+        <tag>lab</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MuonTrap-Preventing Cross-Domain Spectre-Like</title>
+    <url>/2021/03/15/MuonTrap-Preventing-Cross-Domain-Spectre-Like/</url>
+    <content><![CDATA[<p>清华安全公众号推荐</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>Operating Systems</title>
+    <url>/2020/07/17/Operating-Systems/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PCA图像压缩</title>
     <url>/2020/05/20/PCA%E5%9B%BE%E5%83%8F%E5%8E%8B%E7%BC%A9/</url>
     <content><![CDATA[<center><font face="黑体" size="8">一种基于SVD原理的PCA图像压缩算法</font></center>
@@ -2266,12 +2280,6 @@ end
       </tags>
   </entry>
   <entry>
-    <title>MuonTrap-Preventing Cross-Domain Spectre-Like</title>
-    <url>/2021/03/15/MuonTrap-Preventing-Cross-Domain-Spectre-Like/</url>
-    <content><![CDATA[<p>清华安全公众号推荐</p>
-]]></content>
-  </entry>
-  <entry>
     <title>PUBG JNG</title>
     <url>/2020/04/18/PUBG-JNG/</url>
     <content><![CDATA[<h3 id="JNG战队发展历程回顾"><a href="#JNG战队发展历程回顾" class="headerlink" title="JNG战队发展历程回顾"></a>JNG战队发展历程回顾</h3><h4 id="JNG初次相遇"><a href="#JNG初次相遇" class="headerlink" title="JNG初次相遇"></a>JNG初次相遇</h4><p>很久很久以前，这支战队的几个骚年游荡在这样一个空旷的平原上</p>
@@ -2317,20 +2325,6 @@ end
         <tag>game-for-peace</tag>
         <tag>JNG</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Protocol-gossip</title>
-    <url>/2020/11/07/Protocol-gossip/</url>
-    <content><![CDATA[<h3 id="P2P-简介"><a href="#P2P-简介" class="headerlink" title="P2P 简介"></a>P2P 简介</h3><p>​        网络中节点数目的增加，使得传统的C/S计算模型不能满足用户对信息访问等要求，无法满足分布式应用的要求，其限制了网络资源的充分利用，可扩展性较差，无法支持不断增长的客户节点数量等问题越来越明显。</p>
-<p>​        P2P 主要解决网络负载不均衡的问题，用户有能力不通过服务器直接进行资源的的共享和交换。Napster是第一个被广泛应用的 Peer-to-Peer 音乐共享服务。</p>
-<h4 id="Peer-to-Peerr-分类"><a href="#Peer-to-Peerr-分类" class="headerlink" title="Peer-to-Peerr 分类"></a>Peer-to-Peerr 分类</h4><p>集中式P2P系统</p>
-<p>无结构P2P系统</p>
-<p>结构化P2P系统</p>
-<h3 id="分布式文件定位"><a href="#分布式文件定位" class="headerlink" title="分布式文件定位"></a>分布式文件定位</h3><h4 id="Useful-links"><a href="#Useful-links" class="headerlink" title="Useful links"></a>Useful links</h4><p><a href="https://www.cnblogs.com/zhufanyu/p/12101112.html" target="_blank" rel="noopener">RPC 远程调用</a></p>
-<p><a href="https://www.cnblogs.com/gzhcsu/p/11389235.html" target="_blank" rel="noopener">RPC </a></p>
-<p><a href="https://blog.csdn.net/daaikuaichuan/article/details/88595202?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare" target="_blank" rel="noopener">详解RPC </a></p>
-<p><a href="https://wiki.p2pfoundation.net/P2P_Computing" target="_blank" rel="noopener">https://wiki.p2pfoundation.net/P2P_Computing</a></p>
-]]></content>
   </entry>
   <entry>
     <title>Pioneer</title>
@@ -2396,14 +2390,6 @@ end
       </categories>
       <tags>
         <tag>论文解读</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Operating Systems</title>
-    <url>/2020/07/17/Operating-Systems/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -2486,6 +2472,32 @@ end
       <tags>
         <tag>Virtual Machine</tag>
         <tag>Hypervisor</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Protocol-gossip</title>
+    <url>/2020/11/07/Protocol-gossip/</url>
+    <content><![CDATA[<h3 id="P2P-简介"><a href="#P2P-简介" class="headerlink" title="P2P 简介"></a>P2P 简介</h3><p>​        网络中节点数目的增加，使得传统的C/S计算模型不能满足用户对信息访问等要求，无法满足分布式应用的要求，其限制了网络资源的充分利用，可扩展性较差，无法支持不断增长的客户节点数量等问题越来越明显。</p>
+<p>​        P2P 主要解决网络负载不均衡的问题，用户有能力不通过服务器直接进行资源的的共享和交换。Napster是第一个被广泛应用的 Peer-to-Peer 音乐共享服务。</p>
+<h4 id="Peer-to-Peerr-分类"><a href="#Peer-to-Peerr-分类" class="headerlink" title="Peer-to-Peerr 分类"></a>Peer-to-Peerr 分类</h4><p>集中式P2P系统</p>
+<p>无结构P2P系统</p>
+<p>结构化P2P系统</p>
+<h3 id="分布式文件定位"><a href="#分布式文件定位" class="headerlink" title="分布式文件定位"></a>分布式文件定位</h3><h4 id="Useful-links"><a href="#Useful-links" class="headerlink" title="Useful links"></a>Useful links</h4><p><a href="https://www.cnblogs.com/zhufanyu/p/12101112.html" target="_blank" rel="noopener">RPC 远程调用</a></p>
+<p><a href="https://www.cnblogs.com/gzhcsu/p/11389235.html" target="_blank" rel="noopener">RPC </a></p>
+<p><a href="https://blog.csdn.net/daaikuaichuan/article/details/88595202?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare" target="_blank" rel="noopener">详解RPC </a></p>
+<p><a href="https://wiki.p2pfoundation.net/P2P_Computing" target="_blank" rel="noopener">https://wiki.p2pfoundation.net/P2P_Computing</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>RADAR</title>
+    <url>/2020/07/18/RADAR/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -2729,72 +2741,9 @@ func main()  {
       </tags>
   </entry>
   <entry>
-    <title>RADAR</title>
-    <url>/2020/07/18/RADAR/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SOSP-Progress</title>
     <url>/2021/02/18/SOSP-Progress/</url>
     <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>SecVisor</title>
-    <url>/2020/07/21/SecVisor/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="http://www.cs.cmu.edu/~arvinds/pubs/secvisor.pdf" target="_blank" rel="noopener">SecVisor</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">检测</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center"></td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>SOSP</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>Detection</tag>
-      </tags>
   </entry>
   <entry>
     <title>SP&#39;15 Last-Level Cache Side-Channel Attacks are Practical</title>
@@ -2850,8 +2799,8 @@ func main()  {
       </tags>
   </entry>
   <entry>
-    <title>Software ROT</title>
-    <url>/2020/12/02/Software-ROT/</url>
+    <title>SecVisor</title>
+    <url>/2020/07/21/SecVisor/</url>
     <content><![CDATA[<div class="table-container">
 <table>
 <thead>
@@ -2865,26 +2814,27 @@ func main()  {
 <tr>
 <td style="text-align:center">1</td>
 <td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.cylab.cmu.edu/_files/pdfs/tech_reports/CMUCyLab18003.pdf" target="_blank" rel="noopener">Software ROT</a></td>
+<td style="text-align:center"><a href="http://www.cs.cmu.edu/~arvinds/pubs/secvisor.pdf" target="_blank" rel="noopener">SecVisor</a></td>
 </tr>
 <tr>
 <td style="text-align:center">2</td>
 <td style="text-align:center">作者信息</td>
-<td style="text-align:center">CMU/CyLab</td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
 <td style="text-align:center">3</td>
 <td style="text-align:center">核心内容</td>
-<td style="text-align:center">Pioneer 工作的延续</td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
 <td style="text-align:center">4</td>
 <td style="text-align:center">研究领域</td>
-<td style="text-align:center"></td>
+<td style="text-align:center">检测</td>
 </tr>
 <tr>
 <td style="text-align:center">5</td>
 <td style="text-align:center">全文总览</td>
+<td style="text-align:center"></td>
 </tr>
 </tbody>
 </table>
@@ -2892,10 +2842,11 @@ func main()  {
 ]]></content>
       <categories>
         <category>paper</category>
-        <category>NDSS</category>
+        <category>SOSP</category>
       </categories>
       <tags>
         <tag>论文解读</tag>
+        <tag>Detection</tag>
       </tags>
   </entry>
   <entry>
@@ -3272,9 +3223,69 @@ int main(void)
       </tags>
   </entry>
   <entry>
+    <title>Software ROT</title>
+    <url>/2020/12/02/Software-ROT/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.cylab.cmu.edu/_files/pdfs/tech_reports/CMUCyLab18003.pdf" target="_blank" rel="noopener">Software ROT</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">CMU/CyLab</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">Pioneer 工作的延续</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>NDSS</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Systematic Review on FHE</title>
     <url>/2020/08/12/Systematic-Review-on-FHE/</url>
     <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>TPM overview</title>
+    <url>/2020/11/07/TPM-overview/</url>
+    <content><![CDATA[<h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>[1]  中不止包括TPM还有TOCTOU攻击讲解</p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] 基于Xen的可信虚拟机系统体系结构设计与若干关键技术研究_孟璟 (TPM1.2)</p>
+<p>[2]   </p>
+]]></content>
+      <tags>
+        <tag>Technology Overview</tag>
+      </tags>
   </entry>
   <entry>
     <title>The first blog</title>
@@ -3289,17 +3300,6 @@ int main(void)
       <tags>
         <tag>essay</tag>
         <tag>英文</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>TPM overview</title>
-    <url>/2020/11/07/TPM-overview/</url>
-    <content><![CDATA[<h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>[1]  中不止包括TPM还有TOCTOU攻击讲解</p>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] 基于Xen的可信虚拟机系统体系结构设计与若干关键技术研究_孟璟 (TPM1.2)</p>
-<p>[2]   </p>
-]]></content>
-      <tags>
-        <tag>Technology Overview</tag>
       </tags>
   </entry>
   <entry>
@@ -3465,6 +3465,57 @@ int main(void)
       <tags>
         <tag>论文解读</tag>
         <tag>encrypt</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Transient Execution Attacks</title>
+    <url>/2020/12/30/Transient-Execution-Attacks/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.cs.princeton.edu/courses/archive/spr06/cos592/bib/pioneer-seshadri-sosp05.pdf" target="_blank" rel="noopener">Pioneer</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">CMU/CyLab</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">one-on-one 方式检测内存信息是否有差别</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">安全检测</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">通过one-on-one 的方法对非可信主机进行检测，从而构造出一个可信的执行环境。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>瞬时攻击</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>OSDI</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -3717,57 +3768,6 @@ reboot
         <tag>Xen log</tag>
         <tag>Linux</tag>
         <tag>Debian</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Transient Execution Attacks</title>
-    <url>/2020/12/30/Transient-Execution-Attacks/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.cs.princeton.edu/courses/archive/spr06/cos592/bib/pioneer-seshadri-sosp05.pdf" target="_blank" rel="noopener">Pioneer</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">CMU/CyLab</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">one-on-one 方式检测内存信息是否有差别</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">安全检测</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">通过one-on-one 的方法对非可信主机进行检测，从而构造出一个可信的执行环境。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>瞬时攻击</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>OSDI</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -4161,14 +4161,6 @@ cp mm.c /${workdir}/../xen/xen/arch/x86/
       </tags>
   </entry>
   <entry>
-    <title>Xen虚拟化技术完全导读</title>
-    <url>/2020/07/19/Xen%E8%99%9A%E6%8B%9F%E5%8C%96%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E5%AF%BC%E8%AF%BB/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Xen log plus Centos7源码安装Xen4.11</title>
     <url>/2020/11/25/Xen-log-plus-Centos7%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/</url>
     <content><![CDATA[<p>​        本文的安装步骤是参照<a href="https://wiki.xenproject.org/wiki/Compiling_Xen_From_Source#Build_Dependencies_-_RHEL_.2F_Centos" target="_blank" rel="noopener">官网</a>指导下进行的，因为实验需要扩展，所以打算在通用的CentOS上对Xen虚拟机进行部署，从而进行下一步实验。由于需要扩展到的主机上运行的服务比较多，为了避免安装失误，因此记录下此步骤进行参考。</p>
@@ -4547,16 +4539,6 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
-    <title>云虚拟化安全攻防实践</title>
-    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
-<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
-<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>virtualization overview</title>
     <url>/2020/11/27/virtualization-overview/</url>
     <content><![CDATA[<h3 id="虚拟化技术概览"><a href="#虚拟化技术概览" class="headerlink" title="虚拟化技术概览"></a>虚拟化技术概览</h3><p>注：本文主要是整理了看过的博客以及部分论文。</p>
@@ -4706,11 +4688,6 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
     <content><![CDATA[]]></content>
   </entry>
   <entry>
-    <title>从硬件层认识计算机</title>
-    <url>/2020/11/23/%E4%BB%8E%E7%A1%AC%E4%BB%B6%E5%B1%82%E8%AE%A4%E8%AF%86%E8%AE%A1%E7%AE%97%E6%9C%BA/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>博士学长有话说</title>
     <url>/2020/04/22/%E5%8D%9A%E5%A3%AB%E5%AD%A6%E9%95%BF%E6%9C%89%E8%AF%9D%E8%AF%B4/</url>
     <content><![CDATA[<h3 id="读博士的几点建议"><a href="#读博士的几点建议" class="headerlink" title="读博士的几点建议"></a>读博士的几点建议</h3><hr>
@@ -4733,6 +4710,11 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
+    <title>从硬件层认识计算机</title>
+    <url>/2020/11/23/%E4%BB%8E%E7%A1%AC%E4%BB%B6%E5%B1%82%E8%AE%A4%E8%AF%86%E8%AE%A1%E7%AE%97%E6%9C%BA/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>安全计算</title>
     <url>/2020/08/15/%E5%AE%89%E5%85%A8%E8%AE%A1%E7%AE%97/</url>
     <content><![CDATA[<h3 id="什么是安全计算"><a href="#什么是安全计算" class="headerlink" title="什么是安全计算"></a>什么是安全计算</h3><h4 id="安全计算"><a href="#安全计算" class="headerlink" title="安全计算"></a>安全计算</h4><p>安全多方计算，Secure Multi-party Computation（SMC）在保护数据安全的前提下实现多方计算，即，多个参与者将各自的数据凑在一起，并在这个大数据集上进行一定的计算，并得到最后的结果。</p>
@@ -4750,58 +4732,18 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
-    <title>本科毕业游记</title>
-    <url>/2020/07/16/%E6%9C%AC%E7%A7%91%E6%AF%95%E4%B8%9A%E6%B8%B8%E8%AE%B0/</url>
-    <content><![CDATA[<p>当自己满怀负面情绪的时候，出去走走吧</p>
-<p>18年毕业季，对我来说，可能用诸事不顺形容更加贴切。这里不想再回顾那个至暗时刻了~略过500字</p>
-<p>在提交了本科毕业论文之后，跟舍友选择了去旅游，去闲逛。回忆起来，真的挺感谢那次远足。在游玩的时候，有时内心会有一种很强烈的声音在表达：世间如此美好，请继续相信并热爱美好的事情。其实当别人跟你在一起生活了很长时间之后，你的一举一动背后所掩盖的事实都会多多少少的被察觉吧，或悲或喜。非常感谢舍友们对自己的包容与尊重，如果当时真的在某些言语或行为上伤害过你们，真的很抱歉，记住一个人的好总好过记住一个人的坏。</p>
-<p>现在想想，那次旅行是自己成长最迅速的一段时光。懂得了很多，也体会了很多。初到上海时的激动掩盖了自己内心的伤楚，甚至创下了迄今为止单日步数记录。是初到上海的下里巴人，第一次感受到了什么叫繁华。交大与复旦的学子，让我感受到这个城市在文化上的包容与开放。深入灵隐感受那里的绝美景色，站在苏堤眺望西湖两岸，数次跨越钱塘江大桥，亲自挤一挤杭州的地铁也让自己对杭州有了深刻的印象。在绍兴的一间民宿鼓起勇气跟老外谈天侃地，这睡前的卧谈也给自己增加了不少自信心。英语说的烂，到底是谁遭罪？苏州、绍兴的旅途，亲身体会到了什么是江南水乡，那种只会出现在电视画面上的景色，竟然就在自己眼前，脚下，所泛小舟之旁。也许电子设备能够记录下景色，但无法转达自己身临其境的感受。最后一站，品过南京大排档后，跟高中同学去了当时梦寐以求的南京大学，涉足在南大的各个角落，跟南大学子一起篮球，仿佛获得一天的南大身份体验卡。夜幕降临，远去之时，梦也该醒了~</p>
-<p>这次的旅途过后，大家都在匆匆忙忙准备毕业的时候，我选择了再战名校。虽然这时显得跟整个学校的节奏不符，但比起之前浑浑噩噩的生活，这种逐梦并筑梦的日子更能让人铭记，更能拨动生命中响亮的音符。毕业论文答辩结束，导师惊讶的问我怎么没在考研光荣榜上看到我的名字，我不知道该如何面对这样一个始终对我抱有最大希望的老师；离校前一个月，准备租房子；离校前三周，准备6级考试；离校前两周，买下了全新备考资料，参加了6级考试，并见到了大三对我印象深刻（不听她讲课却能考近满分成绩的坏学生）的专业课老师，想对她说声对不起，老师，在你课上不是故意气你的；离校前一周，拿到了双证，见到了导员，真的很想对她说声谢谢，老师再见，但终未说出口。离校前3天，我花光了3个月的积蓄，算是买醉吧，那一段时间，是我四年里第一次跟这么多同学侃侃而谈，有的甚至是四年来第一次交流，原来那时的我在他们眼里还不算差，现在想想已经够欣慰了。6月24号，与母校彻底再见了~</p>
-<p>其实二战也没有想得那么复杂，干就完了。但真正难的是做出那个决定，鼓起勇气面对未知的挑战。</p>
-<p>我始终怀念并感激当年出去撒欢的自己</p>
-<p>2020年7月16日01:27:26 于济宁</p>
+    <title>泉城济南</title>
+    <url>/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/</url>
+    <content><![CDATA[<h3 id="泉城济南"><a href="#泉城济南" class="headerlink" title="泉城济南"></a>泉城济南</h3><p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-7.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-8.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-2.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-3.jpg" width="500px" height="350px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-4.jpg" width="500px" height="390px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-5.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-6.jpg" width="500px" height="400px"></p>
 ]]></content>
       <tags>
-        <tag>essay</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>概率图模型</title>
-    <url>/2021/03/22/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<h1 id="概率图模型"><a href="#概率图模型" class="headerlink" title="概率图模型"></a>概率图模型</h1><p><img src="/2021/03/22/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210326100944404.png" alt="image-20210326100944404"></p>
-<p>可能用到的点：</p>
-<blockquote>
-<p>1、贝叶斯网络-&gt; 动态贝叶斯网络（时间序列）-&gt; 混沌时间序列模型</p>
-<p>2、贝叶斯网络独立性</p>
-<p>3、马尔科夫链</p>
-<p>4、信念传播</p>
-<p>5、信息论，信任传播衰减，边际效应递减</p>
-<p>6、 边缘概率问题</p>
-<p>7、 信任置信区间？</p>
-</blockquote>
-<p>按照概率图中变量关系的不同，概率图模型可以大致分为两类：</p>
-<ul>
-<li>贝叶斯网络：有向图模型，使用有向无环图表达关系（通常，变量间存在显式的因果关系）</li>
-<li>马尔科夫网络：无向图模型，使用无图表达关系（通常，变量间存有关系，但是难以显式表达）</li>
-</ul>
-<h2 id="贝叶斯网络"><a href="#贝叶斯网络" class="headerlink" title="贝叶斯网络"></a>贝叶斯网络</h2><p>概率图模型作为一类有力的工具,能够简洁地表示复杂的概率分布,有效地(近似)计算边缘分布和条件分布,方便地学习概率模型中的参数和超参数.因此,它作为一种处理不确定性的形式化方法,被广泛应用于需要进行自动的概率推理的场合.</p>
-<p>将知识陈述式地表示为概率模型,通过计算我们所关心变量的概率分布实现推理的途径具有独特优势: 首先,它提供了一个描述框架,使我们能够将不同领域的知识抽象为概率模型,将各种应用中的问题都归结为计算概率模型里某些变量的概率分布,从而将知识表示和推理分离开来.模型的设计主要关心如何根据领域知识设计出反映问题本质的概率模型,同时兼顾有效推理的可行性,而推理算法的设计只需关心如何有效地在一般的或者特定的概率模型中进行推理。这种一定程度上的正交性极大地扩展了概率模型的应用,也加快了它的发展速度. 其次,它能够评估未知量取值的可能性,对不同取值的概率给出量化的估计.这在涉及风险的决策系统中非常重要.</p>
-<p><img src="/2021/03/22/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/贝叶斯网络.png"></p>
-<p>贝叶斯网络中的三种独立性[2]</p>
-<blockquote>
-<ol>
-<li><p>head-to-head</p>
-</li>
-<li><p>head-to-tail</p>
-</li>
-<li>tail-to-tail</li>
-</ol>
-</blockquote>
-<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p>[1] <a href="https://www.cnblogs.com/leoo2sk/archive/2010/09/18/bayes-network.html" target="_blank" rel="noopener">https://www.cnblogs.com/leoo2sk/archive/2010/09/18/bayes-network.html</a></p>
-<p>[2] <a href="https://zhuanlan.zhihu.com/p/30139208" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30139208</a></p>
-]]></content>
-      <tags>
-        <tag>贝叶斯网络</tag>
+        <tag>picture</tag>
       </tags>
   </entry>
   <entry>
@@ -4855,6 +4797,61 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
+    <title>概率图模型</title>
+    <url>/2021/03/22/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<h1 id="概率图模型"><a href="#概率图模型" class="headerlink" title="概率图模型"></a>概率图模型</h1><p><img src="/2021/03/22/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210326100944404.png" alt="image-20210326100944404"></p>
+<p>可能用到的点：</p>
+<blockquote>
+<p>1、贝叶斯网络-&gt; 动态贝叶斯网络（时间序列）-&gt; 混沌时间序列模型</p>
+<p>2、贝叶斯网络独立性</p>
+<p>3、马尔科夫链</p>
+<p>4、信念传播</p>
+<p>5、信息论，信任传播衰减，边际效应递减</p>
+<p>6、 边缘概率问题</p>
+<p>7、 信任置信区间？</p>
+</blockquote>
+<p>按照概率图中变量关系的不同，概率图模型可以大致分为两类：</p>
+<ul>
+<li>贝叶斯网络：有向图模型，使用有向无环图表达关系（通常，变量间存在显式的因果关系）</li>
+<li>马尔科夫网络：无向图模型，使用无图表达关系（通常，变量间存有关系，但是难以显式表达）</li>
+</ul>
+<h2 id="贝叶斯网络"><a href="#贝叶斯网络" class="headerlink" title="贝叶斯网络"></a>贝叶斯网络</h2><p>概率图模型作为一类有力的工具,能够简洁地表示复杂的概率分布,有效地(近似)计算边缘分布和条件分布,方便地学习概率模型中的参数和超参数.因此,它作为一种处理不确定性的形式化方法,被广泛应用于需要进行自动的概率推理的场合.</p>
+<p>将知识陈述式地表示为概率模型,通过计算我们所关心变量的概率分布实现推理的途径具有独特优势: 首先,它提供了一个描述框架,使我们能够将不同领域的知识抽象为概率模型,将各种应用中的问题都归结为计算概率模型里某些变量的概率分布,从而将知识表示和推理分离开来.模型的设计主要关心如何根据领域知识设计出反映问题本质的概率模型,同时兼顾有效推理的可行性,而推理算法的设计只需关心如何有效地在一般的或者特定的概率模型中进行推理。这种一定程度上的正交性极大地扩展了概率模型的应用,也加快了它的发展速度. 其次,它能够评估未知量取值的可能性,对不同取值的概率给出量化的估计.这在涉及风险的决策系统中非常重要.</p>
+<p><img src="/2021/03/22/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/贝叶斯网络.png"></p>
+<p>贝叶斯网络中的三种独立性[2]</p>
+<blockquote>
+<ol>
+<li><p>head-to-head</p>
+</li>
+<li><p>head-to-tail</p>
+</li>
+<li>tail-to-tail</li>
+</ol>
+</blockquote>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p>[1] <a href="https://www.cnblogs.com/leoo2sk/archive/2010/09/18/bayes-network.html" target="_blank" rel="noopener">https://www.cnblogs.com/leoo2sk/archive/2010/09/18/bayes-network.html</a></p>
+<p>[2] <a href="https://zhuanlan.zhihu.com/p/30139208" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30139208</a></p>
+]]></content>
+      <tags>
+        <tag>贝叶斯网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>本科毕业游记</title>
+    <url>/2020/07/16/%E6%9C%AC%E7%A7%91%E6%AF%95%E4%B8%9A%E6%B8%B8%E8%AE%B0/</url>
+    <content><![CDATA[<p>当自己满怀负面情绪的时候，出去走走吧</p>
+<p>18年毕业季，对我来说，可能用诸事不顺形容更加贴切。这里不想再回顾那个至暗时刻了~略过500字</p>
+<p>在提交了本科毕业论文之后，跟舍友选择了去旅游，去闲逛。回忆起来，真的挺感谢那次远足。在游玩的时候，有时内心会有一种很强烈的声音在表达：世间如此美好，请继续相信并热爱美好的事情。其实当别人跟你在一起生活了很长时间之后，你的一举一动背后所掩盖的事实都会多多少少的被察觉吧，或悲或喜。非常感谢舍友们对自己的包容与尊重，如果当时真的在某些言语或行为上伤害过你们，真的很抱歉，记住一个人的好总好过记住一个人的坏。</p>
+<p>现在想想，那次旅行是自己成长最迅速的一段时光。懂得了很多，也体会了很多。初到上海时的激动掩盖了自己内心的伤楚，甚至创下了迄今为止单日步数记录。是初到上海的下里巴人，第一次感受到了什么叫繁华。交大与复旦的学子，让我感受到这个城市在文化上的包容与开放。深入灵隐感受那里的绝美景色，站在苏堤眺望西湖两岸，数次跨越钱塘江大桥，亲自挤一挤杭州的地铁也让自己对杭州有了深刻的印象。在绍兴的一间民宿鼓起勇气跟老外谈天侃地，这睡前的卧谈也给自己增加了不少自信心。英语说的烂，到底是谁遭罪？苏州、绍兴的旅途，亲身体会到了什么是江南水乡，那种只会出现在电视画面上的景色，竟然就在自己眼前，脚下，所泛小舟之旁。也许电子设备能够记录下景色，但无法转达自己身临其境的感受。最后一站，品过南京大排档后，跟高中同学去了当时梦寐以求的南京大学，涉足在南大的各个角落，跟南大学子一起篮球，仿佛获得一天的南大身份体验卡。夜幕降临，远去之时，梦也该醒了~</p>
+<p>这次的旅途过后，大家都在匆匆忙忙准备毕业的时候，我选择了再战名校。虽然这时显得跟整个学校的节奏不符，但比起之前浑浑噩噩的生活，这种逐梦并筑梦的日子更能让人铭记，更能拨动生命中响亮的音符。毕业论文答辩结束，导师惊讶的问我怎么没在考研光荣榜上看到我的名字，我不知道该如何面对这样一个始终对我抱有最大希望的老师；离校前一个月，准备租房子；离校前三周，准备6级考试；离校前两周，买下了全新备考资料，参加了6级考试，并见到了大三对我印象深刻（不听她讲课却能考近满分成绩的坏学生）的专业课老师，想对她说声对不起，老师，在你课上不是故意气你的；离校前一周，拿到了双证，见到了导员，真的很想对她说声谢谢，老师再见，但终未说出口。离校前3天，我花光了3个月的积蓄，算是买醉吧，那一段时间，是我四年里第一次跟这么多同学侃侃而谈，有的甚至是四年来第一次交流，原来那时的我在他们眼里还不算差，现在想想已经够欣慰了。6月24号，与母校彻底再见了~</p>
+<p>其实二战也没有想得那么复杂，干就完了。但真正难的是做出那个决定，鼓起勇气面对未知的挑战。</p>
+<p>我始终怀念并感激当年出去撒欢的自己</p>
+<p>2020年7月16日01:27:26 于济宁</p>
+]]></content>
+      <tags>
+        <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>疫情期间小确幸</title>
     <url>/2020/07/14/%E7%96%AB%E6%83%85%E6%9C%9F%E9%97%B4%E5%B0%8F%E7%A1%AE%E5%B9%B8/</url>
     <content><![CDATA[<p>&emsp;&emsp;与不完美的自己和解，事情正在变得越来越好。</p>
@@ -4881,21 +4878,6 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
-    <title>泉城济南</title>
-    <url>/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/</url>
-    <content><![CDATA[<h3 id="泉城济南"><a href="#泉城济南" class="headerlink" title="泉城济南"></a>泉城济南</h3><p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-7.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-8.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-2.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-3.jpg" width="500px" height="350px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-4.jpg" width="500px" height="390px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-5.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-6.jpg" width="500px" height="400px"></p>
-]]></content>
-      <tags>
-        <tag>picture</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>系统虚拟化</title>
     <url>/2020/12/09/%E7%B3%BB%E7%BB%9F%E8%99%9A%E6%8B%9F%E5%8C%96/</url>
     <content><![CDATA[<h3 id="第1章-开篇"><a href="#第1章-开篇" class="headerlink" title="第1章 开篇"></a>第1章 开篇</h3><p>1.1 形形色色的虚拟化<br>1.2 系统虚拟化<br>1.3 系统虚拟化简史<br>1.4 系统虚拟化的好处</p>
@@ -4914,6 +4896,14 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
 ]]></content>
       <tags>
         <tag>虚拟化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Xen虚拟化技术完全导读</title>
+    <url>/2020/07/19/Xen%E8%99%9A%E6%8B%9F%E5%8C%96%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E5%AF%BC%E8%AF%BB/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -4938,6 +4928,16 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
 <script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
       <tags>
         <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>云虚拟化安全攻防实践</title>
+    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
+<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
+<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
+      <tags>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
 </search>
