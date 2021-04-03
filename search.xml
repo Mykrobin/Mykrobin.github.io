@@ -42,6 +42,232 @@
       </tags>
   </entry>
   <entry>
+    <title>Applying TPM to Cloud</title>
+    <url>/2020/10/12/Applying-TPM-to-Cloud/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:left">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:left">原文PDF</td>
+<td style="text-align:center"><a href="https://sci-hub.se/10.1002/spy2.93" target="_blank" rel="noopener">Survey</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:left">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:left">核心内容</td>
+<td style="text-align:center">调研了13年至18年的近120篇文献，且这些论文都利用TPM提高云计算安全。</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:left">研究领域</td>
+<td style="text-align:center">可信计算</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:left">全文总览</td>
+<td style="text-align:center">本文对TPM在云计算安全方面进行的细致的调研，并结合调研结果认为TPM在云计算安全的保护领域具有很大的趋势。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Paper-Source"><a href="#Paper-Source" class="headerlink" title="Paper Source"></a>Paper Source</h3><p><img src="/2020/10/12/Applying-TPM-to-Cloud/sources.png" width="500"></p>
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/papercountry.png" width="500"></p>
+<font color="DodgerBlue"> Paper Structure </font>
+
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Summary.png" width="600"></p>
+<h3 id="Answering-the-Following-Question"><a href="#Answering-the-Following-Question" class="headerlink" title="Answering the Following Question"></a>Answering the Following Question</h3><h4 id="RQ1-For-what-purposes-is-TPM-used-in-the-cloud"><a href="#RQ1-For-what-purposes-is-TPM-used-in-the-cloud" class="headerlink" title="RQ1: For what purposes is TPM used in the cloud?"></a>RQ1: For what purposes is TPM used in the cloud?</h4><blockquote>
+<p><strong>TPM 在云中的作用是什么？为什么要用到TPM？</strong></p>
+</blockquote>
+<h4 id="RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud"><a href="#RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud" class="headerlink" title="RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?"></a>RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?</h4><blockquote>
+<p><strong>TPM的确缓解了的云中的哪些攻击？</strong></p>
+</blockquote>
+<h4 id="RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？"><a href="#RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？" class="headerlink" title="RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？"></a>RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？</h4><blockquote>
+<p><strong>完整性度量的组件到底是什么？云中完整性度量的解释是什么？</strong></p>
+</blockquote>
+<h4 id="RQ4-At-what-level-are-TPM-primitives-invoked"><a href="#RQ4-At-what-level-are-TPM-primitives-invoked" class="headerlink" title="RQ4: At what level are TPM primitives invoked?"></a>RQ4: At what level are TPM primitives invoked?</h4><blockquote>
+<p><strong>TPM被调用的级别是什么？</strong></p>
+</blockquote>
+<h4 id="RQ5-At-which-phase-are-the-TPM-features-used"><a href="#RQ5-At-which-phase-are-the-TPM-features-used" class="headerlink" title="RQ5: At which phase are the TPM features used?"></a>RQ5: At which phase are the TPM features used?</h4><blockquote>
+<p><strong>在什么阶段用到了TPM？</strong><br><strong>A：boot time, run time and both.</strong></p>
+</blockquote>
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Phase.png"></p>
+<h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>​        可信计算利用硬件信任根以及与之关联的软件构建可信环境，提供信任和隐私保护。TPM这个模块，提供安全启动、远程验证、完整性检测以及机密功能。2011年发布了TPM1.2版本，2016年公布了TPM2.0版本。</p>
+<p>​        远程证明是可信计算技术提供的主要功能，它将信任逐步从较低级别扩展到较高级别和应用程序。 这被称为信任链。 在信任链方案中，所有将要加载的组件都被认为是不可信的，因此，在加载之前需要对其进行测量。 TPM包含平台配置寄存器（PCR）受保护的内存位置，该位置存储敏感的安全信息（例如测量信息）。</p>
+<p>​        除了强大的隔离存储，TPM还拥有用于加密操作的唯一认可密钥（EK）。该密钥是在TPM制造时生成的，密钥的私有部分永远不会离开TPM。 在远程认证时，为了保护平台身份的私密性，使用了认证身份密钥（AIK）。 当平台（证明者）收到（来自验证者的）远程证明请求时，它会发送一个完整性报告，该报告由PCR值及其数字签名（由AIK计算）组成。 由于AIK的私有部分从未离开过TPM，因此可以保证报告的完整性和真实性。</p>
+<p>​        初步理解，TPM有几种存在模式，比如：以芯片方式存在电脑主板上或者以firmware形式存在于BIOS中。</p>
+<h4 id="The-Aims-of-TPM"><a href="#The-Aims-of-TPM" class="headerlink" title="The Aims of TPM"></a>The Aims of TPM</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TPMAims.png" width="500" height="280"></p>
+<font color="DodgerBlue"> 远程验证（Remote Attestation ）</font>
+
+<blockquote>
+<ol>
+<li>请求验证者向被验证者发送验证请求，这个请求中包括 <em>nonce</em><sup><a href="#fn_1" id="reffn_1">1</a></sup> ，目的是防止重播攻击（Replay attack）</li>
+<li>接收到验证请求的一方向自己的TPM提出验证请求，TPM验证自身需要度量的模块</li>
+<li>验证后的结果发送给远端的验证发起者（发起者要验证(a)TPM 的真实性(b) 发送数值的真实性）</li>
+</ol>
+</blockquote>
+<font color="DodgerBlue"> 完整性度量 （Integrity Measurement）</font>
+
+<blockquote>
+<p>TPM计算并存储不同组件的哈希值，并将这些哈希值在哈希链中进行转换，并将结果与已经存储的数值相比较。<br>完整性度量分为静态与动态两种类型：<br>        静态：保证在运行之前没有发生篡改<br>        动态：保证在运行过程中没有发生恶意篡改</p>
+</blockquote>
+<font color="DodgerBlue"> Generation and secure storage ofkeys</font>
+
+<blockquote>
+<p>生成随机秘钥的方法：种子、随机数生成器、直接导入TPM中。<br>生成的秘钥保存在TPM中</p>
+</blockquote>
+<font color="DodgerBlue"> Trusted boot</font>
+
+<blockquote>
+<p>在开机时，TPM会检查硬件、软件、固件组件的异同，保证在启动系统之前的环境是可信的。</p>
+<p>本文的参考文献 [14] 利用TPM的可信启动构造一个可信的环境，保证在开机过程中没有恶意入侵。<br>[15] 提出一个用于监控整个云平台的框架，可信启动保证被监控环境的完整性，既对云中租户也是针对云供应商。</p>
+</blockquote>
+<font color="DodgerBlue"> Hardware root of trust</font>
+
+<blockquote>
+<p>信任根是可以在密码系统中信任的来源，加密安全依赖于秘钥来进行加密解密与生成或者验证数字签名，因此，在这种系统中包括不易损坏的硬件模块，并且提供了一定程度的信任保障。<br>TPM可以提供硬件信任根、提供开机与运行时的完整性度量并且保护度量结果。</p>
+</blockquote>
+<h4 id="Security-Threats"><a href="#Security-Threats" class="headerlink" title="Security Threats"></a>Security Threats</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TopThreats.png" width="380" height="500"></p>
+<h4 id="The-level-of-TPM-invoking"><a href="#The-level-of-TPM-invoking" class="headerlink" title="The level of TPM invoking"></a>The level of TPM invoking</h4><font color="DodgerBlue"> Hardware </font>
+
+<blockquote>
+<p>在IoT和云计算等分布式系统模型中，主机平台的安全性至关重要，因为它托管着存储或处理（大量）数据。 TPM是一种用于平台身份验证以及验证其完整性的强大解决方案。在参考文献90中提出的解决方案中，扩展了HCloud（用于医疗保健数据的私有云），并且TPM嵌入在主机平台上以对客户端进行身份验证，并测量静态和动态完整性。讨论了可信云可以提供外部认证服务并进行内部可信调度。提供给外部的每个服务都有一个唯一的映像/进程在内存中运行。加载到内存时，需要验证此过程。可以使用TPM执行静态测量，以验证存储在物理存储库中的文件和软件包。同样，使用TPM签名保护数据库的完整性，以提供硬件级别的安全性。对于过程的动态完整性测量，TPM PCR用于存储和显示逐步的测量值。 Yang等[86]提出了一种设计，旨在为客户提供有关存储在云中的数据的新鲜度，有效性和完整性的保证。为了实现此目标，他们在不受信任的服务器上使用受信任的硬件设备，使客户端能够验证其数据的新鲜度和完整性。在系统运行之前，需要验证平台是否以受信任的方式启动。参考文献91讨论TPM是衡量启动过程和确定平台启动完整性的关键步骤的信任基础。在虚拟环境中，TPM提供了根植于硬件的信任链，该信任链将扩展到虚拟机管理程序。如果关键组件（例如BIOS，固件和虚拟机管理程序）已证明其完整性，则可以确保平台引导的完整性。为了确保启动组件的完整性，需要执行两个步骤：首先，测量引导过程，其次，进行证明，即保证和已执行的组件是受信任的组件。</p>
+</blockquote>
+<font color="DodgerBlue"> Hypervisor </font>
+
+<blockquote>
+<p>本文参考文献28构造了基于Xen的迁移框架：</p>
+<p>Xen虚拟机管理程序的安全迁移框架。该设计使用可信计算和相邻完整性度量来动态监视相邻虚拟机管理程序的完整性。更具体地说，为确保始终监视主机，当主机初始化时，TPM模块会验证虚拟机监控程序并将更新消息发送到完整性验证表（该表包含受信任的虚拟机监控程序列表），并将该虚拟机监控程序标记为受信任的。这意味着，如果未收到此类消息，则认为该特定的管理程序不可信。此外，系统会动态监控虚拟机监控程序的运行状态，如果虚拟机监控程序遭到破坏，则会发送相应的更新消息以报告受到破坏的情况。根据此完整性表的结果，确定源虚拟机管理程序是否受信任以及是否应启动VM迁移过程。</p>
+</blockquote>
+<h4 id="Phase-of-integrity-measurement"><a href="#Phase-of-integrity-measurement" class="headerlink" title="Phase of integrity measurement"></a>Phase of integrity measurement</h4><font color="DodgerBlue"> Boot time </font>
+
+<blockquote>
+<p>可信平台技术追求的原则之一是在关键组件加载和执行之前验证它们的信任和完整性。因此，在运行时完整性检查之前，需要确保正确引导了系统并且正在运行适当的操作系统。受信任的平台通过创建信任链来实现这种信任，该信任链以BIOS引导块中的受信任代码（CRTM）为核心信任根。 CRTM衡量其他实体的完整性价值，并且在平台的整个生命周期内保持不变。 CRTM是普通BIOS的补充，它首先运行以测量BIOS块和硬件，然后将控制权传递给引导加载程序。然后在将控件传递给OS之前测量OS内核映像。在此引导过程的每个步骤中，都会获取测量值，并据此扩展相关的TPM PCR值。该测量过程证明了系统的完整性，并确保引导和操作系统软件是制造商想要的版本，并且未被恶意第三方或恶意软件篡改。100Nanavati等人74指出，在虚拟环境中，可信引导技术允许用户证明基础启动平台的身份，并确保加载的虚拟化平台值得信赖。这为用户提供了有关可以向其提交关键数据的虚拟化平台的具体保证。 TPM通过使用加密原语为虚拟化平台提供此受信任的引导，并为其建立信任根。在ALIBI可信监视框架中，17 TPM用于在服务提供商平台上提供信任根。 TPM PCR记录平台上正在执行的软件的状态，并且由于PCR值仅是附加值，因此仅通过重新启动才能消除以前的记录。 TPM还拥有一个公共-私人密钥对。私钥仅保留在TPM的安全环境中，并用于计算TPM生成的证明值（从经过身份验证的启动累积的度量）的签名。使用TPM的公钥，外部验证程序可以检查签名的有效性，并推断出PCR值表示平台软件的状态。</p>
+</blockquote>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>​        本文所统计并分析了120篇文献后，认为TPM技术在云中应用是一种趋势。在云中TPM技术的主要目标是远程验证以及完整性度量。本文主要分析了TPM的功能，TPM可应对云中的安全威胁，TPM提供完整性度量的阶段以及层次并指出了留有的研究空间，最后指出主要的研究差距。</p>
+<blockquote id="fn_1">
+<sup>1</sup>. 在加密技术中的初始向量和加密散列函数都发挥着重要作用，在各类验证协议的通信应用中确保验证信息不被重复使用以对抗重放攻击(Replay Attack)<a href="#reffn_1" title="Jump back to footnote [1] in the text."> &#8617;</a>
+</blockquote>
+<h3 id="引文延伸阅读"><a href="#引文延伸阅读" class="headerlink" title="引文延伸阅读"></a>引文延伸阅读</h3><p>Here are the papers worth reading further.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>theme</th>
+<th>Reference Number &amp; Summary</th>
+<th>Reference Number &amp; Summary</th>
+<th>more</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>远程验证</td>
+<td>6：TPM进行远程验证VMs</td>
+<td>7：验证用户所在地理位置</td>
+<td></td>
+</tr>
+<tr>
+<td>完整性度量</td>
+<td>10：多用户环境中数据拥有完整性</td>
+<td>11：动态的完成性度量的模型（Xen）</td>
+<td>8、9</td>
+</tr>
+<tr>
+<td>生成秘钥安全存储</td>
+<td>12</td>
+<td>13</td>
+<td></td>
+</tr>
+<tr>
+<td>安全启动</td>
+<td><a href="https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=2969&amp;context=sis_research" target="_blank" rel="noopener">14</a>：protect the hypervisor</td>
+<td>15 ：monitoring the cloud platform</td>
+<td></td>
+</tr>
+<tr>
+<td>硬件信任根</td>
+<td>17 25 33 34 35</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://www.zhihu.com/question/19790488/answer/19290308" target="_blank" rel="noopener">什么是彩虹表？</a> </p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>TPM</tag>
+        <tag>Security</tag>
+        <tag>Cloud Computing</tag>
+        <tag>可信计算</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Attacks Directories, Not Caches</title>
+    <url>/2020/07/17/Attacks-Directories-Not-Caches/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href>Attack Directories, Not Caches: Side-Channel Attacks in a Non-Inclusive World</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">Side Channel Attack</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">Attack, Cache</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">基于缓存的侧信道攻击在新型缓存的攻击实践</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="0-Main-idea"><a href="#0-Main-idea" class="headerlink" title="0. Main idea"></a>0. Main idea</h3>]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>side channel attack</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
     <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
     <content><![CDATA[<div class="table-container">
@@ -146,8 +372,8 @@
       </tags>
   </entry>
   <entry>
-    <title>Attacks Directories, Not Caches</title>
-    <url>/2020/07/17/Attacks-Directories-Not-Caches/</url>
+    <title>BatchCrypt</title>
+    <url>/2020/09/13/BatchCrypt/</url>
     <content><![CDATA[<div class="table-container">
 <table>
 <thead>
@@ -161,145 +387,210 @@
 <tr>
 <td style="text-align:center">1</td>
 <td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href>Attack Directories, Not Caches: Side-Channel Attacks in a Non-Inclusive World</a></td>
+<td style="text-align:center"><a href="https://marcoszh.github.io/batchcrypt_atc20.pdf" target="_blank" rel="noopener">Batchcrypt</a></td>
 </tr>
 <tr>
 <td style="text-align:center">2</td>
 <td style="text-align:center">作者信息</td>
-<td style="text-align:center"></td>
+<td style="text-align:center"><a href="https://marcoszh.github.io/" target="_blank" rel="noopener">Chengliang Zhang</a></td>
 </tr>
 <tr>
 <td style="text-align:center">3</td>
 <td style="text-align:center">核心内容</td>
-<td style="text-align:center">Side Channel Attack</td>
+<td style="text-align:center">利用同态加密技术实现FL的安全数据传输，通过改进系统模型，降低同态加密带来的加密与通讯代价。</td>
 </tr>
 <tr>
 <td style="text-align:center">4</td>
 <td style="text-align:center">研究领域</td>
-<td style="text-align:center">Attack, Cache</td>
+<td style="text-align:center">Federal Learning; HE</td>
 </tr>
 <tr>
 <td style="text-align:center">5</td>
 <td style="text-align:center">全文总览</td>
-<td style="text-align:center">基于缓存的侧信道攻击在新型缓存的攻击实践</td>
+<td style="text-align:center">利用同态加密构造一个适合联邦学习的模型，通过优化降低同态加密带来的加密计算与通讯的时间代价。</td>
 </tr>
 </tbody>
 </table>
 </div>
-<h3 id="0-Main-idea"><a href="#0-Main-idea" class="headerlink" title="0. Main idea"></a>0. Main idea</h3>]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>side channel attack</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CloudMon</title>
-    <url>/2020/09/14/CloudMon/</url>
-    <content><![CDATA[<div class="table-container">
+<h3 id="BatchCrypt"><a href="#BatchCrypt" class="headerlink" title="BatchCrypt"></a>BatchCrypt</h3><p>&emsp;&emsp;这篇论文的目的是利用同态加密构造一个适合联邦学习的模型，能够利用同态加密的安全特性满足联邦学习对安全的需求，并在此基础上对同态加密进行改进，从而获得一个更加高效的处理系统。通过引入批处理，缓解同态加密的加密代价，这样就可以在满足安全性的同时保证性能。</p>
+<h3 id="联邦学习"><a href="#联邦学习" class="headerlink" title="联邦学习"></a>联邦学习</h3><h4 id="联邦学习系统架构"><a href="#联邦学习系统架构" class="headerlink" title="联邦学习系统架构"></a><font color="Blue"><strong>联邦学习系统架构</strong></font></h4><blockquote>
+<p>假设企业A、B想要联合训练一个机器学习模型，两者业务系统分别拥有各自用户的相关数据，企业B拥有模型需要预测的便签数据，出于安全考虑，A与B无法直接进行数据交换，下图是利用联邦学习模型架构的组成。</p>
+<p>第一部分： 加密样本对齐。由于两个公司的用户群体并非完全重合，系统利用基于加密的用户样本对齐，在A与B不公开各自数据的前提下确认双方的共有用户，便于联合这些用户特征进行建模。</p>
+<p>第二部分： 加密模型训练。在确定共有用户群体之后，利用这些数据训练机器学习模型，为了保证训练过程中数据的保密性，需要借助第三方协作者C进行加密训练，以线性回归模型为例，训练过程如下：</p>
+<blockquote>
+<ol>
+<li><p>协作者C把公钥分发给A与B，对训练过程中需要交换的数据进行加密；</p>
+</li>
+<li><p>A、B之间以加密形式交互用于计算梯度的中间结果；</p>
+</li>
+<li><p>A、B分别基于加密的梯度值进行计算，同时B根据便签数据计算损失，并把这些结果汇总给C，C通过汇总结果计算总梯度并将其解密；</p>
+</li>
+<li><p>C将解密后的梯度分别回传给A和B，并根据梯度更新各自模型的参数。</p>
+</li>
+</ol>
+</blockquote>
+<p>对上述过程进行迭代，直至损失函数收敛，这样就完成了整个训练过程，在样本对齐以及模型训练过程中， A、B各自的数据均留在本地，且训练中的数据交互也不会导致数据隐私泄露，因此，双方在联邦学习的帮助下可以实现合作训练模型的目的。</p>
+<p>第三部分： 效果激励。联邦学习的特点是解决了为什么不同机构要加入联邦共同建模的问题。提供数据多的机构获得的模型效果会更好，模型效果取决于数据提供方对自己和他人的贡献，这些模型的效果在联邦机制上会分发给各个机构反馈，并继续激励更多机构加入这一数据联邦。</p>
+</blockquote>
+<p><img src="/2020/09/13/BatchCrypt/FL_Architecture.png" width="600px" height="300px"></p>
+<p>​                                                                   图1. 联邦学习架构图</p>
+<h4 id="联邦学习优势"><a href="#联邦学习优势" class="headerlink" title="联邦学习优势 "></a><font color="RoyalBlue"><strong>联邦学习优势</strong> </font></h4><blockquote>
+<p>数据隔离，满足用户隐私保护和数据安全的需求；</p>
+<p>保证模型质量无损，不会出现负迁移，保证联邦模型比割裂的独立模型效果好；</p>
+<p>参与者地位对等，能够实现公平合作；</p>
+<p>能够保证参与方在保持独立的情况下，进行信息与模型参数的加密交换，并同时获得成长。</p>
+</blockquote>
+<h4 id="联邦学习方式"><a href="#联邦学习方式" class="headerlink" title="联邦学习方式 "></a><font color="RoyalBlue"><strong>联邦学习方式</strong> </font></h4><div class="table-container">
 <table>
 <thead>
 <tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
+<th>Method</th>
+<th>Differential Privacy</th>
+<th>Secure Multi Party Comput.</th>
+<th>Secure Aggregation</th>
+<th>Homomorphic Encryption</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href>CloudMon</a></td>
+<td>Efficiency</td>
+<td>√</td>
+<td>×</td>
+<td>×</td>
+<td>×</td>
 </tr>
 <tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"><a href="https://chuliangweng.github.io/" target="_blank" rel="noopener">Cl.W</a></td>
+<td>Strong Privacy</td>
+<td>×</td>
+<td>√</td>
+<td>×</td>
+<td>√</td>
 </tr>
 <tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">这篇文章信任hypervisor并在此基础上对guestVM进行保护，主要是从内存角度出发，针对rootkit攻击进行运行时检测。</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">System Security; Virtual Machine</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文构造一个动态的监控架构，并在此基础上保证guest VM 运行时的安全性，主要功能是在客户虚拟机中检测出rootkits攻击。</td>
+<td>No accuracy loss</td>
+<td>×</td>
+<td>√</td>
+<td>√</td>
+<td>√-</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>​        本文构建了一个动态的监控架构，运行在特权级别，通过对guestVM内存的扫描，检测客户机是否受到rootkit攻击，从而保证guestVM的运行时安全性。利用虚拟化技术对客户机内存进行实时监控，且这些监控对于客户机是透明的，为了实现检测的有效与高效，本系统在性能和安全之间权衡。</p>
-<h4 id="Rootkit-攻击"><a href="#Rootkit-攻击" class="headerlink" title="Rootkit 攻击 "></a><font color="blue"><strong>Rootkit 攻击</strong> </font></h4><p>​        rootkit 能够以特权级指令访问 host，并且可以通过对系统进行更改隐藏自己的存在。</p>
-<p>​        检测rootkit，最好是对客户机透明，不更改客户机系统的前提下对其进行检测。</p>
-<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        假设VMM（hypervisor）与priviliged VM  是可信的，guest VM 会受到攻击，在开机阶段的安全性受到VMM的保护，并且对guest VM的攻击不会对privileged VM 的安全性造成影响。</p>
-<p>（有些保护是针对VMM的，但是这不在本文的考虑范围内，本文聚焦在对客户机的保护上）</p>
-<h3 id="CloudMon-系统设计"><a href="#CloudMon-系统设计" class="headerlink" title="CloudMon 系统设计"></a>CloudMon 系统设计</h3><p>​        目的是实现一个可以访问较低权限级别内存信息、检测潜在的攻击并且可以保证检测的实时性与系统性能。访问内存的操作实现是基于 Xen的xenctrl 库，这个库能够读取较低权限的内存（如guest VM的内存信息）。</p>
-<p>​        构建一个guest VM 内存的监控器，目标是对VM透明、高效且是瞬时性的，这种方式可行性是因为攻击者对VM内存任何的更改都是可见的。CloudMon扫描内核memory与寄存器，从而可以实时的检测内存状态变化。这是一个特权级别的VM，能够通过VMM访问其他VMs的内存信息，而不是单纯的一个安全的guest VM。</p>
-<p><img src="/2020/09/14/CloudMon/CloudMonArchitecture.png" width="400px" height="240px"></p>
-<p>​        从云中大量的攻击实例中提取rootkit攻击特征，并将该特征记录在Feature Lib中，通过比较RT Value 与 SV Table 中数值的差异情况，可以检测出系统调用表中的攻击情况，设置较小的检测时间间隔，可以近似实时的检测嵌入内核的 rootkit ，通过设置检测的时间间隔，可以控制性能开销。并且CloudMon会直接检索其内存，因此，包括DKSM 和Shadow Walker 在内的任何来宾内核rootkit都不会欺骗CloudMon。 </p>
-<font color="green">**获取开始地址信息**</font>
+<ul>
+<li><p><font color="green"> <strong>DP</strong></font>  通过注入噪声增加对数据的保护(安全性较差)</p>
+</li>
+<li><p><font color="green"> <strong>MPC</strong></font> 多方合作，利用达成一致的同种方式计算。多方客户端通过一种特定受保护的同步协议进行同步，但是不适合于跨孤岛的联邦学习，对隐私或者计算性能都有很大的影响。</p>
+</li>
+<li><p><font color="green"> <strong>Secure Aggregation</strong></font> 易被其他实体获取</p>
+</li>
+<li><font color="green"> **HE**</font> 
 
-<p>​        KV Searcher查找 guest VM 系统调用的起始地址，SV generator 通过扫描，比对通过大量OS攻击实例中获取到的攻击特征，从而可以判断出被攻击者。</p>
-<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a><font color="blue"><strong>实验环境</strong></font></h4><div class="table-container">
+<blockquote>
+<p>1.对训练模型的保护</p>
+<p>2.没有学习精度的缺失，没有噪声的引入</p>
+<p>3.应用的话对系统无需额外的更改，仅仅是加密解密上的更新,但是，这增加了很多的系统负载（计算以及交互代价过高）</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="HE应用于FL"><a href="#HE应用于FL" class="headerlink" title="HE应用于FL"></a><font color="b"><strong>HE应用于FL</strong></font></h3><p>​        上传数据到中心服务器的过程中，密钥对是通过加密信道在客户端之间传输的，客户上传加密过的数据到服务器，服务器聚集所有客户上传的密文，并将结果返回给客户为了保证在上传数据的时候不发生数据泄露，采用的方式包括同态加密，这种方式在保证加密的同时不降低学习的准确率。客户端通过已获取的密钥对解密返回的密文。这样无论客户端是否可信，读取的数据都是密文，即对数据进行了保护。</p>
+<h4 id="HE性能瓶颈"><a href="#HE性能瓶颈" class="headerlink" title="HE性能瓶颈"></a><font color="blue"><strong>HE性能瓶颈</strong></font></h4><p>​        通过测试三个联邦学习的深度学习模型实例得出了性能瓶颈，主要是同态加密过程与通讯过程成为了主要性能瓶颈。</p>
+<font color="green">**实验测试**</font>
+
+<p>​    模拟不同的地理位置的客户，在EC2上开9个客户端，分布在5个不同的地理位置，利用FATE (Federated AI Technology Enabler)进行训练。</p>
+<font color="green">**加密与通讯代价**</font>
+
+<p>​        2.1 在三个数据集上的训练时间增加量分别为 96、135、154倍，提高了两个数量级，加密后的数据量分别带来了161、156、163倍的额外数据量。</p>
+<p>​        2.2 客户端数据加密及解密时间占据8成；在聚合端（服务端），7成以上的时间用来等待数据的传输，聚合数据的时间只有10%</p>
+<p><img src="/2020/09/13/BatchCrypt/Iterationtime.png" width="500px" height="300px"></p>
+<p>​        其余时间用来从不同客户端收集数据、分发数据。（因为不同 客户端在不同的地理位置，因此不是同步传输）</p>
+<font color="green">**为什么同态的代价如此高昂**</font>
+
+<p>​        随着秘钥长度的增加，安全性会随之增加，但是带来的加密代价也是随之增加的。由于pailier只能处理整形的数据，在遇到浮点数的时候需要事先进行转化，因此这些数据加密时间并不是严格按照线性关系增加的。</p>
+<div class="table-container">
 <table>
 <thead>
 <tr>
-<th>Xen</th>
-<th>priviliged VM</th>
-<th>guest VM</th>
+<th>Keysize</th>
+<th>Plaintext</th>
+<th>Ciphertext</th>
+<th>Encryption</th>
+<th>Decryption</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Xen-3.4.2</td>
-<td>Ubuntu 9.04</td>
-<td>Ubuntu 8.04</td>
+<td>1024</td>
+<td>6.87MB</td>
+<td>287.64MB</td>
+<td>216.87S</td>
+<td>68.63S</td>
+</tr>
+<tr>
+<td>2048</td>
+<td>6.87MB</td>
+<td>527.17MB</td>
+<td>1152.98S</td>
+<td>357.17S</td>
+</tr>
+<tr>
+<td>3072</td>
+<td>6.87MB</td>
+<td>754.62MB</td>
+<td>3111.14S</td>
+<td>993.80S</td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>已经存在的检测方式：</p>
+<font color="green">**总结**</font>
+
+<p>​        4.1 由于同态加密在此过程中占据主导地位，如果利用硬件加速模型计算，例如GPU、TPU，获得的意义不大；</p>
+<p>​        4.2 不同的数据孤岛在不同的地理位置，因此大量的数据传输会带来额外的网络通讯费用。</p>
+<font color="green">**解决方法**</font>
+
 <ol>
-<li><p>获取guest OS的system.map信息</p>
-</li>
-<li><p>one-on-one 运行在guest VM上</p>
-</li>
+<li>加速HE的操作时间：FPGA仅提高三倍的处理时间，但是通讯上未改进；</li>
+<li>减少加密的操作（减少密文的长度），或者利用批处理方式对目标值进行处理。</li>
 </ol>
-<h3 id="相关工作介绍"><a href="#相关工作介绍" class="headerlink" title="相关工作介绍"></a>相关工作介绍</h3><p>本文将对VM的保护机制分为了 out-of-VM  与 in-VM两种</p>
-<p>A类：out-of-VM</p>
+<h4 id="FATE改进"><a href="#FATE改进" class="headerlink" title="FATE改进"></a><font color="blue"><strong>FATE改进</strong></font></h4><p>==目标==  想要获得高效的处理时间并且不会引入精度上的缺失。</p>
+<p>==FATE局限性==</p>
+<blockquote>
 <ol>
-<li><p>利用受信任的VM充当监控器。OSck,是一种one-on-one的监控模式</p>
-</li>
-<li><p>XenKIMONO 在VM中聚集信息时会暂停OS的执行</p>
-</li>
-<li><p>vIPS 通过预先设置，这种检测规则需要有固定的检测时间间隔</p>
-</li>
+<li>仅可以处理整数，无法处理浮点数，而梯度值不仅是浮点数而且是有符号的浮点数；</li>
+<li>处理的数都是正整数，处理负数时要转化为正数，无法判断数字是正溢出还是负溢出。</li>
 </ol>
-<p>B类：in-VM</p>
-<ol>
-<li><p>硬件虚拟化技术</p>
-</li>
-<li><p>Lares 在guest VM 中内置hooks（钩子函数）实时的检测虚拟机的安全（事件检测）</p>
-</li>
-</ol>
+</blockquote>
+<p>==对梯度值进行量化==</p>
+<p><img src="/2020/09/13/BatchCrypt/sign.png" width="500px" height="100px"></p>
+<p>由于对浮点数进行加减需要对齐指数（阶码）后才能操作，因此对于仅可以处理整数的系统来说是不太现实的，需要对浮点数进行转化。</p>
+<p>1.将浮点数转化为整数，利用转化后的整数进行计算；</p>
+<p>2.采用两个符号位对浮点数进行正负标识，可以推断出数字的正负溢出。</p>
+<p><img src="/2020/09/13/BatchCrypt/doublesign.png" width="500px" height="200px"></p>
+<p>通过以上的处理，可以使用FATE系统对量化后的梯度值进行HE处理。</p>
+<p>3.利用机器学习的方式，对数据进行剪枝处理，减少处理的数据量（去噪声），并且模型是动态变化的。（在线模型）</p>
+<p>==架构图==</p>
+<p><img src="/2020/09/13/BatchCrypt/batcharchitecture.png" width="500px" height="300px"></p>
+<h4 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a><font color="blue"><strong>实验结果</strong></font></h4><p>==实验环境==</p>
+<p>AWS </p>
+<p>Cluster of 10, spanning 5 locations （部署在五大洲）</p>
+<p>C5.4xlarge instances (16 vCPUs, 32 GB memory) </p>
+<p>==处理时间==</p>
+<p><img src="/2020/09/13/BatchCrypt/lab-1.png" width="500px" height="200px"></p>
+<p>==通讯时间==</p>
+<p><img src="/2020/09/13/BatchCrypt/lab-2.png" width="500px" height="200px"></p>
+<p>==总计时间==</p>
+<p><img src="/2020/09/13/BatchCrypt/lab-3.png" width="500px" height="300px"></p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://blog.csdn.net/cao812755156/article/details/89598410?utm_medium=distribute.pc_relevant.none-task-blog-title-1&amp;spm=1001.2101.3001.4242" target="_blank" rel="noopener">联邦学习</a></p>
+<p>[2] <a href="https://ai.googleblog.com/2017/04/federated-learning-collaborative.html" target="_blank" rel="noopener">https://ai.googleblog.com/2017/04/federated-learning-collaborative.html</a></p>
 ]]></content>
       <categories>
         <category>paper</category>
-        <category>TC</category>
+        <category>ATC</category>
       </categories>
       <tags>
         <tag>论文解读</tag>
-        <tag>Virtual Machine</tag>
-        <tag>System Security</tag>
+        <tag>Federal Learning</tag>
+        <tag>Homomorphic</tag>
       </tags>
   </entry>
   <entry>
@@ -508,8 +799,8 @@
       </tags>
   </entry>
   <entry>
-    <title>CloudVisor-D</title>
-    <url>/2020/10/18/CloudVisor-D/</url>
+    <title>CloudMon</title>
+    <url>/2020/09/14/CloudMon/</url>
     <content><![CDATA[<div class="table-container">
 <table>
 <thead>
@@ -523,107 +814,94 @@
 <tr>
 <td style="text-align:center">1</td>
 <td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://rambleed.com/docs/20190603-rambleed-web.pdf" target="_blank" rel="noopener">CloudViso-D</a></td>
+<td style="text-align:center"><a href>CloudMon</a></td>
 </tr>
 <tr>
 <td style="text-align:center">2</td>
 <td style="text-align:center">作者信息</td>
-<td style="text-align:center">IPADS，Shanghai Jiao Tong University</td>
+<td style="text-align:center"><a href="https://chuliangweng.github.io/" target="_blank" rel="noopener">Cl.W</a></td>
 </tr>
 <tr>
 <td style="text-align:center">3</td>
 <td style="text-align:center">核心内容</td>
-<td style="text-align:center">Untrusted Hypervisor，解耦是嵌套虚拟化技术，非可信平台保护VMs</td>
+<td style="text-align:center">这篇文章信任hypervisor并在此基础上对guestVM进行保护，主要是从内存角度出发，针对rootkit攻击进行运行时检测。</td>
 </tr>
 <tr>
 <td style="text-align:center">4</td>
 <td style="text-align:center">研究领域</td>
-<td style="text-align:center">Virtualization， Cloud Platform</td>
+<td style="text-align:center">System Security; Virtual Machine</td>
 </tr>
 <tr>
 <td style="text-align:center">5</td>
 <td style="text-align:center">全文总览</td>
-<td style="text-align:center">CloudVisor-D将传统嵌套虚拟化的架构分解为两个模块，能在无需引起虚拟机下陷的情况下将大多数虚拟机操作转交给可信的守卫模块处理，大幅度提升嵌套虚拟化技术的性能。</td>
+<td style="text-align:center">本文构造一个动态的监控架构，并在此基础上保证guest VM 运行时的安全性，主要功能是在客户虚拟机中检测出rootkits攻击。</td>
 </tr>
 </tbody>
 </table>
 </div>
-<h3 id="全文概览"><a href="#全文概览" class="headerlink" title="全文概览"></a>全文概览</h3><p>​        本文首次提出解耦式嵌套虚拟化技术，可以在恶意虚拟机监控器环境下实现虚拟机隐私的高效保护，并基于此开发了 CloudVisor-D 系统。该技术将传统嵌套虚拟化的架构分解为两个模块，能在无需引起虚拟机下陷的情况下将大多数虚拟机操作转交给可信的守卫模块处理，大幅度提升嵌套虚拟化技术的性能。通过利用最新硬件的功能，使得VM多数的特权级别操作不需要触发<code>VM Exit</code>， 即无需退出到嵌套的<code>Hypervisor</code>中，这是先前<code>CloudVisor</code>设计中性能下降的主要原因。</p>
-<p>​        该工作是<code>IPADS</code>实验室<code>CloudVisor[SOSP&#39; 11]</code>系统的后续之作，也是继 CHAOS [ISTR’07]、HyperCoffer [HPCA’13]、TxIntro [HPCA’14]、CrossOver [ISCA’15]、SeCage [CCS’15]、Nexen [NDSS’17] 、EPTI [ATC’18]、SkyBridge [EuroSys’19]等系列工作之后，在虚拟化隔离与安全方面的延续工作。</p>
-<p><img src="/2020/10/18/CloudVisor-D/summary.png"></p>
-<h3 id="CloudVisor-D"><a href="#CloudVisor-D" class="headerlink" title="CloudVisor-D"></a>CloudVisor-D</h3><p>​        云中多租户的前提是云平台能够提供给用户隐私与完整性保护，然而提供这个前提的hypervisor 被其存在的漏洞严重的威胁。事实上，随着hypervisor代码量的不断增加，在Xen中发现的代码漏洞正在不断的增加。现有的方法是在软件以及硬件方面都有瑕疵，会导致性能的下降。</p>
-<p>​        本文利用嵌套虚拟化技术,目的是保护部署在同一个物理机上的客户虚拟机安全。CloudVisor-D解决了嵌套虚拟化的不足，并设计了一个分解的嵌套虚拟化管理器。通过分解，hypervisor分解为小型的管理程序，在非特权模式下，分解为一组guardian-VM（不是完整的VM，仅包含一些服务处理程序，对于商业虚拟机管理器是透明的），并为每一个客户虚拟机提供一个，因此消耗的资源很少。基于新硬件的特征，Guardian-VM能够在不退出VM的情况下执行卸载VM的操作，通过这种G-VM的帮助，客户VM可以直接调用超级调用命令，而且不需要陷入RootVisor中。常规EPT违规将在来宾模式下转换为异常，然后由Guardian-VM重定向到SubVisor进行处理。</p>
-<p>​        但是在客户模式下，VM或SubVisor可能会恶意切换EPT以绕过甚至攻击Guardian-VM。有一些工作在假设不能够修改CR3寄存器数值的前提的下解决上述问题，但本文并不基于此种假设。本文在CloudVisor-D中提供了一系列的技术来保护：</p>
+<p>​        本文构建了一个动态的监控架构，运行在特权级别，通过对guestVM内存的扫描，检测客户机是否受到rootkit攻击，从而保证guestVM的运行时安全性。利用虚拟化技术对客户机内存进行实时监控，且这些监控对于客户机是透明的，为了实现检测的有效与高效，本系统在性能和安全之间权衡。</p>
+<h4 id="Rootkit-攻击"><a href="#Rootkit-攻击" class="headerlink" title="Rootkit 攻击 "></a><font color="blue"><strong>Rootkit 攻击</strong> </font></h4><p>​        rootkit 能够以特权级指令访问 host，并且可以通过对系统进行更改隐藏自己的存在。</p>
+<p>​        检测rootkit，最好是对客户机透明，不更改客户机系统的前提下对其进行检测。</p>
+<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        假设VMM（hypervisor）与priviliged VM  是可信的，guest VM 会受到攻击，在开机阶段的安全性受到VMM的保护，并且对guest VM的攻击不会对privileged VM 的安全性造成影响。</p>
+<p>（有些保护是针对VMM的，但是这不在本文的考虑范围内，本文聚焦在对客户机的保护上）</p>
+<h3 id="CloudMon-系统设计"><a href="#CloudMon-系统设计" class="headerlink" title="CloudMon 系统设计"></a>CloudMon 系统设计</h3><p>​        目的是实现一个可以访问较低权限级别内存信息、检测潜在的攻击并且可以保证检测的实时性与系统性能。访问内存的操作实现是基于 Xen的xenctrl 库，这个库能够读取较低权限的内存（如guest VM的内存信息）。</p>
+<p>​        构建一个guest VM 内存的监控器，目标是对VM透明、高效且是瞬时性的，这种方式可行性是因为攻击者对VM内存任何的更改都是可见的。CloudMon扫描内核memory与寄存器，从而可以实时的检测内存状态变化。这是一个特权级别的VM，能够通过VMM访问其他VMs的内存信息，而不是单纯的一个安全的guest VM。</p>
+<p><img src="/2020/09/14/CloudMon/CloudMonArchitecture.png" width="400px" height="240px"></p>
+<p>​        从云中大量的攻击实例中提取rootkit攻击特征，并将该特征记录在Feature Lib中，通过比较RT Value 与 SV Table 中数值的差异情况，可以检测出系统调用表中的攻击情况，设置较小的检测时间间隔，可以近似实时的检测嵌入内核的 rootkit ，通过设置检测的时间间隔，可以控制性能开销。并且CloudMon会直接检索其内存，因此，包括DKSM 和Shadow Walker 在内的任何来宾内核rootkit都不会欺骗CloudMon。 </p>
+<font color="green">**获取开始地址信息**</font>
+
+<p>​        KV Searcher查找 guest VM 系统调用的起始地址，SV generator 通过扫描，比对通过大量OS攻击实例中获取到的攻击特征，从而可以判断出被攻击者。</p>
+<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a><font color="blue"><strong>实验环境</strong></font></h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Xen</th>
+<th>priviliged VM</th>
+<th>guest VM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xen-3.4.2</td>
+<td>Ubuntu 9.04</td>
+<td>Ubuntu 8.04</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>已经存在的检测方式：</p>
 <ol>
-<li><p>RootVisor创建出一个隔离的环境使得Guardian-VM不会被篡改；</p>
+<li><p>获取guest OS的system.map信息</p>
 </li>
-<li><p>每个Guardian-VM都会强制其在客户VM和SubVisor之间以客户模式插入所有通信路径。</p>
-<p><img src="/2020/10/18/CloudVisor-D/comparison.jpg"></p>
+<li><p>one-on-one 运行在guest VM上</p>
 </li>
 </ol>
-<p>​        CloudVisor-D通过解耦合的设计来解决嵌套虚拟化(<strong>CloudVisor工作</strong> )的不足，方法是在特权模式下将嵌套的管理程序功能分解为微小的嵌套管理程序（RootVisor），在非特权模式下将其分解为一组Guardian-VM。这种分解的设计为每个来宾VM提供一个Guardian-VM，并将大多数保护逻辑卸载到每个Guardian-VM，而小型RootVisor负责将所有Guardian-VM与商业虚拟机管理程序（SubVisor）和来宾VM隔离。 Guardian-VM不是完整的VM，而仅包含一些服务处理程序，并且对于SubVisor是不可见的。 </p>
-<p>​        Guardian-VM可以处理VM操作，而无需信任来宾VM和SubVisor。 具体来说，Guardian-VM要求相应的VM只能调用跳转表中列出的有限范围内的功能。 此外，它为每个来宾VM向SubVisor提供了一个影子EPT，并在将其复制回真实EPT之前仔细检查了SubVisor对影子EPT所做的更新。 最后，Guardian-VM还可以保护其来宾VM的I / O数据的隐私和完整性。</p>
-<h3 id="虚拟机退出"><a href="#虚拟机退出" class="headerlink" title="虚拟机退出"></a>虚拟机退出</h3><p>VM响应某些指令而退出，并且事件（例如页面错误）是虚拟化系统中性能下降的关键来源。但是您是否想过为什么？无论如何，VM退出过程中到底会发生什么？</p>
-<p>VM出口标志着在当前运行的VM和必须出于特定原因而必须执行系统控制的VMM（管理程序）之间进行转换的点。通常，处理器必须在退出时保存VM运行时的状态快照。对于英特尔架构，以下是这些步骤的近似值：</p>
-<p>1.在VM退出信息字段中记录有关VM退出原因的信息（退出原因，来宾地址），并更新VM进入控制字段。</p>
-<p>2.将处理器状态保存在来宾状态区域中。其中包括控制寄存器，调试寄存器，MSR（请参见下一项），段寄存器，描述符表寄存器，RIP，RSP和RFLAGS，以及未注册状态（如未决的调试异常）。</p>
-<p>3.将MSR保存在VM退出MSR存储区中。如果您不熟悉，MSR代表机器专用寄存器。它们用于控制和报告处理器性能。</p>
-<p>4.根据主机状态区域和某些VM退出控件加载处理器状态。这包括主机控制寄存器，调试寄存器，MSR，主机表和描述符表寄存器，RIP，RSP和RFLAGS，页目录指针表条目以及非寄存器状态。</p>
-<p>5.从VM退出MSR加载区域加载MSR。</p>
-<p>在VMM执行其系统管理功能之后，将执行相应的VM条目，该条目将处理器控制从VMM过渡到VM！</p>
-<h3 id="嵌套虚拟化？"><a href="#嵌套虚拟化？" class="headerlink" title="嵌套虚拟化？"></a>嵌套虚拟化？</h3><h3 id="阅读时的问题："><a href="#阅读时的问题：" class="headerlink" title="阅读时的问题："></a>阅读时的问题：</h3><ol>
-<li><p>本文提到的硬件（SGX）与即将用到的硬件（TPM）分别都是什么，有什么区别、联系？</p>
-<p>TPM与SGX都是安全芯片，Intel SGX最关键的优势在于将程序以外的software stack如OS和BIOS都排除在了TCB（Trusted Computing Base）以外，在enclave里的code只信任自己和intel的CPU。TPM在开机过程中需要构建信任链，逐步确立信任。但是SGX仅仅在用户权限下使用，TPM则在特权级别下使用。</p>
-</li>
-<li><p>嵌套虚拟化需要VM退出？CloudVisor-D版本的嵌套虚拟化怎么就解决了前者的问题？</p>
-<p>嵌套虚拟化是指将原来的hypervisor转移到非特权模式下，命名为SubVisor，在特权模式下构建一个受信任的虚拟机管理器（RootVisor），VM与SubVisor的任何通讯都要经过RootVisor进行检查，从而避免漏洞注入到SubVisor中。</p>
-<p><a href="https://www.cnblogs.com/kelamoyujuzhen/p/10115167.html" target="_blank" rel="noopener">https://www.cnblogs.com/kelamoyujuzhen/p/10115167.html</a></p>
-</li>
-<li><p>文中出现的RootVisor、SubVisor是什么关系？</p>
-<p>RootVisor是新构建的一个特权级别的虚拟机管理，类似于修改前的hypervisor，对费特权级别的VM以及SubVisor进行管理。</p>
-<p>SubVisor是将原始的hypervisor移动到非特权级别下的名称，在非特权模式下，仍然保留了创建虚拟机的功能。</p>
-</li>
-<li><p>详细指出半虚拟化与全虚拟化的关系？<br>后者效率比较低下。</p>
-</li>
-<li><p>2.2节中为什么EPT有4层违规？介绍下EPT？</p>
-<p>Intel EPT应该有5级分页，经历4次地址拼接，所以在寻址的时候，最差情况下要经历4次地址miss，导致4次VM exit.</p>
-</li>
-<li><p>虚拟化异常是什么？</p>
-</li>
-<li><p>谈论虚拟化安全一般会从几个方面入手，分别都是什么？（性能？可靠性？）</p>
-</li>
-<li><p>Ring0与特权模式的关系、区别？</p>
-<p><a href="https://www.cnblogs.com/xusongwei/archive/2012/07/30/2615592.html" target="_blank" rel="noopener">https://www.cnblogs.com/xusongwei/archive/2012/07/30/2615592.html</a></p>
-</li>
-<li><p>本文用到的技术？</p>
+<h3 id="相关工作介绍"><a href="#相关工作介绍" class="headerlink" title="相关工作介绍"></a>相关工作介绍</h3><p>本文将对VM的保护机制分为了 out-of-VM  与 in-VM两种</p>
+<p>A类：out-of-VM</p>
 <ol>
-<li>TPM</li>
-<li>SSL</li>
-</ol>
+<li><p>利用受信任的VM充当监控器。OSck,是一种one-on-one的监控模式</p>
 </li>
-<li><p>本文提到的加密是怎么回事？</p>
-<p>涉及到IO传输，对传输的数据进行加密，防止被恶意窃取。</p>
+<li><p>XenKIMONO 在VM中聚集信息时会暂停OS的执行</p>
 </li>
-<li><p>以文中提到的虚拟机退出次数为例，本文只在Xen与CloudVisor间做了比较，说明后者产生更多的VM Exit，而CloudVisor-D是利用新硬件特性进行的部署，是所以VM Exit的次数明显减少，但是如果直接在CloudVisor上进行改进呢？</p>
-<p>​        本文所利用的指令，VMFUNC，是可以在非特权级别下进行操作并寻得EPTP表的，本文并未提到在特权模式下的转换会不会涉及到VM Exit（是会触发VM Exit的），这样的话，仅仅在CloudVisor架构基础上利用新硬件，并不能达到其最佳的效果。简言之，<code>利用VMFUNC指令在非特权模式下进行EPT Switching操作不会引发VM Exit 的特性</code>，进行优化，很大程度上减少了VM Exit的次数。又要保证这种更改之后的可靠性，所以加入了Guardian-VM.</p>
-</li>
-<li><p>虚拟化异常不会触发VM Exit吗?</p>
-</li>
-<li><p>文中指出的EPT存在哪里？</p>
-<p>指的是适配硬件虚拟化的 intel 扩展页表。</p>
+<li><p>vIPS 通过预先设置，这种检测规则需要有固定的检测时间间隔</p>
 </li>
 </ol>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://www.cnblogs.com/ck1020/p/6043054.html" target="_blank" rel="noopener">intel EPT 机制详解</a></p>
-<p>[2] <a href="https://www.facebook.com/notes/intel/virtualization-and-performance-understanding-vm-exits/97103992067/" target="_blank" rel="noopener">Understanding VM Exits</a></p>
+<p>B类：in-VM</p>
+<ol>
+<li><p>硬件虚拟化技术</p>
+</li>
+<li><p>Lares 在guest VM 中内置hooks（钩子函数）实时的检测虚拟机的安全（事件检测）</p>
+</li>
+</ol>
 ]]></content>
       <categories>
         <category>paper</category>
-        <category>Security</category>
+        <category>TC</category>
       </categories>
       <tags>
         <tag>论文解读</tag>
-        <tag>Untrusted Hypervisor</tag>
-        <tag>Virtualization</tag>
+        <tag>Virtual Machine</tag>
+        <tag>System Security</tag>
       </tags>
   </entry>
   <entry>
@@ -784,6 +1062,125 @@
       </tags>
   </entry>
   <entry>
+    <title>CloudVisor-D</title>
+    <url>/2020/10/18/CloudVisor-D/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://rambleed.com/docs/20190603-rambleed-web.pdf" target="_blank" rel="noopener">CloudViso-D</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">IPADS，Shanghai Jiao Tong University</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">Untrusted Hypervisor，解耦是嵌套虚拟化技术，非可信平台保护VMs</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">Virtualization， Cloud Platform</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">CloudVisor-D将传统嵌套虚拟化的架构分解为两个模块，能在无需引起虚拟机下陷的情况下将大多数虚拟机操作转交给可信的守卫模块处理，大幅度提升嵌套虚拟化技术的性能。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="全文概览"><a href="#全文概览" class="headerlink" title="全文概览"></a>全文概览</h3><p>​        本文首次提出解耦式嵌套虚拟化技术，可以在恶意虚拟机监控器环境下实现虚拟机隐私的高效保护，并基于此开发了 CloudVisor-D 系统。该技术将传统嵌套虚拟化的架构分解为两个模块，能在无需引起虚拟机下陷的情况下将大多数虚拟机操作转交给可信的守卫模块处理，大幅度提升嵌套虚拟化技术的性能。通过利用最新硬件的功能，使得VM多数的特权级别操作不需要触发<code>VM Exit</code>， 即无需退出到嵌套的<code>Hypervisor</code>中，这是先前<code>CloudVisor</code>设计中性能下降的主要原因。</p>
+<p>​        该工作是<code>IPADS</code>实验室<code>CloudVisor[SOSP&#39; 11]</code>系统的后续之作，也是继 CHAOS [ISTR’07]、HyperCoffer [HPCA’13]、TxIntro [HPCA’14]、CrossOver [ISCA’15]、SeCage [CCS’15]、Nexen [NDSS’17] 、EPTI [ATC’18]、SkyBridge [EuroSys’19]等系列工作之后，在虚拟化隔离与安全方面的延续工作。</p>
+<p><img src="/2020/10/18/CloudVisor-D/summary.png"></p>
+<h3 id="CloudVisor-D"><a href="#CloudVisor-D" class="headerlink" title="CloudVisor-D"></a>CloudVisor-D</h3><p>​        云中多租户的前提是云平台能够提供给用户隐私与完整性保护，然而提供这个前提的hypervisor 被其存在的漏洞严重的威胁。事实上，随着hypervisor代码量的不断增加，在Xen中发现的代码漏洞正在不断的增加。现有的方法是在软件以及硬件方面都有瑕疵，会导致性能的下降。</p>
+<p>​        本文利用嵌套虚拟化技术,目的是保护部署在同一个物理机上的客户虚拟机安全。CloudVisor-D解决了嵌套虚拟化的不足，并设计了一个分解的嵌套虚拟化管理器。通过分解，hypervisor分解为小型的管理程序，在非特权模式下，分解为一组guardian-VM（不是完整的VM，仅包含一些服务处理程序，对于商业虚拟机管理器是透明的），并为每一个客户虚拟机提供一个，因此消耗的资源很少。基于新硬件的特征，Guardian-VM能够在不退出VM的情况下执行卸载VM的操作，通过这种G-VM的帮助，客户VM可以直接调用超级调用命令，而且不需要陷入RootVisor中。常规EPT违规将在来宾模式下转换为异常，然后由Guardian-VM重定向到SubVisor进行处理。</p>
+<p>​        但是在客户模式下，VM或SubVisor可能会恶意切换EPT以绕过甚至攻击Guardian-VM。有一些工作在假设不能够修改CR3寄存器数值的前提的下解决上述问题，但本文并不基于此种假设。本文在CloudVisor-D中提供了一系列的技术来保护：</p>
+<ol>
+<li><p>RootVisor创建出一个隔离的环境使得Guardian-VM不会被篡改；</p>
+</li>
+<li><p>每个Guardian-VM都会强制其在客户VM和SubVisor之间以客户模式插入所有通信路径。</p>
+<p><img src="/2020/10/18/CloudVisor-D/comparison.jpg"></p>
+</li>
+</ol>
+<p>​        CloudVisor-D通过解耦合的设计来解决嵌套虚拟化(<strong>CloudVisor工作</strong> )的不足，方法是在特权模式下将嵌套的管理程序功能分解为微小的嵌套管理程序（RootVisor），在非特权模式下将其分解为一组Guardian-VM。这种分解的设计为每个来宾VM提供一个Guardian-VM，并将大多数保护逻辑卸载到每个Guardian-VM，而小型RootVisor负责将所有Guardian-VM与商业虚拟机管理程序（SubVisor）和来宾VM隔离。 Guardian-VM不是完整的VM，而仅包含一些服务处理程序，并且对于SubVisor是不可见的。 </p>
+<p>​        Guardian-VM可以处理VM操作，而无需信任来宾VM和SubVisor。 具体来说，Guardian-VM要求相应的VM只能调用跳转表中列出的有限范围内的功能。 此外，它为每个来宾VM向SubVisor提供了一个影子EPT，并在将其复制回真实EPT之前仔细检查了SubVisor对影子EPT所做的更新。 最后，Guardian-VM还可以保护其来宾VM的I / O数据的隐私和完整性。</p>
+<h3 id="虚拟机退出"><a href="#虚拟机退出" class="headerlink" title="虚拟机退出"></a>虚拟机退出</h3><p>VM响应某些指令而退出，并且事件（例如页面错误）是虚拟化系统中性能下降的关键来源。但是您是否想过为什么？无论如何，VM退出过程中到底会发生什么？</p>
+<p>VM出口标志着在当前运行的VM和必须出于特定原因而必须执行系统控制的VMM（管理程序）之间进行转换的点。通常，处理器必须在退出时保存VM运行时的状态快照。对于英特尔架构，以下是这些步骤的近似值：</p>
+<p>1.在VM退出信息字段中记录有关VM退出原因的信息（退出原因，来宾地址），并更新VM进入控制字段。</p>
+<p>2.将处理器状态保存在来宾状态区域中。其中包括控制寄存器，调试寄存器，MSR（请参见下一项），段寄存器，描述符表寄存器，RIP，RSP和RFLAGS，以及未注册状态（如未决的调试异常）。</p>
+<p>3.将MSR保存在VM退出MSR存储区中。如果您不熟悉，MSR代表机器专用寄存器。它们用于控制和报告处理器性能。</p>
+<p>4.根据主机状态区域和某些VM退出控件加载处理器状态。这包括主机控制寄存器，调试寄存器，MSR，主机表和描述符表寄存器，RIP，RSP和RFLAGS，页目录指针表条目以及非寄存器状态。</p>
+<p>5.从VM退出MSR加载区域加载MSR。</p>
+<p>在VMM执行其系统管理功能之后，将执行相应的VM条目，该条目将处理器控制从VMM过渡到VM！</p>
+<h3 id="嵌套虚拟化？"><a href="#嵌套虚拟化？" class="headerlink" title="嵌套虚拟化？"></a>嵌套虚拟化？</h3><h3 id="阅读时的问题："><a href="#阅读时的问题：" class="headerlink" title="阅读时的问题："></a>阅读时的问题：</h3><ol>
+<li><p>本文提到的硬件（SGX）与即将用到的硬件（TPM）分别都是什么，有什么区别、联系？</p>
+<p>TPM与SGX都是安全芯片，Intel SGX最关键的优势在于将程序以外的software stack如OS和BIOS都排除在了TCB（Trusted Computing Base）以外，在enclave里的code只信任自己和intel的CPU。TPM在开机过程中需要构建信任链，逐步确立信任。但是SGX仅仅在用户权限下使用，TPM则在特权级别下使用。</p>
+</li>
+<li><p>嵌套虚拟化需要VM退出？CloudVisor-D版本的嵌套虚拟化怎么就解决了前者的问题？</p>
+<p>嵌套虚拟化是指将原来的hypervisor转移到非特权模式下，命名为SubVisor，在特权模式下构建一个受信任的虚拟机管理器（RootVisor），VM与SubVisor的任何通讯都要经过RootVisor进行检查，从而避免漏洞注入到SubVisor中。</p>
+<p><a href="https://www.cnblogs.com/kelamoyujuzhen/p/10115167.html" target="_blank" rel="noopener">https://www.cnblogs.com/kelamoyujuzhen/p/10115167.html</a></p>
+</li>
+<li><p>文中出现的RootVisor、SubVisor是什么关系？</p>
+<p>RootVisor是新构建的一个特权级别的虚拟机管理，类似于修改前的hypervisor，对费特权级别的VM以及SubVisor进行管理。</p>
+<p>SubVisor是将原始的hypervisor移动到非特权级别下的名称，在非特权模式下，仍然保留了创建虚拟机的功能。</p>
+</li>
+<li><p>详细指出半虚拟化与全虚拟化的关系？<br>后者效率比较低下。</p>
+</li>
+<li><p>2.2节中为什么EPT有4层违规？介绍下EPT？</p>
+<p>Intel EPT应该有5级分页，经历4次地址拼接，所以在寻址的时候，最差情况下要经历4次地址miss，导致4次VM exit.</p>
+</li>
+<li><p>虚拟化异常是什么？</p>
+</li>
+<li><p>谈论虚拟化安全一般会从几个方面入手，分别都是什么？（性能？可靠性？）</p>
+</li>
+<li><p>Ring0与特权模式的关系、区别？</p>
+<p><a href="https://www.cnblogs.com/xusongwei/archive/2012/07/30/2615592.html" target="_blank" rel="noopener">https://www.cnblogs.com/xusongwei/archive/2012/07/30/2615592.html</a></p>
+</li>
+<li><p>本文用到的技术？</p>
+<ol>
+<li>TPM</li>
+<li>SSL</li>
+</ol>
+</li>
+<li><p>本文提到的加密是怎么回事？</p>
+<p>涉及到IO传输，对传输的数据进行加密，防止被恶意窃取。</p>
+</li>
+<li><p>以文中提到的虚拟机退出次数为例，本文只在Xen与CloudVisor间做了比较，说明后者产生更多的VM Exit，而CloudVisor-D是利用新硬件特性进行的部署，是所以VM Exit的次数明显减少，但是如果直接在CloudVisor上进行改进呢？</p>
+<p>​        本文所利用的指令，VMFUNC，是可以在非特权级别下进行操作并寻得EPTP表的，本文并未提到在特权模式下的转换会不会涉及到VM Exit（是会触发VM Exit的），这样的话，仅仅在CloudVisor架构基础上利用新硬件，并不能达到其最佳的效果。简言之，<code>利用VMFUNC指令在非特权模式下进行EPT Switching操作不会引发VM Exit 的特性</code>，进行优化，很大程度上减少了VM Exit的次数。又要保证这种更改之后的可靠性，所以加入了Guardian-VM.</p>
+</li>
+<li><p>虚拟化异常不会触发VM Exit吗?</p>
+</li>
+<li><p>文中指出的EPT存在哪里？</p>
+<p>指的是适配硬件虚拟化的 intel 扩展页表。</p>
+</li>
+</ol>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://www.cnblogs.com/ck1020/p/6043054.html" target="_blank" rel="noopener">intel EPT 机制详解</a></p>
+<p>[2] <a href="https://www.facebook.com/notes/intel/virtualization-and-performance-understanding-vm-exits/97103992067/" target="_blank" rel="noopener">Understanding VM Exits</a></p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Untrusted Hypervisor</tag>
+        <tag>Virtualization</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Dancing with Wolves</title>
     <url>/2020/06/27/Dancing-with-Wolves/</url>
     <content><![CDATA[<div class="table-container">
@@ -894,178 +1291,54 @@
       </tags>
   </entry>
   <entry>
-    <title>Applying TPM to Cloud</title>
-    <url>/2020/10/12/Applying-TPM-to-Cloud/</url>
+    <title>FHEW</title>
+    <url>/2020/08/13/FHEW/</url>
     <content><![CDATA[<div class="table-container">
 <table>
 <thead>
 <tr>
 <th style="text-align:center">序号</th>
-<th style="text-align:left">属性</th>
+<th style="text-align:center">属性</th>
 <th style="text-align:center">内容</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td style="text-align:center">1</td>
-<td style="text-align:left">原文PDF</td>
-<td style="text-align:center"><a href="https://sci-hub.se/10.1002/spy2.93" target="_blank" rel="noopener">Survey</a></td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://eprint.iacr.org/2014/816.pdf" target="_blank" rel="noopener">FHEW</a></td>
 </tr>
 <tr>
 <td style="text-align:center">2</td>
-<td style="text-align:left">作者信息</td>
-<td style="text-align:center"></td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Centrum Wiskunde &amp; Informatica, Amsterdam</td>
 </tr>
 <tr>
 <td style="text-align:center">3</td>
-<td style="text-align:left">核心内容</td>
-<td style="text-align:center">调研了13年至18年的近120篇文献，且这些论文都利用TPM提高云计算安全。</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">对全同态加密中 bootstraping 进行优化</td>
 </tr>
 <tr>
 <td style="text-align:center">4</td>
-<td style="text-align:left">研究领域</td>
-<td style="text-align:center">可信计算</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">同态加密</td>
 </tr>
 <tr>
 <td style="text-align:center">5</td>
-<td style="text-align:left">全文总览</td>
-<td style="text-align:center">本文对TPM在云计算安全方面进行的细致的调研，并结合调研结果认为TPM在云计算安全的保护领域具有很大的趋势。</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">优化影响同态加密效率的主要瓶颈——Gentry 的引导程序</td>
 </tr>
 </tbody>
 </table>
 </div>
-<h3 id="Paper-Source"><a href="#Paper-Source" class="headerlink" title="Paper Source"></a>Paper Source</h3><p><img src="/2020/10/12/Applying-TPM-to-Cloud/sources.png" width="500"></p>
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/papercountry.png" width="500"></p>
-<font color="DodgerBlue"> Paper Structure </font>
-
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Summary.png" width="600"></p>
-<h3 id="Answering-the-Following-Question"><a href="#Answering-the-Following-Question" class="headerlink" title="Answering the Following Question"></a>Answering the Following Question</h3><h4 id="RQ1-For-what-purposes-is-TPM-used-in-the-cloud"><a href="#RQ1-For-what-purposes-is-TPM-used-in-the-cloud" class="headerlink" title="RQ1: For what purposes is TPM used in the cloud?"></a>RQ1: For what purposes is TPM used in the cloud?</h4><blockquote>
-<p><strong>TPM 在云中的作用是什么？为什么要用到TPM？</strong></p>
-</blockquote>
-<h4 id="RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud"><a href="#RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud" class="headerlink" title="RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?"></a>RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?</h4><blockquote>
-<p><strong>TPM的确缓解了的云中的哪些攻击？</strong></p>
-</blockquote>
-<h4 id="RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？"><a href="#RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？" class="headerlink" title="RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？"></a>RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？</h4><blockquote>
-<p><strong>完整性度量的组件到底是什么？云中完整性度量的解释是什么？</strong></p>
-</blockquote>
-<h4 id="RQ4-At-what-level-are-TPM-primitives-invoked"><a href="#RQ4-At-what-level-are-TPM-primitives-invoked" class="headerlink" title="RQ4: At what level are TPM primitives invoked?"></a>RQ4: At what level are TPM primitives invoked?</h4><blockquote>
-<p><strong>TPM被调用的级别是什么？</strong></p>
-</blockquote>
-<h4 id="RQ5-At-which-phase-are-the-TPM-features-used"><a href="#RQ5-At-which-phase-are-the-TPM-features-used" class="headerlink" title="RQ5: At which phase are the TPM features used?"></a>RQ5: At which phase are the TPM features used?</h4><blockquote>
-<p><strong>在什么阶段用到了TPM？</strong><br><strong>A：boot time, run time and both.</strong></p>
-</blockquote>
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Phase.png"></p>
-<h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>​        可信计算利用硬件信任根以及与之关联的软件构建可信环境，提供信任和隐私保护。TPM这个模块，提供安全启动、远程验证、完整性检测以及机密功能。2011年发布了TPM1.2版本，2016年公布了TPM2.0版本。</p>
-<p>​        远程证明是可信计算技术提供的主要功能，它将信任逐步从较低级别扩展到较高级别和应用程序。 这被称为信任链。 在信任链方案中，所有将要加载的组件都被认为是不可信的，因此，在加载之前需要对其进行测量。 TPM包含平台配置寄存器（PCR）受保护的内存位置，该位置存储敏感的安全信息（例如测量信息）。</p>
-<p>​        除了强大的隔离存储，TPM还拥有用于加密操作的唯一认可密钥（EK）。该密钥是在TPM制造时生成的，密钥的私有部分永远不会离开TPM。 在远程认证时，为了保护平台身份的私密性，使用了认证身份密钥（AIK）。 当平台（证明者）收到（来自验证者的）远程证明请求时，它会发送一个完整性报告，该报告由PCR值及其数字签名（由AIK计算）组成。 由于AIK的私有部分从未离开过TPM，因此可以保证报告的完整性和真实性。</p>
-<p>​        初步理解，TPM有几种存在模式，比如：以芯片方式存在电脑主板上或者以firmware形式存在于BIOS中。</p>
-<h4 id="The-Aims-of-TPM"><a href="#The-Aims-of-TPM" class="headerlink" title="The Aims of TPM"></a>The Aims of TPM</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TPMAims.png" width="500" height="280"></p>
-<font color="DodgerBlue"> 远程验证（Remote Attestation ）</font>
-
-<blockquote>
-<ol>
-<li>请求验证者向被验证者发送验证请求，这个请求中包括 <em>nonce</em><sup><a href="#fn_1" id="reffn_1">1</a></sup> ，目的是防止重播攻击（Replay attack）</li>
-<li>接收到验证请求的一方向自己的TPM提出验证请求，TPM验证自身需要度量的模块</li>
-<li>验证后的结果发送给远端的验证发起者（发起者要验证(a)TPM 的真实性(b) 发送数值的真实性）</li>
-</ol>
-</blockquote>
-<font color="DodgerBlue"> 完整性度量 （Integrity Measurement）</font>
-
-<blockquote>
-<p>TPM计算并存储不同组件的哈希值，并将这些哈希值在哈希链中进行转换，并将结果与已经存储的数值相比较。<br>完整性度量分为静态与动态两种类型：<br>        静态：保证在运行之前没有发生篡改<br>        动态：保证在运行过程中没有发生恶意篡改</p>
-</blockquote>
-<font color="DodgerBlue"> Generation and secure storage ofkeys</font>
-
-<blockquote>
-<p>生成随机秘钥的方法：种子、随机数生成器、直接导入TPM中。<br>生成的秘钥保存在TPM中</p>
-</blockquote>
-<font color="DodgerBlue"> Trusted boot</font>
-
-<blockquote>
-<p>在开机时，TPM会检查硬件、软件、固件组件的异同，保证在启动系统之前的环境是可信的。</p>
-<p>本文的参考文献 [14] 利用TPM的可信启动构造一个可信的环境，保证在开机过程中没有恶意入侵。<br>[15] 提出一个用于监控整个云平台的框架，可信启动保证被监控环境的完整性，既对云中租户也是针对云供应商。</p>
-</blockquote>
-<font color="DodgerBlue"> Hardware root of trust</font>
-
-<blockquote>
-<p>信任根是可以在密码系统中信任的来源，加密安全依赖于秘钥来进行加密解密与生成或者验证数字签名，因此，在这种系统中包括不易损坏的硬件模块，并且提供了一定程度的信任保障。<br>TPM可以提供硬件信任根、提供开机与运行时的完整性度量并且保护度量结果。</p>
-</blockquote>
-<h4 id="Security-Threats"><a href="#Security-Threats" class="headerlink" title="Security Threats"></a>Security Threats</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TopThreats.png" width="380" height="500"></p>
-<h4 id="The-level-of-TPM-invoking"><a href="#The-level-of-TPM-invoking" class="headerlink" title="The level of TPM invoking"></a>The level of TPM invoking</h4><font color="DodgerBlue"> Hardware </font>
-
-<blockquote>
-<p>在IoT和云计算等分布式系统模型中，主机平台的安全性至关重要，因为它托管着存储或处理（大量）数据。 TPM是一种用于平台身份验证以及验证其完整性的强大解决方案。在参考文献90中提出的解决方案中，扩展了HCloud（用于医疗保健数据的私有云），并且TPM嵌入在主机平台上以对客户端进行身份验证，并测量静态和动态完整性。讨论了可信云可以提供外部认证服务并进行内部可信调度。提供给外部的每个服务都有一个唯一的映像/进程在内存中运行。加载到内存时，需要验证此过程。可以使用TPM执行静态测量，以验证存储在物理存储库中的文件和软件包。同样，使用TPM签名保护数据库的完整性，以提供硬件级别的安全性。对于过程的动态完整性测量，TPM PCR用于存储和显示逐步的测量值。 Yang等[86]提出了一种设计，旨在为客户提供有关存储在云中的数据的新鲜度，有效性和完整性的保证。为了实现此目标，他们在不受信任的服务器上使用受信任的硬件设备，使客户端能够验证其数据的新鲜度和完整性。在系统运行之前，需要验证平台是否以受信任的方式启动。参考文献91讨论TPM是衡量启动过程和确定平台启动完整性的关键步骤的信任基础。在虚拟环境中，TPM提供了根植于硬件的信任链，该信任链将扩展到虚拟机管理程序。如果关键组件（例如BIOS，固件和虚拟机管理程序）已证明其完整性，则可以确保平台引导的完整性。为了确保启动组件的完整性，需要执行两个步骤：首先，测量引导过程，其次，进行证明，即保证和已执行的组件是受信任的组件。</p>
-</blockquote>
-<font color="DodgerBlue"> Hypervisor </font>
-
-<blockquote>
-<p>本文参考文献28构造了基于Xen的迁移框架：</p>
-<p>Xen虚拟机管理程序的安全迁移框架。该设计使用可信计算和相邻完整性度量来动态监视相邻虚拟机管理程序的完整性。更具体地说，为确保始终监视主机，当主机初始化时，TPM模块会验证虚拟机监控程序并将更新消息发送到完整性验证表（该表包含受信任的虚拟机监控程序列表），并将该虚拟机监控程序标记为受信任的。这意味着，如果未收到此类消息，则认为该特定的管理程序不可信。此外，系统会动态监控虚拟机监控程序的运行状态，如果虚拟机监控程序遭到破坏，则会发送相应的更新消息以报告受到破坏的情况。根据此完整性表的结果，确定源虚拟机管理程序是否受信任以及是否应启动VM迁移过程。</p>
-</blockquote>
-<h4 id="Phase-of-integrity-measurement"><a href="#Phase-of-integrity-measurement" class="headerlink" title="Phase of integrity measurement"></a>Phase of integrity measurement</h4><font color="DodgerBlue"> Boot time </font>
-
-<blockquote>
-<p>可信平台技术追求的原则之一是在关键组件加载和执行之前验证它们的信任和完整性。因此，在运行时完整性检查之前，需要确保正确引导了系统并且正在运行适当的操作系统。受信任的平台通过创建信任链来实现这种信任，该信任链以BIOS引导块中的受信任代码（CRTM）为核心信任根。 CRTM衡量其他实体的完整性价值，并且在平台的整个生命周期内保持不变。 CRTM是普通BIOS的补充，它首先运行以测量BIOS块和硬件，然后将控制权传递给引导加载程序。然后在将控件传递给OS之前测量OS内核映像。在此引导过程的每个步骤中，都会获取测量值，并据此扩展相关的TPM PCR值。该测量过程证明了系统的完整性，并确保引导和操作系统软件是制造商想要的版本，并且未被恶意第三方或恶意软件篡改。100Nanavati等人74指出，在虚拟环境中，可信引导技术允许用户证明基础启动平台的身份，并确保加载的虚拟化平台值得信赖。这为用户提供了有关可以向其提交关键数据的虚拟化平台的具体保证。 TPM通过使用加密原语为虚拟化平台提供此受信任的引导，并为其建立信任根。在ALIBI可信监视框架中，17 TPM用于在服务提供商平台上提供信任根。 TPM PCR记录平台上正在执行的软件的状态，并且由于PCR值仅是附加值，因此仅通过重新启动才能消除以前的记录。 TPM还拥有一个公共-私人密钥对。私钥仅保留在TPM的安全环境中，并用于计算TPM生成的证明值（从经过身份验证的启动累积的度量）的签名。使用TPM的公钥，外部验证程序可以检查签名的有效性，并推断出PCR值表示平台软件的状态。</p>
-</blockquote>
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>​        本文所统计并分析了120篇文献后，认为TPM技术在云中应用是一种趋势。在云中TPM技术的主要目标是远程验证以及完整性度量。本文主要分析了TPM的功能，TPM可应对云中的安全威胁，TPM提供完整性度量的阶段以及层次并指出了留有的研究空间，最后指出主要的研究差距。</p>
-<blockquote id="fn_1">
-<sup>1</sup>. 在加密技术中的初始向量和加密散列函数都发挥着重要作用，在各类验证协议的通信应用中确保验证信息不被重复使用以对抗重放攻击(Replay Attack)<a href="#reffn_1" title="Jump back to footnote [1] in the text."> &#8617;</a>
-</blockquote>
-<h3 id="引文延伸阅读"><a href="#引文延伸阅读" class="headerlink" title="引文延伸阅读"></a>引文延伸阅读</h3><p>Here are the papers worth reading further.</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>theme</th>
-<th>Reference Number &amp; Summary</th>
-<th>Reference Number &amp; Summary</th>
-<th>more</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>远程验证</td>
-<td>6：TPM进行远程验证VMs</td>
-<td>7：验证用户所在地理位置</td>
-<td></td>
-</tr>
-<tr>
-<td>完整性度量</td>
-<td>10：多用户环境中数据拥有完整性</td>
-<td>11：动态的完成性度量的模型（Xen）</td>
-<td>8、9</td>
-</tr>
-<tr>
-<td>生成秘钥安全存储</td>
-<td>12</td>
-<td>13</td>
-<td></td>
-</tr>
-<tr>
-<td>安全启动</td>
-<td><a href="https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=2969&amp;context=sis_research" target="_blank" rel="noopener">14</a>：protect the hypervisor</td>
-<td>15 ：monitoring the cloud platform</td>
-<td></td>
-</tr>
-<tr>
-<td>硬件信任根</td>
-<td>17 25 33 34 35</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://www.zhihu.com/question/19790488/answer/19290308" target="_blank" rel="noopener">什么是彩虹表？</a> </p>
-]]></content>
+<h3 id><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
       <categories>
         <category>paper</category>
-        <category>Security and Privacy</category>
+        <category>Cryptographic Techniques</category>
       </categories>
       <tags>
-        <tag>TPM</tag>
-        <tag>Security</tag>
-        <tag>Cloud Computing</tag>
-        <tag>可信计算</tag>
+        <tag>论文解读</tag>
+        <tag>Homomorphic</tag>
       </tags>
   </entry>
   <entry>
@@ -1116,6 +1389,61 @@
       </categories>
       <tags>
         <tag>论文解读</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>HyperLock</title>
+    <url>/2020/12/01/HyperLock/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.cs.fsu.edu/~zwang/files/EuroSys12.pdf" target="_blank" rel="noopener">HyperLock</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">保护Hypervisor</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">保护虚拟机安全</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">1. 提出HyperLock保护Hypervisor和客户虚拟机；2. 提出Hypervisor 影子技术，为每个客户机分配一个Hypervisor，提高隔离性。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>​        本文主要指出是对Hypervisor的保护，实验的平台是KVM。<br>​        即便是部署虚拟机之后会带来很大的便利，但是Hypervisor软件bug是有可能被利用并发起攻击的。本文认为，因为客户机与主机的联系如此紧密，如果一个Hypervisor被攻击了，那么部署在其上面的许多客户机很有可能受到威胁。<br>​        为了隔离Hypervisor与各个客户机，本文提出了HyperLock来提供严格的隔离保证。具体来说，Hypervisor在运行时被隔离，他有自己独立的地址空间和受限制的指令集；另一种技术是Hypervisor shadow，有效的为每个客户机创建单独的Hypervisor，从而将可能受到的影响降到最小。</p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>​        现有对Hypervisor的攻击表明攻击者可以从客户机逃脱并直接攻击主机OS，并且受攻击的Hypervisor能够轻松的读取其他客户机的内容或者窃取敏感信息。</p>
+<p>（为了说明xen的不安全性，需要介绍几个对xen的攻击实例）</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>EuroSys</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Detection</tag>
+        <tag>Isolation</tag>
       </tags>
   </entry>
   <entry>
@@ -1222,61 +1550,6 @@
       </tags>
   </entry>
   <entry>
-    <title>HyperLock</title>
-    <url>/2020/12/01/HyperLock/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.cs.fsu.edu/~zwang/files/EuroSys12.pdf" target="_blank" rel="noopener">HyperLock</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">保护Hypervisor</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">保护虚拟机安全</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">1. 提出HyperLock保护Hypervisor和客户虚拟机；2. 提出Hypervisor 影子技术，为每个客户机分配一个Hypervisor，提高隔离性。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>​        本文主要指出是对Hypervisor的保护，实验的平台是KVM。<br>​        即便是部署虚拟机之后会带来很大的便利，但是Hypervisor软件bug是有可能被利用并发起攻击的。本文认为，因为客户机与主机的联系如此紧密，如果一个Hypervisor被攻击了，那么部署在其上面的许多客户机很有可能受到威胁。<br>​        为了隔离Hypervisor与各个客户机，本文提出了HyperLock来提供严格的隔离保证。具体来说，Hypervisor在运行时被隔离，他有自己独立的地址空间和受限制的指令集；另一种技术是Hypervisor shadow，有效的为每个客户机创建单独的Hypervisor，从而将可能受到的影响降到最小。</p>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>​        现有对Hypervisor的攻击表明攻击者可以从客户机逃脱并直接攻击主机OS，并且受攻击的Hypervisor能够轻松的读取其他客户机的内容或者窃取敏感信息。</p>
-<p>（为了说明xen的不安全性，需要介绍几个对xen的攻击实例）</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>EuroSys</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>Detection</tag>
-        <tag>Isolation</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Information theoretic framework</title>
     <url>/2021/03/15/Information-theoretic-framework/</url>
     <content><![CDATA[<h2 id="四条公理"><a href="#四条公理" class="headerlink" title="四条公理"></a>四条公理</h2><h2 id="两种模型"><a href="#两种模型" class="headerlink" title="两种模型"></a>两种模型</h2>]]></content>
@@ -1287,6 +1560,231 @@
       <tags>
         <tag>论文解读</tag>
         <tag>Protocol</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MIT log 0 内存管理实验环境</title>
+    <url>/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/</url>
+    <content><![CDATA[<h3 id="内存实验环境搭建"><a href="#内存实验环境搭建" class="headerlink" title="内存实验环境搭建"></a>内存实验环境搭建</h3><p><strong>操作系统</strong>是计算机科学中十分重要的一门基础学科，是一名计算机专业毕业生必须要具备的基础知识。但是在学习这门课时，如果仅仅把目光停留在课本上一些关于操作系统概念上的叙述，并不能对操作系统有着深层次的理解。必须要结合动手实践，才能真正掌握核心的知识。<br>MIT的操作系统课程6.828是一门被广泛好评的入门课程。它最重要的特点就是它实践第一的教学原则。在这门课程中会涉及到非常丰富的实验，也会有非常多的动手机会。而且授课者更是亲自构建了一个简化的基于Unix内核的操作系统xv6。所有的实验都是在这个操作系统上完成。虽然它功能很简单，但是它能够帮助我们真正的了解操作系统在做什么[3]。<br>因此，以博客的形式记录自己学习6.828的过程，本系列博文尽量包括以下几个内容：</p>
+<ul>
+<li>所有实验的实验报告(Lab)</li>
+<li>所有实验中的练习(Exercise)</li>
+</ul>
+<p>下面开始实验环境的搭建：</p>
+<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h4><p>本次实验在ubuntu18系统上进行，所有的操作步骤都在Linux 操作系统上进行。</p>
+<h3 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h3><p>因为本实验的  操作系统是比较新的 Ubuntu18，其自带的软件版本可能比较新，对于此lab可能不太适配，所以需要对需要的软件进行一些配置。</p>
+<h4 id="gcc版本降级"><a href="#gcc版本降级" class="headerlink" title="gcc版本降级"></a>gcc版本降级</h4><p>目的： 将gcc 版本降级到 4.8 版本</p>
+<p>(1). 下载 <code>gcc/g++ 4.8</code></p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">apt-get install -y gcc-4.8
+apt-get install -y g++-4.8
+</code></pre>
+<p>(2). 链接gcc/g++实现降级</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">cd /usr/bin
+sudo rm gcc
+sudo ln -s gcc-4.8 gcc
+sudo rm g++
+sudo ln -s g++-4.8 g++
+</code></pre>
+<h4 id="编译qemu"><a href="#编译qemu" class="headerlink" title="编译qemu"></a>编译qemu</h4><p><strong>安装依赖</strong> [4]</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">apt-get install git build-essential binutils g++-multilib libgtk2.0-dev libtool-bin libsdl-dev -y
+</code></pre>
+<p><strong>下载qemu源码</strong></p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">git clone https://github.com/mit-pdos/6.828-qemu.git qemu
+</code></pre>
+<p><strong>下载 lab 源码</strong></p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">git clone https://pdos.csail.mit.edu/6.828/2018/jos.git lab # 只有第一实验的检查脚本
+</code></pre>
+<p><strong>安装步骤</strong></p>
+<p>进入<code>qemu</code>目录下</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">./configure --disable-kvm --target-list="i386-softmmu x86_64-softmmu"
+sudo make && make install
+</code></pre>
+<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu.png" height="260xp"></p>
+<p>它生成的最后一个信息 <code>mk obj/kern/kernel.img</code>，这个<code>kernel.img</code>就是内核映像文件，另外obj目录在make之前是没有的，它是make指令生成的，它里面将会有许多的文件我们之后会重点观察。编译完内核源码，我们就可以把它运行在<code>QEMU</code>上啦！[3]</p>
+<p><strong>安装结果测试</strong></p>
+<p>输入<code>/usr/local/bin/qemu-system-i386</code> 出现以下窗口则安装ok</p>
+<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu-test.png" height="300xp"></p>
+<p>在<code>lab</code>目录下输入  <code>make qemu</code> 出现如下结果</p>
+<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/make-qemu.png" height="300xp"></p>
+<p>至此，实验环境搭建完成！</p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://os.vampire.rip/" target="_blank" rel="noopener">https://os.vampire.rip/</a></p>
+<p>[2] <a href="https://zhuanlan.zhihu.com/p/74028717" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/74028717</a></p>
+<p>[3] <a href="https://www.cnblogs.com/fatsheep9146/p/5060292.html" target="_blank" rel="noopener">https://www.cnblogs.com/fatsheep9146/p/5060292.html</a></p>
+<p>[4] <a href="https://www.cnblogs.com/gatsby123/p/9746193.html" target="_blank" rel="noopener">https://www.cnblogs.com/gatsby123/p/9746193.html</a></p>
+]]></content>
+      <tags>
+        <tag>lab</tag>
+        <tag>OS Memory</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MIT-log-1-启动PC</title>
+    <url>/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/</url>
+    <content><![CDATA[<h3 id="Part-1-PC-BootStrap"><a href="#Part-1-PC-BootStrap" class="headerlink" title="Part 1: PC BootStrap"></a>Part 1: PC BootStrap</h3><p><strong>PC物理地址空间</strong></p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">+------------------+  <- 0xFFFFFFFF (4GB)
+|      32-bit      |
+|  memory mapped   |
+|     devices      |
+|                  |
+/\/\/\/\/\/\/\/\/\/\
+
+/\/\/\/\/\/\/\/\/\/\
+|                  |
+|      Unused      |
+|                  |
++------------------+  <- depends on amount of RAM
+|                  |
+|                  |
+| Extended Memory  |
+|                  |
+|                  |
++------------------+  <- 0x00100000 (1MB)
+|     BIOS ROM     |
++------------------+  <- 0x000F0000 (960KB)
+|  16-bit devices, |
+|  expansion ROMs  |
++------------------+  <- 0x000C0000 (768KB)
+|   VGA Display    |
++------------------+  <- 0x000A0000 (640KB)
+|                  |
+|    Low Memory    |
+|                  |
++------------------+  <- 0x00000000
+</code></pre>
+<h4 id="利用Qemu和gdb实现对OS的debug"><a href="#利用Qemu和gdb实现对OS的debug" class="headerlink" title="利用Qemu和gdb实现对OS的debug"></a>利用Qemu和gdb实现对OS的debug</h4><h5 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h5><ol>
+<li><p>打开一个终端，在lab目录下输入 <code>make qemu-gdb</code></p>
+<p><img src="/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/gdb-1.png" height="100"></p>
+</li>
+<li><p>在另一个终端中进入lab目录下，输入<code>gdb</code>即可</p>
+<p><img src="/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/gdb-2.png" height="400"></p>
+</li>
+</ol>
+<p>此时，便可以进行调试了。</p>
+<p>&emsp; &emsp;在OS启动时，第一段加载的第一段程序是BIOS，BIOS的操作就是在控制、初始化、检测各种底层的设备，如：时钟，GDTR寄存器、设置中断向量表等，最重要的功能就是<strong>把操作系统从此磁盘中导入内存，然后把控制权交给操作系统。</strong>所以BIOS在运行的最后会去检测可以从当前系统的哪个设备中找到操作系统，通常来说是我们的磁盘。当BIOS确定操作系统位于磁盘中，那么它就会把这个磁盘的第一个扇区，通常把它叫做启动区（boot sector）先加载到内存中，这个启动区中包括一个非常重要的程序—<strong>boot loader，</strong>它会负责完成整个操作系统从磁盘导入内存的工作，以及一些其他的非常重要的配置工作。最后操作系统才会开始运行。</p>
+<p>可见PC启动后的运行顺序为<code>BIOS --&gt; boot loader--&gt; OS内核</code></p>
+<h5 id="Exercise-2"><a href="#Exercise-2" class="headerlink" title="Exercise 2:"></a>Exercise 2:</h5><p>在gdb窗口中显示出PC机启动后运行BIOS的第一条命令为</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">1. [f000:fff0]    0xffff0: ljmp   $0xf000,$0xe05b
+</code></pre>
+<p>&emsp; &emsp; 这是运行的第一条指令，为跳转指令，目标是<code>0xfe05b</code>. 当PC机启动后，CPU运行在实模式(real mode)<sup><a href="#fn_实模式" id="reffn_实模式">实模式</a></sup>下，而当进入操作系统内核后，将会运行在保护模式(protected mode)下[2]。其中实模式是早期CPU（如8088处理器）的工作模式，这类处理器只有20根地址线，所以只能访问<code>1MB</code>的内存空间。但是，CPU不断的发展，之后的<code>80286/80386</code>已经具备32根地址线，能够访问<code>4GB</code>的内存空间，为了能够很好的管理内存空间，提出了保护模式。所以现在的处理器都是工作在保护模式下的，但为了向后兼容，即原来的8088处理器的软件仍能够运行在现代处理器上，现代处理器的CPU在启动过程中都处于实模式，启动完成后进入保护模式。<code>BIOS</code>就是PC刚启动时运行的软件，所以工作在实模式下。</p>
+<p>&emsp; &emsp; 实模式下的地址：<code>段基址：段内偏移</code>，其中这两个字段的值都存放在寄存器中，段基地址必须存放在段寄存器中，如CS(代码段), DS(数据段), SS(堆栈段), ES(扩展段)。</p>
+<p> &emsp; &emsp; 由于8088CPU 寄存器中都是16位，而CPU总线是20位，则需要通过16位的寄存器拼接得到20位的地址：把段寄存器中值左移4位，形成20位段基址，然后和16位段内偏移地址相加，得到20位的真实地址，如：<code>0xf000&lt;&lt;4+0xe05b=0xfe05b</code></p>
+<p>使用gdb进行调试：<code>si</code> 查看下一条指令</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">2. [f000:e05b]    0xfe05b: cmpl   $0x0,%cs:0x6ac8
+</code></pre>
+<p>&emsp;&emsp; 把<code>0x0</code> 这个立即数 与 <code>%cs:0x6ac8</code>代表的内存地址处的值进行比较。其中<code>% cs</code>代表CS段寄存器中的值。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">3. [f000:e062]    0xfe062: jne    0xfd2e1
+</code></pre>
+<p>&emsp;&emsp; <code>jne</code>指令：如果ZF标志位为0的时候跳转，即上一条指令 <code>cmpl</code> 的结果不是0 的时候跳转，即 <code>%cs:0x6ac8</code> 地址处的值不是 <code>0x0</code>的时候跳转。</p>
+<blockquote>
+<p><code>cmpl</code>指令是将两个操作数相减，但计算结果不保存，只是更具计算结果改变<code>eflags</code>的标志位，如果两个操作数相同，则计算结果为0，ZF标志位为1 。</p>
+<p><code>gdb</code>查看寄存器中数值：</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">(gdb) info registers
+eax            0x0      0
+ecx            0x0      0
+edx            0x663    1635
+ebx            0x0      0
+esp            0x0      0x0
+ebp            0x0      0x0
+esi            0x0      0
+edi            0x0      0
+eip            0xe062   0xe062
+eflags         0x46     [ PF ZF ]
+cs             0xf000   61440
+ss             0x0      0
+ds             0x0      0
+es             0x0      0
+fs             0x0      0
+gs             0x0      0
+</code></pre>
+<p><code>gdb</code>查看内存信息：</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">(gdb) x 0xfe05b
+   0xfe05b:     cmpl   $0x0,%cs:0x6ac8
+(gdb) x 0xfe062
+   0xfe062:     jne    0xfd2e1
+</code></pre>
+</blockquote>
+<pre class=" language-lang-shell"><code class="language-lang-shell">4. [f000:e066]    0xfe066: xor    %dx,%dx
+</code></pre>
+<p>&emsp;&emsp; 下一条指令的地址为<code>0xfe066</code>，可见并没有发生指令跳转，该指令功能是把dx寄存器内容清零。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">5. [f000:e068]    0xfe068: mov    %dx,%ss
+6. [f000:e06a]    0xfe06a: mov    $0x7000,%esp
+7. [f000:e070]    0xfe070: mov    $0xf34c2,%edx
+8. [f000:e076]    0xfe076: jmp    0xfd15c  # 跳转到绝对地址
+9. [f000:d15c]    0xfd15c: mov    %eax,%ecx
+</code></pre>
+<p>&emsp; &emsp; 设置寄存器中的数值。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">10. [f000:d15f]    0xfd15f: cli
+</code></pre>
+<p>&emsp;&emsp; 关闭中断指令。PC启动时的操作是比较关键的，关中断指令用于关闭那些可以屏蔽的中断。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">11. [f000:d160]    0xfd160: cld
+</code></pre>
+<p>&emsp; &emsp; 设置方向标识位为0，表示后续的串操作 [3] 比如MOVS操作，内存地址的变化方向，如果为0代表从低地址值变为高地址。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">12. [f000:d161]    0xfd161: mov    $0x8f,%eax
+# (gdb) info register eax
+# eax            0x0      0
+13. [f000:d167]    0xfd167: out    %al,$0x70
+# (gdb) info register eax
+# eax            0x8f     143
+14. [f000:d169]    0xfd169: in     $0x71,%al
+# (gdb) info register al
+# al             0x8f     -113
+</code></pre>
+<p>&emsp; &emsp; CPU与外部设备通讯时，通常是通过访问、修改设备控制器中的寄存器来实现的。那么这些位于设备控制器当中的寄存器也叫做<strong>IO端口</strong>。为了方便管理，80x86CPU采用IO端口单独编址的方式，即所有设备的端口都被命名到一个IO端口地址空间中。这个空间是独立于内存地址空间的。所以必须采用和访问内存的指令不一样的指令来访问端口。</p>
+<blockquote>
+<p>在向0x70端口写入值后，必须对0x71端口有操作(这里正好选用了in操作)，否则RTC就会处于an unknown state之中.</p>
+</blockquote>
+<pre class=" language-lang-shell"><code class="language-lang-shell">out %al,PortAddress #把al寄存器中值写到端口PortAddress
+in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
+# 标准规定，端口操作必须用到al/ax寄存器作为缓冲
+</code></pre>
+<p>&emsp; &emsp; 三条命令就是要操作端口0x70，0x71，根据清单[4] 中内容，可以知道0x70端口和0x71端口是用于控制系统中一个叫做CMOS的设备，这个设备是一个低功耗的存储设备，它可以用于在计算机关闭时存储一些信息，它是由独立的电池供电的[5]。 这个CMOS中可以控制跟PC相关的多个功能，其中最重要的就是<strong>时钟设备（Real Time Clock）</strong>的 ，它还可以控制是否<strong>响应不可屏蔽中断NMI(Non-Maskable Interrupt)</strong>。操作CMOS存储器中的内容需要两个端口，一个是0x70另一个就是0x71。其中0x70可以叫做索引寄存器，<strong>这个8位寄存器的最高位是不可屏蔽中断(NMI)使能位。如果你把这个位置1，则NMI不会被响应。低7位用于指定CMOS存储器中的存储单元地址</strong>，所以如果你想访问第1号存储单元，并且在访问时，我要使能NMI，那么你就应该向端口0x70里面送入0b10000001 = 0x81。</p>
+<p>&emsp; &emsp; 这三条指令可以看出，它首先关闭了NMI中断，并且要访问存储单元0xF的值，并且把值读到al中，但是在后面我们发现这个值并没有被利用，所以可以认为<strong>这三条指令是用来关闭NMI中断的。</strong></p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">15. [f000:d16b]    0xfd16b: in     $0x92,%al 
+# (gdb) info register al
+# al             0x0      0
+16. [f000:d16d]    0xfd16d: or     $0x2,%al
+17. [f000:d16f]    0xfd16f: out    %al,$0x92
+# (gdb) info register al
+# al             0x2      2
+</code></pre>
+<p>&emsp; &emsp; 它控制的是 PS/2系统控制端口A，而第16，17步的操作是在把这个端口的1号bit置为1。这个端口的bit1的功能是<code>bit 1= 1 indicates A20 active</code>,即A20位，即第21个地址线被使能，如果A20地址线被激活，那么系统工作在保护模式下。但是在之后的boot loader程序中，计算机首先要工作在实模式下啊。所以这里的这个操作，根据[6]应该是去测试可用内存空间。在boot loader之前，它肯定还会转换回实模式。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">or # 只要有一个输入位是 1，则输出位就是 1
+</code></pre>
+<pre class=" language-lang-shell"><code class="language-lang-shell">18. [f000:d171]    0xfd171: lidtw  %cs:0x6ab8
+</code></pre>
+<p>&emsp; &emsp; 加载中断向量表寄存器(IDTR)。这个指令会把从地址0xf6ab8起始的后面6个字节的数据读入到中断向量表寄存器(IDTR)中。中断是操作系统中非常重要的一部分，有了中断操作系统才能真正实现进程。每一种中断都有自己对应的中断处理程序，那么这个中断的处理程序的首地址就叫做这个中断的中断向量。中断向量表[7]是存放所有中断向量的表。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">19. [f000:d177]    0xfd177: lgdtw  %cs:0x6a74
+</code></pre>
+<p>&emsp; &emsp; 把从<code>0xf6a74</code>为起始地址处的6个字节的值加载到全局描述符表格寄存器中GDTR中.</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">20. [f000:d17d]    0xfd17d: mov    %cr0,%eax
+21. [f000:d180]    0xfd180: or     $0x1,%eax
+22. [f000:d184]    0xfd184: mov    %eax,%cr0
+</code></pre>
+<p>&emsp; &emsp; 计算机中包含CR0-CR3四个控制寄存器，用来控制和确定处理器的操作模式。其中这三个语句的操作是要把CR0寄存器的最低位(0bit)置1。CR0寄存器的0bit是PE位，启动保护位，当该位被置1，代表开启了保护模式。但是这里出现了问题，我们刚刚说过BIOS是工作在实模式之下，后面的boot loader开始的时候也是工作在实模式下，所以这里把它切换为保护模式，显然是自相矛盾。所以只能推测它在检测机器是否能工作在保护模式下。</p>
+<pre class=" language-lang-shell"><code class="language-lang-shell">23. [f000:d187]    0xfd187: ljmpl  $0x8,$0xfd18f
+# The target architecture is assumed to be i386
+24. => 0xfd18f:     mov    $0x10,%eax
+25. => 0xfd194:     mov    %eax,%ds
+26. => 0xfd196:     mov    %eax,%es
+27. => 0xfd198:     mov    %eax,%ss
+28. => 0xfd19a:     mov    %eax,%fs
+29. => 0xfd19c:     mov    %eax,%gs
+</code></pre>
+<p>&emsp; &emsp; 这里的23~29步之所以这么做是按照规定来的，[8]中指出，如果刚刚加载完GDTR寄存器我们必须要重新加载所有的段寄存器的值，而其中CS段寄存器必须通过长跳转指令，即23号指令来进行加载。所以这些步骤是在第19步完成后必须要做的。这样才能是GDTR的值生效。</p>
+<h3 id="Part-2-引导加载程序"><a href="#Part-2-引导加载程序" class="headerlink" title="Part 2: 引导加载程序"></a>Part 2: 引导加载程序</h3><h3 id="Part-3-内核"><a href="#Part-3-内核" class="headerlink" title="Part 3: 内核"></a>Part 3: 内核</h3><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>[1] <a href="https://github.com/shishujuan/mit6.828-2017.git" target="_blank" rel="noopener">https://github.com/shishujuan/mit6.828-2017.git</a></p>
+<p>[2] <a href="https://blog.csdn.net/zdwzzu2006/article/details/4030948" target="_blank" rel="noopener">https://blog.csdn.net/zdwzzu2006/article/details/4030948</a></p>
+<p>[3] <a href="https://www.cnblogs.com/cykun/archive/2010/10/27/1862940.html" target="_blank" rel="noopener">https://www.cnblogs.com/cykun/archive/2010/10/27/1862940.html</a></p>
+<p>[4] <a href="http://bochs.sourceforge.net/techspec/PORTS.LST" target="_blank" rel="noopener">http://bochs.sourceforge.net/techspec/PORTS.LST</a></p>
+<p>[5] <a href="http://wiki.osdev.org/CMOS" target="_blank" rel="noopener">http://wiki.osdev.org/CMOS</a></p>
+<p>[6] <a href="http://kernelx.weebly.com/a20-address-line.html" target="_blank" rel="noopener">http://kernelx.weebly.com/a20-address-line.html</a></p>
+<p>[7] <a href="http://wiki.osdev.org/Interrupt_Descriptor_Table" target="_blank" rel="noopener">http://wiki.osdev.org/Interrupt_Descriptor_Table</a> </p>
+<p>[8] <a href="https://en.wikibooks.org/wiki/X86_Assembly/Global_Descriptor_Table" target="_blank" rel="noopener">https://en.wikibooks.org/wiki/X86_Assembly/Global_Descriptor_Table</a></p>
+<p>[9] <a href="https://blog.csdn.net/a747979985/article/details/94334901" target="_blank" rel="noopener">https://blog.csdn.net/a747979985/article/details/94334901</a></p>
+<p>[10] <a href="https://wenku.baidu.com/view/fe595521bb68a98271fefad4?pcf=2&amp;fromShare=1&amp;fr=copy&amp;copyfr=copylinkpop" target="_blank" rel="noopener">https://wenku.baidu.com/view/fe595521bb68a98271fefad4?pcf=2&amp;fromShare=1&amp;fr=copy&amp;copyfr=copylinkpop</a></p>
+<p> <sup><a href="#fn_实模式" id="reffn_实模式">实模式</a></sup>： 实模式采用 16 位寻址模式，在该模式中，最大寻址空间为 1MB，最大分段为 64KB。 由于处理器的设计需要考虑到兼容问题，8086 处理器地址总线扩展到 20 位，但CPU的ALU宽度(数据总线)却只有 16 位，也就是说直接参与运算的数值都是 16 位的。为支持 1MB 寻址空间，8086 处理器在实模式下引入了分段方法。在处理器中设置了四个 16 位的段寄存器:CS、DS、SS、ES，对 应于地址总线中的高 16 位。寻址时，采用以下公式计算实际访问的物理内存地址，这样，便实现了 16 位内存地址到 20 位物理地址的转换。</p>
+]]></content>
+      <tags>
+        <tag>lab</tag>
       </tags>
   </entry>
   <entry>
@@ -1596,226 +2094,10 @@ func main()  {
       </tags>
   </entry>
   <entry>
-    <title>BatchCrypt</title>
-    <url>/2020/09/13/BatchCrypt/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://marcoszh.github.io/batchcrypt_atc20.pdf" target="_blank" rel="noopener">Batchcrypt</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"><a href="https://marcoszh.github.io/" target="_blank" rel="noopener">Chengliang Zhang</a></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">利用同态加密技术实现FL的安全数据传输，通过改进系统模型，降低同态加密带来的加密与通讯代价。</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">Federal Learning; HE</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">利用同态加密构造一个适合联邦学习的模型，通过优化降低同态加密带来的加密计算与通讯的时间代价。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="BatchCrypt"><a href="#BatchCrypt" class="headerlink" title="BatchCrypt"></a>BatchCrypt</h3><p>&emsp;&emsp;这篇论文的目的是利用同态加密构造一个适合联邦学习的模型，能够利用同态加密的安全特性满足联邦学习对安全的需求，并在此基础上对同态加密进行改进，从而获得一个更加高效的处理系统。通过引入批处理，缓解同态加密的加密代价，这样就可以在满足安全性的同时保证性能。</p>
-<h3 id="联邦学习"><a href="#联邦学习" class="headerlink" title="联邦学习"></a>联邦学习</h3><h4 id="联邦学习系统架构"><a href="#联邦学习系统架构" class="headerlink" title="联邦学习系统架构"></a><font color="Blue"><strong>联邦学习系统架构</strong></font></h4><blockquote>
-<p>假设企业A、B想要联合训练一个机器学习模型，两者业务系统分别拥有各自用户的相关数据，企业B拥有模型需要预测的便签数据，出于安全考虑，A与B无法直接进行数据交换，下图是利用联邦学习模型架构的组成。</p>
-<p>第一部分： 加密样本对齐。由于两个公司的用户群体并非完全重合，系统利用基于加密的用户样本对齐，在A与B不公开各自数据的前提下确认双方的共有用户，便于联合这些用户特征进行建模。</p>
-<p>第二部分： 加密模型训练。在确定共有用户群体之后，利用这些数据训练机器学习模型，为了保证训练过程中数据的保密性，需要借助第三方协作者C进行加密训练，以线性回归模型为例，训练过程如下：</p>
-<blockquote>
-<ol>
-<li><p>协作者C把公钥分发给A与B，对训练过程中需要交换的数据进行加密；</p>
-</li>
-<li><p>A、B之间以加密形式交互用于计算梯度的中间结果；</p>
-</li>
-<li><p>A、B分别基于加密的梯度值进行计算，同时B根据便签数据计算损失，并把这些结果汇总给C，C通过汇总结果计算总梯度并将其解密；</p>
-</li>
-<li><p>C将解密后的梯度分别回传给A和B，并根据梯度更新各自模型的参数。</p>
-</li>
-</ol>
-</blockquote>
-<p>对上述过程进行迭代，直至损失函数收敛，这样就完成了整个训练过程，在样本对齐以及模型训练过程中， A、B各自的数据均留在本地，且训练中的数据交互也不会导致数据隐私泄露，因此，双方在联邦学习的帮助下可以实现合作训练模型的目的。</p>
-<p>第三部分： 效果激励。联邦学习的特点是解决了为什么不同机构要加入联邦共同建模的问题。提供数据多的机构获得的模型效果会更好，模型效果取决于数据提供方对自己和他人的贡献，这些模型的效果在联邦机制上会分发给各个机构反馈，并继续激励更多机构加入这一数据联邦。</p>
-</blockquote>
-<p><img src="/2020/09/13/BatchCrypt/FL_Architecture.png" width="600px" height="300px"></p>
-<p>​                                                                   图1. 联邦学习架构图</p>
-<h4 id="联邦学习优势"><a href="#联邦学习优势" class="headerlink" title="联邦学习优势 "></a><font color="RoyalBlue"><strong>联邦学习优势</strong> </font></h4><blockquote>
-<p>数据隔离，满足用户隐私保护和数据安全的需求；</p>
-<p>保证模型质量无损，不会出现负迁移，保证联邦模型比割裂的独立模型效果好；</p>
-<p>参与者地位对等，能够实现公平合作；</p>
-<p>能够保证参与方在保持独立的情况下，进行信息与模型参数的加密交换，并同时获得成长。</p>
-</blockquote>
-<h4 id="联邦学习方式"><a href="#联邦学习方式" class="headerlink" title="联邦学习方式 "></a><font color="RoyalBlue"><strong>联邦学习方式</strong> </font></h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Differential Privacy</th>
-<th>Secure Multi Party Comput.</th>
-<th>Secure Aggregation</th>
-<th>Homomorphic Encryption</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Efficiency</td>
-<td>√</td>
-<td>×</td>
-<td>×</td>
-<td>×</td>
-</tr>
-<tr>
-<td>Strong Privacy</td>
-<td>×</td>
-<td>√</td>
-<td>×</td>
-<td>√</td>
-</tr>
-<tr>
-<td>No accuracy loss</td>
-<td>×</td>
-<td>√</td>
-<td>√</td>
-<td>√-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<ul>
-<li><p><font color="green"> <strong>DP</strong></font>  通过注入噪声增加对数据的保护(安全性较差)</p>
-</li>
-<li><p><font color="green"> <strong>MPC</strong></font> 多方合作，利用达成一致的同种方式计算。多方客户端通过一种特定受保护的同步协议进行同步，但是不适合于跨孤岛的联邦学习，对隐私或者计算性能都有很大的影响。</p>
-</li>
-<li><p><font color="green"> <strong>Secure Aggregation</strong></font> 易被其他实体获取</p>
-</li>
-<li><font color="green"> **HE**</font> 
-
-<blockquote>
-<p>1.对训练模型的保护</p>
-<p>2.没有学习精度的缺失，没有噪声的引入</p>
-<p>3.应用的话对系统无需额外的更改，仅仅是加密解密上的更新,但是，这增加了很多的系统负载（计算以及交互代价过高）</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="HE应用于FL"><a href="#HE应用于FL" class="headerlink" title="HE应用于FL"></a><font color="b"><strong>HE应用于FL</strong></font></h3><p>​        上传数据到中心服务器的过程中，密钥对是通过加密信道在客户端之间传输的，客户上传加密过的数据到服务器，服务器聚集所有客户上传的密文，并将结果返回给客户为了保证在上传数据的时候不发生数据泄露，采用的方式包括同态加密，这种方式在保证加密的同时不降低学习的准确率。客户端通过已获取的密钥对解密返回的密文。这样无论客户端是否可信，读取的数据都是密文，即对数据进行了保护。</p>
-<h4 id="HE性能瓶颈"><a href="#HE性能瓶颈" class="headerlink" title="HE性能瓶颈"></a><font color="blue"><strong>HE性能瓶颈</strong></font></h4><p>​        通过测试三个联邦学习的深度学习模型实例得出了性能瓶颈，主要是同态加密过程与通讯过程成为了主要性能瓶颈。</p>
-<font color="green">**实验测试**</font>
-
-<p>​    模拟不同的地理位置的客户，在EC2上开9个客户端，分布在5个不同的地理位置，利用FATE (Federated AI Technology Enabler)进行训练。</p>
-<font color="green">**加密与通讯代价**</font>
-
-<p>​        2.1 在三个数据集上的训练时间增加量分别为 96、135、154倍，提高了两个数量级，加密后的数据量分别带来了161、156、163倍的额外数据量。</p>
-<p>​        2.2 客户端数据加密及解密时间占据8成；在聚合端（服务端），7成以上的时间用来等待数据的传输，聚合数据的时间只有10%</p>
-<p><img src="/2020/09/13/BatchCrypt/Iterationtime.png" width="500px" height="300px"></p>
-<p>​        其余时间用来从不同客户端收集数据、分发数据。（因为不同 客户端在不同的地理位置，因此不是同步传输）</p>
-<font color="green">**为什么同态的代价如此高昂**</font>
-
-<p>​        随着秘钥长度的增加，安全性会随之增加，但是带来的加密代价也是随之增加的。由于pailier只能处理整形的数据，在遇到浮点数的时候需要事先进行转化，因此这些数据加密时间并不是严格按照线性关系增加的。</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>Keysize</th>
-<th>Plaintext</th>
-<th>Ciphertext</th>
-<th>Encryption</th>
-<th>Decryption</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1024</td>
-<td>6.87MB</td>
-<td>287.64MB</td>
-<td>216.87S</td>
-<td>68.63S</td>
-</tr>
-<tr>
-<td>2048</td>
-<td>6.87MB</td>
-<td>527.17MB</td>
-<td>1152.98S</td>
-<td>357.17S</td>
-</tr>
-<tr>
-<td>3072</td>
-<td>6.87MB</td>
-<td>754.62MB</td>
-<td>3111.14S</td>
-<td>993.80S</td>
-</tr>
-</tbody>
-</table>
-</div>
-<font color="green">**总结**</font>
-
-<p>​        4.1 由于同态加密在此过程中占据主导地位，如果利用硬件加速模型计算，例如GPU、TPU，获得的意义不大；</p>
-<p>​        4.2 不同的数据孤岛在不同的地理位置，因此大量的数据传输会带来额外的网络通讯费用。</p>
-<font color="green">**解决方法**</font>
-
-<ol>
-<li>加速HE的操作时间：FPGA仅提高三倍的处理时间，但是通讯上未改进；</li>
-<li>减少加密的操作（减少密文的长度），或者利用批处理方式对目标值进行处理。</li>
-</ol>
-<h4 id="FATE改进"><a href="#FATE改进" class="headerlink" title="FATE改进"></a><font color="blue"><strong>FATE改进</strong></font></h4><p>==目标==  想要获得高效的处理时间并且不会引入精度上的缺失。</p>
-<p>==FATE局限性==</p>
-<blockquote>
-<ol>
-<li>仅可以处理整数，无法处理浮点数，而梯度值不仅是浮点数而且是有符号的浮点数；</li>
-<li>处理的数都是正整数，处理负数时要转化为正数，无法判断数字是正溢出还是负溢出。</li>
-</ol>
-</blockquote>
-<p>==对梯度值进行量化==</p>
-<p><img src="/2020/09/13/BatchCrypt/sign.png" width="500px" height="100px"></p>
-<p>由于对浮点数进行加减需要对齐指数（阶码）后才能操作，因此对于仅可以处理整数的系统来说是不太现实的，需要对浮点数进行转化。</p>
-<p>1.将浮点数转化为整数，利用转化后的整数进行计算；</p>
-<p>2.采用两个符号位对浮点数进行正负标识，可以推断出数字的正负溢出。</p>
-<p><img src="/2020/09/13/BatchCrypt/doublesign.png" width="500px" height="200px"></p>
-<p>通过以上的处理，可以使用FATE系统对量化后的梯度值进行HE处理。</p>
-<p>3.利用机器学习的方式，对数据进行剪枝处理，减少处理的数据量（去噪声），并且模型是动态变化的。（在线模型）</p>
-<p>==架构图==</p>
-<p><img src="/2020/09/13/BatchCrypt/batcharchitecture.png" width="500px" height="300px"></p>
-<h4 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a><font color="blue"><strong>实验结果</strong></font></h4><p>==实验环境==</p>
-<p>AWS </p>
-<p>Cluster of 10, spanning 5 locations （部署在五大洲）</p>
-<p>C5.4xlarge instances (16 vCPUs, 32 GB memory) </p>
-<p>==处理时间==</p>
-<p><img src="/2020/09/13/BatchCrypt/lab-1.png" width="500px" height="200px"></p>
-<p>==通讯时间==</p>
-<p><img src="/2020/09/13/BatchCrypt/lab-2.png" width="500px" height="200px"></p>
-<p>==总计时间==</p>
-<p><img src="/2020/09/13/BatchCrypt/lab-3.png" width="500px" height="300px"></p>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://blog.csdn.net/cao812755156/article/details/89598410?utm_medium=distribute.pc_relevant.none-task-blog-title-1&amp;spm=1001.2101.3001.4242" target="_blank" rel="noopener">联邦学习</a></p>
-<p>[2] <a href="https://ai.googleblog.com/2017/04/federated-learning-collaborative.html" target="_blank" rel="noopener">https://ai.googleblog.com/2017/04/federated-learning-collaborative.html</a></p>
+    <title>MuonTrap-Preventing Cross-Domain Spectre-Like</title>
+    <url>/2021/03/15/MuonTrap-Preventing-Cross-Domain-Spectre-Like/</url>
+    <content><![CDATA[<p>清华安全公众号推荐</p>
 ]]></content>
-      <categories>
-        <category>paper</category>
-        <category>ATC</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>Federal Learning</tag>
-        <tag>Homomorphic</tag>
-      </tags>
   </entry>
   <entry>
     <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
@@ -1840,242 +2122,58 @@ func main()  {
       </tags>
   </entry>
   <entry>
-    <title>MIT log 0 内存管理实验环境</title>
-    <url>/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/</url>
-    <content><![CDATA[<h3 id="内存实验环境搭建"><a href="#内存实验环境搭建" class="headerlink" title="内存实验环境搭建"></a>内存实验环境搭建</h3><p><strong>操作系统</strong>是计算机科学中十分重要的一门基础学科，是一名计算机专业毕业生必须要具备的基础知识。但是在学习这门课时，如果仅仅把目光停留在课本上一些关于操作系统概念上的叙述，并不能对操作系统有着深层次的理解。必须要结合动手实践，才能真正掌握核心的知识。<br>MIT的操作系统课程6.828是一门被广泛好评的入门课程。它最重要的特点就是它实践第一的教学原则。在这门课程中会涉及到非常丰富的实验，也会有非常多的动手机会。而且授课者更是亲自构建了一个简化的基于Unix内核的操作系统xv6。所有的实验都是在这个操作系统上完成。虽然它功能很简单，但是它能够帮助我们真正的了解操作系统在做什么[3]。<br>因此，以博客的形式记录自己学习6.828的过程，本系列博文尽量包括以下几个内容：</p>
-<ul>
-<li>所有实验的实验报告(Lab)</li>
-<li>所有实验中的练习(Exercise)</li>
-</ul>
-<p>下面开始实验环境的搭建：</p>
-<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h4><p>本次实验在ubuntu18系统上进行，所有的操作步骤都在Linux 操作系统上进行。</p>
-<h3 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h3><p>因为本实验的  操作系统是比较新的 Ubuntu18，其自带的软件版本可能比较新，对于此lab可能不太适配，所以需要对需要的软件进行一些配置。</p>
-<h4 id="gcc版本降级"><a href="#gcc版本降级" class="headerlink" title="gcc版本降级"></a>gcc版本降级</h4><p>目的： 将gcc 版本降级到 4.8 版本</p>
-<p>(1). 下载 <code>gcc/g++ 4.8</code></p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">apt-get install -y gcc-4.8
-apt-get install -y g++-4.8
-</code></pre>
-<p>(2). 链接gcc/g++实现降级</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">cd /usr/bin
-sudo rm gcc
-sudo ln -s gcc-4.8 gcc
-sudo rm g++
-sudo ln -s g++-4.8 g++
-</code></pre>
-<h4 id="编译qemu"><a href="#编译qemu" class="headerlink" title="编译qemu"></a>编译qemu</h4><p><strong>安装依赖</strong> [4]</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">apt-get install git build-essential binutils g++-multilib libgtk2.0-dev libtool-bin libsdl-dev -y
-</code></pre>
-<p><strong>下载qemu源码</strong></p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">git clone https://github.com/mit-pdos/6.828-qemu.git qemu
-</code></pre>
-<p><strong>下载 lab 源码</strong></p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">git clone https://pdos.csail.mit.edu/6.828/2018/jos.git lab # 只有第一实验的检查脚本
-</code></pre>
-<p><strong>安装步骤</strong></p>
-<p>进入<code>qemu</code>目录下</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">./configure --disable-kvm --target-list="i386-softmmu x86_64-softmmu"
-sudo make && make install
-</code></pre>
-<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu.png" height="260xp"></p>
-<p>它生成的最后一个信息 <code>mk obj/kern/kernel.img</code>，这个<code>kernel.img</code>就是内核映像文件，另外obj目录在make之前是没有的，它是make指令生成的，它里面将会有许多的文件我们之后会重点观察。编译完内核源码，我们就可以把它运行在<code>QEMU</code>上啦！[3]</p>
-<p><strong>安装结果测试</strong></p>
-<p>输入<code>/usr/local/bin/qemu-system-i386</code> 出现以下窗口则安装ok</p>
-<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu-test.png" height="300xp"></p>
-<p>在<code>lab</code>目录下输入  <code>make qemu</code> 出现如下结果</p>
-<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/make-qemu.png" height="300xp"></p>
-<p>至此，实验环境搭建完成！</p>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://os.vampire.rip/" target="_blank" rel="noopener">https://os.vampire.rip/</a></p>
-<p>[2] <a href="https://zhuanlan.zhihu.com/p/74028717" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/74028717</a></p>
-<p>[3] <a href="https://www.cnblogs.com/fatsheep9146/p/5060292.html" target="_blank" rel="noopener">https://www.cnblogs.com/fatsheep9146/p/5060292.html</a></p>
-<p>[4] <a href="https://www.cnblogs.com/gatsby123/p/9746193.html" target="_blank" rel="noopener">https://www.cnblogs.com/gatsby123/p/9746193.html</a></p>
-]]></content>
-      <tags>
-        <tag>lab</tag>
-        <tag>OS Memory</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MIT-log-1-启动PC</title>
-    <url>/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/</url>
-    <content><![CDATA[<h3 id="Part-1-PC-BootStrap"><a href="#Part-1-PC-BootStrap" class="headerlink" title="Part 1: PC BootStrap"></a>Part 1: PC BootStrap</h3><p><strong>PC物理地址空间</strong></p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">+------------------+  <- 0xFFFFFFFF (4GB)
-|      32-bit      |
-|  memory mapped   |
-|     devices      |
-|                  |
-/\/\/\/\/\/\/\/\/\/\
-
-/\/\/\/\/\/\/\/\/\/\
-|                  |
-|      Unused      |
-|                  |
-+------------------+  <- depends on amount of RAM
-|                  |
-|                  |
-| Extended Memory  |
-|                  |
-|                  |
-+------------------+  <- 0x00100000 (1MB)
-|     BIOS ROM     |
-+------------------+  <- 0x000F0000 (960KB)
-|  16-bit devices, |
-|  expansion ROMs  |
-+------------------+  <- 0x000C0000 (768KB)
-|   VGA Display    |
-+------------------+  <- 0x000A0000 (640KB)
-|                  |
-|    Low Memory    |
-|                  |
-+------------------+  <- 0x00000000
-</code></pre>
-<h4 id="利用Qemu和gdb实现对OS的debug"><a href="#利用Qemu和gdb实现对OS的debug" class="headerlink" title="利用Qemu和gdb实现对OS的debug"></a>利用Qemu和gdb实现对OS的debug</h4><h5 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h5><ol>
-<li><p>打开一个终端，在lab目录下输入 <code>make qemu-gdb</code></p>
-<p><img src="/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/gdb-1.png" height="100"></p>
-</li>
-<li><p>在另一个终端中进入lab目录下，输入<code>gdb</code>即可</p>
-<p><img src="/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/gdb-2.png" height="400"></p>
-</li>
-</ol>
-<p>此时，便可以进行调试了。</p>
-<p>&emsp; &emsp;在OS启动时，第一段加载的第一段程序是BIOS，BIOS的操作就是在控制、初始化、检测各种底层的设备，如：时钟，GDTR寄存器、设置中断向量表等，最重要的功能就是<strong>把操作系统从此磁盘中导入内存，然后把控制权交给操作系统。</strong>所以BIOS在运行的最后会去检测可以从当前系统的哪个设备中找到操作系统，通常来说是我们的磁盘。当BIOS确定操作系统位于磁盘中，那么它就会把这个磁盘的第一个扇区，通常把它叫做启动区（boot sector）先加载到内存中，这个启动区中包括一个非常重要的程序—<strong>boot loader，</strong>它会负责完成整个操作系统从磁盘导入内存的工作，以及一些其他的非常重要的配置工作。最后操作系统才会开始运行。</p>
-<p>可见PC启动后的运行顺序为<code>BIOS --&gt; boot loader--&gt; OS内核</code></p>
-<h5 id="Exercise-2"><a href="#Exercise-2" class="headerlink" title="Exercise 2:"></a>Exercise 2:</h5><p>在gdb窗口中显示出PC机启动后运行BIOS的第一条命令为</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">1. [f000:fff0]    0xffff0: ljmp   $0xf000,$0xe05b
-</code></pre>
-<p>&emsp; &emsp; 这是运行的第一条指令，为跳转指令，目标是<code>0xfe05b</code>. 当PC机启动后，CPU运行在实模式(real mode)<sup><a href="#fn_实模式" id="reffn_实模式">实模式</a></sup>下，而当进入操作系统内核后，将会运行在保护模式(protected mode)下[2]。其中实模式是早期CPU（如8088处理器）的工作模式，这类处理器只有20根地址线，所以只能访问<code>1MB</code>的内存空间。但是，CPU不断的发展，之后的<code>80286/80386</code>已经具备32根地址线，能够访问<code>4GB</code>的内存空间，为了能够很好的管理内存空间，提出了保护模式。所以现在的处理器都是工作在保护模式下的，但为了向后兼容，即原来的8088处理器的软件仍能够运行在现代处理器上，现代处理器的CPU在启动过程中都处于实模式，启动完成后进入保护模式。<code>BIOS</code>就是PC刚启动时运行的软件，所以工作在实模式下。</p>
-<p>&emsp; &emsp; 实模式下的地址：<code>段基址：段内偏移</code>，其中这两个字段的值都存放在寄存器中，段基地址必须存放在段寄存器中，如CS(代码段), DS(数据段), SS(堆栈段), ES(扩展段)。</p>
-<p> &emsp; &emsp; 由于8088CPU 寄存器中都是16位，而CPU总线是20位，则需要通过16位的寄存器拼接得到20位的地址：把段寄存器中值左移4位，形成20位段基址，然后和16位段内偏移地址相加，得到20位的真实地址，如：<code>0xf000&lt;&lt;4+0xe05b=0xfe05b</code></p>
-<p>使用gdb进行调试：<code>si</code> 查看下一条指令</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">2. [f000:e05b]    0xfe05b: cmpl   $0x0,%cs:0x6ac8
-</code></pre>
-<p>&emsp;&emsp; 把<code>0x0</code> 这个立即数 与 <code>%cs:0x6ac8</code>代表的内存地址处的值进行比较。其中<code>% cs</code>代表CS段寄存器中的值。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">3. [f000:e062]    0xfe062: jne    0xfd2e1
-</code></pre>
-<p>&emsp;&emsp; <code>jne</code>指令：如果ZF标志位为0的时候跳转，即上一条指令 <code>cmpl</code> 的结果不是0 的时候跳转，即 <code>%cs:0x6ac8</code> 地址处的值不是 <code>0x0</code>的时候跳转。</p>
-<blockquote>
-<p><code>cmpl</code>指令是将两个操作数相减，但计算结果不保存，只是更具计算结果改变<code>eflags</code>的标志位，如果两个操作数相同，则计算结果为0，ZF标志位为1 。</p>
-<p><code>gdb</code>查看寄存器中数值：</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">(gdb) info registers
-eax            0x0      0
-ecx            0x0      0
-edx            0x663    1635
-ebx            0x0      0
-esp            0x0      0x0
-ebp            0x0      0x0
-esi            0x0      0
-edi            0x0      0
-eip            0xe062   0xe062
-eflags         0x46     [ PF ZF ]
-cs             0xf000   61440
-ss             0x0      0
-ds             0x0      0
-es             0x0      0
-fs             0x0      0
-gs             0x0      0
-</code></pre>
-<p><code>gdb</code>查看内存信息：</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">(gdb) x 0xfe05b
-   0xfe05b:     cmpl   $0x0,%cs:0x6ac8
-(gdb) x 0xfe062
-   0xfe062:     jne    0xfd2e1
-</code></pre>
-</blockquote>
-<pre class=" language-lang-shell"><code class="language-lang-shell">4. [f000:e066]    0xfe066: xor    %dx,%dx
-</code></pre>
-<p>&emsp;&emsp; 下一条指令的地址为<code>0xfe066</code>，可见并没有发生指令跳转，该指令功能是把dx寄存器内容清零。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">5. [f000:e068]    0xfe068: mov    %dx,%ss
-6. [f000:e06a]    0xfe06a: mov    $0x7000,%esp
-7. [f000:e070]    0xfe070: mov    $0xf34c2,%edx
-8. [f000:e076]    0xfe076: jmp    0xfd15c  # 跳转到绝对地址
-9. [f000:d15c]    0xfd15c: mov    %eax,%ecx
-</code></pre>
-<p>&emsp; &emsp; 设置寄存器中的数值。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">10. [f000:d15f]    0xfd15f: cli
-</code></pre>
-<p>&emsp;&emsp; 关闭中断指令。PC启动时的操作是比较关键的，关中断指令用于关闭那些可以屏蔽的中断。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">11. [f000:d160]    0xfd160: cld
-</code></pre>
-<p>&emsp; &emsp; 设置方向标识位为0，表示后续的串操作 [3] 比如MOVS操作，内存地址的变化方向，如果为0代表从低地址值变为高地址。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">12. [f000:d161]    0xfd161: mov    $0x8f,%eax
-# (gdb) info register eax
-# eax            0x0      0
-13. [f000:d167]    0xfd167: out    %al,$0x70
-# (gdb) info register eax
-# eax            0x8f     143
-14. [f000:d169]    0xfd169: in     $0x71,%al
-# (gdb) info register al
-# al             0x8f     -113
-</code></pre>
-<p>&emsp; &emsp; CPU与外部设备通讯时，通常是通过访问、修改设备控制器中的寄存器来实现的。那么这些位于设备控制器当中的寄存器也叫做<strong>IO端口</strong>。为了方便管理，80x86CPU采用IO端口单独编址的方式，即所有设备的端口都被命名到一个IO端口地址空间中。这个空间是独立于内存地址空间的。所以必须采用和访问内存的指令不一样的指令来访问端口。</p>
-<blockquote>
-<p>在向0x70端口写入值后，必须对0x71端口有操作(这里正好选用了in操作)，否则RTC就会处于an unknown state之中.</p>
-</blockquote>
-<pre class=" language-lang-shell"><code class="language-lang-shell">out %al,PortAddress #把al寄存器中值写到端口PortAddress
-in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
-# 标准规定，端口操作必须用到al/ax寄存器作为缓冲
-</code></pre>
-<p>&emsp; &emsp; 三条命令就是要操作端口0x70，0x71，根据清单[4] 中内容，可以知道0x70端口和0x71端口是用于控制系统中一个叫做CMOS的设备，这个设备是一个低功耗的存储设备，它可以用于在计算机关闭时存储一些信息，它是由独立的电池供电的[5]。 这个CMOS中可以控制跟PC相关的多个功能，其中最重要的就是<strong>时钟设备（Real Time Clock）</strong>的 ，它还可以控制是否<strong>响应不可屏蔽中断NMI(Non-Maskable Interrupt)</strong>。操作CMOS存储器中的内容需要两个端口，一个是0x70另一个就是0x71。其中0x70可以叫做索引寄存器，<strong>这个8位寄存器的最高位是不可屏蔽中断(NMI)使能位。如果你把这个位置1，则NMI不会被响应。低7位用于指定CMOS存储器中的存储单元地址</strong>，所以如果你想访问第1号存储单元，并且在访问时，我要使能NMI，那么你就应该向端口0x70里面送入0b10000001 = 0x81。</p>
-<p>&emsp; &emsp; 这三条指令可以看出，它首先关闭了NMI中断，并且要访问存储单元0xF的值，并且把值读到al中，但是在后面我们发现这个值并没有被利用，所以可以认为<strong>这三条指令是用来关闭NMI中断的。</strong></p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">15. [f000:d16b]    0xfd16b: in     $0x92,%al 
-# (gdb) info register al
-# al             0x0      0
-16. [f000:d16d]    0xfd16d: or     $0x2,%al
-17. [f000:d16f]    0xfd16f: out    %al,$0x92
-# (gdb) info register al
-# al             0x2      2
-</code></pre>
-<p>&emsp; &emsp; 它控制的是 PS/2系统控制端口A，而第16，17步的操作是在把这个端口的1号bit置为1。这个端口的bit1的功能是<code>bit 1= 1 indicates A20 active</code>,即A20位，即第21个地址线被使能，如果A20地址线被激活，那么系统工作在保护模式下。但是在之后的boot loader程序中，计算机首先要工作在实模式下啊。所以这里的这个操作，根据[6]应该是去测试可用内存空间。在boot loader之前，它肯定还会转换回实模式。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">or # 只要有一个输入位是 1，则输出位就是 1
-</code></pre>
-<pre class=" language-lang-shell"><code class="language-lang-shell">18. [f000:d171]    0xfd171: lidtw  %cs:0x6ab8
-</code></pre>
-<p>&emsp; &emsp; 加载中断向量表寄存器(IDTR)。这个指令会把从地址0xf6ab8起始的后面6个字节的数据读入到中断向量表寄存器(IDTR)中。中断是操作系统中非常重要的一部分，有了中断操作系统才能真正实现进程。每一种中断都有自己对应的中断处理程序，那么这个中断的处理程序的首地址就叫做这个中断的中断向量。中断向量表[7]是存放所有中断向量的表。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">19. [f000:d177]    0xfd177: lgdtw  %cs:0x6a74
-</code></pre>
-<p>&emsp; &emsp; 把从<code>0xf6a74</code>为起始地址处的6个字节的值加载到全局描述符表格寄存器中GDTR中.</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">20. [f000:d17d]    0xfd17d: mov    %cr0,%eax
-21. [f000:d180]    0xfd180: or     $0x1,%eax
-22. [f000:d184]    0xfd184: mov    %eax,%cr0
-</code></pre>
-<p>&emsp; &emsp; 计算机中包含CR0-CR3四个控制寄存器，用来控制和确定处理器的操作模式。其中这三个语句的操作是要把CR0寄存器的最低位(0bit)置1。CR0寄存器的0bit是PE位，启动保护位，当该位被置1，代表开启了保护模式。但是这里出现了问题，我们刚刚说过BIOS是工作在实模式之下，后面的boot loader开始的时候也是工作在实模式下，所以这里把它切换为保护模式，显然是自相矛盾。所以只能推测它在检测机器是否能工作在保护模式下。</p>
-<pre class=" language-lang-shell"><code class="language-lang-shell">23. [f000:d187]    0xfd187: ljmpl  $0x8,$0xfd18f
-# The target architecture is assumed to be i386
-24. => 0xfd18f:     mov    $0x10,%eax
-25. => 0xfd194:     mov    %eax,%ds
-26. => 0xfd196:     mov    %eax,%es
-27. => 0xfd198:     mov    %eax,%ss
-28. => 0xfd19a:     mov    %eax,%fs
-29. => 0xfd19c:     mov    %eax,%gs
-</code></pre>
-<p>&emsp; &emsp; 这里的23~29步之所以这么做是按照规定来的，[8]中指出，如果刚刚加载完GDTR寄存器我们必须要重新加载所有的段寄存器的值，而其中CS段寄存器必须通过长跳转指令，即23号指令来进行加载。所以这些步骤是在第19步完成后必须要做的。这样才能是GDTR的值生效。</p>
-<h3 id="Part-2-引导加载程序"><a href="#Part-2-引导加载程序" class="headerlink" title="Part 2: 引导加载程序"></a>Part 2: 引导加载程序</h3><h3 id="Part-3-内核"><a href="#Part-3-内核" class="headerlink" title="Part 3: 内核"></a>Part 3: 内核</h3><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>[1] <a href="https://github.com/shishujuan/mit6.828-2017.git" target="_blank" rel="noopener">https://github.com/shishujuan/mit6.828-2017.git</a></p>
-<p>[2] <a href="https://blog.csdn.net/zdwzzu2006/article/details/4030948" target="_blank" rel="noopener">https://blog.csdn.net/zdwzzu2006/article/details/4030948</a></p>
-<p>[3] <a href="https://www.cnblogs.com/cykun/archive/2010/10/27/1862940.html" target="_blank" rel="noopener">https://www.cnblogs.com/cykun/archive/2010/10/27/1862940.html</a></p>
-<p>[4] <a href="http://bochs.sourceforge.net/techspec/PORTS.LST" target="_blank" rel="noopener">http://bochs.sourceforge.net/techspec/PORTS.LST</a></p>
-<p>[5] <a href="http://wiki.osdev.org/CMOS" target="_blank" rel="noopener">http://wiki.osdev.org/CMOS</a></p>
-<p>[6] <a href="http://kernelx.weebly.com/a20-address-line.html" target="_blank" rel="noopener">http://kernelx.weebly.com/a20-address-line.html</a></p>
-<p>[7] <a href="http://wiki.osdev.org/Interrupt_Descriptor_Table" target="_blank" rel="noopener">http://wiki.osdev.org/Interrupt_Descriptor_Table</a> </p>
-<p>[8] <a href="https://en.wikibooks.org/wiki/X86_Assembly/Global_Descriptor_Table" target="_blank" rel="noopener">https://en.wikibooks.org/wiki/X86_Assembly/Global_Descriptor_Table</a></p>
-<p>[9] <a href="https://blog.csdn.net/a747979985/article/details/94334901" target="_blank" rel="noopener">https://blog.csdn.net/a747979985/article/details/94334901</a></p>
-<p>[10] <a href="https://wenku.baidu.com/view/fe595521bb68a98271fefad4?pcf=2&amp;fromShare=1&amp;fr=copy&amp;copyfr=copylinkpop" target="_blank" rel="noopener">https://wenku.baidu.com/view/fe595521bb68a98271fefad4?pcf=2&amp;fromShare=1&amp;fr=copy&amp;copyfr=copylinkpop</a></p>
-<p> <sup><a href="#fn_实模式" id="reffn_实模式">实模式</a></sup>： 实模式采用 16 位寻址模式，在该模式中，最大寻址空间为 1MB，最大分段为 64KB。 由于处理器的设计需要考虑到兼容问题，8086 处理器地址总线扩展到 20 位，但CPU的ALU宽度(数据总线)却只有 16 位，也就是说直接参与运算的数值都是 16 位的。为支持 1MB 寻址空间，8086 处理器在实模式下引入了分段方法。在处理器中设置了四个 16 位的段寄存器:CS、DS、SS、ES，对 应于地址总线中的高 16 位。寻址时，采用以下公式计算实际访问的物理内存地址，这样，便实现了 16 位内存地址到 20 位物理地址的转换。</p>
-]]></content>
-      <tags>
-        <tag>lab</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>MuonTrap-Preventing Cross-Domain Spectre-Like</title>
-    <url>/2021/03/15/MuonTrap-Preventing-Cross-Domain-Spectre-Like/</url>
-    <content><![CDATA[<p>清华安全公众号推荐</p>
-]]></content>
-  </entry>
-  <entry>
     <title>Operating Systems</title>
     <url>/2020/07/17/Operating-Systems/</url>
     <content><![CDATA[]]></content>
       <tags>
         <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PUBG JNG</title>
+    <url>/2020/04/18/PUBG-JNG/</url>
+    <content><![CDATA[<h3 id="JNG战队发展历程回顾"><a href="#JNG战队发展历程回顾" class="headerlink" title="JNG战队发展历程回顾"></a>JNG战队发展历程回顾</h3><h4 id="JNG初次相遇"><a href="#JNG初次相遇" class="headerlink" title="JNG初次相遇"></a>JNG初次相遇</h4><p>很久很久以前，这支战队的几个骚年游荡在这样一个空旷的平原上</p>
+<p><img src="/2020/04/18/PUBG-JNG/1.jpg" alt="IMG_0814"></p>
+<p>这个寒假的某一天，他们在飞机上相遇，并开启了他们相识到并肩作战的征程</p>
+<p><img src="/2020/04/18/PUBG-JNG/2.jpg" alt="IMG_0815"></p>
+<h4 id="睡衣战队红极一时"><a href="#睡衣战队红极一时" class="headerlink" title="睡衣战队红极一时"></a>睡衣战队红极一时</h4><p>在他们相遇不久，便迎来了队伍的第一次胜利</p>
+<p><img src="/2020/04/18/PUBG-JNG/3.jpg" alt="IMG_0823"></p>
+<p>当时他们采取的是著名的车轮战，即3辆装甲车并驾齐驱，纵横四海的战术</p>
+<p><img src="/2020/04/18/PUBG-JNG/4.jpg" alt="IMG_0822"></p>
+<h4 id="各种模式吃鸡常态化"><a href="#各种模式吃鸡常态化" class="headerlink" title="各种模式吃鸡常态化"></a>各种模式吃鸡常态化</h4><p>在经历了短短几天的磨合后，这几个小伙子已经将吃鸡常态化</p>
+<p>普通模式</p>
+<p><img src="/2020/04/18/PUBG-JNG/5.jpg" alt="IMG_0863"></p>
+<p><img src="/2020/04/18/PUBG-JNG/20.jpg" alt></p>
+<p>特种兵模式</p>
+<p><img src="/2020/04/18/PUBG-JNG/6.jpg" alt="IMG_0833"></p>
+<p>一日两鸡已是正常</p>
+<p><img src="/2020/04/18/PUBG-JNG/7.jpg" alt="IMG_0838"></p>
+<p><img src="/2020/04/18/PUBG-JNG/8.jpg" alt="IMG_0852"></p>
+<h4 id="雪地扔雷，对手一片哀嚎"><a href="#雪地扔雷，对手一片哀嚎" class="headerlink" title="雪地扔雷，对手一片哀嚎"></a>雪地扔雷，对手一片哀嚎</h4><p><img src="/2020/04/18/PUBG-JNG/9.jpg" alt="IMG_0858"></p>
+<p><img src="/2020/04/18/PUBG-JNG/10.jpg" alt="IMG_0869"></p>
+<p><img src="/2020/04/18/PUBG-JNG/11.jpg" alt="IMG_0871"></p>
+<p><img src="/2020/04/18/PUBG-JNG/12.jpg" alt="IMG_0903"></p>
+<h4 id="最后一次征战雪地"><a href="#最后一次征战雪地" class="headerlink" title="最后一次征战雪地"></a>最后一次征战雪地</h4><p>在一次极寒模式对决中，几个小伙子竟然连锅端掉了一个满编RMB玩家。在这之后，光子工作室终于对他们下手了，出于人道主义，并不能直接限制玩家们参与游戏，于是乎，默默地移除了他们最擅长的极寒模式，他们再也不用落地寻找暖宝宝了，再也听不到系统提示：“暴风雪还有60秒到达，打开背包，利用打火机生火取暖”。但系统为了其余玩家的游戏体验，只能如此。</p>
+<p><img src="/2020/04/18/PUBG-JNG/13.jpg" alt="IMG_0909"></p>
+<h4 id="插曲"><a href="#插曲" class="headerlink" title="插曲"></a>插曲</h4><p>性感小wei在线比心</p>
+<p><img src="/2020/04/18/PUBG-JNG/14.jpg" alt="IMG_0834"></p>
+<h3 id="JNG-建队"><a href="#JNG-建队" class="headerlink" title="JNG 建队"></a>JNG 建队</h3><p>终于，在2020年4月17日，这支战队正式成立了</p>
+<p><img src="/2020/04/18/PUBG-JNG/15.jpg" alt="IMG_0855"></p>
+<p>属于JNG（Jining Gaming）的时刻已经来临</p>
+<p><img src="/2020/04/18/PUBG-JNG/16.jpg" alt></p>
+<p>今晚，请锁定和平精英，关注这支战队！</p>
+<p><img src="/2020/04/18/PUBG-JNG/21.jpg" alt></p>
+<p>建队首鸡</p>
+<p><img src="/2020/04/18/PUBG-JNG/18.jpg" alt></p>
+<p><img src="/2020/04/18/PUBG-JNG/19.jpg" alt></p>
+<p>一支穿云箭，千军万马来相见</p>
+<p><img src="/2020/04/18/PUBG-JNG/22.jpg" alt></p>
+<p>雪地彩蛋</p>
+<p><img src="/2020/04/18/PUBG-JNG/23.jpg" alt></p>
+]]></content>
+      <tags>
+        <tag>game-for-peace</tag>
+        <tag>JNG</tag>
       </tags>
   </entry>
   <entry>
@@ -2229,53 +2327,6 @@ end
       </tags>
   </entry>
   <entry>
-    <title>PUBG JNG</title>
-    <url>/2020/04/18/PUBG-JNG/</url>
-    <content><![CDATA[<h3 id="JNG战队发展历程回顾"><a href="#JNG战队发展历程回顾" class="headerlink" title="JNG战队发展历程回顾"></a>JNG战队发展历程回顾</h3><h4 id="JNG初次相遇"><a href="#JNG初次相遇" class="headerlink" title="JNG初次相遇"></a>JNG初次相遇</h4><p>很久很久以前，这支战队的几个骚年游荡在这样一个空旷的平原上</p>
-<p><img src="/2020/04/18/PUBG-JNG/1.jpg" alt="IMG_0814"></p>
-<p>这个寒假的某一天，他们在飞机上相遇，并开启了他们相识到并肩作战的征程</p>
-<p><img src="/2020/04/18/PUBG-JNG/2.jpg" alt="IMG_0815"></p>
-<h4 id="睡衣战队红极一时"><a href="#睡衣战队红极一时" class="headerlink" title="睡衣战队红极一时"></a>睡衣战队红极一时</h4><p>在他们相遇不久，便迎来了队伍的第一次胜利</p>
-<p><img src="/2020/04/18/PUBG-JNG/3.jpg" alt="IMG_0823"></p>
-<p>当时他们采取的是著名的车轮战，即3辆装甲车并驾齐驱，纵横四海的战术</p>
-<p><img src="/2020/04/18/PUBG-JNG/4.jpg" alt="IMG_0822"></p>
-<h4 id="各种模式吃鸡常态化"><a href="#各种模式吃鸡常态化" class="headerlink" title="各种模式吃鸡常态化"></a>各种模式吃鸡常态化</h4><p>在经历了短短几天的磨合后，这几个小伙子已经将吃鸡常态化</p>
-<p>普通模式</p>
-<p><img src="/2020/04/18/PUBG-JNG/5.jpg" alt="IMG_0863"></p>
-<p><img src="/2020/04/18/PUBG-JNG/20.jpg" alt></p>
-<p>特种兵模式</p>
-<p><img src="/2020/04/18/PUBG-JNG/6.jpg" alt="IMG_0833"></p>
-<p>一日两鸡已是正常</p>
-<p><img src="/2020/04/18/PUBG-JNG/7.jpg" alt="IMG_0838"></p>
-<p><img src="/2020/04/18/PUBG-JNG/8.jpg" alt="IMG_0852"></p>
-<h4 id="雪地扔雷，对手一片哀嚎"><a href="#雪地扔雷，对手一片哀嚎" class="headerlink" title="雪地扔雷，对手一片哀嚎"></a>雪地扔雷，对手一片哀嚎</h4><p><img src="/2020/04/18/PUBG-JNG/9.jpg" alt="IMG_0858"></p>
-<p><img src="/2020/04/18/PUBG-JNG/10.jpg" alt="IMG_0869"></p>
-<p><img src="/2020/04/18/PUBG-JNG/11.jpg" alt="IMG_0871"></p>
-<p><img src="/2020/04/18/PUBG-JNG/12.jpg" alt="IMG_0903"></p>
-<h4 id="最后一次征战雪地"><a href="#最后一次征战雪地" class="headerlink" title="最后一次征战雪地"></a>最后一次征战雪地</h4><p>在一次极寒模式对决中，几个小伙子竟然连锅端掉了一个满编RMB玩家。在这之后，光子工作室终于对他们下手了，出于人道主义，并不能直接限制玩家们参与游戏，于是乎，默默地移除了他们最擅长的极寒模式，他们再也不用落地寻找暖宝宝了，再也听不到系统提示：“暴风雪还有60秒到达，打开背包，利用打火机生火取暖”。但系统为了其余玩家的游戏体验，只能如此。</p>
-<p><img src="/2020/04/18/PUBG-JNG/13.jpg" alt="IMG_0909"></p>
-<h4 id="插曲"><a href="#插曲" class="headerlink" title="插曲"></a>插曲</h4><p>性感小wei在线比心</p>
-<p><img src="/2020/04/18/PUBG-JNG/14.jpg" alt="IMG_0834"></p>
-<h3 id="JNG-建队"><a href="#JNG-建队" class="headerlink" title="JNG 建队"></a>JNG 建队</h3><p>终于，在2020年4月17日，这支战队正式成立了</p>
-<p><img src="/2020/04/18/PUBG-JNG/15.jpg" alt="IMG_0855"></p>
-<p>属于JNG（Jining Gaming）的时刻已经来临</p>
-<p><img src="/2020/04/18/PUBG-JNG/16.jpg" alt></p>
-<p>今晚，请锁定和平精英，关注这支战队！</p>
-<p><img src="/2020/04/18/PUBG-JNG/21.jpg" alt></p>
-<p>建队首鸡</p>
-<p><img src="/2020/04/18/PUBG-JNG/18.jpg" alt></p>
-<p><img src="/2020/04/18/PUBG-JNG/19.jpg" alt></p>
-<p>一支穿云箭，千军万马来相见</p>
-<p><img src="/2020/04/18/PUBG-JNG/22.jpg" alt></p>
-<p>雪地彩蛋</p>
-<p><img src="/2020/04/18/PUBG-JNG/23.jpg" alt></p>
-]]></content>
-      <tags>
-        <tag>game-for-peace</tag>
-        <tag>JNG</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Pioneer</title>
     <url>/2020/11/23/Pioneer/</url>
     <content><![CDATA[<div class="table-container">
@@ -2340,6 +2391,20 @@ end
       <tags>
         <tag>论文解读</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Protocol-gossip</title>
+    <url>/2020/11/07/Protocol-gossip/</url>
+    <content><![CDATA[<h3 id="P2P-简介"><a href="#P2P-简介" class="headerlink" title="P2P 简介"></a>P2P 简介</h3><p>​        网络中节点数目的增加，使得传统的C/S计算模型不能满足用户对信息访问等要求，无法满足分布式应用的要求，其限制了网络资源的充分利用，可扩展性较差，无法支持不断增长的客户节点数量等问题越来越明显。</p>
+<p>​        P2P 主要解决网络负载不均衡的问题，用户有能力不通过服务器直接进行资源的的共享和交换。Napster是第一个被广泛应用的 Peer-to-Peer 音乐共享服务。</p>
+<h4 id="Peer-to-Peerr-分类"><a href="#Peer-to-Peerr-分类" class="headerlink" title="Peer-to-Peerr 分类"></a>Peer-to-Peerr 分类</h4><p>集中式P2P系统</p>
+<p>无结构P2P系统</p>
+<p>结构化P2P系统</p>
+<h3 id="分布式文件定位"><a href="#分布式文件定位" class="headerlink" title="分布式文件定位"></a>分布式文件定位</h3><h4 id="Useful-links"><a href="#Useful-links" class="headerlink" title="Useful links"></a>Useful links</h4><p><a href="https://www.cnblogs.com/zhufanyu/p/12101112.html" target="_blank" rel="noopener">RPC 远程调用</a></p>
+<p><a href="https://www.cnblogs.com/gzhcsu/p/11389235.html" target="_blank" rel="noopener">RPC </a></p>
+<p><a href="https://blog.csdn.net/daaikuaichuan/article/details/88595202?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare" target="_blank" rel="noopener">详解RPC </a></p>
+<p><a href="https://wiki.p2pfoundation.net/P2P_Computing" target="_blank" rel="noopener">https://wiki.p2pfoundation.net/P2P_Computing</a></p>
+]]></content>
   </entry>
   <entry>
     <title>PrivateEye</title>
@@ -2424,68 +2489,80 @@ end
       </tags>
   </entry>
   <entry>
-    <title>Protocol-gossip</title>
-    <url>/2020/11/07/Protocol-gossip/</url>
-    <content><![CDATA[<h3 id="P2P-简介"><a href="#P2P-简介" class="headerlink" title="P2P 简介"></a>P2P 简介</h3><p>​        网络中节点数目的增加，使得传统的C/S计算模型不能满足用户对信息访问等要求，无法满足分布式应用的要求，其限制了网络资源的充分利用，可扩展性较差，无法支持不断增长的客户节点数量等问题越来越明显。</p>
-<p>​        P2P 主要解决网络负载不均衡的问题，用户有能力不通过服务器直接进行资源的的共享和交换。Napster是第一个被广泛应用的 Peer-to-Peer 音乐共享服务。</p>
-<h4 id="Peer-to-Peerr-分类"><a href="#Peer-to-Peerr-分类" class="headerlink" title="Peer-to-Peerr 分类"></a>Peer-to-Peerr 分类</h4><p>集中式P2P系统</p>
-<p>无结构P2P系统</p>
-<p>结构化P2P系统</p>
-<h3 id="分布式文件定位"><a href="#分布式文件定位" class="headerlink" title="分布式文件定位"></a>分布式文件定位</h3><h4 id="Useful-links"><a href="#Useful-links" class="headerlink" title="Useful links"></a>Useful links</h4><p><a href="https://www.cnblogs.com/zhufanyu/p/12101112.html" target="_blank" rel="noopener">RPC 远程调用</a></p>
-<p><a href="https://www.cnblogs.com/gzhcsu/p/11389235.html" target="_blank" rel="noopener">RPC </a></p>
-<p><a href="https://blog.csdn.net/daaikuaichuan/article/details/88595202?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare" target="_blank" rel="noopener">详解RPC </a></p>
-<p><a href="https://wiki.p2pfoundation.net/P2P_Computing" target="_blank" rel="noopener">https://wiki.p2pfoundation.net/P2P_Computing</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>FHEW</title>
-    <url>/2020/08/13/FHEW/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://eprint.iacr.org/2014/816.pdf" target="_blank" rel="noopener">FHEW</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Centrum Wiskunde &amp; Informatica, Amsterdam</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">对全同态加密中 bootstraping 进行优化</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">同态加密</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">优化影响同态加密效率的主要瓶颈——Gentry 的引导程序</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
+    <title>RADAR</title>
+    <url>/2020/07/18/RADAR/</url>
+    <content><![CDATA[]]></content>
       <categories>
         <category>paper</category>
-        <category>Cryptographic Techniques</category>
+        <category>Security and Privacy</category>
       </categories>
       <tags>
         <tag>论文解读</tag>
-        <tag>Homomorphic</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>ROP attacks</title>
+    <url>/2021/02/01/ROP-attacks/</url>
+    <content><![CDATA[<h3 id="栈溢出"><a href="#栈溢出" class="headerlink" title="栈溢出"></a>栈溢出</h3><p>由于<code>C</code> 语言对数组引用不做任何边界检查，从而导致缓冲区溢出<code>buffer overflow</code>，这成为一种常见的漏洞。根据溢出发生的内存位置，可以分为栈溢出和堆溢出。其中，由于栈上保存着局部变量和一些状态信息，例如寄存器值和返回地址等，一旦发生严重溢出，攻击者可以通过复写返回地址来执行任意代码，利用包括<code>shellcode</code>注入、ret2libc、<code>ROP</code>等。</p>
+<h3 id="What-is-ROP"><a href="#What-is-ROP" class="headerlink" title="What is ROP"></a>What is ROP</h3><p>最开始，要利用栈溢出只需将返回地址覆盖为 jmp esp 指令的地址，并在后面添加 shellcode 就可以执行。后来引入了 NX 缓解机制，数据所在的内存页被标记为不可执行，此时再执行 shellcode 就会抛出异常。既然注入新代码不可行，那么就复用程序中已有的代码。libc.so 几乎在每个程序执 行时都会加载，攻击者就开始考虑利用 libc 中的函数，这种技术就是 ret2libc。但是这种技术也有缺陷，首先，虽然攻击者可以一个接一个地调用 libc 中的函数，但这个执行流仍然是线性的，而不像代码注入那样任意执行，其次，攻击者只能使用程序 text 段和 libc 中已有的函数，通过移除这些特定的函数就可以限制此类攻击。</p>
+<p>论文 <code>The Geometry of Innocent Flesh on the Bone: Return-into-libc without Function Calls (on the x86)</code>提出了一种新的攻击技术——返回导向编程<code>（Return-Oriented Programming, ROP）</code>，无须调用任何函数即可执行任意代码。</p>
+<p>使用 ROP 攻击，首先需要扫描文件，提取出可用的 gadget 片段（通常以 ret 指令结尾），然后<br>将这些 gadget 根据所需要的功能进行组合，达到攻击者的目的。举个小例子，exit(0)的 shellcode 由<br>下面 4 条连续的指令组成。</p>
+<pre class=" language-lang-c"><code class="language-lang-c">; exit(0) shellcode
+xor eax, eax
+xor ebx, ebx
+inc eax
+int 0x80
+</code></pre>
+<p>如果要将它改写成 ROP 链，则需要分别找到包含这些指令的 gadget，由于它们在地址上不一定<br>是连续的，所以需要通过 ret 指令进行连接，依次执行。</p>
+<pre class=" language-lang-C"><code class="language-lang-C">; exit(0) ROP chain
+xor eax, eax ; gadget 1
+ret
+xor ebx, ebx ; gadget 2
+ret
+inc eax ; gadget 3
+ret
+int 0x80 ; gadget 4
+</code></pre>
+<p>为了完成指令序列的构建，首先要找到这些以ret指令为结尾，并且在执行时必然以ret结束而不会跳转到其他地方的gadget，算法如下：</p>
+<pre class=" language-lang-C"><code class="language-lang-C">Algorithm GALILEO:
+    create a node, root, representing the ret instruction; 
+    place root in the trie; 
+    for pos from 1 to textseg_len do:
+        if the byte at pos is c3, i.e., a ret instruction, then:
+            call BUILDFROM(pos, root).
+
+Procedure BuILDFROM(index pos, instruction parent_insn):
+    for step from 1 to max_insn_len do:
+        if bytes [( pos-step )···(pos-1)] decode as a valid instruction insn then:
+            ensure insn is in the trie as a child of parent_insn; 
+            if insn isn't boring then:
+                call BUILDFROM (pos-step,insn).
+</code></pre>
+<p>扫描二进制找到 ret（c3）指令，将其作为 trie 的根节点，然后回溯解析前面的指令，如果是有效指令，将其添加为子节点，再判断是否 boring；如果不是，就继续递归回溯。举个例子，在一个 trie 中一个表示 pop %eax 的节点是表示 ret 的根节点的子节点，则这个 gadget 为 pop %eax; ret。<br>如此就能把有用的 gadgets 都找出来了。boring 指令则分为三种情况：<br>（1）该指令是 leave，后跟一个 ret 指令；<br>（2）该指令是一个 pop %ebp，后跟一个 ret 指令；<br>（3）该指令是返回或者非条件跳转。<br>实际上，有很多工具可以帮助我们完成 gadget 搜索的工作，常用的有 ROPgadget、Ropper 等，还可以直接在 ropshell 网站上搜索。gadgets 在多个体系架构上都是图灵完备的，允许任意复杂度的计算，也就是说基本上只要能想到的事情它都可以做。下面简单介绍几种用法。<br>（1）保存栈数据到寄存器。弹出栈顶数据到寄存器中，然后跳转到新的栈顶地址。所以当返回<br>地址被一个 gadget 的地址覆盖，程序将在返回后执行该指令序列。例如：pop eax; ret；<br>（2）保存内存数据到寄存器。例如：mov ecx,[eax]; ret；<br>（3）保存寄存器数据到内存。例如：mov [eax],ecx; ret；<br>（4）算数和逻辑运算。add、sub、mul、xor 等。例如：add eax,ebx; ret, xor edx,edx; ret；<br>（5）系统调用。执行内核中断。例如：int 0x80; ret, call gs:[0x10]; ret；<br>（6）会影响栈帧的 gadget。这些 gadget 会改变 ebp 的值，从而影响栈帧，在一些操作如 stack<br>pivot 时我们需要这样的指令来转移栈帧。例如：leave; ret, pop ebp; ret。</p>
+<h3 id="Analyse-ROP"><a href="#Analyse-ROP" class="headerlink" title="Analyse ROP"></a>Analyse ROP</h3><ol>
+<li><p>【<code>ROP</code>攻击】 攻击者预先扫描并识别系统中可以利用的gadgets（包含<code>ret</code> 指令并可以跳转到指定地址的代码片段），利用缓冲区溢出，通过对堆栈段的控制，控制访问控制流程（新的流程复用正常的代码段），从而得到攻击者想要的信息，达到攻击的目的；</p>
+</li>
+<li><p>【可行性】<code>Xen</code> 代码段中确实存在很多可以用于<code>ROP</code>攻击的<code>gadgets</code>，[1] 这篇文章是第一个实现在虚拟化领域的<code>ROP</code>攻击，攻击结果是实现对非特权<code>VM</code>的权限提升；</p>
+</li>
+<li><p>【ROP不影响代码完整性】[2] 在相关工作中指出，使用<code>ROP</code>攻击的攻击模型，不会对<code>hypervisor</code>代码产生影响，因此，仅检测代码完整性的机制不会检测到该攻击；在文中introduction介绍，非特权级客户机，会控制<code>hypervisor</code>的 <code>ToolStack</code>，从而提升自己的权限并且控制其他的客户机；[3] 在文中也明确提出<code>ROP</code>攻击可以完美的旁路掉代码完整性检测。</p>
+</li>
+<li><p>综上，我看过的几篇文章中没有提到<code>ROP</code>攻击会对code integrity 产生影响的说明，并且，在<code>Outlier</code>中，对比Checker 是扫描的 <code>Hypervisor</code> 的代码区域，那么这个提到的ROP攻击就会避开我们的检测，所以从理论上来看<code>Outlier</code>确实不会检测到ROP的攻击；ROP在攻击的过程中，会在内存中留下痕迹，但是，应该是在堆、栈段留下痕迹，在代码段没有影响。</p>
+</li>
+</ol>
+<h3 id="how-does-ROP-effect-the-OS"><a href="#how-does-ROP-effect-the-OS" class="headerlink" title="how does ROP effect the OS"></a>how does ROP effect the OS</h3><p>[6] 文中举的例子：</p>
+<p>攻击者扫描已有的动态链接库和可执行文件，提取出可以利用的指令片段(gadget)，这些指令片段均以ret指令结尾，即用ret指令实现指令片段执行流的衔接。操作系统通过栈来进行函数的调用和返回。函数的调用和返回就是通过压栈和出栈来实现的。每个程序都会维护一个程序运行栈，栈为所有函数共享，每次函数调用，系统会分配一个栈桢给当前被调用函数，用于参数的传递、局部变量的维护、返回地址的填入等。栈帧是程序运行栈的一部分 ，在<a href>Linux</a>中 ，通过%esp和 %ebp寄存器维护栈顶指针和栈帧的起始地址 ，%eip是<a href>程序计数器</a>寄存器 。而ROP攻击则是利用以ret结尾的程序片段 ，操作这些栈相关寄存器，控制程序的流程，执行相应的gadget，实施攻击者预设目标 。ROP不同于retum-to-libc攻击之处在于，<strong>ROP攻击以ret指令结尾的函数代码片段</strong> ，而不是整个函数本身去完成预定的操作。从广义角度讲 ，return-to-libc攻击是ROP攻的特例。最初ROP攻击实现在x86体系结构下，随后扩展到各种体系结构.。与以往攻击技术不同的是，<strong>ROP恶意代码不包含任何指令</strong>，将自己的恶意代码隐藏在正常代码中。因而，它可以绕过W⊕X的防御技术。</p>
+<p><img src="/2021/02/01/ROP-attacks/example.png" width="500"></p>
+<h3 id="how-can-we-detect"><a href="#how-can-we-detect" class="headerlink" title="how can we detect"></a>how can we detect</h3><h3 id="how-could-it-apply-on-Xen"><a href="#how-could-it-apply-on-Xen" class="headerlink" title="how could it apply on Xen"></a>how could it apply on Xen</h3><h3 id="Xen-hypervisor-and-ROP"><a href="#Xen-hypervisor-and-ROP" class="headerlink" title="Xen hypervisor and ROP"></a>Xen hypervisor and ROP</h3><p>Control-flow Enforcement Technology (CET) is a set of features in hardware designed to combat Return-oriented Programming (ROP, also call/jump COP/¯JOP) attacks. Xen 4.14 can use these hardware features, if available, to protect itself from ROP attacks.[5]</p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] Ding B, Wu Y, He Y, et al. Return-oriented programming attack on the xen hypervisor[C]//2012 Seventh International Conference on Availability, Reliability and Security. IEEE, 2012: 479-484.</p>
+<p>[2] Saeed A, Hussain S A, Garraghan P. Cross-VM Network Channel Attacks and Countermeasures within Cloud Computing Environments[J]. IEEE Transactions on Dependable and Secure Computing, 2020.</p>
+<p>[3] Jiang J, Jia X, Feng D, et al. HyperCrop: a hypervisor-based countermeasure for return oriented programming[C]//International Conference on Information and Communications Security. Springer, Berlin, Heidelberg, 2011: 360-373.</p>
+<p>[4] <a href="https://www.youtube.com/watch?v=n-_QkDek6jY" target="_blank" rel="noopener">https://www.youtube.com/watch?v=n-_QkDek6jY</a> </p>
+<p>[5] <a href="https://wiki.xenproject.org/wiki/Xen_Project_4.14_Feature_List" target="_blank" rel="noopener">https://wiki.xenproject.org/wiki/Xen_Project_4.14_Feature_List</a></p>
+<p>[6] Zhang J, Hou R, Song W, et al. RAGuard: An Efficient and User-Transparent Hardware Mechanism against ROP Attacks[J]. ACM Transactions on Architecture and Code Optimization (TACO), 2018, 15(4): 1-21.</p>
+]]></content>
+      <tags>
+        <tag>attacks</tag>
+        <tag>ROP</tag>
       </tags>
   </entry>
   <entry>
@@ -2664,71 +2741,6 @@ func main()  {
       </tags>
   </entry>
   <entry>
-    <title>ROP attacks</title>
-    <url>/2021/02/01/ROP-attacks/</url>
-    <content><![CDATA[<h3 id="栈溢出"><a href="#栈溢出" class="headerlink" title="栈溢出"></a>栈溢出</h3><p>由于<code>C</code> 语言对数组引用不做任何边界检查，从而导致缓冲区溢出<code>buffer overflow</code>，这成为一种常见的漏洞。根据溢出发生的内存位置，可以分为栈溢出和堆溢出。其中，由于栈上保存着局部变量和一些状态信息，例如寄存器值和返回地址等，一旦发生严重溢出，攻击者可以通过复写返回地址来执行任意代码，利用包括<code>shellcode</code>注入、ret2libc、<code>ROP</code>等。</p>
-<h3 id="What-is-ROP"><a href="#What-is-ROP" class="headerlink" title="What is ROP"></a>What is ROP</h3><p>最开始，要利用栈溢出只需将返回地址覆盖为 jmp esp 指令的地址，并在后面添加 shellcode 就可以执行。后来引入了 NX 缓解机制，数据所在的内存页被标记为不可执行，此时再执行 shellcode 就会抛出异常。既然注入新代码不可行，那么就复用程序中已有的代码。libc.so 几乎在每个程序执 行时都会加载，攻击者就开始考虑利用 libc 中的函数，这种技术就是 ret2libc。但是这种技术也有缺陷，首先，虽然攻击者可以一个接一个地调用 libc 中的函数，但这个执行流仍然是线性的，而不像代码注入那样任意执行，其次，攻击者只能使用程序 text 段和 libc 中已有的函数，通过移除这些特定的函数就可以限制此类攻击。</p>
-<p>论文 <code>The Geometry of Innocent Flesh on the Bone: Return-into-libc without Function Calls (on the x86)</code>提出了一种新的攻击技术——返回导向编程<code>（Return-Oriented Programming, ROP）</code>，无须调用任何函数即可执行任意代码。</p>
-<p>使用 ROP 攻击，首先需要扫描文件，提取出可用的 gadget 片段（通常以 ret 指令结尾），然后<br>将这些 gadget 根据所需要的功能进行组合，达到攻击者的目的。举个小例子，exit(0)的 shellcode 由<br>下面 4 条连续的指令组成。</p>
-<pre class=" language-lang-c"><code class="language-lang-c">; exit(0) shellcode
-xor eax, eax
-xor ebx, ebx
-inc eax
-int 0x80
-</code></pre>
-<p>如果要将它改写成 ROP 链，则需要分别找到包含这些指令的 gadget，由于它们在地址上不一定<br>是连续的，所以需要通过 ret 指令进行连接，依次执行。</p>
-<pre class=" language-lang-C"><code class="language-lang-C">; exit(0) ROP chain
-xor eax, eax ; gadget 1
-ret
-xor ebx, ebx ; gadget 2
-ret
-inc eax ; gadget 3
-ret
-int 0x80 ; gadget 4
-</code></pre>
-<p>为了完成指令序列的构建，首先要找到这些以ret指令为结尾，并且在执行时必然以ret结束而不会跳转到其他地方的gadget，算法如下：</p>
-<pre class=" language-lang-C"><code class="language-lang-C">Algorithm GALILEO:
-    create a node, root, representing the ret instruction; 
-    place root in the trie; 
-    for pos from 1 to textseg_len do:
-        if the byte at pos is c3, i.e., a ret instruction, then:
-            call BUILDFROM(pos, root).
-
-Procedure BuILDFROM(index pos, instruction parent_insn):
-    for step from 1 to max_insn_len do:
-        if bytes [( pos-step )···(pos-1)] decode as a valid instruction insn then:
-            ensure insn is in the trie as a child of parent_insn; 
-            if insn isn't boring then:
-                call BUILDFROM (pos-step,insn).
-</code></pre>
-<p>扫描二进制找到 ret（c3）指令，将其作为 trie 的根节点，然后回溯解析前面的指令，如果是有效指令，将其添加为子节点，再判断是否 boring；如果不是，就继续递归回溯。举个例子，在一个 trie 中一个表示 pop %eax 的节点是表示 ret 的根节点的子节点，则这个 gadget 为 pop %eax; ret。<br>如此就能把有用的 gadgets 都找出来了。boring 指令则分为三种情况：<br>（1）该指令是 leave，后跟一个 ret 指令；<br>（2）该指令是一个 pop %ebp，后跟一个 ret 指令；<br>（3）该指令是返回或者非条件跳转。<br>实际上，有很多工具可以帮助我们完成 gadget 搜索的工作，常用的有 ROPgadget、Ropper 等，还可以直接在 ropshell 网站上搜索。gadgets 在多个体系架构上都是图灵完备的，允许任意复杂度的计算，也就是说基本上只要能想到的事情它都可以做。下面简单介绍几种用法。<br>（1）保存栈数据到寄存器。弹出栈顶数据到寄存器中，然后跳转到新的栈顶地址。所以当返回<br>地址被一个 gadget 的地址覆盖，程序将在返回后执行该指令序列。例如：pop eax; ret；<br>（2）保存内存数据到寄存器。例如：mov ecx,[eax]; ret；<br>（3）保存寄存器数据到内存。例如：mov [eax],ecx; ret；<br>（4）算数和逻辑运算。add、sub、mul、xor 等。例如：add eax,ebx; ret, xor edx,edx; ret；<br>（5）系统调用。执行内核中断。例如：int 0x80; ret, call gs:[0x10]; ret；<br>（6）会影响栈帧的 gadget。这些 gadget 会改变 ebp 的值，从而影响栈帧，在一些操作如 stack<br>pivot 时我们需要这样的指令来转移栈帧。例如：leave; ret, pop ebp; ret。</p>
-<h3 id="Analyse-ROP"><a href="#Analyse-ROP" class="headerlink" title="Analyse ROP"></a>Analyse ROP</h3><ol>
-<li><p>【<code>ROP</code>攻击】 攻击者预先扫描并识别系统中可以利用的gadgets（包含<code>ret</code> 指令并可以跳转到指定地址的代码片段），利用缓冲区溢出，通过对堆栈段的控制，控制访问控制流程（新的流程复用正常的代码段），从而得到攻击者想要的信息，达到攻击的目的；</p>
-</li>
-<li><p>【可行性】<code>Xen</code> 代码段中确实存在很多可以用于<code>ROP</code>攻击的<code>gadgets</code>，[1] 这篇文章是第一个实现在虚拟化领域的<code>ROP</code>攻击，攻击结果是实现对非特权<code>VM</code>的权限提升；</p>
-</li>
-<li><p>【ROP不影响代码完整性】[2] 在相关工作中指出，使用<code>ROP</code>攻击的攻击模型，不会对<code>hypervisor</code>代码产生影响，因此，仅检测代码完整性的机制不会检测到该攻击；在文中introduction介绍，非特权级客户机，会控制<code>hypervisor</code>的 <code>ToolStack</code>，从而提升自己的权限并且控制其他的客户机；[3] 在文中也明确提出<code>ROP</code>攻击可以完美的旁路掉代码完整性检测。</p>
-</li>
-<li><p>综上，我看过的几篇文章中没有提到<code>ROP</code>攻击会对code integrity 产生影响的说明，并且，在<code>Outlier</code>中，对比Checker 是扫描的 <code>Hypervisor</code> 的代码区域，那么这个提到的ROP攻击就会避开我们的检测，所以从理论上来看<code>Outlier</code>确实不会检测到ROP的攻击；ROP在攻击的过程中，会在内存中留下痕迹，但是，应该是在堆、栈段留下痕迹，在代码段没有影响。</p>
-</li>
-</ol>
-<h3 id="how-does-ROP-effect-the-OS"><a href="#how-does-ROP-effect-the-OS" class="headerlink" title="how does ROP effect the OS"></a>how does ROP effect the OS</h3><p>[6] 文中举的例子：</p>
-<p>攻击者扫描已有的动态链接库和可执行文件，提取出可以利用的指令片段(gadget)，这些指令片段均以ret指令结尾，即用ret指令实现指令片段执行流的衔接。操作系统通过栈来进行函数的调用和返回。函数的调用和返回就是通过压栈和出栈来实现的。每个程序都会维护一个程序运行栈，栈为所有函数共享，每次函数调用，系统会分配一个栈桢给当前被调用函数，用于参数的传递、局部变量的维护、返回地址的填入等。栈帧是程序运行栈的一部分 ，在<a href>Linux</a>中 ，通过%esp和 %ebp寄存器维护栈顶指针和栈帧的起始地址 ，%eip是<a href>程序计数器</a>寄存器 。而ROP攻击则是利用以ret结尾的程序片段 ，操作这些栈相关寄存器，控制程序的流程，执行相应的gadget，实施攻击者预设目标 。ROP不同于retum-to-libc攻击之处在于，<strong>ROP攻击以ret指令结尾的函数代码片段</strong> ，而不是整个函数本身去完成预定的操作。从广义角度讲 ，return-to-libc攻击是ROP攻的特例。最初ROP攻击实现在x86体系结构下，随后扩展到各种体系结构.。与以往攻击技术不同的是，<strong>ROP恶意代码不包含任何指令</strong>，将自己的恶意代码隐藏在正常代码中。因而，它可以绕过W⊕X的防御技术。</p>
-<p><img src="/2021/02/01/ROP-attacks/example.png" width="500"></p>
-<h3 id="how-can-we-detect"><a href="#how-can-we-detect" class="headerlink" title="how can we detect"></a>how can we detect</h3><h3 id="how-could-it-apply-on-Xen"><a href="#how-could-it-apply-on-Xen" class="headerlink" title="how could it apply on Xen"></a>how could it apply on Xen</h3><h3 id="Xen-hypervisor-and-ROP"><a href="#Xen-hypervisor-and-ROP" class="headerlink" title="Xen hypervisor and ROP"></a>Xen hypervisor and ROP</h3><p>Control-flow Enforcement Technology (CET) is a set of features in hardware designed to combat Return-oriented Programming (ROP, also call/jump COP/¯JOP) attacks. Xen 4.14 can use these hardware features, if available, to protect itself from ROP attacks.[5]</p>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] Ding B, Wu Y, He Y, et al. Return-oriented programming attack on the xen hypervisor[C]//2012 Seventh International Conference on Availability, Reliability and Security. IEEE, 2012: 479-484.</p>
-<p>[2] Saeed A, Hussain S A, Garraghan P. Cross-VM Network Channel Attacks and Countermeasures within Cloud Computing Environments[J]. IEEE Transactions on Dependable and Secure Computing, 2020.</p>
-<p>[3] Jiang J, Jia X, Feng D, et al. HyperCrop: a hypervisor-based countermeasure for return oriented programming[C]//International Conference on Information and Communications Security. Springer, Berlin, Heidelberg, 2011: 360-373.</p>
-<p>[4] <a href="https://www.youtube.com/watch?v=n-_QkDek6jY" target="_blank" rel="noopener">https://www.youtube.com/watch?v=n-_QkDek6jY</a> </p>
-<p>[5] <a href="https://wiki.xenproject.org/wiki/Xen_Project_4.14_Feature_List" target="_blank" rel="noopener">https://wiki.xenproject.org/wiki/Xen_Project_4.14_Feature_List</a></p>
-<p>[6] Zhang J, Hou R, Song W, et al. RAGuard: An Efficient and User-Transparent Hardware Mechanism against ROP Attacks[J]. ACM Transactions on Architecture and Code Optimization (TACO), 2018, 15(4): 1-21.</p>
-]]></content>
-      <tags>
-        <tag>attacks</tag>
-        <tag>ROP</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SOSP-Progress</title>
     <url>/2021/02/18/SOSP-Progress/</url>
     <content><![CDATA[]]></content>
@@ -2784,18 +2796,6 @@ Procedure BuILDFROM(index pos, instruction parent_insn):
         <tag>side channel attack</tag>
         <tag>cross VM</tag>
         <tag>last level cache</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>RADAR</title>
-    <url>/2020/07/18/RADAR/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -2897,11 +2897,6 @@ Procedure BuILDFROM(index pos, instruction parent_insn):
       <tags>
         <tag>论文解读</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Systematic Review on FHE</title>
-    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>Socket编程基础总结</title>
@@ -3288,6 +3283,11 @@ int main(void)
       </tags>
   </entry>
   <entry>
+    <title>Systematic Review on FHE</title>
+    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>The first blog</title>
     <url>/2020/04/18/The-first-blog/</url>
     <content><![CDATA[<h3 id="The-first-bolg"><a href="#The-first-bolg" class="headerlink" title="The first bolg"></a>The first bolg</h3><p>Hello，this is my first bolg of github.io.</p>
@@ -3300,18 +3300,6 @@ int main(void)
       <tags>
         <tag>essay</tag>
         <tag>英文</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>The outline of Outlier</title>
-    <url>/2020/07/14/The-outline-of-Outlier/</url>
-    <content><![CDATA[<h3 id="The-Outline-of-Outlier"><a href="#The-Outline-of-Outlier" class="headerlink" title="The Outline of Outlier"></a>The Outline of Outlier</h3><h3 id="0-Abstract"><a href="#0-Abstract" class="headerlink" title="0 Abstract"></a>0 Abstract</h3><h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h3><ol>
-<li>指出虚拟化的多租户云平台优点；</li>
-<li>hypervisor对于云平台很重要；</li>
-</ol>
-<h3 id="2-Background"><a href="#2-Background" class="headerlink" title="2 Background"></a>2 Background</h3><h4 id="2-1-Quick-View-of-Xen-Hypervisor"><a href="#2-1-Quick-View-of-Xen-Hypervisor" class="headerlink" title="2.1 Quick View  of Xen Hypervisor"></a>2.1 Quick View  of Xen Hypervisor</h4><h4 id="2-2-Dynamic-Root-of-Trust"><a href="#2-2-Dynamic-Root-of-Trust" class="headerlink" title="2.2 Dynamic Root of Trust"></a>2.2 Dynamic Root of Trust</h4><h4 id="2-3-Byzantine-Fault-Tolerance"><a href="#2-3-Byzantine-Fault-Tolerance" class="headerlink" title="2.3 Byzantine Fault Tolerance"></a>2.3 Byzantine Fault Tolerance</h4><h3 id="3-Overview"><a href="#3-Overview" class="headerlink" title="3 Overview"></a>3 Overview</h3><h4 id="3-1-Threat-Model-and-Assumptions"><a href="#3-1-Threat-Model-and-Assumptions" class="headerlink" title="3.1 Threat Model and Assumptions"></a>3.1 Threat Model and Assumptions</h4><h4 id="3-2-Goals"><a href="#3-2-Goals" class="headerlink" title="3.2 Goals"></a>3.2 Goals</h4><h4 id="3-3-Design-and-Approaches"><a href="#3-3-Design-and-Approaches" class="headerlink" title="3.3 Design and Approaches"></a>3.3 Design and Approaches</h4><h3 id="4-Implementation"><a href="#4-Implementation" class="headerlink" title="4 Implementation"></a>4 Implementation</h3><h4 id="4-1-Co-protocol"><a href="#4-1-Co-protocol" class="headerlink" title="4.1 Co-protocol"></a>4.1 Co-protocol</h4><h4 id="4-2-Checker"><a href="#4-2-Checker" class="headerlink" title="4.2 Checker"></a>4.2 Checker</h4><h3 id="5-Security-Analysis"><a href="#5-Security-Analysis" class="headerlink" title="5 Security Analysis"></a>5 Security Analysis</h3><h4 id="5-1-Theorems-in-the-Co-protocol"><a href="#5-1-Theorems-in-the-Co-protocol" class="headerlink" title="5.1 Theorems in the Co-protocol"></a>5.1 Theorems in the Co-protocol</h4><h4 id="5-2-Subverting-Outlier"><a href="#5-2-Subverting-Outlier" class="headerlink" title="5.2 Subverting Outlier"></a>5.2 Subverting Outlier</h4><h4 id="5-3-Attacking-Hypervisor-Code-Integrity"><a href="#5-3-Attacking-Hypervisor-Code-Integrity" class="headerlink" title="5.3 Attacking Hypervisor Code Integrity"></a>5.3 Attacking Hypervisor Code Integrity</h4><h4 id="5-4-Limitations-and-Future-Work"><a href="#5-4-Limitations-and-Future-Work" class="headerlink" title="5.4 Limitations and Future Work"></a>5.4 Limitations and Future Work</h4><h3 id="6-Evaluation"><a href="#6-Evaluation" class="headerlink" title="6 Evaluation"></a>6 Evaluation</h3><h4 id="6-1-CPU-Overhead"><a href="#6-1-CPU-Overhead" class="headerlink" title="6.1 CPU Overhead"></a>6.1 CPU Overhead</h4><h4 id="6-2-Network-Overhead"><a href="#6-2-Network-Overhead" class="headerlink" title="6.2 Network Overhead"></a>6.2 Network Overhead</h4><h4 id="6-3-Detection-Time"><a href="#6-3-Detection-Time" class="headerlink" title="6.3 Detection Time"></a>6.3 Detection Time</h4><h3 id="7-Related-Work"><a href="#7-Related-Work" class="headerlink" title="7 Related Work"></a>7 Related Work</h3><h3 id="8-Conclusion"><a href="#8-Conclusion" class="headerlink" title="8 Conclusion"></a>8 Conclusion</h3>]]></content>
-      <tags>
-        <tag>paper</tag>
       </tags>
   </entry>
   <entry>
@@ -3328,6 +3316,206 @@ int main(void)
 ]]></content>
       <tags>
         <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>The outline of Outlier</title>
+    <url>/2020/07/14/The-outline-of-Outlier/</url>
+    <content><![CDATA[<h3 id="The-Outline-of-Outlier"><a href="#The-Outline-of-Outlier" class="headerlink" title="The Outline of Outlier"></a>The Outline of Outlier</h3><h3 id="0-Abstract"><a href="#0-Abstract" class="headerlink" title="0 Abstract"></a>0 Abstract</h3><h3 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1 Introduction"></a>1 Introduction</h3><ol>
+<li>指出虚拟化的多租户云平台优点；</li>
+<li>hypervisor对于云平台很重要；</li>
+</ol>
+<h3 id="2-Background"><a href="#2-Background" class="headerlink" title="2 Background"></a>2 Background</h3><h4 id="2-1-Quick-View-of-Xen-Hypervisor"><a href="#2-1-Quick-View-of-Xen-Hypervisor" class="headerlink" title="2.1 Quick View  of Xen Hypervisor"></a>2.1 Quick View  of Xen Hypervisor</h4><h4 id="2-2-Dynamic-Root-of-Trust"><a href="#2-2-Dynamic-Root-of-Trust" class="headerlink" title="2.2 Dynamic Root of Trust"></a>2.2 Dynamic Root of Trust</h4><h4 id="2-3-Byzantine-Fault-Tolerance"><a href="#2-3-Byzantine-Fault-Tolerance" class="headerlink" title="2.3 Byzantine Fault Tolerance"></a>2.3 Byzantine Fault Tolerance</h4><h3 id="3-Overview"><a href="#3-Overview" class="headerlink" title="3 Overview"></a>3 Overview</h3><h4 id="3-1-Threat-Model-and-Assumptions"><a href="#3-1-Threat-Model-and-Assumptions" class="headerlink" title="3.1 Threat Model and Assumptions"></a>3.1 Threat Model and Assumptions</h4><h4 id="3-2-Goals"><a href="#3-2-Goals" class="headerlink" title="3.2 Goals"></a>3.2 Goals</h4><h4 id="3-3-Design-and-Approaches"><a href="#3-3-Design-and-Approaches" class="headerlink" title="3.3 Design and Approaches"></a>3.3 Design and Approaches</h4><h3 id="4-Implementation"><a href="#4-Implementation" class="headerlink" title="4 Implementation"></a>4 Implementation</h3><h4 id="4-1-Co-protocol"><a href="#4-1-Co-protocol" class="headerlink" title="4.1 Co-protocol"></a>4.1 Co-protocol</h4><h4 id="4-2-Checker"><a href="#4-2-Checker" class="headerlink" title="4.2 Checker"></a>4.2 Checker</h4><h3 id="5-Security-Analysis"><a href="#5-Security-Analysis" class="headerlink" title="5 Security Analysis"></a>5 Security Analysis</h3><h4 id="5-1-Theorems-in-the-Co-protocol"><a href="#5-1-Theorems-in-the-Co-protocol" class="headerlink" title="5.1 Theorems in the Co-protocol"></a>5.1 Theorems in the Co-protocol</h4><h4 id="5-2-Subverting-Outlier"><a href="#5-2-Subverting-Outlier" class="headerlink" title="5.2 Subverting Outlier"></a>5.2 Subverting Outlier</h4><h4 id="5-3-Attacking-Hypervisor-Code-Integrity"><a href="#5-3-Attacking-Hypervisor-Code-Integrity" class="headerlink" title="5.3 Attacking Hypervisor Code Integrity"></a>5.3 Attacking Hypervisor Code Integrity</h4><h4 id="5-4-Limitations-and-Future-Work"><a href="#5-4-Limitations-and-Future-Work" class="headerlink" title="5.4 Limitations and Future Work"></a>5.4 Limitations and Future Work</h4><h3 id="6-Evaluation"><a href="#6-Evaluation" class="headerlink" title="6 Evaluation"></a>6 Evaluation</h3><h4 id="6-1-CPU-Overhead"><a href="#6-1-CPU-Overhead" class="headerlink" title="6.1 CPU Overhead"></a>6.1 CPU Overhead</h4><h4 id="6-2-Network-Overhead"><a href="#6-2-Network-Overhead" class="headerlink" title="6.2 Network Overhead"></a>6.2 Network Overhead</h4><h4 id="6-3-Detection-Time"><a href="#6-3-Detection-Time" class="headerlink" title="6.3 Detection Time"></a>6.3 Detection Time</h4><h3 id="7-Related-Work"><a href="#7-Related-Work" class="headerlink" title="7 Related Work"></a>7 Related Work</h3><h3 id="8-Conclusion"><a href="#8-Conclusion" class="headerlink" title="8 Conclusion"></a>8 Conclusion</h3>]]></content>
+      <tags>
+        <tag>paper</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TimeCrypt</title>
+    <url>/2020/07/22/TimeCrypt/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.usenix.org/system/files/nsdi20-paper-burkhalter.pdf" target="_blank" rel="noopener">TimeCrypt</a></td>
+</tr>
+<tr>
+<td>2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">1. <a href="https://people.inf.ethz.ch/burlukas/" target="_blank" rel="noopener">Lukas Burkhalter</a> Distributed Systems Group at ETH Zurich 苏黎世联邦理工学院分布式系统组研究助理；2. Sylvia Ratnasamy  Berkeley associate professor；3. Anwar Hithnawi is a researcher at the NetSys Lab at UC Berkeley, USA；4. Hossein Shafagh is a researcher at the Distributed Systems Group at ETH Zurich.</td>
+</tr>
+<tr>
+<td>3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">时间序列流数据加密，用户访问控制</td>
+</tr>
+<tr>
+<td>4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">同态加密，密码学，时间序列</td>
+</tr>
+<tr>
+<td>5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文目的是构建一个对时间序列数据更细粒度的访问控制策略，可以实现数据的端到端共享，数据所有者可以对访问权限加以约束。</td>
+</tr>
+<tr>
+<td>6</td>
+<td style="text-align:center">补充介绍</td>
+<td style="text-align:center"><a href="https://timecrypt.io/" target="_blank" rel="noopener">https://timecrypt.io/</a></td>
+</tr>
+<tr>
+<td>7</td>
+<td style="text-align:center">开源代码</td>
+<td style="text-align:center"><a href="https://github.com/TimeCrypt/timecrypt" target="_blank" rel="noopener">https://github.com/TimeCrypt/timecrypt</a></td>
+</tr>
+<tr>
+<td>8</td>
+<td style="text-align:center">同态加密</td>
+<td style="text-align:center"><a href="https://web.archive.org/web/20130704120108/http://www.cs.ut.ee/~lipmaa/crypto/link/public/homomorphic.php" target="_blank" rel="noopener">https://web.archive.org/web/20130704120108/http://www.cs.ut.ee/~lipmaa/crypto/link/public/homomorphic.php</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="研究背景"><a href="#研究背景" class="headerlink" title="研究背景"></a>研究背景</h3><p>&emsp; &emsp; 许多的设备都可以在云端存储一些时间序列信息，在云环境中，许多的服务都可以获取到这些时间序列信息，这是对用户隐私的一种侵犯。而且随着物联网的到来，更加速了这些数据的生成。目前，人们提高了对隐私数据的重视程度，致力于保护这些数据的机密性。</p>
+<h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>本文是发表在NSDI‘20的一篇文章，目的是构建一个针对时序数据加密并且能够进行访问控制的系统。数据的加密与解密过程都存在与客户端，因此发送给服务器端（云平台）的数据都默认是加密的，数据加密防止了云平台对用户传输数据的窥探。</p>
+<h3 id="Background-Time-Series-Data"><a href="#Background-Time-Series-Data" class="headerlink" title="Background-Time Series Data"></a>Background-Time Series Data</h3><ol>
+<li><p>时间序列数据应用广泛：个人健康、农业、交通运输和智慧城市等</p>
+</li>
+<li><p>时间序列数据特征：</p>
+<p>a.只追加，产生频率高，存储占用多 </p>
+<p>b.高吞吐、需要可扩展 </p>
+<p>c.查询通常是基于时间范围考虑，满足用户在不同的时间粒度进行查询</p>
+</li>
+<li><p>对时间序列数据的操作：</p>
+<p>a.查询通常用于汇总、统计 </p>
+<p>b.通常这些时间数据由机器产生且是大量连续的，数据价值随着时间的推移递减，一般最近的数据要比较早的数据价值高，因此要对较早的数据进行聚合操作。</p>
+</li>
+</ol>
+<h3 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h3><p>&emsp; 许多的设备都可以在云端存储一些时间序列信息，在云环境中，许多的服务都可以获取到这些时间序列信息，这是对用户隐私的一种侵犯。而且随着物联网的到来，更加速了这些数据的生成。目前，人们提高了对隐私数据的重视程度，致力于保护这些数据的机密性。</p>
+<h3 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h3><p>数据端到端的加密通常：不信任云供应商的安全性，因此在客户端对数据进行加密，传输密文到云中进行存储，客户端读取数据时进行解密。</p>
+<p>刚提到的是时间序列数据产生频率很高，数据量很大，它所需要的高吞吐低延时的查询，在对数据加密之后可以实现吗？</p>
+<h3 id="Challenge"><a href="#Challenge" class="headerlink" title="Challenge"></a>Challenge</h3><p>为了达到这个目的，本文面临的挑战是：数据的可扩展性以及与用户的交互性。</p>
+<p>当前的时序数据库所提供的仅仅是数据追加操作以及在指定时间范围内的查询操作。因为对数据加密的代价是比较高的，所以为了满足挑战1，要在数据加密的同时对时序数据库大量数据进行高吞吐的写入，以及对指定时间的数据查询。</p>
+<p>另一个挑战是安全共享</p>
+<p>拿个人的健康数据举例子，个人的医生可能想看到个人每小时的平均心率数据，运动时可能想看下运动过程每分钟的平均心率，这就需要个人的数据以不同的时间间隔共享给指定的用户，同时在云端的存储是加密的。这就要求有选择的共享个人时序数据。</p>
+<h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><p>宏观来看TimeCrypt有两个角色，一个是Client端，一个是Server端，后者是非可信的，仅仅用于存储以及索引数据。</p>
+<p>其中Client可以分为Data Producer和 Data Consumer，后者需要从前者得到访问权限才可以对数据在指定范文内以指定的时间间隔进行解密。</p>
+<p>在这个系统中，将时序数据库中的分块压缩和数据序列化等操作放在了Client端，这样更改之后server端仅仅对加密的数据进行存储以及满足Client Consumer查询操作。Writer（Producer）这个角色以最小的时间间隔将收集到的数据打包源源不断的发送给Server端。</p>
+<h3 id="Writing-Stream"><a href="#Writing-Stream" class="headerlink" title="Writing Stream"></a>Writing Stream</h3><p>细节部分可以看到Writer（Producer）以最小的时间间隔将收集到的数据打包源源不断的发送给Server端。</p>
+<p>因为对时间序列数据的操作中提到过，对这种数据进行的查询通常是统计学上的一些操作，比如取平均值、加和、计数等等。因此在Client中首先对数据在基本单位时间内进行初步的计算，并将这些计算的结果打包发送给Server端进行存储。那么，如何满足不同时间间隔的查询呢？本文将不同的时间间隔命名为分辨率，在不同分辨率的查询结果是不同时间间隔的统计结果。</p>
+<p>作者就想：能不能在Server端对这些数据进行一步聚合操作，就直接等价于对明文数据进行了一步聚合操作呢？</p>
+<p>上文提到，他们18年就是在同态加密上做的一个工作。因此，他们是有这个技术积累的。同态加密就是一种加密形式，在密文上的计算解密后与明文上的执行一致。这样可以不危及数据隐私，同时对数据进行计算。但是呢，目前的同态加密手段基本都是非对称的加密，这种加密虽然保证了数据的安全性，但是代价是十分昂贵的。比如对8bytes数据进行加密<sup><a href="#fn_describe" id="reffn_describe">describe</a></sup>，产生的密文是明文的96倍，两段明文加密的代价是1028倍，这显然不适合于源源不断产生的大量的时序数据。因此需要对该方法进行改进，使得能满足对时序数据的加密与查询需求。</p>
+<h3 id="Goals"><a href="#Goals" class="headerlink" title="Goals"></a>Goals</h3><p>作者分析了很多现存的时序数据库的访问控制策略，这些访问控制粒度很粗糙，只是在数据库接口设置控制机制，要么用户可以访问全部数据，要么拒绝访问。</p>
+<p>但是考虑到，医生想查看患者每小时的心率数据、健身教练想查看每分钟的心率数据这些情形，需要一个很细粒度的访问策略，同时对数据进行保护。</p>
+<p>本文的目标是：将之前时序数据库中对数据的分享机制进行访问控制，实现更细粒度的访问。</p>
+<h3 id="访问控制"><a href="#访问控制" class="headerlink" title="访问控制"></a>访问控制</h3><p><img src="/2020/07/22/TimeCrypt/Tree.png" style="zoom:40%;"></p>
+<p>构建一个适合时间序列数据的加密方式，其中秘钥的分发采用将 $K_i$与 $K_{i+1}$ 以正值与负值分发给第$i$条明文用于加密，由于时间序列数据是连续的，因此在解密过程只获得收尾两个秘钥即可对此区间的所有数据进行解密。同时数据所有者对不同的client分发不同分辨率数据的秘钥，即可对数据实现访问控制。</p>
+<p><img src="/2020/07/22/TimeCrypt/KeyStream.png" style="zoom:40%;"></p>
+<p><img src="/2020/07/22/TimeCrypt/KeyTree.png" style="zoom:40%;"></p>
+<p>本文提到的秘钥分发过程采用二叉树形式，在设置秘钥的过程中，将树的高度设置为一个很大的值，因此，存储在叶子节点的秘钥的数量基本接近无限大，这对时间序列的数据处理是有效的。同时在分发密钥时，对相应的节点进行派发，由于秘钥的单向性，也能够对用户的访问权限加以限制。</p>
+<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><p><img src="/2020/07/22/TimeCrypt/Evaluation.png" style="zoom:40%;"></p>
+<p>在实验结果中可以看到，采用新形势的秘钥分发策略，系统的吞吐提升明显。对比实验的后两者是没有改进的同态加密策略。</p>
+<p><img src="/2020/07/22/TimeCrypt/EvaluationLatency.png" style="zoom:40%;"></p>
+<p>在实验结果中看到对不同分辨率的数据进行查询的时间延迟都是在秒级以内，是可以接受的。</p>
+<h3 id="同态加密"><a href="#同态加密" class="headerlink" title="同态加密"></a>同态加密</h3><p>同态加密（HE）是一种加密形式，允许对密文进行计算，生成加密结果，加密后的结果与操作结果相匹配，就好像它们是在明文上执行一样。使用这样的工具，可以在不危及数据隐私的情况下外包存储或计算。</p>
+<p>一般的加密方案关注的都是<strong>数据存储安全</strong>。即，我要给其他人发个加密的东西，或者要在计算机或者其他服务器上存一个东西，我要对数据进行加密后在发送或者存储。没有密钥的用户，不可能从加密结果中得到有关原始数据的任何信息。只有拥有密钥的用户才能够正确解密，得到原始的内容。我们注意到，这个过程中<strong>用户是不能对加密结果做任何操作的</strong>，只能进行存储、传输。对加密结果做任何操作，都将会导致错误的解密，甚至解密失败。</p>
+<p>同态加密方案最有趣的地方在于，其关注的是<strong>数据处理安全</strong>。同态加密提供了一种<strong>对加密数据进行处理的功能</strong>。也就是说，其他人可以对加密数据进行处理，但是处理过程不会泄露任何原始内容。同时，拥有密钥的用户对处理过的数据进行解密后，得到的正好是处理后的结果。</p>
+<p>允许人们对密文进行特定形式的代数运算得到仍然是加密的结果，将其解密所得到的结果与对明文进行同样的运算结果一样。换言之，这项技术令人们可以在加密的数据中进行诸如检索、比较等操作，得出正确的结果，而在整个处理过程中无需对数据进行解密。其意义在于，真正从根本上解决将数据及其操作委托给第三方时的保密问题，例如对于各种云计算的应用。</p>
+<p>同态加密几乎就是为云计算而量身打造的！如果一个用户想要处理一个数据，但是他的计算机计算能力较弱。这个用户可以使用云计算来帮助他进行处理而得到结果。但是如果直接将数据交给云，无法保证安全性。于是，他可以使用同态加密，然后让云来对加密数据进行直接处理，并将处理结果返回给他。这样一来：</p>
+<ul>
+<li>用户向云服务商付款，得到了处理的结果；</li>
+<li>云服务商挣到了费用，并在不知道用户数据的前提下正确处理了数据；</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>不必对每一个密文解密后再计算而花费高昂的计算代价。</li>
+<li>可以实现无密钥方对密文的计算，密文计算无须经过密钥方，既可以减少通信代价，又可以转移计算任务。</li>
+<li>第三方为明文未知，提高了信息的安全性。</li>
+<li>对密文计算后解密的结果与明文进行同样运算的结果一致，保证了运算的正确性。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>同态加密技术目前的难度在于效率,效率一词包含两个方面，一个是加密数据的处理速度，一个是这个加密方案的数据存储量。</li>
+<li>满足同态加密的算法并不容易实现。</li>
+</ul>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="http://www.vontroy.com/2018/01/25/homomorphic-encryption-survey/" target="_blank" rel="noopener">http://www.vontroy.com/2018/01/25/homomorphic-encryption-survey/</a></p>
+<p>[2] <a href="https://zh.wikipedia.org/wiki/同态加密" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E5%90%8C%E6%80%81%E5%8A%A0%E5%AF%86</a></p>
+<p>[3] <a href="https://www.zhihu.com/question/27645858/answer/37598506" target="_blank" rel="noopener">https://www.zhihu.com/question/27645858/answer/37598506</a></p>
+<blockquote id="fn_cassandra">
+<sup>cassandra</sup>. <strong>Apache Cassandra</strong>（社区内一般简称为C*）是一套开源分布式<a href="https://zh.wikipedia.org/wiki/NoSQL" target="_blank" rel="noopener">NoSQL</a>数据库系统。它最初由<a href="https://zh.wikipedia.org/wiki/Facebook" target="_blank" rel="noopener">Facebook</a>开发，用于改善电子邮件系统的搜索性能的简单格式数据，集<a href="https://zh.wikipedia.org/wiki/Google" target="_blank" rel="noopener">Google</a> <a href="https://zh.wikipedia.org/wiki/BigTable" target="_blank" rel="noopener">BigTable</a>的数据模型与<a href="https://zh.wikipedia.org/wiki/Amazon" target="_blank" rel="noopener">Amazon</a> <a href="https://zh.wikipedia.org/w/index.php?title=Dynamo&amp;action=edit&amp;redlink=1" target="_blank" rel="noopener">Dynamo</a>的完全分布式架构于一身。Facebook于2008将 Cassandra 开源，此后，由于Cassandra良好的<a href="https://zh.wikipedia.org/wiki/可扩展性" target="_blank" rel="noopener">可扩展性</a>和性能，被 Apple<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-1" target="_blank" rel="noopener">[1]</a>, Comcast<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-2" target="_blank" rel="noopener">[2]</a>,Instagram<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-3" target="_blank" rel="noopener">[3]</a>, Spotify<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-4" target="_blank" rel="noopener">[4]</a>, eBay<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-5" target="_blank" rel="noopener">[5]</a>, Rackspace<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-6" target="_blank" rel="noopener">[6]</a>, Netflix<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-7" target="_blank" rel="noopener">[7]</a>等知名网站所采用，成为了一种流行的分布式结构化数据存储方案。<a href="#reffn_cassandra" title="Jump back to footnote [cassandra] in the text."> &#8617;</a>
+</blockquote>
+<blockquote id="fn_describe">
+<sup>describe</sup>. 加密过程是将明文对等加密，如果明文的长度低于256字节，则扩充为256字节长度之后再对其进行加密，由于本文的思想是对最小时间间隔的数据打包发送至云平台进行存储，因此在此间隔产生的数据大小是固定的，如果采用加密方式，则自然会增加加密的代价。同时传统的秘钥分发方式，解密过程也会有很高的延迟以及较大的IO.<a href="#reffn_describe" title="Jump back to footnote [describe] in the text."> &#8617;</a>
+</blockquote>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>NSDI</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>encrypt</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Transient Execution Attacks</title>
+    <url>/2020/12/30/Transient-Execution-Attacks/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.cs.princeton.edu/courses/archive/spr06/cos592/bib/pioneer-seshadri-sosp05.pdf" target="_blank" rel="noopener">Pioneer</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">CMU/CyLab</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">one-on-one 方式检测内存信息是否有差别</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">安全检测</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">通过one-on-one 的方法对非可信主机进行检测，从而构造出一个可信的执行环境。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>瞬时攻击</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>OSDI</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -3380,57 +3568,6 @@ int main(void)
         <tag>论文解读</tag>
         <tag>Untrusted Hypervisor</tag>
         <tag>Virtualization</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Transient Execution Attacks</title>
-    <url>/2020/12/30/Transient-Execution-Attacks/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.cs.princeton.edu/courses/archive/spr06/cos592/bib/pioneer-seshadri-sosp05.pdf" target="_blank" rel="noopener">Pioneer</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">CMU/CyLab</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">one-on-one 方式检测内存信息是否有差别</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">安全检测</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">通过one-on-one 的方法对非可信主机进行检测，从而构造出一个可信的执行环境。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>瞬时攻击</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>OSDI</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -3936,143 +4073,6 @@ runspec -c config.cfg -i ref -l fp
 ]]></content>
       <tags>
         <tag>Xen log</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>TimeCrypt</title>
-    <url>/2020/07/22/TimeCrypt/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.usenix.org/system/files/nsdi20-paper-burkhalter.pdf" target="_blank" rel="noopener">TimeCrypt</a></td>
-</tr>
-<tr>
-<td>2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">1. <a href="https://people.inf.ethz.ch/burlukas/" target="_blank" rel="noopener">Lukas Burkhalter</a> Distributed Systems Group at ETH Zurich 苏黎世联邦理工学院分布式系统组研究助理；2. Sylvia Ratnasamy  Berkeley associate professor；3. Anwar Hithnawi is a researcher at the NetSys Lab at UC Berkeley, USA；4. Hossein Shafagh is a researcher at the Distributed Systems Group at ETH Zurich.</td>
-</tr>
-<tr>
-<td>3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">时间序列流数据加密，用户访问控制</td>
-</tr>
-<tr>
-<td>4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">同态加密，密码学，时间序列</td>
-</tr>
-<tr>
-<td>5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文目的是构建一个对时间序列数据更细粒度的访问控制策略，可以实现数据的端到端共享，数据所有者可以对访问权限加以约束。</td>
-</tr>
-<tr>
-<td>6</td>
-<td style="text-align:center">补充介绍</td>
-<td style="text-align:center"><a href="https://timecrypt.io/" target="_blank" rel="noopener">https://timecrypt.io/</a></td>
-</tr>
-<tr>
-<td>7</td>
-<td style="text-align:center">开源代码</td>
-<td style="text-align:center"><a href="https://github.com/TimeCrypt/timecrypt" target="_blank" rel="noopener">https://github.com/TimeCrypt/timecrypt</a></td>
-</tr>
-<tr>
-<td>8</td>
-<td style="text-align:center">同态加密</td>
-<td style="text-align:center"><a href="https://web.archive.org/web/20130704120108/http://www.cs.ut.ee/~lipmaa/crypto/link/public/homomorphic.php" target="_blank" rel="noopener">https://web.archive.org/web/20130704120108/http://www.cs.ut.ee/~lipmaa/crypto/link/public/homomorphic.php</a></td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="研究背景"><a href="#研究背景" class="headerlink" title="研究背景"></a>研究背景</h3><p>&emsp; &emsp; 许多的设备都可以在云端存储一些时间序列信息，在云环境中，许多的服务都可以获取到这些时间序列信息，这是对用户隐私的一种侵犯。而且随着物联网的到来，更加速了这些数据的生成。目前，人们提高了对隐私数据的重视程度，致力于保护这些数据的机密性。</p>
-<h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>本文是发表在NSDI‘20的一篇文章，目的是构建一个针对时序数据加密并且能够进行访问控制的系统。数据的加密与解密过程都存在与客户端，因此发送给服务器端（云平台）的数据都默认是加密的，数据加密防止了云平台对用户传输数据的窥探。</p>
-<h3 id="Background-Time-Series-Data"><a href="#Background-Time-Series-Data" class="headerlink" title="Background-Time Series Data"></a>Background-Time Series Data</h3><ol>
-<li><p>时间序列数据应用广泛：个人健康、农业、交通运输和智慧城市等</p>
-</li>
-<li><p>时间序列数据特征：</p>
-<p>a.只追加，产生频率高，存储占用多 </p>
-<p>b.高吞吐、需要可扩展 </p>
-<p>c.查询通常是基于时间范围考虑，满足用户在不同的时间粒度进行查询</p>
-</li>
-<li><p>对时间序列数据的操作：</p>
-<p>a.查询通常用于汇总、统计 </p>
-<p>b.通常这些时间数据由机器产生且是大量连续的，数据价值随着时间的推移递减，一般最近的数据要比较早的数据价值高，因此要对较早的数据进行聚合操作。</p>
-</li>
-</ol>
-<h3 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h3><p>&emsp; 许多的设备都可以在云端存储一些时间序列信息，在云环境中，许多的服务都可以获取到这些时间序列信息，这是对用户隐私的一种侵犯。而且随着物联网的到来，更加速了这些数据的生成。目前，人们提高了对隐私数据的重视程度，致力于保护这些数据的机密性。</p>
-<h3 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h3><p>数据端到端的加密通常：不信任云供应商的安全性，因此在客户端对数据进行加密，传输密文到云中进行存储，客户端读取数据时进行解密。</p>
-<p>刚提到的是时间序列数据产生频率很高，数据量很大，它所需要的高吞吐低延时的查询，在对数据加密之后可以实现吗？</p>
-<h3 id="Challenge"><a href="#Challenge" class="headerlink" title="Challenge"></a>Challenge</h3><p>为了达到这个目的，本文面临的挑战是：数据的可扩展性以及与用户的交互性。</p>
-<p>当前的时序数据库所提供的仅仅是数据追加操作以及在指定时间范围内的查询操作。因为对数据加密的代价是比较高的，所以为了满足挑战1，要在数据加密的同时对时序数据库大量数据进行高吞吐的写入，以及对指定时间的数据查询。</p>
-<p>另一个挑战是安全共享</p>
-<p>拿个人的健康数据举例子，个人的医生可能想看到个人每小时的平均心率数据，运动时可能想看下运动过程每分钟的平均心率，这就需要个人的数据以不同的时间间隔共享给指定的用户，同时在云端的存储是加密的。这就要求有选择的共享个人时序数据。</p>
-<h3 id="Overview"><a href="#Overview" class="headerlink" title="Overview"></a>Overview</h3><p>宏观来看TimeCrypt有两个角色，一个是Client端，一个是Server端，后者是非可信的，仅仅用于存储以及索引数据。</p>
-<p>其中Client可以分为Data Producer和 Data Consumer，后者需要从前者得到访问权限才可以对数据在指定范文内以指定的时间间隔进行解密。</p>
-<p>在这个系统中，将时序数据库中的分块压缩和数据序列化等操作放在了Client端，这样更改之后server端仅仅对加密的数据进行存储以及满足Client Consumer查询操作。Writer（Producer）这个角色以最小的时间间隔将收集到的数据打包源源不断的发送给Server端。</p>
-<h3 id="Writing-Stream"><a href="#Writing-Stream" class="headerlink" title="Writing Stream"></a>Writing Stream</h3><p>细节部分可以看到Writer（Producer）以最小的时间间隔将收集到的数据打包源源不断的发送给Server端。</p>
-<p>因为对时间序列数据的操作中提到过，对这种数据进行的查询通常是统计学上的一些操作，比如取平均值、加和、计数等等。因此在Client中首先对数据在基本单位时间内进行初步的计算，并将这些计算的结果打包发送给Server端进行存储。那么，如何满足不同时间间隔的查询呢？本文将不同的时间间隔命名为分辨率，在不同分辨率的查询结果是不同时间间隔的统计结果。</p>
-<p>作者就想：能不能在Server端对这些数据进行一步聚合操作，就直接等价于对明文数据进行了一步聚合操作呢？</p>
-<p>上文提到，他们18年就是在同态加密上做的一个工作。因此，他们是有这个技术积累的。同态加密就是一种加密形式，在密文上的计算解密后与明文上的执行一致。这样可以不危及数据隐私，同时对数据进行计算。但是呢，目前的同态加密手段基本都是非对称的加密，这种加密虽然保证了数据的安全性，但是代价是十分昂贵的。比如对8bytes数据进行加密<sup><a href="#fn_describe" id="reffn_describe">describe</a></sup>，产生的密文是明文的96倍，两段明文加密的代价是1028倍，这显然不适合于源源不断产生的大量的时序数据。因此需要对该方法进行改进，使得能满足对时序数据的加密与查询需求。</p>
-<h3 id="Goals"><a href="#Goals" class="headerlink" title="Goals"></a>Goals</h3><p>作者分析了很多现存的时序数据库的访问控制策略，这些访问控制粒度很粗糙，只是在数据库接口设置控制机制，要么用户可以访问全部数据，要么拒绝访问。</p>
-<p>但是考虑到，医生想查看患者每小时的心率数据、健身教练想查看每分钟的心率数据这些情形，需要一个很细粒度的访问策略，同时对数据进行保护。</p>
-<p>本文的目标是：将之前时序数据库中对数据的分享机制进行访问控制，实现更细粒度的访问。</p>
-<h3 id="访问控制"><a href="#访问控制" class="headerlink" title="访问控制"></a>访问控制</h3><p><img src="/2020/07/22/TimeCrypt/Tree.png" style="zoom:40%;"></p>
-<p>构建一个适合时间序列数据的加密方式，其中秘钥的分发采用将 $K_i$与 $K_{i+1}$ 以正值与负值分发给第$i$条明文用于加密，由于时间序列数据是连续的，因此在解密过程只获得收尾两个秘钥即可对此区间的所有数据进行解密。同时数据所有者对不同的client分发不同分辨率数据的秘钥，即可对数据实现访问控制。</p>
-<p><img src="/2020/07/22/TimeCrypt/KeyStream.png" style="zoom:40%;"></p>
-<p><img src="/2020/07/22/TimeCrypt/KeyTree.png" style="zoom:40%;"></p>
-<p>本文提到的秘钥分发过程采用二叉树形式，在设置秘钥的过程中，将树的高度设置为一个很大的值，因此，存储在叶子节点的秘钥的数量基本接近无限大，这对时间序列的数据处理是有效的。同时在分发密钥时，对相应的节点进行派发，由于秘钥的单向性，也能够对用户的访问权限加以限制。</p>
-<h3 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h3><p><img src="/2020/07/22/TimeCrypt/Evaluation.png" style="zoom:40%;"></p>
-<p>在实验结果中可以看到，采用新形势的秘钥分发策略，系统的吞吐提升明显。对比实验的后两者是没有改进的同态加密策略。</p>
-<p><img src="/2020/07/22/TimeCrypt/EvaluationLatency.png" style="zoom:40%;"></p>
-<p>在实验结果中看到对不同分辨率的数据进行查询的时间延迟都是在秒级以内，是可以接受的。</p>
-<h3 id="同态加密"><a href="#同态加密" class="headerlink" title="同态加密"></a>同态加密</h3><p>同态加密（HE）是一种加密形式，允许对密文进行计算，生成加密结果，加密后的结果与操作结果相匹配，就好像它们是在明文上执行一样。使用这样的工具，可以在不危及数据隐私的情况下外包存储或计算。</p>
-<p>一般的加密方案关注的都是<strong>数据存储安全</strong>。即，我要给其他人发个加密的东西，或者要在计算机或者其他服务器上存一个东西，我要对数据进行加密后在发送或者存储。没有密钥的用户，不可能从加密结果中得到有关原始数据的任何信息。只有拥有密钥的用户才能够正确解密，得到原始的内容。我们注意到，这个过程中<strong>用户是不能对加密结果做任何操作的</strong>，只能进行存储、传输。对加密结果做任何操作，都将会导致错误的解密，甚至解密失败。</p>
-<p>同态加密方案最有趣的地方在于，其关注的是<strong>数据处理安全</strong>。同态加密提供了一种<strong>对加密数据进行处理的功能</strong>。也就是说，其他人可以对加密数据进行处理，但是处理过程不会泄露任何原始内容。同时，拥有密钥的用户对处理过的数据进行解密后，得到的正好是处理后的结果。</p>
-<p>允许人们对密文进行特定形式的代数运算得到仍然是加密的结果，将其解密所得到的结果与对明文进行同样的运算结果一样。换言之，这项技术令人们可以在加密的数据中进行诸如检索、比较等操作，得出正确的结果，而在整个处理过程中无需对数据进行解密。其意义在于，真正从根本上解决将数据及其操作委托给第三方时的保密问题，例如对于各种云计算的应用。</p>
-<p>同态加密几乎就是为云计算而量身打造的！如果一个用户想要处理一个数据，但是他的计算机计算能力较弱。这个用户可以使用云计算来帮助他进行处理而得到结果。但是如果直接将数据交给云，无法保证安全性。于是，他可以使用同态加密，然后让云来对加密数据进行直接处理，并将处理结果返回给他。这样一来：</p>
-<ul>
-<li>用户向云服务商付款，得到了处理的结果；</li>
-<li>云服务商挣到了费用，并在不知道用户数据的前提下正确处理了数据；</li>
-</ul>
-<p>优点：</p>
-<ul>
-<li>不必对每一个密文解密后再计算而花费高昂的计算代价。</li>
-<li>可以实现无密钥方对密文的计算，密文计算无须经过密钥方，既可以减少通信代价，又可以转移计算任务。</li>
-<li>第三方为明文未知，提高了信息的安全性。</li>
-<li>对密文计算后解密的结果与明文进行同样运算的结果一致，保证了运算的正确性。</li>
-</ul>
-<p>缺点：</p>
-<ul>
-<li>同态加密技术目前的难度在于效率,效率一词包含两个方面，一个是加密数据的处理速度，一个是这个加密方案的数据存储量。</li>
-<li>满足同态加密的算法并不容易实现。</li>
-</ul>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="http://www.vontroy.com/2018/01/25/homomorphic-encryption-survey/" target="_blank" rel="noopener">http://www.vontroy.com/2018/01/25/homomorphic-encryption-survey/</a></p>
-<p>[2] <a href="https://zh.wikipedia.org/wiki/同态加密" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E5%90%8C%E6%80%81%E5%8A%A0%E5%AF%86</a></p>
-<p>[3] <a href="https://www.zhihu.com/question/27645858/answer/37598506" target="_blank" rel="noopener">https://www.zhihu.com/question/27645858/answer/37598506</a></p>
-<blockquote id="fn_cassandra">
-<sup>cassandra</sup>. <strong>Apache Cassandra</strong>（社区内一般简称为C*）是一套开源分布式<a href="https://zh.wikipedia.org/wiki/NoSQL" target="_blank" rel="noopener">NoSQL</a>数据库系统。它最初由<a href="https://zh.wikipedia.org/wiki/Facebook" target="_blank" rel="noopener">Facebook</a>开发，用于改善电子邮件系统的搜索性能的简单格式数据，集<a href="https://zh.wikipedia.org/wiki/Google" target="_blank" rel="noopener">Google</a> <a href="https://zh.wikipedia.org/wiki/BigTable" target="_blank" rel="noopener">BigTable</a>的数据模型与<a href="https://zh.wikipedia.org/wiki/Amazon" target="_blank" rel="noopener">Amazon</a> <a href="https://zh.wikipedia.org/w/index.php?title=Dynamo&amp;action=edit&amp;redlink=1" target="_blank" rel="noopener">Dynamo</a>的完全分布式架构于一身。Facebook于2008将 Cassandra 开源，此后，由于Cassandra良好的<a href="https://zh.wikipedia.org/wiki/可扩展性" target="_blank" rel="noopener">可扩展性</a>和性能，被 Apple<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-1" target="_blank" rel="noopener">[1]</a>, Comcast<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-2" target="_blank" rel="noopener">[2]</a>,Instagram<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-3" target="_blank" rel="noopener">[3]</a>, Spotify<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-4" target="_blank" rel="noopener">[4]</a>, eBay<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-5" target="_blank" rel="noopener">[5]</a>, Rackspace<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-6" target="_blank" rel="noopener">[6]</a>, Netflix<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-7" target="_blank" rel="noopener">[7]</a>等知名网站所采用，成为了一种流行的分布式结构化数据存储方案。<a href="#reffn_cassandra" title="Jump back to footnote [cassandra] in the text."> &#8617;</a>
-</blockquote>
-<blockquote id="fn_describe">
-<sup>describe</sup>. 加密过程是将明文对等加密，如果明文的长度低于256字节，则扩充为256字节长度之后再对其进行加密，由于本文的思想是对最小时间间隔的数据打包发送至云平台进行存储，因此在此间隔产生的数据大小是固定的，如果采用加密方式，则自然会增加加密的代价。同时传统的秘钥分发方式，解密过程也会有很高的延迟以及较大的IO.<a href="#reffn_describe" title="Jump back to footnote [describe] in the text."> &#8617;</a>
-</blockquote>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>NSDI</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>encrypt</tag>
       </tags>
   </entry>
   <entry>
@@ -4766,6 +4766,45 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
+    <title>概率图模型</title>
+    <url>/2021/03/22/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<h1 id="概率图模型"><a href="#概率图模型" class="headerlink" title="概率图模型"></a>概率图模型</h1><p><img src="/2021/03/22/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210326100944404.png" alt="image-20210326100944404"></p>
+<p>可能用到的点：</p>
+<blockquote>
+<p>1、贝叶斯网络-&gt; 动态贝叶斯网络（时间序列）-&gt; 混沌时间序列模型</p>
+<p>2、贝叶斯网络独立性</p>
+<p>3、马尔科夫链</p>
+<p>4、信念传播</p>
+<p>5、信息论，信任传播衰减，边际效应递减</p>
+<p>6、 边缘概率问题</p>
+<p>7、 信任置信区间？</p>
+</blockquote>
+<p>按照概率图中变量关系的不同，概率图模型可以大致分为两类：</p>
+<ul>
+<li>贝叶斯网络：有向图模型，使用有向无环图表达关系（通常，变量间存在显式的因果关系）</li>
+<li>马尔科夫网络：无向图模型，使用无图表达关系（通常，变量间存有关系，但是难以显式表达）</li>
+</ul>
+<h2 id="贝叶斯网络"><a href="#贝叶斯网络" class="headerlink" title="贝叶斯网络"></a>贝叶斯网络</h2><p>概率图模型作为一类有力的工具,能够简洁地表示复杂的概率分布,有效地(近似)计算边缘分布和条件分布,方便地学习概率模型中的参数和超参数.因此,它作为一种处理不确定性的形式化方法,被广泛应用于需要进行自动的概率推理的场合.</p>
+<p>将知识陈述式地表示为概率模型,通过计算我们所关心变量的概率分布实现推理的途径具有独特优势: 首先,它提供了一个描述框架,使我们能够将不同领域的知识抽象为概率模型,将各种应用中的问题都归结为计算概率模型里某些变量的概率分布,从而将知识表示和推理分离开来.模型的设计主要关心如何根据领域知识设计出反映问题本质的概率模型,同时兼顾有效推理的可行性,而推理算法的设计只需关心如何有效地在一般的或者特定的概率模型中进行推理。这种一定程度上的正交性极大地扩展了概率模型的应用,也加快了它的发展速度. 其次,它能够评估未知量取值的可能性,对不同取值的概率给出量化的估计.这在涉及风险的决策系统中非常重要.</p>
+<p><img src="/2021/03/22/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/贝叶斯网络.png"></p>
+<p>贝叶斯网络中的三种独立性[2]</p>
+<blockquote>
+<ol>
+<li><p>head-to-head</p>
+</li>
+<li><p>head-to-tail</p>
+</li>
+<li>tail-to-tail</li>
+</ol>
+</blockquote>
+<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p>[1] <a href="https://www.cnblogs.com/leoo2sk/archive/2010/09/18/bayes-network.html" target="_blank" rel="noopener">https://www.cnblogs.com/leoo2sk/archive/2010/09/18/bayes-network.html</a></p>
+<p>[2] <a href="https://zhuanlan.zhihu.com/p/30139208" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30139208</a></p>
+]]></content>
+      <tags>
+        <tag>贝叶斯网络</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>求最大间隔分离超平面</title>
     <url>/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/</url>
     <content><![CDATA[<p>在利用向量机进行最大间隔分离超平面和分类决策函数的求解时，解题过程如下</p>
@@ -4828,45 +4867,6 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
 ]]></content>
       <tags>
         <tag>picture</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>概率图模型</title>
-    <url>/2021/03/22/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<h1 id="概率图模型"><a href="#概率图模型" class="headerlink" title="概率图模型"></a>概率图模型</h1><p><img src="/2021/03/22/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/Users\Lenovo\AppData\Roaming\Typora\typora-user-images\image-20210326100944404.png" alt="image-20210326100944404"></p>
-<p>可能用到的点：</p>
-<blockquote>
-<p>1、贝叶斯网络-&gt; 动态贝叶斯网络（时间序列）-&gt; 混沌时间序列模型</p>
-<p>2、贝叶斯网络独立性</p>
-<p>3、马尔科夫链</p>
-<p>4、信念传播</p>
-<p>5、信息论，信任传播衰减，边际效应递减</p>
-<p>6、 边缘概率问题</p>
-<p>7、 信任置信区间？</p>
-</blockquote>
-<p>按照概率图中变量关系的不同，概率图模型可以大致分为两类：</p>
-<ul>
-<li>贝叶斯网络：有向图模型，使用有向无环图表达关系（通常，变量间存在显式的因果关系）</li>
-<li>马尔科夫网络：无向图模型，使用无图表达关系（通常，变量间存有关系，但是难以显式表达）</li>
-</ul>
-<h2 id="贝叶斯网络"><a href="#贝叶斯网络" class="headerlink" title="贝叶斯网络"></a>贝叶斯网络</h2><p>概率图模型作为一类有力的工具,能够简洁地表示复杂的概率分布,有效地(近似)计算边缘分布和条件分布,方便地学习概率模型中的参数和超参数.因此,它作为一种处理不确定性的形式化方法,被广泛应用于需要进行自动的概率推理的场合.</p>
-<p>将知识陈述式地表示为概率模型,通过计算我们所关心变量的概率分布实现推理的途径具有独特优势: 首先,它提供了一个描述框架,使我们能够将不同领域的知识抽象为概率模型,将各种应用中的问题都归结为计算概率模型里某些变量的概率分布,从而将知识表示和推理分离开来.模型的设计主要关心如何根据领域知识设计出反映问题本质的概率模型,同时兼顾有效推理的可行性,而推理算法的设计只需关心如何有效地在一般的或者特定的概率模型中进行推理。这种一定程度上的正交性极大地扩展了概率模型的应用,也加快了它的发展速度. 其次,它能够评估未知量取值的可能性,对不同取值的概率给出量化的估计.这在涉及风险的决策系统中非常重要.</p>
-<p><img src="/2021/03/22/%E6%A6%82%E7%8E%87%E5%9B%BE%E6%A8%A1%E5%9E%8B/贝叶斯网络.png"></p>
-<p>贝叶斯网络中的三种独立性[2]</p>
-<blockquote>
-<ol>
-<li><p>head-to-head</p>
-</li>
-<li><p>head-to-tail</p>
-</li>
-<li>tail-to-tail</li>
-</ol>
-</blockquote>
-<h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p>[1] <a href="https://www.cnblogs.com/leoo2sk/archive/2010/09/18/bayes-network.html" target="_blank" rel="noopener">https://www.cnblogs.com/leoo2sk/archive/2010/09/18/bayes-network.html</a></p>
-<p>[2] <a href="https://zhuanlan.zhihu.com/p/30139208" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30139208</a></p>
-]]></content>
-      <tags>
-        <tag>贝叶斯网络</tag>
       </tags>
   </entry>
   <entry>
