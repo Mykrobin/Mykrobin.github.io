@@ -6,146 +6,6 @@
     <content><![CDATA[]]></content>
   </entry>
   <entry>
-    <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
-    <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://dl.acm.org/doi/epdf/10.1145/3035918.3056101" target="_blank" rel="noopener">Aurora</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Amazon</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">分布式数据库</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">数据库</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">致力于构建一个分布式数据库</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="0-研究背景-为什么出现Aurora？"><a href="#0-研究背景-为什么出现Aurora？" class="headerlink" title="0 研究背景 为什么出现Aurora？"></a>0 研究背景 为什么出现Aurora？</h3><p>&emsp; &emsp; Aurora是亚马逊云服务AWS中的关系型数据库服务，主要面向OLTP场景。 <strong>Aurora</strong>基本设计理念是在云上环境下，数据库的最大瓶颈不再是计算或者存储资源，而是网络，因此基于一套存储计算分离架构，将日志处理下推到分布式存储层，通过架构上的优化来解决网络瓶颈。 </p>
-<p>&emsp; &emsp; 在云上环境下，存储计算分离作为解决系统弹性和伸缩性的方案越来越普遍。广义来说，任何数据库，底下文件系统挂一个分布式存储，即可以认为做到了存储计算分离。通过存储计算分离，可以透明添加存储节点，剔除故障节点，进行故障切换，扩展存储空间等。在这个背景下，IO不再成为数据库的瓶颈，因为IO压力可以打散在多个存储节点上，反而是<strong>网络成为瓶颈</strong>，因为数据库实例与所有存储节点的交互都需要通过网络，尤其是为了提升数据库性能，数据库实例与存储节点可能是并行交互的，这进一步加重了网络压力。</p>
-<p>&emsp; &emsp; 传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。比如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。另外一个我们熟悉场景是事务提交操作(IO写操作)，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。 <strong>传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的。</strong></p>
-<p>&emsp; &emsp; 本文介绍的Aurora是一个云上环境全新的数据库服务可以很好的解决上述传统数据库遇到的问题。 <strong>它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。</strong> Aurora体系下的数据库实例仍然包含了大部分核心功能，比如查询处理，事务，锁，缓存管理，访问接口和undo日志管理等；但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
-<h3 id="1-面临问题"><a href="#1-面临问题" class="headerlink" title="1 面临问题"></a>1 面临问题</h3><p>&emsp;&emsp;在云环境中，将存储和计算分离已经成为解决系统弹性和可伸缩性的方案。实现存储计算分离，可以进行故障切换，扩展存储空间等。因此磁盘IO压力可以打散在多个存储节点上，所以IO不再成为数据库的瓶颈。存储和计算分离之后，数据库实例与所有存储节点的交互都需要通过网络，加重了网络带宽压力，从而网络成为瓶颈。</p>
-<h3 id="2-问题带来的挑战"><a href="#2-问题带来的挑战" class="headerlink" title="2 问题带来的挑战"></a>2 问题带来的挑战</h3><p>&emsp;&emsp;在云环境中数据库的瓶颈不再是计算或者是资源存储，而是网络。基于此，Aurora设计了存储和计算分离的架构，与传统数据库相比较，这些问题带来的挑战如下。</p>
-<p>&emsp;&emsp;传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。云环境中的IO操作与传统数据库中的操作是不同的，这带来了IO操作的挑战。</p>
-<p>&emsp;&emsp;事务提交操作，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的，这又是一大挑战。</p>
-<h3 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3 解决方法"></a>3 解决方法</h3><p>&emsp;&emsp;Aurora是一个云上环境全新的数据库服务可以很好的解决上述问题带来的挑战。它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。Aurora体系下的数据库实例仍然包含了大部分核心功能，但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
-<h5 id="3-1-数据存储"><a href="#3-1-数据存储" class="headerlink" title="3.1 数据存储"></a><strong>3.1</strong> <strong>数据存储</strong></h5><p>&emsp;&emsp;Aurora存储层的复制基于Quorum协议，假设复制拓扑中有V个节点，每个节点有一个投票权，读或写必须拿到Vr 或 Vw个投票才能返回。为了满足一致性，需要满足两个条件，首先Vr + Vw &gt; V，这个保证了每次读都能读到拥有最新数据的节点；第二，Vw &gt; V/2，每次写都要保证能获取到上次写的最新数据，避免写冲突。</p>
-<p>&emsp;&emsp;结合Quorum模型，V=6 ，Vw=4，Vr=3，Aurora可以容忍任何一个AZ出现故障，不会影响写服务；任何一个AZ出现故障，以及另外一个AZ中的一个节点出现故障，不会影响读服务且不会丢失数据。通过Quorum协议，Aurora可以保证只要AZ级别的故障(火灾，洪水，网络故障)和节点故障(磁盘故障，掉电，机器损坏)不同时发生，就不会破坏协议本身，数据库可用性和正确性就能得到保证。</p>
-<h5 id="3-2-日志即数据"><a href="#3-2-日志即数据" class="headerlink" title="3.2 日志即数据"></a><strong>3.2</strong> <strong>日志即数据</strong></h5><p>&emsp;&emsp;以MySQL为例，考虑主备复制，如图1所示，AZ1和AZ2分别部署一个MySQL实例做同步镜像复制，底层存储采用EBS，并且每个EBS还有自己的一份镜像，另外部署S3进行redo日志和binlog日志归档，以支持基于时间点的恢复。每个步骤都需要传递5种类型的数据，包括redo，binlog，data-page，double-write和frm元数据。图中的1，3，5步骤是顺序的，要进行4次网络IO，且其中3次是同步串行的。从存储角度来看，数据在EBS上存了4份，需要4份都写成功才能返回。所以在这种架构下，无论是IO量还是串行化模型都会导致性能损耗。</p>
-<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/1.png" width="300px" height="300px"></p>
-<p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图1. Mirrored MySQL写操作流程</p>
-<p>&emsp;&emsp;在Aurora中，所有的写类型只有一种，那就是redo日志。修改一个数据页，会同步产生对应的redo日志。事务提交时，需要事务对应的redo日志都落盘成功后才能返回。存储节点接收redo日志，基于旧版本数据页回放日志，可以得到新版本的数据页。为了避免每次都从头开始回放数据页变更产生的redo日志，存储节点会定期物化数据页版本。Aurora由跨AZ的一个主实例和多个副本实例组成，主实例与副本实例或者存储节点间只传递redo日志和元信息。主实例并发向6个存储节点和副本实例发送日志，当4/6的存储节点应答后，则认为日志已经持久化。传统数据库宕机重启后，恢复从最近的一个检查点开始，读取检查点后的所有redo日志进行回放，确保已经提交的事务对应的数据页得到更新。</p>
-<p>&emsp;&emsp;在Aurora中，redo日志相关的功能下推到存储层，回放日志的工作可以一直在后台做。真正进行故障恢复时，需要做的事情很少，所以故障恢复的速度非常快。Aurora存储服务设计的一个关键原则是减少前台用户写的响应时间，因此将尽可能多的操作移到后台异步执行，并且存储节点会根据前台的请求压力，自适应分配资源做不同的工作。对于Aurora而言，分离的存储服务层使得后台线程推进检查点动作完全不影响数据库实例，并且是推进地越快，越有利于前台的磁盘IO读操作。Aurora写基于Quorum模型，存储分片后，按片达成多数即可返回，由于分布足够离散，少数的磁盘IO压力大也不会影响到整体的写性能。</p>
-<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/2.png" width="400px" height="300px"></p>
-<p>如上图所示，图中详细介绍了主要的写流程，</p>
-<p>1).存储节点接收数据库实例的日志，并追加到内存队列；</p>
-<p>2).将日志在本地持久化成功后，给实例应答；</p>
-<p>3).按分片归类日志，并确认丢失了哪些日志；</p>
-<p>4).与其它存储节点交互，填充丢失的日志；</p>
-<p>5).回放日志生成新的数据页；</p>
-<p>6).周期性地备份数据页和日志到S3系统；</p>
-<p>7).周期性地回收过期的数据页版本；</p>
-<p>8).周期性地对数据页进行CRC校验。</p>
-<p>&emsp;&emsp;上述所有写相关的操作，只有第1)和第2)步是串行同步的，会直接影响前台请求的响应时间，其它操作都是异步的。</p>
-<h4 id="3-3-事务提交"><a href="#3-3-事务提交" class="headerlink" title="3.3 事务提交"></a><strong>3.3</strong> <strong>事务提交</strong></h4><p>&emsp;&emsp;在Aurora中，数据库实例向存储节点传递redo日志，达成多数派后将事务标记为提交状态，然后推进VDL，使数据库进入一个新的一致状态。每个事务的每条redo日志都会分配一个唯一的LSN，这个LSN一定大于当前最新的VDL。由于底层存储按segment分片，每个分片管理一部分页面，当一个事务涉及的修改跨多个分片时，事务对应的日志被打散，每个分片只能看到这个事务的部分日志。为了确保各个分片日志的完整性，每条日志都记录前一条日志的链接，通过前向链接确保分片拥有了完整的日志。Segment Complete LSN(SCL)表示分片拥有完整日志的位点，存储节点相互间通过gossip协议来弥补本地日志空洞，推进SCL。</p>
-<p>&emsp;&emsp;在Aurora中，事务提交是完全异步的。每个事务由若干个日志组成，并包含有一个唯一的“commit LSN”，工作线程处理事务提交请求时，将事务相关的日志提交到持久化队列并将事务挂起，并继续处理其它数据库请求。当VDL的位点大于事务的LSN时，表示这个事务redo日志都已经持久化，可以向客户端回包，通知事务已经成功执行。在Aurora中，有一个独立的线程处理事务成功执行的回包工作，因此，从整个提交流程来看，所有工作线程不会因为事务提交等待日志推进而堵塞，他们会继续处理新的请求，通过这种异步提交方式，大大提高了系统的吞吐。</p>
-<h4 id="3-4-故障恢复"><a href="#3-4-故障恢复" class="headerlink" title="3.4 故障恢复"></a><strong>3.4</strong> <strong>故障恢复</strong></h4><p>&emsp;&emsp;大多数数据库系统通常会周期性地做检查点，并将检查点信息计入日志。故障时，数据页中同时可能包含了提交和未提交的数据，因此，在故障恢复时，系统首先需要从上一个检查点开始回放日志，将数据页恢复到故障时的状态，然后根据undo日志回滚未交事务。从故障恢复的过程来看，故障恢复是一个比较耗时的操作，并且与检查点操作频率强相关。通过提高检查点频率，可以减少故障恢复时间，但是这直接会影响系统处理前台请求吞吐，所以需要在检查点频率和故障恢复时间做一个权衡，而在Aurora中不需要做这种权衡。</p>
-<p>&emsp;&emsp;Aurora将回放日志逻辑下推到存储节点，并且在数据库在线提供服务时在后台常态运行。因此，当出现故障重启时，存储服务能快速恢复。数据库实例宕机重启后，需要故障恢复来获得运行时的一致状态，实例与仲裁协议确定的N个存储节点通信，这样确保能读到最新的数据，并重新计算新的VDL，超过VDL部分的日志都可以被截断丢弃。在Aurora中，对于新分配的LSN范围做了限制，这个主要是为了避免数据库实例上堆积过多的未提交事务。</p>
-<h3 id="4-实验验证"><a href="#4-实验验证" class="headerlink" title="4 实验验证"></a>4 实验验证</h3><p>&emsp;&emsp;本文的实验对Aurora的读写能力，吞吐量大小，以及部署后用户的使用数据对Aurora进行了分析。</p>
-<p>&emsp;&emsp;从sysbench测试的数据来看，Aurora是基于镜像MySQL吞吐能力的35倍，每个事务的日志量比基于镜像MySQL日志量要少7.7倍。从用户的使用数据来看，某游戏公司使用后web应用响应时间明显降低，由之前的15ms降低到5.5ms,性能提高了近3倍，而且时间延迟明显降低。</p>
-<p>&emsp;&emsp;基于实验验证，Aurora相对于传统数据库的优势如下：</p>
-<p>&emsp;&emsp;第一，底层数据库存储是一个分布式存储服务，可以轻松应对故障；</p>
-<p>&emsp;&emsp;第二，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；</p>
-<p>&emsp;&emsp;第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
-<h3 id="5-相关工作"><a href="#5-相关工作" class="headerlink" title="5 相关工作"></a>5 相关工作</h3><p>&emsp;&emsp;本文的相关工作主要是在分布式存储的将存储与计算解耦、分布式系统、并发控制、日志结构的存储与数据恢复等几个方面分别进行描述的。在描述的过程中，首先通过对Aurora面临的问题进行逐个层面的分析，并对相关工作进行总结，在分析之后，将已有工作与Aurora相结合，并通过Aurora与先有工作进行比较说明，进一步阐述Aurora的实现原理。</p>
-<p>&emsp;&emsp;将存储与计算解耦：在此处本文提出与传统系统通常作为整体不同的数据库系统，介绍了有一些关于将内核分解为不同组件的数据库的研究。Deuteronomy 将提供并发控制和恢复的事务组件（TC）与提供LLAMA访问方法的数据组件（DC）分开，结构化缓存和存储管理器。Sinfonia和Hyder是在横向扩展服务上抽象事务访问方法的系统，并且可以使用这些抽象来实现数据库系统。Yesquel系统实现了多版本分布式平衡树，并将并发控制与查询处理器分离。在Aurora中，将查询处理、事务、并发、缓冲区高速缓存和访问方法与作为横向扩展服务实现的日志记录，存储和恢复分离。</p>
-<p>&emsp;&emsp;分布式系统：首先指出已经证明过的Brewer CAP定理，指出高度可用的系统无法在存在网络分区的情况下提供“强”的一致性保证。这个结果激发了作者对一致性目标的追求。并对相关工作进行总结，Bailis等人研究了提供高可用事务（HATs）的问题，该事务既不会在分区期间遭受不可用，也不会导致高网络延迟。他们表明可串行性，快照隔离和可重复读取隔离不符合HAT的要求，而大多数其他隔离级别都可以通过高可用性实现。Aurora通过简化假设，即在任何时候只有一个写入器使用从单个有序域分配的LSN生成日志更新来提供所有这些隔离级别。Google的Spanner提供外部一致的读写操作，并在一个时间戳上跨数据库提供全局一致的读取信息。这些功能使Spanner支持一致的备份，一致的分布式查询处理以及原子模式更新，所有这些都是在全球范围内进行的，甚至在正在进行的事务存在的情况下也是如此。Spanner专门针对Google的繁重工作负载，并依靠两阶段提交和两阶段锁定来进行读/写事务。</p>
-<p>&emsp;&emsp;并发控制：本文指出较弱的一致性和隔离模型在分布式数据库中是众所周知的，并导致了乐观的复制技术以及最终的一致性系统。集中式系统中的其他方法包括基于锁定的经典悲观方案，Hekaton中的多方案并发控制之类的乐观方案，VoltDB等分片方法和HyPer中的时间戳排序和Deuteronomy . Aurora的存储服务为数据库引擎提供了持久保留的本地磁盘的抽象，并允许引擎确定隔离和并发控制。</p>
-<p>&emsp;&emsp;日志结构存储：先介绍日志结构的起源，日志结构的存储系统由LFS 在1992年引入。并对最近的日志结构存储的相关工作进行总结，Deuteronomy 以及LLAMA 和Bw-Tree 的相关工作在存储引擎堆栈中以多种方式使用日志结构化技术。最后对本文提出的Aurora与Deuteronomy 进行横向比较说明。Aurora，通过编写增量而不是整个页面来减少写放大，Deuteronomy 和Aurora都实现纯重做日志记录，并跟踪最高稳定的LSN以确认提交。</p>
-<p>&emsp;&emsp;恢复：尽管传统数据库依赖于基于ARIES 的恢复协议，但是一些最近的系统已经选择了其他途径来提高性能。例如，Hekaton和VoltDB在崩溃后使用某种形式的更新日志来重建其内存状态。像Sinfonia这样的系统通过使用诸如进程对和状态机复制之类的技术来避免恢复。Graefe 描述了一种具有每页日志记录链的系统，该系统可以按需进行逐页重做，从而可以快速恢复。与Aurora一样，Deuteronomy 不需要重做恢复。这是因为Deuteronomy 会延迟事务，因此只有已提交的更新才会发布到持久存储中。结果，与Aurora不同，Deuteronomy 中的交易规模可能受到限制。</p>
-<h3 id="6-总结建议"><a href="#6-总结建议" class="headerlink" title="6 总结建议"></a>6 总结建议</h3><p>&emsp;&emsp;在计算与存储分离的云基础设施之上，通过仅传输redo log，大幅减少跨网络的IO数据传输，将产生大量IO的数据页合并和持久化交由本地存储来解决，大幅减缓了网络延迟对数据库性能的影响。即使网络传输的速度不再是分布式数据库的瓶颈，这种“日志即数据“的思想也是有意义的，因为在分布式数据库中的计算，存储，网络中，网络通信的功耗是最大的。</p>
-<p>&emsp;&emsp;Aurora诞生的原因是在弹性伸缩的云环境下，传统的高吞吐<strong>OLTP</strong>数据库既不能保证可用性，又不能保证持久性。 <strong>Aurora</strong>的关键点在于将传统数据库中的存储与计算分离，具体而言，将日志部分下推到一个独立的分布式存储服务层。由于这种分离架构下，所有IO操作都是通过网络，网络将成为最大的瓶颈，因此Aurora集中精力优化网络以便提高系统吞吐能力。Aurora依靠Quorum模型，在性能影响可控的前提下，解决云环境下的各种异常错误。在Aurora中，日志处理技术减少了I/O写放大，异步提交协议避免了同步等待，同时分离的存储服务层还避免了离线故障恢复和检查点操作。</p>
-<p>&emsp; &emsp;Aurora相对于传统数据库有三大优势，首先，底层数据库存储是一个分布式存储服务，可以轻松应对故障；其次，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
-<p>&emsp;&emsp;批评性建议：</p>
-<p>&emsp;&emsp;1.在存储结构方面，论文中没有给出caching很明确的细节说明，Caching是位于了存储层内还是计算层内？读者只能靠猜测。如果在文中给出了具体的细节说明，可能对读者理解本文具有很大的帮助。</p>
-<p>&emsp;&emsp;2.Amazon Aurora是基于开源MySQL的数据库，理论上修改GPL协议的开源软件再开发一个新软件是需要开源的，但它本身没有开放源代码，是一个闭源数据库。</p>
-<p>&emsp;&emsp;3.为什么备机节点可以多达15个呢？是为了应对数据库的读负载还是作为故障转移的目标，需要这么多备机做备选？本文在15个备份节点的解释上不是很清楚，读后存有疑惑。</p>
-<p>下面引用两位专家对Aurora的评价：</p>
-<p>Percona Vadim Tkachenko: Aurora没有解决写拓展和分库分表的问题。（2017）</p>
-<p>Bill Karwin：Aurora不适合对具有二级索引的表进行大量写操作的场景。（2017）</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>SIGMOD</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>数据库</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Advice for PhD</title>
-    <url>/2021/02/17/Advice-for-PhD/</url>
-    <content><![CDATA[<h3 id="Twenty-things-for-the-start-of-PhD"><a href="#Twenty-things-for-the-start-of-PhD" class="headerlink" title="Twenty things for the start of PhD"></a>Twenty things for the start of PhD</h3><p>Recent PhD graduate Lucy A. Taylor shares the advice she and her colleagues wish they had received.</p>
-<p>This is an article [<a href="https://www.nature.com/articles/d41586-018-07332-x" target="_blank" rel="noopener">1</a> ] from the Nature Careers Community, the authors share their professional experiences and advice. </p>
-<h4 id="1-保持生活和科研工作之间的平衡"><a href="#1-保持生活和科研工作之间的平衡" class="headerlink" title="1. 保持生活和科研工作之间的平衡"></a>1. 保持生活和科研工作之间的平衡</h4><p>Maintain a healthy work–life balance by finding a routine that works for you. It’s better to develop a good balance and work steadily throughout your program than to work intensively and burn out. Looking after yourself is key to success.</p>
-<h4 id="2-多与导师交流自己的需求"><a href="#2-多与导师交流自己的需求" class="headerlink" title="2. 多与导师交流自己的需求"></a>2. 多与导师交流自己的需求</h4><p>Discuss expectations with your supervisor. Everyone works differently. Make sure you know your needs and communicate them to your supervisor early on, so you can work productively together.</p>
-<h4 id="3-尽可能多的投入时间阅读经典文献综述"><a href="#3-尽可能多的投入时间阅读经典文献综述" class="headerlink" title="3. 尽可能多的投入时间阅读经典文献综述"></a>3. 尽可能多的投入时间阅读经典文献综述</h4><p>Invest time in literature reviews. These reviews, both before and after data collection, help you to develop your research aims and conclusions.</p>
-<h4 id="4-早点确定目标"><a href="#4-早点确定目标" class="headerlink" title="4. 早点确定目标"></a>4. 早点确定目标</h4><p>Decide on your goals early. Look at your departmental guidelines and then establish clear PhD aims or questions on the basis of your thesis requirements. Goals can change later, but a clear plan will help you to maintain focus.</p>
-<h4 id="5-好记性不如烂笔头，记录需要做和做过的所有事"><a href="#5-好记性不如烂笔头，记录需要做和做过的所有事" class="headerlink" title="5. 好记性不如烂笔头，记录需要做和做过的所有事"></a>5. 好记性不如烂笔头，记录需要做和做过的所有事</h4><p> “I don’t need to write that down, I’ll remember it” is the biggest lie you can tell yourself! Write down everything you do — even if it doesn’t work. This includes meeting notes, method details, code annotations, among other things.</p>
-<h4 id="6-整理工作和工作地点、文件和各种记录"><a href="#6-整理工作和工作地点、文件和各种记录" class="headerlink" title="6. 整理工作和工作地点、文件和各种记录"></a>6. 整理工作和工作地点、文件和各种记录</h4><p>Organize your work and workspace. In particular, make sure to use meaningful labels, so you know what and where things are. Organizing early will save you time later on.</p>
-<h4 id="7-尽早着手论文"><a href="#7-尽早着手论文" class="headerlink" title="7. 尽早着手论文"></a>7. 尽早着手论文</h4><p>It’s never too early to start writing your thesis. Write and show your work to your supervisor as you go — even if you don’t end up using your early work, it’s good practice and a way to get ideas organized in your head.</p>
-<h4 id="8-把毕业论文打散为SMART五部分"><a href="#8-把毕业论文打散为SMART五部分" class="headerlink" title="8. 把毕业论文打散为SMART五部分"></a>8. 把毕业论文打散为SMART五部分</h4><p>Specific 明确工作内容</p>
-<p>Measurement  可衡量工作量</p>
-<p>Attainable  可实现的工作</p>
-<p>Relevant  相关工作</p>
-<p>Timely  需要及时做的工作</p>
-<p> Break your thesis down into SMART (specific, measurable, attainable, relevant and timely) goals. You will be more productive if your to-do list reads “draft first paragraph of the results” rather than “write chapter 1”. Many small actions lead to one complete thesis.</p>
-<h4 id="9-完成比完美更重要"><a href="#9-完成比完美更重要" class="headerlink" title="9. 完成比完美更重要"></a>9. 完成比完美更重要</h4><p>The best thesis is a finished thesis. No matter how much time you spend perfecting your first draft, your work will come back covered in corrections, and you will go through more drafts before you submit your final version. Send your drafts to your supervisor <a href="http://blogs.nature.com/naturejobs/2018/07/09/done-is-better-than-perfect-overcoming-phd-perfectionism/" target="_blank" rel="noopener">sooner rather than later</a>.</p>
-<h4 id="10-对导师诚实"><a href="#10-对导师诚实" class="headerlink" title="10. 对导师诚实"></a>10. 对导师诚实</h4><p>Be honest with your supervisor. Let them know if you don’t understand something, if you’ve messed up an experiment or if they forgot to give you feedback. The more honest you are, the better your relationship will be. Helping your supervisor to help you is key.</p>
-<h4 id="11-备份！"><a href="#11-备份！" class="headerlink" title="11. 备份！"></a>11. 备份！</h4><p> Back up your work! You can avoid many tears by doing this at least weekly.</p>
-<h4 id="12-和实验室其他成员多交流"><a href="#12-和实验室其他成员多交流" class="headerlink" title="12. 和实验室其他成员多交流"></a>12. 和实验室其他成员多交流</h4><p>Socialize with your lab group and other students. It’s a great way to discuss PhD experiences, get advice and help, improve your research and make friends.</p>
-<h4 id="13-参加其他实验室的组会，开阔视野"><a href="#13-参加其他实验室的组会，开阔视野" class="headerlink" title="13. 参加其他实验室的组会，开阔视野"></a>13. 参加其他实验室的组会，开阔视野</h4><p>Attend departmental seminars and lab-group meetings, even (or especially) when the topic is not your area of expertise. What you learn could change the direction of your research and career. Regular attendance will also be noticed.</p>
-<h4 id="14-展示个人的工作"><a href="#14-展示个人的工作" class="headerlink" title="14. 展示个人的工作"></a>14. 展示个人的工作</h4><p>Present your research. This can be at lab-group meetings, conferences and so on. Presenting can be scary, but it gets easier as you practise, and it’s a fantastic way to network and get feedback at the same time.</p>
-<h4 id="15-尝试发表个人的工作"><a href="#15-尝试发表个人的工作" class="headerlink" title="15. 尝试发表个人的工作"></a>15. 尝试发表个人的工作</h4><p>Aim to publish your research. It might not work out, but drafting articles and submitting them to journals is a great way to learn new skills and enhance your CV.</p>
-<h4 id="16-抓住机会离开实验室，-出去运动放松"><a href="#16-抓住机会离开实验室，-出去运动放松" class="headerlink" title="16. 抓住机会离开实验室， 出去运动放松"></a>16. 抓住机会离开实验室， 出去运动放松</h4><p>Have a life outside work. Although your lab group is like your work family, it’s great for your mental health to be able to escape work. This could be through sport, clubs, hobbies, holidays or spending time with friends.</p>
-<h4 id="17-不与别人比较"><a href="#17-不与别人比较" class="headerlink" title="17. 不与别人比较"></a>17. 不与别人比较</h4><p>Don’t compare yourself with others. Your PhD is an opportunity to conduct original research that reveals new information. As such, all PhD programmes are different. You just need to do what works for you and your project.</p>
-<h4 id="18-研究不是一路顺分顺水的"><a href="#18-研究不是一路顺分顺水的" class="headerlink" title="18. 研究不是一路顺分顺水的"></a>18. 研究不是一路顺分顺水的</h4><p>The nature of research means that things will not always go according to plan. This does not mean you are a bad student. Keep calm, take a break and then carry on. Experiments that fail can still be written up as part of a successful PhD.</p>
-<h4 id="19-向导师求助，别自己死磕"><a href="#19-向导师求助，别自己死磕" class="headerlink" title="19. 向导师求助，别自己死磕"></a>19. 向导师求助，别自己死磕</h4><p>Never struggle on your own. Talk to other students and have frank discussions with your supervisor. There’s no shame in asking for help. You are not alone.</p>
-<h4 id="20-享受博士生涯"><a href="#20-享受博士生涯" class="headerlink" title="20. 享受博士生涯"></a>20. 享受博士生涯</h4><p>Enjoy your PhD! It can be tough, and there will be days when you wish you had a ‘normal’ job, but PhDs are full of wonderful experiences and give you the opportunity to work on something that fascinates you. Celebrate your successes and enjoy yourself.</p>
-<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>[1]  <a href="https://www.nature.com/articles/d41586-018-07332-x" target="_blank" rel="noopener">https://www.nature.com/articles/d41586-018-07332-x</a></p>
-]]></content>
-      <tags>
-        <tag>essay</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Applying TPM to Cloud</title>
     <url>/2020/10/12/Applying-TPM-to-Cloud/</url>
     <content><![CDATA[<div class="table-container">
@@ -372,6 +232,110 @@
       </tags>
   </entry>
   <entry>
+    <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
+    <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://dl.acm.org/doi/epdf/10.1145/3035918.3056101" target="_blank" rel="noopener">Aurora</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Amazon</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">分布式数据库</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">数据库</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">致力于构建一个分布式数据库</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="0-研究背景-为什么出现Aurora？"><a href="#0-研究背景-为什么出现Aurora？" class="headerlink" title="0 研究背景 为什么出现Aurora？"></a>0 研究背景 为什么出现Aurora？</h3><p>&emsp; &emsp; Aurora是亚马逊云服务AWS中的关系型数据库服务，主要面向OLTP场景。 <strong>Aurora</strong>基本设计理念是在云上环境下，数据库的最大瓶颈不再是计算或者存储资源，而是网络，因此基于一套存储计算分离架构，将日志处理下推到分布式存储层，通过架构上的优化来解决网络瓶颈。 </p>
+<p>&emsp; &emsp; 在云上环境下，存储计算分离作为解决系统弹性和伸缩性的方案越来越普遍。广义来说，任何数据库，底下文件系统挂一个分布式存储，即可以认为做到了存储计算分离。通过存储计算分离，可以透明添加存储节点，剔除故障节点，进行故障切换，扩展存储空间等。在这个背景下，IO不再成为数据库的瓶颈，因为IO压力可以打散在多个存储节点上，反而是<strong>网络成为瓶颈</strong>，因为数据库实例与所有存储节点的交互都需要通过网络，尤其是为了提升数据库性能，数据库实例与存储节点可能是并行交互的，这进一步加重了网络压力。</p>
+<p>&emsp; &emsp; 传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。比如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。另外一个我们熟悉场景是事务提交操作(IO写操作)，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。 <strong>传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的。</strong></p>
+<p>&emsp; &emsp; 本文介绍的Aurora是一个云上环境全新的数据库服务可以很好的解决上述传统数据库遇到的问题。 <strong>它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。</strong> Aurora体系下的数据库实例仍然包含了大部分核心功能，比如查询处理，事务，锁，缓存管理，访问接口和undo日志管理等；但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
+<h3 id="1-面临问题"><a href="#1-面临问题" class="headerlink" title="1 面临问题"></a>1 面临问题</h3><p>&emsp;&emsp;在云环境中，将存储和计算分离已经成为解决系统弹性和可伸缩性的方案。实现存储计算分离，可以进行故障切换，扩展存储空间等。因此磁盘IO压力可以打散在多个存储节点上，所以IO不再成为数据库的瓶颈。存储和计算分离之后，数据库实例与所有存储节点的交互都需要通过网络，加重了网络带宽压力，从而网络成为瓶颈。</p>
+<h3 id="2-问题带来的挑战"><a href="#2-问题带来的挑战" class="headerlink" title="2 问题带来的挑战"></a>2 问题带来的挑战</h3><p>&emsp;&emsp;在云环境中数据库的瓶颈不再是计算或者是资源存储，而是网络。基于此，Aurora设计了存储和计算分离的架构，与传统数据库相比较，这些问题带来的挑战如下。</p>
+<p>&emsp;&emsp;传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。云环境中的IO操作与传统数据库中的操作是不同的，这带来了IO操作的挑战。</p>
+<p>&emsp;&emsp;事务提交操作，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的，这又是一大挑战。</p>
+<h3 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3 解决方法"></a>3 解决方法</h3><p>&emsp;&emsp;Aurora是一个云上环境全新的数据库服务可以很好的解决上述问题带来的挑战。它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。Aurora体系下的数据库实例仍然包含了大部分核心功能，但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
+<h5 id="3-1-数据存储"><a href="#3-1-数据存储" class="headerlink" title="3.1 数据存储"></a><strong>3.1</strong> <strong>数据存储</strong></h5><p>&emsp;&emsp;Aurora存储层的复制基于Quorum协议，假设复制拓扑中有V个节点，每个节点有一个投票权，读或写必须拿到Vr 或 Vw个投票才能返回。为了满足一致性，需要满足两个条件，首先Vr + Vw &gt; V，这个保证了每次读都能读到拥有最新数据的节点；第二，Vw &gt; V/2，每次写都要保证能获取到上次写的最新数据，避免写冲突。</p>
+<p>&emsp;&emsp;结合Quorum模型，V=6 ，Vw=4，Vr=3，Aurora可以容忍任何一个AZ出现故障，不会影响写服务；任何一个AZ出现故障，以及另外一个AZ中的一个节点出现故障，不会影响读服务且不会丢失数据。通过Quorum协议，Aurora可以保证只要AZ级别的故障(火灾，洪水，网络故障)和节点故障(磁盘故障，掉电，机器损坏)不同时发生，就不会破坏协议本身，数据库可用性和正确性就能得到保证。</p>
+<h5 id="3-2-日志即数据"><a href="#3-2-日志即数据" class="headerlink" title="3.2 日志即数据"></a><strong>3.2</strong> <strong>日志即数据</strong></h5><p>&emsp;&emsp;以MySQL为例，考虑主备复制，如图1所示，AZ1和AZ2分别部署一个MySQL实例做同步镜像复制，底层存储采用EBS，并且每个EBS还有自己的一份镜像，另外部署S3进行redo日志和binlog日志归档，以支持基于时间点的恢复。每个步骤都需要传递5种类型的数据，包括redo，binlog，data-page，double-write和frm元数据。图中的1，3，5步骤是顺序的，要进行4次网络IO，且其中3次是同步串行的。从存储角度来看，数据在EBS上存了4份，需要4份都写成功才能返回。所以在这种架构下，无论是IO量还是串行化模型都会导致性能损耗。</p>
+<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/1.png" width="300px" height="300px"></p>
+<p>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;图1. Mirrored MySQL写操作流程</p>
+<p>&emsp;&emsp;在Aurora中，所有的写类型只有一种，那就是redo日志。修改一个数据页，会同步产生对应的redo日志。事务提交时，需要事务对应的redo日志都落盘成功后才能返回。存储节点接收redo日志，基于旧版本数据页回放日志，可以得到新版本的数据页。为了避免每次都从头开始回放数据页变更产生的redo日志，存储节点会定期物化数据页版本。Aurora由跨AZ的一个主实例和多个副本实例组成，主实例与副本实例或者存储节点间只传递redo日志和元信息。主实例并发向6个存储节点和副本实例发送日志，当4/6的存储节点应答后，则认为日志已经持久化。传统数据库宕机重启后，恢复从最近的一个检查点开始，读取检查点后的所有redo日志进行回放，确保已经提交的事务对应的数据页得到更新。</p>
+<p>&emsp;&emsp;在Aurora中，redo日志相关的功能下推到存储层，回放日志的工作可以一直在后台做。真正进行故障恢复时，需要做的事情很少，所以故障恢复的速度非常快。Aurora存储服务设计的一个关键原则是减少前台用户写的响应时间，因此将尽可能多的操作移到后台异步执行，并且存储节点会根据前台的请求压力，自适应分配资源做不同的工作。对于Aurora而言，分离的存储服务层使得后台线程推进检查点动作完全不影响数据库实例，并且是推进地越快，越有利于前台的磁盘IO读操作。Aurora写基于Quorum模型，存储分片后，按片达成多数即可返回，由于分布足够离散，少数的磁盘IO压力大也不会影响到整体的写性能。</p>
+<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/2.png" width="400px" height="300px"></p>
+<p>如上图所示，图中详细介绍了主要的写流程，</p>
+<p>1).存储节点接收数据库实例的日志，并追加到内存队列；</p>
+<p>2).将日志在本地持久化成功后，给实例应答；</p>
+<p>3).按分片归类日志，并确认丢失了哪些日志；</p>
+<p>4).与其它存储节点交互，填充丢失的日志；</p>
+<p>5).回放日志生成新的数据页；</p>
+<p>6).周期性地备份数据页和日志到S3系统；</p>
+<p>7).周期性地回收过期的数据页版本；</p>
+<p>8).周期性地对数据页进行CRC校验。</p>
+<p>&emsp;&emsp;上述所有写相关的操作，只有第1)和第2)步是串行同步的，会直接影响前台请求的响应时间，其它操作都是异步的。</p>
+<h4 id="3-3-事务提交"><a href="#3-3-事务提交" class="headerlink" title="3.3 事务提交"></a><strong>3.3</strong> <strong>事务提交</strong></h4><p>&emsp;&emsp;在Aurora中，数据库实例向存储节点传递redo日志，达成多数派后将事务标记为提交状态，然后推进VDL，使数据库进入一个新的一致状态。每个事务的每条redo日志都会分配一个唯一的LSN，这个LSN一定大于当前最新的VDL。由于底层存储按segment分片，每个分片管理一部分页面，当一个事务涉及的修改跨多个分片时，事务对应的日志被打散，每个分片只能看到这个事务的部分日志。为了确保各个分片日志的完整性，每条日志都记录前一条日志的链接，通过前向链接确保分片拥有了完整的日志。Segment Complete LSN(SCL)表示分片拥有完整日志的位点，存储节点相互间通过gossip协议来弥补本地日志空洞，推进SCL。</p>
+<p>&emsp;&emsp;在Aurora中，事务提交是完全异步的。每个事务由若干个日志组成，并包含有一个唯一的“commit LSN”，工作线程处理事务提交请求时，将事务相关的日志提交到持久化队列并将事务挂起，并继续处理其它数据库请求。当VDL的位点大于事务的LSN时，表示这个事务redo日志都已经持久化，可以向客户端回包，通知事务已经成功执行。在Aurora中，有一个独立的线程处理事务成功执行的回包工作，因此，从整个提交流程来看，所有工作线程不会因为事务提交等待日志推进而堵塞，他们会继续处理新的请求，通过这种异步提交方式，大大提高了系统的吞吐。</p>
+<h4 id="3-4-故障恢复"><a href="#3-4-故障恢复" class="headerlink" title="3.4 故障恢复"></a><strong>3.4</strong> <strong>故障恢复</strong></h4><p>&emsp;&emsp;大多数数据库系统通常会周期性地做检查点，并将检查点信息计入日志。故障时，数据页中同时可能包含了提交和未提交的数据，因此，在故障恢复时，系统首先需要从上一个检查点开始回放日志，将数据页恢复到故障时的状态，然后根据undo日志回滚未交事务。从故障恢复的过程来看，故障恢复是一个比较耗时的操作，并且与检查点操作频率强相关。通过提高检查点频率，可以减少故障恢复时间，但是这直接会影响系统处理前台请求吞吐，所以需要在检查点频率和故障恢复时间做一个权衡，而在Aurora中不需要做这种权衡。</p>
+<p>&emsp;&emsp;Aurora将回放日志逻辑下推到存储节点，并且在数据库在线提供服务时在后台常态运行。因此，当出现故障重启时，存储服务能快速恢复。数据库实例宕机重启后，需要故障恢复来获得运行时的一致状态，实例与仲裁协议确定的N个存储节点通信，这样确保能读到最新的数据，并重新计算新的VDL，超过VDL部分的日志都可以被截断丢弃。在Aurora中，对于新分配的LSN范围做了限制，这个主要是为了避免数据库实例上堆积过多的未提交事务。</p>
+<h3 id="4-实验验证"><a href="#4-实验验证" class="headerlink" title="4 实验验证"></a>4 实验验证</h3><p>&emsp;&emsp;本文的实验对Aurora的读写能力，吞吐量大小，以及部署后用户的使用数据对Aurora进行了分析。</p>
+<p>&emsp;&emsp;从sysbench测试的数据来看，Aurora是基于镜像MySQL吞吐能力的35倍，每个事务的日志量比基于镜像MySQL日志量要少7.7倍。从用户的使用数据来看，某游戏公司使用后web应用响应时间明显降低，由之前的15ms降低到5.5ms,性能提高了近3倍，而且时间延迟明显降低。</p>
+<p>&emsp;&emsp;基于实验验证，Aurora相对于传统数据库的优势如下：</p>
+<p>&emsp;&emsp;第一，底层数据库存储是一个分布式存储服务，可以轻松应对故障；</p>
+<p>&emsp;&emsp;第二，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；</p>
+<p>&emsp;&emsp;第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
+<h3 id="5-相关工作"><a href="#5-相关工作" class="headerlink" title="5 相关工作"></a>5 相关工作</h3><p>&emsp;&emsp;本文的相关工作主要是在分布式存储的将存储与计算解耦、分布式系统、并发控制、日志结构的存储与数据恢复等几个方面分别进行描述的。在描述的过程中，首先通过对Aurora面临的问题进行逐个层面的分析，并对相关工作进行总结，在分析之后，将已有工作与Aurora相结合，并通过Aurora与先有工作进行比较说明，进一步阐述Aurora的实现原理。</p>
+<p>&emsp;&emsp;将存储与计算解耦：在此处本文提出与传统系统通常作为整体不同的数据库系统，介绍了有一些关于将内核分解为不同组件的数据库的研究。Deuteronomy 将提供并发控制和恢复的事务组件（TC）与提供LLAMA访问方法的数据组件（DC）分开，结构化缓存和存储管理器。Sinfonia和Hyder是在横向扩展服务上抽象事务访问方法的系统，并且可以使用这些抽象来实现数据库系统。Yesquel系统实现了多版本分布式平衡树，并将并发控制与查询处理器分离。在Aurora中，将查询处理、事务、并发、缓冲区高速缓存和访问方法与作为横向扩展服务实现的日志记录，存储和恢复分离。</p>
+<p>&emsp;&emsp;分布式系统：首先指出已经证明过的Brewer CAP定理，指出高度可用的系统无法在存在网络分区的情况下提供“强”的一致性保证。这个结果激发了作者对一致性目标的追求。并对相关工作进行总结，Bailis等人研究了提供高可用事务（HATs）的问题，该事务既不会在分区期间遭受不可用，也不会导致高网络延迟。他们表明可串行性，快照隔离和可重复读取隔离不符合HAT的要求，而大多数其他隔离级别都可以通过高可用性实现。Aurora通过简化假设，即在任何时候只有一个写入器使用从单个有序域分配的LSN生成日志更新来提供所有这些隔离级别。Google的Spanner提供外部一致的读写操作，并在一个时间戳上跨数据库提供全局一致的读取信息。这些功能使Spanner支持一致的备份，一致的分布式查询处理以及原子模式更新，所有这些都是在全球范围内进行的，甚至在正在进行的事务存在的情况下也是如此。Spanner专门针对Google的繁重工作负载，并依靠两阶段提交和两阶段锁定来进行读/写事务。</p>
+<p>&emsp;&emsp;并发控制：本文指出较弱的一致性和隔离模型在分布式数据库中是众所周知的，并导致了乐观的复制技术以及最终的一致性系统。集中式系统中的其他方法包括基于锁定的经典悲观方案，Hekaton中的多方案并发控制之类的乐观方案，VoltDB等分片方法和HyPer中的时间戳排序和Deuteronomy . Aurora的存储服务为数据库引擎提供了持久保留的本地磁盘的抽象，并允许引擎确定隔离和并发控制。</p>
+<p>&emsp;&emsp;日志结构存储：先介绍日志结构的起源，日志结构的存储系统由LFS 在1992年引入。并对最近的日志结构存储的相关工作进行总结，Deuteronomy 以及LLAMA 和Bw-Tree 的相关工作在存储引擎堆栈中以多种方式使用日志结构化技术。最后对本文提出的Aurora与Deuteronomy 进行横向比较说明。Aurora，通过编写增量而不是整个页面来减少写放大，Deuteronomy 和Aurora都实现纯重做日志记录，并跟踪最高稳定的LSN以确认提交。</p>
+<p>&emsp;&emsp;恢复：尽管传统数据库依赖于基于ARIES 的恢复协议，但是一些最近的系统已经选择了其他途径来提高性能。例如，Hekaton和VoltDB在崩溃后使用某种形式的更新日志来重建其内存状态。像Sinfonia这样的系统通过使用诸如进程对和状态机复制之类的技术来避免恢复。Graefe 描述了一种具有每页日志记录链的系统，该系统可以按需进行逐页重做，从而可以快速恢复。与Aurora一样，Deuteronomy 不需要重做恢复。这是因为Deuteronomy 会延迟事务，因此只有已提交的更新才会发布到持久存储中。结果，与Aurora不同，Deuteronomy 中的交易规模可能受到限制。</p>
+<h3 id="6-总结建议"><a href="#6-总结建议" class="headerlink" title="6 总结建议"></a>6 总结建议</h3><p>&emsp;&emsp;在计算与存储分离的云基础设施之上，通过仅传输redo log，大幅减少跨网络的IO数据传输，将产生大量IO的数据页合并和持久化交由本地存储来解决，大幅减缓了网络延迟对数据库性能的影响。即使网络传输的速度不再是分布式数据库的瓶颈，这种“日志即数据“的思想也是有意义的，因为在分布式数据库中的计算，存储，网络中，网络通信的功耗是最大的。</p>
+<p>&emsp;&emsp;Aurora诞生的原因是在弹性伸缩的云环境下，传统的高吞吐<strong>OLTP</strong>数据库既不能保证可用性，又不能保证持久性。 <strong>Aurora</strong>的关键点在于将传统数据库中的存储与计算分离，具体而言，将日志部分下推到一个独立的分布式存储服务层。由于这种分离架构下，所有IO操作都是通过网络，网络将成为最大的瓶颈，因此Aurora集中精力优化网络以便提高系统吞吐能力。Aurora依靠Quorum模型，在性能影响可控的前提下，解决云环境下的各种异常错误。在Aurora中，日志处理技术减少了I/O写放大，异步提交协议避免了同步等待，同时分离的存储服务层还避免了离线故障恢复和检查点操作。</p>
+<p>&emsp; &emsp;Aurora相对于传统数据库有三大优势，首先，底层数据库存储是一个分布式存储服务，可以轻松应对故障；其次，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
+<p>&emsp;&emsp;批评性建议：</p>
+<p>&emsp;&emsp;1.在存储结构方面，论文中没有给出caching很明确的细节说明，Caching是位于了存储层内还是计算层内？读者只能靠猜测。如果在文中给出了具体的细节说明，可能对读者理解本文具有很大的帮助。</p>
+<p>&emsp;&emsp;2.Amazon Aurora是基于开源MySQL的数据库，理论上修改GPL协议的开源软件再开发一个新软件是需要开源的，但它本身没有开放源代码，是一个闭源数据库。</p>
+<p>&emsp;&emsp;3.为什么备机节点可以多达15个呢？是为了应对数据库的读负载还是作为故障转移的目标，需要这么多备机做备选？本文在15个备份节点的解释上不是很清楚，读后存有疑惑。</p>
+<p>下面引用两位专家对Aurora的评价：</p>
+<p>Percona Vadim Tkachenko: Aurora没有解决写拓展和分库分表的问题。（2017）</p>
+<p>Bill Karwin：Aurora不适合对具有二级索引的表进行大量写操作的场景。（2017）</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>SIGMOD</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>BatchCrypt</title>
     <url>/2020/09/13/BatchCrypt/</url>
     <content><![CDATA[<div class="table-container">
@@ -594,6 +558,112 @@
       </tags>
   </entry>
   <entry>
+    <title>CloudMon</title>
+    <url>/2020/09/14/CloudMon/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href>CloudMon</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"><a href="https://chuliangweng.github.io/" target="_blank" rel="noopener">Cl.W</a></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">这篇文章信任hypervisor并在此基础上对guestVM进行保护，主要是从内存角度出发，针对rootkit攻击进行运行时检测。</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">System Security; Virtual Machine</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文构造一个动态的监控架构，并在此基础上保证guest VM 运行时的安全性，主要功能是在客户虚拟机中检测出rootkits攻击。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>​        本文构建了一个动态的监控架构，运行在特权级别，通过对guestVM内存的扫描，检测客户机是否受到rootkit攻击，从而保证guestVM的运行时安全性。利用虚拟化技术对客户机内存进行实时监控，且这些监控对于客户机是透明的，为了实现检测的有效与高效，本系统在性能和安全之间权衡。</p>
+<h4 id="Rootkit-攻击"><a href="#Rootkit-攻击" class="headerlink" title="Rootkit 攻击 "></a><font color="blue"><strong>Rootkit 攻击</strong> </font></h4><p>​        rootkit 能够以特权级指令访问 host，并且可以通过对系统进行更改隐藏自己的存在。</p>
+<p>​        检测rootkit，最好是对客户机透明，不更改客户机系统的前提下对其进行检测。</p>
+<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        假设VMM（hypervisor）与priviliged VM  是可信的，guest VM 会受到攻击，在开机阶段的安全性受到VMM的保护，并且对guest VM的攻击不会对privileged VM 的安全性造成影响。</p>
+<p>（有些保护是针对VMM的，但是这不在本文的考虑范围内，本文聚焦在对客户机的保护上）</p>
+<h3 id="CloudMon-系统设计"><a href="#CloudMon-系统设计" class="headerlink" title="CloudMon 系统设计"></a>CloudMon 系统设计</h3><p>​        目的是实现一个可以访问较低权限级别内存信息、检测潜在的攻击并且可以保证检测的实时性与系统性能。访问内存的操作实现是基于 Xen的xenctrl 库，这个库能够读取较低权限的内存（如guest VM的内存信息）。</p>
+<p>​        构建一个guest VM 内存的监控器，目标是对VM透明、高效且是瞬时性的，这种方式可行性是因为攻击者对VM内存任何的更改都是可见的。CloudMon扫描内核memory与寄存器，从而可以实时的检测内存状态变化。这是一个特权级别的VM，能够通过VMM访问其他VMs的内存信息，而不是单纯的一个安全的guest VM。</p>
+<p><img src="/2020/09/14/CloudMon/CloudMonArchitecture.png" width="400px" height="240px"></p>
+<p>​        从云中大量的攻击实例中提取rootkit攻击特征，并将该特征记录在Feature Lib中，通过比较RT Value 与 SV Table 中数值的差异情况，可以检测出系统调用表中的攻击情况，设置较小的检测时间间隔，可以近似实时的检测嵌入内核的 rootkit ，通过设置检测的时间间隔，可以控制性能开销。并且CloudMon会直接检索其内存，因此，包括DKSM 和Shadow Walker 在内的任何来宾内核rootkit都不会欺骗CloudMon。 </p>
+<font color="green">**获取开始地址信息**</font>
+
+<p>​        KV Searcher查找 guest VM 系统调用的起始地址，SV generator 通过扫描，比对通过大量OS攻击实例中获取到的攻击特征，从而可以判断出被攻击者。</p>
+<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a><font color="blue"><strong>实验环境</strong></font></h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Xen</th>
+<th>priviliged VM</th>
+<th>guest VM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Xen-3.4.2</td>
+<td>Ubuntu 9.04</td>
+<td>Ubuntu 8.04</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>已经存在的检测方式：</p>
+<ol>
+<li><p>获取guest OS的system.map信息</p>
+</li>
+<li><p>one-on-one 运行在guest VM上</p>
+</li>
+</ol>
+<h3 id="相关工作介绍"><a href="#相关工作介绍" class="headerlink" title="相关工作介绍"></a>相关工作介绍</h3><p>本文将对VM的保护机制分为了 out-of-VM  与 in-VM两种</p>
+<p>A类：out-of-VM</p>
+<ol>
+<li><p>利用受信任的VM充当监控器。OSck,是一种one-on-one的监控模式</p>
+</li>
+<li><p>XenKIMONO 在VM中聚集信息时会暂停OS的执行</p>
+</li>
+<li><p>vIPS 通过预先设置，这种检测规则需要有固定的检测时间间隔</p>
+</li>
+</ol>
+<p>B类：in-VM</p>
+<ol>
+<li><p>硬件虚拟化技术</p>
+</li>
+<li><p>Lares 在guest VM 中内置hooks（钩子函数）实时的检测虚拟机的安全（事件检测）</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>TC</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Virtual Machine</tag>
+        <tag>System Security</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>CITM attacks</title>
     <url>/2021/03/23/CITM-attacks/</url>
     <content><![CDATA[<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><div class="table-container">
@@ -796,112 +866,6 @@
       <tags>
         <tag>论文解读</tag>
         <tag>TEE</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CloudMon</title>
-    <url>/2020/09/14/CloudMon/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href>CloudMon</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"><a href="https://chuliangweng.github.io/" target="_blank" rel="noopener">Cl.W</a></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">这篇文章信任hypervisor并在此基础上对guestVM进行保护，主要是从内存角度出发，针对rootkit攻击进行运行时检测。</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">System Security; Virtual Machine</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文构造一个动态的监控架构，并在此基础上保证guest VM 运行时的安全性，主要功能是在客户虚拟机中检测出rootkits攻击。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>​        本文构建了一个动态的监控架构，运行在特权级别，通过对guestVM内存的扫描，检测客户机是否受到rootkit攻击，从而保证guestVM的运行时安全性。利用虚拟化技术对客户机内存进行实时监控，且这些监控对于客户机是透明的，为了实现检测的有效与高效，本系统在性能和安全之间权衡。</p>
-<h4 id="Rootkit-攻击"><a href="#Rootkit-攻击" class="headerlink" title="Rootkit 攻击 "></a><font color="blue"><strong>Rootkit 攻击</strong> </font></h4><p>​        rootkit 能够以特权级指令访问 host，并且可以通过对系统进行更改隐藏自己的存在。</p>
-<p>​        检测rootkit，最好是对客户机透明，不更改客户机系统的前提下对其进行检测。</p>
-<h3 id="威胁模型"><a href="#威胁模型" class="headerlink" title="威胁模型"></a>威胁模型</h3><p>​        假设VMM（hypervisor）与priviliged VM  是可信的，guest VM 会受到攻击，在开机阶段的安全性受到VMM的保护，并且对guest VM的攻击不会对privileged VM 的安全性造成影响。</p>
-<p>（有些保护是针对VMM的，但是这不在本文的考虑范围内，本文聚焦在对客户机的保护上）</p>
-<h3 id="CloudMon-系统设计"><a href="#CloudMon-系统设计" class="headerlink" title="CloudMon 系统设计"></a>CloudMon 系统设计</h3><p>​        目的是实现一个可以访问较低权限级别内存信息、检测潜在的攻击并且可以保证检测的实时性与系统性能。访问内存的操作实现是基于 Xen的xenctrl 库，这个库能够读取较低权限的内存（如guest VM的内存信息）。</p>
-<p>​        构建一个guest VM 内存的监控器，目标是对VM透明、高效且是瞬时性的，这种方式可行性是因为攻击者对VM内存任何的更改都是可见的。CloudMon扫描内核memory与寄存器，从而可以实时的检测内存状态变化。这是一个特权级别的VM，能够通过VMM访问其他VMs的内存信息，而不是单纯的一个安全的guest VM。</p>
-<p><img src="/2020/09/14/CloudMon/CloudMonArchitecture.png" width="400px" height="240px"></p>
-<p>​        从云中大量的攻击实例中提取rootkit攻击特征，并将该特征记录在Feature Lib中，通过比较RT Value 与 SV Table 中数值的差异情况，可以检测出系统调用表中的攻击情况，设置较小的检测时间间隔，可以近似实时的检测嵌入内核的 rootkit ，通过设置检测的时间间隔，可以控制性能开销。并且CloudMon会直接检索其内存，因此，包括DKSM 和Shadow Walker 在内的任何来宾内核rootkit都不会欺骗CloudMon。 </p>
-<font color="green">**获取开始地址信息**</font>
-
-<p>​        KV Searcher查找 guest VM 系统调用的起始地址，SV generator 通过扫描，比对通过大量OS攻击实例中获取到的攻击特征，从而可以判断出被攻击者。</p>
-<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a><font color="blue"><strong>实验环境</strong></font></h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>Xen</th>
-<th>priviliged VM</th>
-<th>guest VM</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Xen-3.4.2</td>
-<td>Ubuntu 9.04</td>
-<td>Ubuntu 8.04</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>已经存在的检测方式：</p>
-<ol>
-<li><p>获取guest OS的system.map信息</p>
-</li>
-<li><p>one-on-one 运行在guest VM上</p>
-</li>
-</ol>
-<h3 id="相关工作介绍"><a href="#相关工作介绍" class="headerlink" title="相关工作介绍"></a>相关工作介绍</h3><p>本文将对VM的保护机制分为了 out-of-VM  与 in-VM两种</p>
-<p>A类：out-of-VM</p>
-<ol>
-<li><p>利用受信任的VM充当监控器。OSck,是一种one-on-one的监控模式</p>
-</li>
-<li><p>XenKIMONO 在VM中聚集信息时会暂停OS的执行</p>
-</li>
-<li><p>vIPS 通过预先设置，这种检测规则需要有固定的检测时间间隔</p>
-</li>
-</ol>
-<p>B类：in-VM</p>
-<ol>
-<li><p>硬件虚拟化技术</p>
-</li>
-<li><p>Lares 在guest VM 中内置hooks（钩子函数）实时的检测虚拟机的安全（事件检测）</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>TC</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>Virtual Machine</tag>
-        <tag>System Security</tag>
       </tags>
   </entry>
   <entry>
@@ -1342,16 +1306,89 @@
       </tags>
   </entry>
   <entry>
-    <title>Information theoretic framework</title>
-    <url>/2021/03/15/Information-theoretic-framework/</url>
-    <content><![CDATA[<h2 id="四条公理"><a href="#四条公理" class="headerlink" title="四条公理"></a>四条公理</h2><h2 id="两种模型"><a href="#两种模型" class="headerlink" title="两种模型"></a>两种模型</h2>]]></content>
+    <title>Google Technology</title>
+    <url>/2020/11/23/Google-Technology/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/gfs-sosp2003.pdf" target="_blank" rel="noopener">GFS</a> <a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf" target="_blank" rel="noopener">MapReduce</a> <a href="https://storage.googleapis.com/pub-tools-public-publication-data/pdf/68a74a85e1662fe02ff3967497f31fda7f32225c.pdf" target="_blank" rel="noopener">Bigtable</a> <a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/spanner-osdi2012.pdf" target="_blank" rel="noopener">Spanner</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">google</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">分布式文件系统、数据存储系统等技术</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
       <categories>
         <category>paper</category>
-        <category>JSAC</category>
+        <category>SOSP</category>
+        <category>OSDI</category>
       </categories>
       <tags>
         <tag>论文解读</tag>
-        <tag>Protocol</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Advice for PhD</title>
+    <url>/2021/02/17/Advice-for-PhD/</url>
+    <content><![CDATA[<h3 id="Twenty-things-for-the-start-of-PhD"><a href="#Twenty-things-for-the-start-of-PhD" class="headerlink" title="Twenty things for the start of PhD"></a>Twenty things for the start of PhD</h3><p>Recent PhD graduate Lucy A. Taylor shares the advice she and her colleagues wish they had received.</p>
+<p>This is an article [<a href="https://www.nature.com/articles/d41586-018-07332-x" target="_blank" rel="noopener">1</a> ] from the Nature Careers Community, the authors share their professional experiences and advice. </p>
+<h4 id="1-保持生活和科研工作之间的平衡"><a href="#1-保持生活和科研工作之间的平衡" class="headerlink" title="1. 保持生活和科研工作之间的平衡"></a>1. 保持生活和科研工作之间的平衡</h4><p>Maintain a healthy work–life balance by finding a routine that works for you. It’s better to develop a good balance and work steadily throughout your program than to work intensively and burn out. Looking after yourself is key to success.</p>
+<h4 id="2-多与导师交流自己的需求"><a href="#2-多与导师交流自己的需求" class="headerlink" title="2. 多与导师交流自己的需求"></a>2. 多与导师交流自己的需求</h4><p>Discuss expectations with your supervisor. Everyone works differently. Make sure you know your needs and communicate them to your supervisor early on, so you can work productively together.</p>
+<h4 id="3-尽可能多的投入时间阅读经典文献综述"><a href="#3-尽可能多的投入时间阅读经典文献综述" class="headerlink" title="3. 尽可能多的投入时间阅读经典文献综述"></a>3. 尽可能多的投入时间阅读经典文献综述</h4><p>Invest time in literature reviews. These reviews, both before and after data collection, help you to develop your research aims and conclusions.</p>
+<h4 id="4-早点确定目标"><a href="#4-早点确定目标" class="headerlink" title="4. 早点确定目标"></a>4. 早点确定目标</h4><p>Decide on your goals early. Look at your departmental guidelines and then establish clear PhD aims or questions on the basis of your thesis requirements. Goals can change later, but a clear plan will help you to maintain focus.</p>
+<h4 id="5-好记性不如烂笔头，记录需要做和做过的所有事"><a href="#5-好记性不如烂笔头，记录需要做和做过的所有事" class="headerlink" title="5. 好记性不如烂笔头，记录需要做和做过的所有事"></a>5. 好记性不如烂笔头，记录需要做和做过的所有事</h4><p> “I don’t need to write that down, I’ll remember it” is the biggest lie you can tell yourself! Write down everything you do — even if it doesn’t work. This includes meeting notes, method details, code annotations, among other things.</p>
+<h4 id="6-整理工作和工作地点、文件和各种记录"><a href="#6-整理工作和工作地点、文件和各种记录" class="headerlink" title="6. 整理工作和工作地点、文件和各种记录"></a>6. 整理工作和工作地点、文件和各种记录</h4><p>Organize your work and workspace. In particular, make sure to use meaningful labels, so you know what and where things are. Organizing early will save you time later on.</p>
+<h4 id="7-尽早着手论文"><a href="#7-尽早着手论文" class="headerlink" title="7. 尽早着手论文"></a>7. 尽早着手论文</h4><p>It’s never too early to start writing your thesis. Write and show your work to your supervisor as you go — even if you don’t end up using your early work, it’s good practice and a way to get ideas organized in your head.</p>
+<h4 id="8-把毕业论文打散为SMART五部分"><a href="#8-把毕业论文打散为SMART五部分" class="headerlink" title="8. 把毕业论文打散为SMART五部分"></a>8. 把毕业论文打散为SMART五部分</h4><p>Specific 明确工作内容</p>
+<p>Measurement  可衡量工作量</p>
+<p>Attainable  可实现的工作</p>
+<p>Relevant  相关工作</p>
+<p>Timely  需要及时做的工作</p>
+<p> Break your thesis down into SMART (specific, measurable, attainable, relevant and timely) goals. You will be more productive if your to-do list reads “draft first paragraph of the results” rather than “write chapter 1”. Many small actions lead to one complete thesis.</p>
+<h4 id="9-完成比完美更重要"><a href="#9-完成比完美更重要" class="headerlink" title="9. 完成比完美更重要"></a>9. 完成比完美更重要</h4><p>The best thesis is a finished thesis. No matter how much time you spend perfecting your first draft, your work will come back covered in corrections, and you will go through more drafts before you submit your final version. Send your drafts to your supervisor <a href="http://blogs.nature.com/naturejobs/2018/07/09/done-is-better-than-perfect-overcoming-phd-perfectionism/" target="_blank" rel="noopener">sooner rather than later</a>.</p>
+<h4 id="10-对导师诚实"><a href="#10-对导师诚实" class="headerlink" title="10. 对导师诚实"></a>10. 对导师诚实</h4><p>Be honest with your supervisor. Let them know if you don’t understand something, if you’ve messed up an experiment or if they forgot to give you feedback. The more honest you are, the better your relationship will be. Helping your supervisor to help you is key.</p>
+<h4 id="11-备份！"><a href="#11-备份！" class="headerlink" title="11. 备份！"></a>11. 备份！</h4><p> Back up your work! You can avoid many tears by doing this at least weekly.</p>
+<h4 id="12-和实验室其他成员多交流"><a href="#12-和实验室其他成员多交流" class="headerlink" title="12. 和实验室其他成员多交流"></a>12. 和实验室其他成员多交流</h4><p>Socialize with your lab group and other students. It’s a great way to discuss PhD experiences, get advice and help, improve your research and make friends.</p>
+<h4 id="13-参加其他实验室的组会，开阔视野"><a href="#13-参加其他实验室的组会，开阔视野" class="headerlink" title="13. 参加其他实验室的组会，开阔视野"></a>13. 参加其他实验室的组会，开阔视野</h4><p>Attend departmental seminars and lab-group meetings, even (or especially) when the topic is not your area of expertise. What you learn could change the direction of your research and career. Regular attendance will also be noticed.</p>
+<h4 id="14-展示个人的工作"><a href="#14-展示个人的工作" class="headerlink" title="14. 展示个人的工作"></a>14. 展示个人的工作</h4><p>Present your research. This can be at lab-group meetings, conferences and so on. Presenting can be scary, but it gets easier as you practise, and it’s a fantastic way to network and get feedback at the same time.</p>
+<h4 id="15-尝试发表个人的工作"><a href="#15-尝试发表个人的工作" class="headerlink" title="15. 尝试发表个人的工作"></a>15. 尝试发表个人的工作</h4><p>Aim to publish your research. It might not work out, but drafting articles and submitting them to journals is a great way to learn new skills and enhance your CV.</p>
+<h4 id="16-抓住机会离开实验室，-出去运动放松"><a href="#16-抓住机会离开实验室，-出去运动放松" class="headerlink" title="16. 抓住机会离开实验室， 出去运动放松"></a>16. 抓住机会离开实验室， 出去运动放松</h4><p>Have a life outside work. Although your lab group is like your work family, it’s great for your mental health to be able to escape work. This could be through sport, clubs, hobbies, holidays or spending time with friends.</p>
+<h4 id="17-不与别人比较"><a href="#17-不与别人比较" class="headerlink" title="17. 不与别人比较"></a>17. 不与别人比较</h4><p>Don’t compare yourself with others. Your PhD is an opportunity to conduct original research that reveals new information. As such, all PhD programmes are different. You just need to do what works for you and your project.</p>
+<h4 id="18-研究不是一路顺分顺水的"><a href="#18-研究不是一路顺分顺水的" class="headerlink" title="18. 研究不是一路顺分顺水的"></a>18. 研究不是一路顺分顺水的</h4><p>The nature of research means that things will not always go according to plan. This does not mean you are a bad student. Keep calm, take a break and then carry on. Experiments that fail can still be written up as part of a successful PhD.</p>
+<h4 id="19-向导师求助，别自己死磕"><a href="#19-向导师求助，别自己死磕" class="headerlink" title="19. 向导师求助，别自己死磕"></a>19. 向导师求助，别自己死磕</h4><p>Never struggle on your own. Talk to other students and have frank discussions with your supervisor. There’s no shame in asking for help. You are not alone.</p>
+<h4 id="20-享受博士生涯"><a href="#20-享受博士生涯" class="headerlink" title="20. 享受博士生涯"></a>20. 享受博士生涯</h4><p>Enjoy your PhD! It can be tough, and there will be days when you wish you had a ‘normal’ job, but PhDs are full of wonderful experiences and give you the opportunity to work on something that fascinates you. Celebrate your successes and enjoy yourself.</p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>[1]  <a href="https://www.nature.com/articles/d41586-018-07332-x" target="_blank" rel="noopener">https://www.nature.com/articles/d41586-018-07332-x</a></p>
+]]></content>
+      <tags>
+        <tag>essay</tag>
       </tags>
   </entry>
   <entry>
@@ -1513,309 +1550,38 @@
       </tags>
   </entry>
   <entry>
-    <title>Language-go-goroutine</title>
-    <url>/2020/12/03/Language-go-goroutine/</url>
-    <content><![CDATA[<h3 id="Goroutine-和-系统线程"><a href="#Goroutine-和-系统线程" class="headerlink" title="Goroutine 和 系统线程"></a>Goroutine 和 系统线程</h3><p>​        Go语言的Goroutine之间是共享内存的。Goroutine是Go语言特有的并发体，是一种轻量级的线程，由go关键字启动。在真实的Go语言的实现中，goroutine和系统线程也<strong>不是等价</strong>的。尽管两者的区别实际上只是一个量的区别，但正是这个量变引发了Go语言并发编程质的飞跃。[1]</p>
-<p>​        首先，每个系统级线程都会有一个固定大小的栈（一般默认可能是2MB），这个栈主要用来保存函数递归调用时参数和局部变量。固定了栈的大小导致了两个问题：一是对于很多只需要很小的栈空间的线程来说是一个巨大的<strong>浪费</strong>，二是对于少数需要巨大栈空间的线程来说又面临<strong>栈溢出</strong>的风险。针对这两个问题的解决方案是：要么降低固定的栈大小，提升空间的利用率；要么增大栈的大小以允许更深的函数递归调用，但这两者是没法同时兼得的。相反，一个Goroutine会以一个很<strong>小的栈启动</strong>（可能是2KB或4KB），当遇到深度递归导致当前栈空间不足时，Goroutine会根据需要<strong>动态地伸缩</strong>栈的大小（主流实现中栈的<strong>最大值可达到1GB</strong>）。因为启动的<strong>代价很小</strong>，所以我们可以轻易地启动成千上万个Goroutine。</p>
-<p>​        Go的运行时还包含了其自己的调度器，这个调度器使用了一些技术手段，可以在n个操作系统线程上<strong>多工调度</strong>m个Goroutine。Go调度器的工作和内核的调度是相似的，但是这个调度器只关注单独的Go程序中的Goroutine。Goroutine采用的是<strong>半抢占式</strong>的协作调度，只有在当前Goroutine发生阻塞时才会导致调度；同时发生在用户态，调度器会根据具体函数只保存必要的寄存器，<strong>切换的代价</strong>要比系统线程<strong>低</strong>得多。运行时有一个<code>runtime.GOMAXPROCS</code>变量，用于控制当前运行正常非阻塞Goroutine的系统线程数目。</p>
-<p>​        在Go语言中启动一个Goroutine不仅和调用函数一样简单，而且Goroutine之间调度代价也很低，这些因素极大地促进了并发编程的流行和发展。</p>
-<h3 id="使用-goroutine"><a href="#使用-goroutine" class="headerlink" title="使用 goroutine"></a>使用 goroutine</h3><p>​        go 语言中使用 <code>goroutine</code> 只需要在调用的函数之前加上<code>go</code> 关键字，就可以为函数创建一个<code>goroutine</code>，一个<code>goroutine</code> 必须至少对应一个函数。</p>
-<h4 id="启动单个goroutine"><a href="#启动单个goroutine" class="headerlink" title="启动单个goroutine"></a>启动单个goroutine</h4><pre class=" language-lang-go"><code class="language-lang-go">// goroutine_1.go
-package main
-
-import "fmt"
-import "time"
-
-func hello()  {
-    fmt.Println("Hello, Goroutine!")
-}
-
-func main()  {
-    go hello()  // 启动另外一个goroutine去执行hello函数
-    fmt.Println("main goroutine done!")
-    time.Sleep(time.Second)
-}
-</code></pre>
-<p>​        在<code>goroutine_1.go</code>中，输出结果仅打印了<code>main goroutine done!</code>，而<code>hello()</code>函数中的结果没有输出，这是因为在程序启动时，Go程序就会为<code>main()</code>函数创建一个默认的主<code>goroutine</code>，当main()函数返回的时候该<code>goroutine</code>就结束了，所有在<code>main()</code>函数中启动的<code>goroutine</code>会一同结束，<code>main</code>函数所在的<code>goroutine</code>就像是权利的游戏中的夜王，其他的<code>goroutine</code>都是异鬼，夜王一死它转化的那些异鬼也就全部GG了 [2]。</p>
-<p>如果要打印<code>hello()</code>函数中的内容，就要让<code>main</code>函数等一等。</p>
-<pre class=" language-lang-go"><code class="language-lang-go">func main() {
-    go hello() // 启动另外一个goroutine去执行hello函数
-    fmt.Println("main goroutine done!")
-    time.Sleep(time.Second)
-}
-</code></pre>
-<p>​        这时会首先打印<code>main goroutine done!</code>是因为我们在创建新的goroutine的时候需要花费一些时间，而此时main函数所在的<code>goroutine</code>是继续执行的。</p>
-<h4 id="启动多个-goroutine"><a href="#启动多个-goroutine" class="headerlink" title="启动多个 goroutine"></a>启动多个 goroutine</h4><p>使用<code>sync.WaitGroup</code>来实现goroutine的同步，实现并发执行，<code>goroutine</code>的调度是随机的。</p>
-<pre class=" language-lang-go"><code class="language-lang-go">package main
-
-import "fmt"
-// import "time"
-import "sync"
-
-var wg sync.WaitGroup
-
-func hello(i int)  {
-    defer wg.Done()  // goroutine结束时登记 -1
-    fmt.Println("Hello, Goroutine!", i)
-}
-
-func main()  {
-
-    for i := 0; i < 10; i++ {
-        wg.Add(1) // 启动一个 goroutine 就 +1
-        go hello(i)
-        // fmt.Println("main loop : i = ", i)
-    }
-
-    wg.Wait()  // 等待所有登记的goroutine都结束
-
-}
-</code></pre>
-<h3 id="原子操作"><a href="#原子操作" class="headerlink" title="原子操作"></a>原子操作</h3><p>​        所谓的原子操作就是并发编程中“最小的且不可并行化”的操作。通常，如果多个并发体对同一个共享资源进行的操作是原子的话，那么同一时刻<strong>最多只能有一个</strong>并发体对该资源进行操作。从线程角度看，在当前线程修改共享资源期间，其它的线程是不能访问该资源的。原子操作对于多线程并发编程模型来说，不会发生有别于单线程的意外情况，共享资源的完整性可以得到保证。</p>
-<p>​        一般情况下，原子操作都是通过“互斥”访问来保证的，通常由特殊的CPU指令提供保护。当然，如果仅仅是想模拟下粗粒度的原子操作，我们可以借助于<code>sync.Mutex</code>来实现：</p>
-<pre class=" language-lang-go"><code class="language-lang-go">package main
-
-import (
-    "sync"
-    "fmt"
-)
-
-var total struct {
-    sync.Mutex
-    value int
-}
-
-func worker(wg *sync.WaitGroup)  {
-    defer wg.Done()
-
-    // fmt.Println("worker")
-
-    for i := 0; i < 10;  {
-        total.Lock()
-        total.value += 1
-        total.Unlock()
-        fmt.Println(total.value)
-        i++
-    }
-}
-
-func main()  {
-    var wg sync.WaitGroup
-    wg.Add(2)
-    go worker(&wg)
-    go worker(&wg)
-
-    wg.Wait()
-    // fmt.Println(total.value)
-}
-</code></pre>
-<h3 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h3><h4 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h4><h5 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h5><p><code>channel</code>是一种引用类型，声明方式为 <code>var 变量 chan 元素类型</code></p>
-<pre class=" language-lang-go"><code class="language-lang-go">var ch1 chan int   // 声明一个传递整型的通道
-var ch2 chan bool  // 声明一个传递布尔型的通道
-var ch3 chan []int // 声明一个传递int切片的通道
-</code></pre>
-<h5 id="创建channel"><a href="#创建channel" class="headerlink" title="创建channel"></a>创建channel</h5><p><code>channel</code>的缓冲大小是可选的，创建方式为 <code>make(chan 元素类型, [缓冲大小])</code></p>
-<pre class=" language-lang-go"><code class="language-lang-go">ch4 := make(chan int)
-ch5 := make(chan bool)
-ch6 := make(chan []int)
-</code></pre>
-<h5 id="channel-操作"><a href="#channel-操作" class="headerlink" title="channel 操作"></a>channel 操作</h5><p>通道的操作分为 send, receive, close 三种操作，发送和接受都使用<code>&lt;-</code> 符号</p>
-<p>创建一个缓冲大小为1的通道 <code>ch := make(chan int, 1)</code></p>
-<p><strong>send</strong>              <code>ch &lt;- 10</code>  // 把10发送到ch</p>
-<p><strong>receive</strong>          <code>x := &lt;- ch</code>  // 从ch 接受值赋给变量x</p>
-<p><strong>close</strong>              <code>close(ch)</code>     // 调用内置的<code>close</code> 函数关闭通道</p>
-<h4 id="创建有缓冲通道"><a href="#创建有缓冲通道" class="headerlink" title="创建有缓冲通道"></a>创建有缓冲通道</h4><pre class=" language-lang-go"><code class="language-lang-go">// goChannel_1.go
-func main()  {
-    ch := make(chan int, 1) // 创建一个容量为1 的有缓冲区通道
-    ch <- 10
-    fmt.Println("send success!")
-}
-</code></pre>
-<h4 id="创建无缓冲通道"><a href="#创建无缓冲通道" class="headerlink" title="创建无缓冲通道"></a>创建无缓冲通道</h4><pre class=" language-lang-go"><code class="language-lang-go">// goChannel_2.go
-
-package main
-
-import "fmt"
-
-func recv(c chan int)  {
-    ret := <-c
-    fmt.Println("receive success, ret = ", ret)
-}
-
-func main()  {
-    ch := make(chan int) // 创建一个无缓冲区通道
-    go recv(ch)
-    ch <- 10
-    fmt.Println("send success!")
-}
-</code></pre>
-<p>在对无缓冲通道进行操作时，如果像设置了缓冲大小的有缓冲方式对通道进行传递参数，会报错，因此，使用<code>goroutine</code>进行传递参数。</p>
-<h4 id="两通道之间传递参数"><a href="#两通道之间传递参数" class="headerlink" title="两通道之间传递参数"></a>两通道之间传递参数</h4><pre class=" language-lang-go"><code class="language-lang-go">// goChannel_3.go
-
-package main
-
-import "fmt"
-
-func main()  {
-    ch1 := make(chan int) // 创建一个无缓冲区通道
-    ch2 := make(chan int)
-
-    // 开启 goroutine将0~10的数发送到 ch1中
-    go func() {
-        for i := 0; i < 10; i++ {
-            ch1 <- i
-        }
-        close(ch1)
-    }()
-
-    // 开启 goroutine将该数字的平方发送到 ch2中
-    go func() {
-        for true {
-            i, ok := <- ch1  // 通道关闭后再取值，ok = false
-            if !ok {
-                break
-            }
-            ch2 <- i * i
-        }
-        close(ch2)
-    }()
-
-    // 在主goroutine 中接收ch2 值
-    for i:= range ch2 { // 通道关闭后会退出 循环
-        fmt.Println("ch2 = ",i)
-    }
-}
-</code></pre>
-<p>使用<code>for range</code>方式读取通道内数据</p>
-<pre class=" language-lang-go"><code class="language-lang-go">// goChannel_3plus.go
-
-package main
-
-import "fmt"
-
-func initValue(ch1 chan int)  {
-    for i := 0; i < 10; i++ {
-        ch1 <- i
-    }
-    close(ch1)
-}
-
-func square(ch2 chan int, ch1 chan int)  {
-
-    for true {
-        i, ok := <- ch1
-        if !ok {
-            break
-        }
-        ch2 <- i * i
-    }
-    close(ch2)
-}
-
-func main()  {
-    ch1 := make(chan int) // 创建一个无缓冲区通道
-    ch2 := make(chan int)
-
-    // 开启 goroutine将0~100的数发送到 ch1中
-    go initValue(ch1)
-
-    // 开启 goroutine将该数字的平方发送到 ch2中
-    go square(ch2, ch1)
-
-    // 在主goroutine 中接收ch2 值
-    for i:= range ch2 { // 通道关闭后会退出 循环
-        fmt.Println("ch2 = ",i)
-    }
-}
-</code></pre>
-<h4 id="单向通道"><a href="#单向通道" class="headerlink" title="单向通道"></a>单向通道</h4><ul>
-<li><code>chan&lt;- int</code>是一个只写单向通道（只能对其写入int类型值），可以对其执行发送操作但是不能执行接收操作；</li>
-<li><code>&lt;-chan int</code>是一个只读单向通道（只能从其读取int类型值），可以对其执行接收操作但是不能执行发送操作。</li>
+    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
+    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
+    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
+<ul>
+<li><strong>Active Monitoring（Synchronous）</strong></li>
 </ul>
-<pre class=" language-lang-go"><code class="language-lang-go">// goChannel_4.go
-
-package main
-
-import "fmt"
-
-func counter(out chan<- int)  {
-    for i := 0; i < 10; i++ {
-        out <- i
-    }
-    close(out)
-}
-
-func squarer(out chan<- int, in <-chan int)  {
-    for i := range in{
-        out <- i * i
-    }
-    close(out)
-}
-
-func printer(in <-chan int)  {
-    for i := range in{
-        fmt.Println(i)
-    }
-}
-
-func main()  {
-    ch1 := make(chan int) // 创建一个无缓冲区通道
-    ch2 := make(chan int)
-
-    // 开启 goroutine将0~100的数发送到 ch1中
-    go counter(ch1)
-
-    // 开启 goroutine将该数字的平方发送到 ch2中
-    go squarer(ch2, ch1)
-
-    printer(ch2)
-
-}
-</code></pre>
-<h4 id="channel-总结"><a href="#channel-总结" class="headerlink" title="channel 总结"></a>channel 总结</h4><div class="table-container">
-<table>
-<thead>
-<tr>
-<th>channel</th>
-<th>nil</th>
-<th>非空</th>
-<th>空</th>
-<th>满</th>
-<th>非满</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>接受</td>
-<td><font color="orange">阻塞</font></td>
-<td>接收值</td>
-<td><font color="orange">阻塞</font></td>
-<td>接收值</td>
-<td>接收值</td>
-</tr>
-<tr>
-<td>发送</td>
-<td><font color="orange">阻塞</font></td>
-<td>发送值</td>
-<td>发送值</td>
-<td><font color="orange">阻塞</font></td>
-<td>发送值</td>
-</tr>
-<tr>
-<td>关闭</td>
-<td><font color="red">panic</font></td>
-<td>关闭成功，读完数据后返回零值</td>
-<td>关闭成功，返回零值</td>
-<td>关闭成功，读完数据后返回零值</td>
-<td>关闭成功，读完数据后返回零值</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://chai2010.cn/advanced-go-programming-book/ch1-basic/ch1-05-mem.html" target="_blank" rel="noopener">https://chai2010.cn/advanced-go-programming-book/ch1-basic/ch1-05-mem.html</a><br>[2] <a href="https://www.liwenzhou.com/posts/Go/14_concurrence/#autoid-1-1-0" target="_blank" rel="noopener">https://www.liwenzhou.com/posts/Go/14_concurrence/#autoid-1-1-0</a></p>
+<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
+<ul>
+<li><strong>Passive Monitoring （Asynchronous）</strong></li>
+</ul>
+<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
 ]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
       <tags>
-        <tag>go</tag>
+        <tag>论文解读</tag>
+        <tag>虚拟化安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Information theoretic framework</title>
+    <url>/2021/03/15/Information-theoretic-framework/</url>
+    <content><![CDATA[<h2 id="四条公理"><a href="#四条公理" class="headerlink" title="四条公理"></a>四条公理</h2><h2 id="两种模型"><a href="#两种模型" class="headerlink" title="两种模型"></a>两种模型</h2>]]></content>
+      <categories>
+        <category>paper</category>
+        <category>JSAC</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Protocol</tag>
       </tags>
   </entry>
   <entry>
@@ -1871,28 +1637,6 @@ sudo make && make install
       <tags>
         <tag>lab</tag>
         <tag>OS Memory</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
-    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
-    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
-<ul>
-<li><strong>Active Monitoring（Synchronous）</strong></li>
-</ul>
-<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
-<ul>
-<li><strong>Passive Monitoring （Asynchronous）</strong></li>
-</ul>
-<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>虚拟化安全</tag>
       </tags>
   </entry>
   <entry>
@@ -2066,54 +1810,10 @@ in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
       </tags>
   </entry>
   <entry>
-    <title>Google Technology</title>
-    <url>/2020/11/23/Google-Technology/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/gfs-sosp2003.pdf" target="_blank" rel="noopener">GFS</a> <a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf" target="_blank" rel="noopener">MapReduce</a> <a href="https://storage.googleapis.com/pub-tools-public-publication-data/pdf/68a74a85e1662fe02ff3967497f31fda7f32225c.pdf" target="_blank" rel="noopener">Bigtable</a> <a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/spanner-osdi2012.pdf" target="_blank" rel="noopener">Spanner</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">google</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">分布式文件系统、数据存储系统等技术</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-</tr>
-</tbody>
-</table>
-</div>
+    <title>MuonTrap-Preventing Cross-Domain Spectre-Like</title>
+    <url>/2021/03/15/MuonTrap-Preventing-Cross-Domain-Spectre-Like/</url>
+    <content><![CDATA[<p>清华安全公众号推荐</p>
 ]]></content>
-      <categories>
-        <category>paper</category>
-        <category>SOSP</category>
-        <category>OSDI</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-      </tags>
   </entry>
   <entry>
     <title>Operating Systems</title>
@@ -2122,12 +1822,6 @@ in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
       <tags>
         <tag>读书笔记</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>MuonTrap-Preventing Cross-Domain Spectre-Like</title>
-    <url>/2021/03/15/MuonTrap-Preventing-Cross-Domain-Spectre-Like/</url>
-    <content><![CDATA[<p>清华安全公众号推荐</p>
-]]></content>
   </entry>
   <entry>
     <title>PCA图像压缩</title>
@@ -2736,67 +2430,14 @@ func main()  {
 <p>[3] <a href="https://smallnest.gitbooks.io/go-rpc-programming-guide/content/part1/client.html" target="_blank" rel="noopener">https://smallnest.gitbooks.io/go-rpc-programming-guide/content/part1/client.html</a></p>
 ]]></content>
       <tags>
-        <tag>go</tag>
         <tag>RPC</tag>
+        <tag>go</tag>
       </tags>
   </entry>
   <entry>
     <title>SOSP-Progress</title>
     <url>/2021/02/18/SOSP-Progress/</url>
     <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>SP&#39;15 Last-Level Cache Side-Channel Attacks are Practical</title>
-    <url>/2020/05/18/SP-15-Last-Level-Cache-Side-Channel-Attacks-are-Practical/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://mykrobin.github.io/files/docs/CSCA-004-SP2015.pdf" target="_blank" rel="noopener">Last Level Cache Side Channel Attacks are Practical</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Department of Electrical Engineering, Princeton University</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">side channel attacks</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">security cross VM</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文详细地讲解了跨虚拟机的侧信道攻击</td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>side channel attack</tag>
-        <tag>cross VM</tag>
-        <tag>last level cache</tag>
-      </tags>
   </entry>
   <entry>
     <title>SecVisor</title>
@@ -3223,6 +2864,59 @@ int main(void)
       </tags>
   </entry>
   <entry>
+    <title>SP&#39;15 Last-Level Cache Side-Channel Attacks are Practical</title>
+    <url>/2020/05/18/SP-15-Last-Level-Cache-Side-Channel-Attacks-are-Practical/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://mykrobin.github.io/files/docs/CSCA-004-SP2015.pdf" target="_blank" rel="noopener">Last Level Cache Side Channel Attacks are Practical</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Department of Electrical Engineering, Princeton University</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">side channel attacks</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">security cross VM</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文详细地讲解了跨虚拟机的侧信道攻击</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>side channel attack</tag>
+        <tag>cross VM</tag>
+        <tag>last level cache</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Software ROT</title>
     <url>/2020/12/02/Software-ROT/</url>
     <content><![CDATA[<div class="table-container">
@@ -3272,6 +2966,11 @@ int main(void)
       </tags>
   </entry>
   <entry>
+    <title>Systematic Review on FHE</title>
+    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>TPM overview</title>
     <url>/2020/11/07/TPM-overview/</url>
     <content><![CDATA[<h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>[1]  中不止包括TPM还有TOCTOU攻击讲解</p>
@@ -3296,11 +2995,6 @@ int main(void)
         <tag>essay</tag>
         <tag>英文</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Systematic Review on FHE</title>
-    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>The moment</title>
@@ -3465,6 +3159,57 @@ int main(void)
       <tags>
         <tag>论文解读</tag>
         <tag>encrypt</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Transient Execution Attacks</title>
+    <url>/2020/12/30/Transient-Execution-Attacks/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.cs.princeton.edu/courses/archive/spr06/cos592/bib/pioneer-seshadri-sosp05.pdf" target="_blank" rel="noopener">Pioneer</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">CMU/CyLab</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">one-on-one 方式检测内存信息是否有差别</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">安全检测</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">通过one-on-one 的方法对非可信主机进行检测，从而构造出一个可信的执行环境。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>瞬时攻击</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>OSDI</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -3717,6 +3462,312 @@ reboot
         <tag>Xen log</tag>
         <tag>Linux</tag>
         <tag>Debian</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Language-go-goroutine</title>
+    <url>/2020/12/03/Language-go-goroutine/</url>
+    <content><![CDATA[<h3 id="Goroutine-和-系统线程"><a href="#Goroutine-和-系统线程" class="headerlink" title="Goroutine 和 系统线程"></a>Goroutine 和 系统线程</h3><p>​        Go语言的Goroutine之间是共享内存的。Goroutine是Go语言特有的并发体，是一种轻量级的线程，由go关键字启动。在真实的Go语言的实现中，goroutine和系统线程也<strong>不是等价</strong>的。尽管两者的区别实际上只是一个量的区别，但正是这个量变引发了Go语言并发编程质的飞跃。[1]</p>
+<p>​        首先，每个系统级线程都会有一个固定大小的栈（一般默认可能是2MB），这个栈主要用来保存函数递归调用时参数和局部变量。固定了栈的大小导致了两个问题：一是对于很多只需要很小的栈空间的线程来说是一个巨大的<strong>浪费</strong>，二是对于少数需要巨大栈空间的线程来说又面临<strong>栈溢出</strong>的风险。针对这两个问题的解决方案是：要么降低固定的栈大小，提升空间的利用率；要么增大栈的大小以允许更深的函数递归调用，但这两者是没法同时兼得的。相反，一个Goroutine会以一个很<strong>小的栈启动</strong>（可能是2KB或4KB），当遇到深度递归导致当前栈空间不足时，Goroutine会根据需要<strong>动态地伸缩</strong>栈的大小（主流实现中栈的<strong>最大值可达到1GB</strong>）。因为启动的<strong>代价很小</strong>，所以我们可以轻易地启动成千上万个Goroutine。</p>
+<p>​        Go的运行时还包含了其自己的调度器，这个调度器使用了一些技术手段，可以在n个操作系统线程上<strong>多工调度</strong>m个Goroutine。Go调度器的工作和内核的调度是相似的，但是这个调度器只关注单独的Go程序中的Goroutine。Goroutine采用的是<strong>半抢占式</strong>的协作调度，只有在当前Goroutine发生阻塞时才会导致调度；同时发生在用户态，调度器会根据具体函数只保存必要的寄存器，<strong>切换的代价</strong>要比系统线程<strong>低</strong>得多。运行时有一个<code>runtime.GOMAXPROCS</code>变量，用于控制当前运行正常非阻塞Goroutine的系统线程数目。</p>
+<p>​        在Go语言中启动一个Goroutine不仅和调用函数一样简单，而且Goroutine之间调度代价也很低，这些因素极大地促进了并发编程的流行和发展。</p>
+<h3 id="使用-goroutine"><a href="#使用-goroutine" class="headerlink" title="使用 goroutine"></a>使用 goroutine</h3><p>​        go 语言中使用 <code>goroutine</code> 只需要在调用的函数之前加上<code>go</code> 关键字，就可以为函数创建一个<code>goroutine</code>，一个<code>goroutine</code> 必须至少对应一个函数。</p>
+<h4 id="启动单个goroutine"><a href="#启动单个goroutine" class="headerlink" title="启动单个goroutine"></a>启动单个goroutine</h4><pre class=" language-lang-go"><code class="language-lang-go">// goroutine_1.go
+package main
+
+import "fmt"
+import "time"
+
+func hello()  {
+    fmt.Println("Hello, Goroutine!")
+}
+
+func main()  {
+    go hello()  // 启动另外一个goroutine去执行hello函数
+    fmt.Println("main goroutine done!")
+    time.Sleep(time.Second)
+}
+</code></pre>
+<p>​        在<code>goroutine_1.go</code>中，输出结果仅打印了<code>main goroutine done!</code>，而<code>hello()</code>函数中的结果没有输出，这是因为在程序启动时，Go程序就会为<code>main()</code>函数创建一个默认的主<code>goroutine</code>，当main()函数返回的时候该<code>goroutine</code>就结束了，所有在<code>main()</code>函数中启动的<code>goroutine</code>会一同结束，<code>main</code>函数所在的<code>goroutine</code>就像是权利的游戏中的夜王，其他的<code>goroutine</code>都是异鬼，夜王一死它转化的那些异鬼也就全部GG了 [2]。</p>
+<p>如果要打印<code>hello()</code>函数中的内容，就要让<code>main</code>函数等一等。</p>
+<pre class=" language-lang-go"><code class="language-lang-go">func main() {
+    go hello() // 启动另外一个goroutine去执行hello函数
+    fmt.Println("main goroutine done!")
+    time.Sleep(time.Second)
+}
+</code></pre>
+<p>​        这时会首先打印<code>main goroutine done!</code>是因为我们在创建新的goroutine的时候需要花费一些时间，而此时main函数所在的<code>goroutine</code>是继续执行的。</p>
+<h4 id="启动多个-goroutine"><a href="#启动多个-goroutine" class="headerlink" title="启动多个 goroutine"></a>启动多个 goroutine</h4><p>使用<code>sync.WaitGroup</code>来实现goroutine的同步，实现并发执行，<code>goroutine</code>的调度是随机的。</p>
+<pre class=" language-lang-go"><code class="language-lang-go">package main
+
+import "fmt"
+// import "time"
+import "sync"
+
+var wg sync.WaitGroup
+
+func hello(i int)  {
+    defer wg.Done()  // goroutine结束时登记 -1
+    fmt.Println("Hello, Goroutine!", i)
+}
+
+func main()  {
+
+    for i := 0; i < 10; i++ {
+        wg.Add(1) // 启动一个 goroutine 就 +1
+        go hello(i)
+        // fmt.Println("main loop : i = ", i)
+    }
+
+    wg.Wait()  // 等待所有登记的goroutine都结束
+
+}
+</code></pre>
+<h3 id="原子操作"><a href="#原子操作" class="headerlink" title="原子操作"></a>原子操作</h3><p>​        所谓的原子操作就是并发编程中“最小的且不可并行化”的操作。通常，如果多个并发体对同一个共享资源进行的操作是原子的话，那么同一时刻<strong>最多只能有一个</strong>并发体对该资源进行操作。从线程角度看，在当前线程修改共享资源期间，其它的线程是不能访问该资源的。原子操作对于多线程并发编程模型来说，不会发生有别于单线程的意外情况，共享资源的完整性可以得到保证。</p>
+<p>​        一般情况下，原子操作都是通过“互斥”访问来保证的，通常由特殊的CPU指令提供保护。当然，如果仅仅是想模拟下粗粒度的原子操作，我们可以借助于<code>sync.Mutex</code>来实现：</p>
+<pre class=" language-lang-go"><code class="language-lang-go">package main
+
+import (
+    "sync"
+    "fmt"
+)
+
+var total struct {
+    sync.Mutex
+    value int
+}
+
+func worker(wg *sync.WaitGroup)  {
+    defer wg.Done()
+
+    // fmt.Println("worker")
+
+    for i := 0; i < 10;  {
+        total.Lock()
+        total.value += 1
+        total.Unlock()
+        fmt.Println(total.value)
+        i++
+    }
+}
+
+func main()  {
+    var wg sync.WaitGroup
+    wg.Add(2)
+    go worker(&wg)
+    go worker(&wg)
+
+    wg.Wait()
+    // fmt.Println(total.value)
+}
+</code></pre>
+<h3 id="Channel"><a href="#Channel" class="headerlink" title="Channel"></a>Channel</h3><h4 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h4><h5 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h5><p><code>channel</code>是一种引用类型，声明方式为 <code>var 变量 chan 元素类型</code></p>
+<pre class=" language-lang-go"><code class="language-lang-go">var ch1 chan int   // 声明一个传递整型的通道
+var ch2 chan bool  // 声明一个传递布尔型的通道
+var ch3 chan []int // 声明一个传递int切片的通道
+</code></pre>
+<h5 id="创建channel"><a href="#创建channel" class="headerlink" title="创建channel"></a>创建channel</h5><p><code>channel</code>的缓冲大小是可选的，创建方式为 <code>make(chan 元素类型, [缓冲大小])</code></p>
+<pre class=" language-lang-go"><code class="language-lang-go">ch4 := make(chan int)
+ch5 := make(chan bool)
+ch6 := make(chan []int)
+</code></pre>
+<h5 id="channel-操作"><a href="#channel-操作" class="headerlink" title="channel 操作"></a>channel 操作</h5><p>通道的操作分为 send, receive, close 三种操作，发送和接受都使用<code>&lt;-</code> 符号</p>
+<p>创建一个缓冲大小为1的通道 <code>ch := make(chan int, 1)</code></p>
+<p><strong>send</strong>              <code>ch &lt;- 10</code>  // 把10发送到ch</p>
+<p><strong>receive</strong>          <code>x := &lt;- ch</code>  // 从ch 接受值赋给变量x</p>
+<p><strong>close</strong>              <code>close(ch)</code>     // 调用内置的<code>close</code> 函数关闭通道</p>
+<h4 id="创建有缓冲通道"><a href="#创建有缓冲通道" class="headerlink" title="创建有缓冲通道"></a>创建有缓冲通道</h4><pre class=" language-lang-go"><code class="language-lang-go">// goChannel_1.go
+func main()  {
+    ch := make(chan int, 1) // 创建一个容量为1 的有缓冲区通道
+    ch <- 10
+    fmt.Println("send success!")
+}
+</code></pre>
+<h4 id="创建无缓冲通道"><a href="#创建无缓冲通道" class="headerlink" title="创建无缓冲通道"></a>创建无缓冲通道</h4><pre class=" language-lang-go"><code class="language-lang-go">// goChannel_2.go
+
+package main
+
+import "fmt"
+
+func recv(c chan int)  {
+    ret := <-c
+    fmt.Println("receive success, ret = ", ret)
+}
+
+func main()  {
+    ch := make(chan int) // 创建一个无缓冲区通道
+    go recv(ch)
+    ch <- 10
+    fmt.Println("send success!")
+}
+</code></pre>
+<p>在对无缓冲通道进行操作时，如果像设置了缓冲大小的有缓冲方式对通道进行传递参数，会报错，因此，使用<code>goroutine</code>进行传递参数。</p>
+<h4 id="两通道之间传递参数"><a href="#两通道之间传递参数" class="headerlink" title="两通道之间传递参数"></a>两通道之间传递参数</h4><pre class=" language-lang-go"><code class="language-lang-go">// goChannel_3.go
+
+package main
+
+import "fmt"
+
+func main()  {
+    ch1 := make(chan int) // 创建一个无缓冲区通道
+    ch2 := make(chan int)
+
+    // 开启 goroutine将0~10的数发送到 ch1中
+    go func() {
+        for i := 0; i < 10; i++ {
+            ch1 <- i
+        }
+        close(ch1)
+    }()
+
+    // 开启 goroutine将该数字的平方发送到 ch2中
+    go func() {
+        for true {
+            i, ok := <- ch1  // 通道关闭后再取值，ok = false
+            if !ok {
+                break
+            }
+            ch2 <- i * i
+        }
+        close(ch2)
+    }()
+
+    // 在主goroutine 中接收ch2 值
+    for i:= range ch2 { // 通道关闭后会退出 循环
+        fmt.Println("ch2 = ",i)
+    }
+}
+</code></pre>
+<p>使用<code>for range</code>方式读取通道内数据</p>
+<pre class=" language-lang-go"><code class="language-lang-go">// goChannel_3plus.go
+
+package main
+
+import "fmt"
+
+func initValue(ch1 chan int)  {
+    for i := 0; i < 10; i++ {
+        ch1 <- i
+    }
+    close(ch1)
+}
+
+func square(ch2 chan int, ch1 chan int)  {
+
+    for true {
+        i, ok := <- ch1
+        if !ok {
+            break
+        }
+        ch2 <- i * i
+    }
+    close(ch2)
+}
+
+func main()  {
+    ch1 := make(chan int) // 创建一个无缓冲区通道
+    ch2 := make(chan int)
+
+    // 开启 goroutine将0~100的数发送到 ch1中
+    go initValue(ch1)
+
+    // 开启 goroutine将该数字的平方发送到 ch2中
+    go square(ch2, ch1)
+
+    // 在主goroutine 中接收ch2 值
+    for i:= range ch2 { // 通道关闭后会退出 循环
+        fmt.Println("ch2 = ",i)
+    }
+}
+</code></pre>
+<h4 id="单向通道"><a href="#单向通道" class="headerlink" title="单向通道"></a>单向通道</h4><ul>
+<li><code>chan&lt;- int</code>是一个只写单向通道（只能对其写入int类型值），可以对其执行发送操作但是不能执行接收操作；</li>
+<li><code>&lt;-chan int</code>是一个只读单向通道（只能从其读取int类型值），可以对其执行接收操作但是不能执行发送操作。</li>
+</ul>
+<pre class=" language-lang-go"><code class="language-lang-go">// goChannel_4.go
+
+package main
+
+import "fmt"
+
+func counter(out chan<- int)  {
+    for i := 0; i < 10; i++ {
+        out <- i
+    }
+    close(out)
+}
+
+func squarer(out chan<- int, in <-chan int)  {
+    for i := range in{
+        out <- i * i
+    }
+    close(out)
+}
+
+func printer(in <-chan int)  {
+    for i := range in{
+        fmt.Println(i)
+    }
+}
+
+func main()  {
+    ch1 := make(chan int) // 创建一个无缓冲区通道
+    ch2 := make(chan int)
+
+    // 开启 goroutine将0~100的数发送到 ch1中
+    go counter(ch1)
+
+    // 开启 goroutine将该数字的平方发送到 ch2中
+    go squarer(ch2, ch1)
+
+    printer(ch2)
+
+}
+</code></pre>
+<h4 id="channel-总结"><a href="#channel-总结" class="headerlink" title="channel 总结"></a>channel 总结</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>channel</th>
+<th>nil</th>
+<th>非空</th>
+<th>空</th>
+<th>满</th>
+<th>非满</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>接受</td>
+<td><font color="orange">阻塞</font></td>
+<td>接收值</td>
+<td><font color="orange">阻塞</font></td>
+<td>接收值</td>
+<td>接收值</td>
+</tr>
+<tr>
+<td>发送</td>
+<td><font color="orange">阻塞</font></td>
+<td>发送值</td>
+<td>发送值</td>
+<td><font color="orange">阻塞</font></td>
+<td>发送值</td>
+</tr>
+<tr>
+<td>关闭</td>
+<td><font color="red">panic</font></td>
+<td>关闭成功，读完数据后返回零值</td>
+<td>关闭成功，返回零值</td>
+<td>关闭成功，读完数据后返回零值</td>
+<td>关闭成功，读完数据后返回零值</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://chai2010.cn/advanced-go-programming-book/ch1-basic/ch1-05-mem.html" target="_blank" rel="noopener">https://chai2010.cn/advanced-go-programming-book/ch1-basic/ch1-05-mem.html</a><br>[2] <a href="https://www.liwenzhou.com/posts/Go/14_concurrence/#autoid-1-1-0" target="_blank" rel="noopener">https://www.liwenzhou.com/posts/Go/14_concurrence/#autoid-1-1-0</a></p>
+]]></content>
+      <tags>
+        <tag>go</tag>
       </tags>
   </entry>
   <entry>
@@ -4404,108 +4455,6 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
-    <title>RAMBleed Reading Bits in Memory Without Accessing Them</title>
-    <url>/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://rambleed.com/docs/20190603-rambleed-web.pdf" target="_blank" rel="noopener">RAMBleed Reading Bits in Memory Without Accessing Them</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">University of Michigan;Graz University of Technology;University of Adelaide and Data61</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">Rowhammer attack,Bit Flips</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">Microarchitecture attacks</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文利用DRAM中临位的比特反转(bit flips)所得到的信息，推断出内存中的数据项，并依次读取目标信息。</td>
-</tr>
-<tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">扩展信息</td>
-<td style="text-align:center"><a href="https://rambleed.com/" target="_blank" rel="noopener">RAMBleed</a></td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="Rowhammer-Attack"><a href="#Rowhammer-Attack" class="headerlink" title="Rowhammer Attack"></a>Rowhammer Attack</h3><p>&emsp;&emsp;Rowhammer比特翻转攻击是指利用临近内存单元之间电子的互相影响，在足够多的访问次数后让某个单元的值从1变成0，反之亦然。这种攻击可以在不访问目标内存区域的前提下使其产生数据错误。 这次的攻击与操作系统和软件无关，纯粹是硬件上的漏洞导致的。</p>
-<p>&emsp;&emsp;这是个特别针对Memory的攻击技术，但不是缓冲区破坏或溢出攻击。一般的计算机Memory介质中，每个存储单元（晶体管+电容器）存放1bit数据，这个比特位要么是0，要么是1——存储单元中充满电子表示1，清空表示0。内存就是由上亿这样的存储单元构成的，数据也因此得以存储。</p>
-<p>&emsp;&emsp;不过电容器会泄露，一个电容器充满电子后，只需要几毫秒就会泄露殆尽。这就要求CPU（内存控制器）对电容进行充电，让“1”这个值能够保持住。整个过程是由内存控制器先读取电容器中的值，然后再把数据写回去。这种刷新操作，每秒会执行几千次。</p>
-<p>&emsp;&emsp;内存容量正在大幅度上涨，所以存储比特位的电容器也就越来越小，排列越来越近。要防止相邻的电容之间相互干扰，难度也就变得更大。如果能够快速、反复访问一排电容，相邻行的电容更容易产生干扰错误和所谓的“比特位翻转”，也就是0变成1。</p>
-<p>&emsp;&emsp;其实正常的数据读写一般是不会发生比特位翻转的，可是如果对某些行进行<strong>反复读写</strong>，问题就有可能产生。2014年卡内基梅陇大学的研究人员层发表过一篇论文，题为《无访问情况下的内存比特位翻转——DRAM干扰行错误的试验研究》，其本质是通过机器码指令CLFUSH或Cache Line Flush，强制进行这种比特位的读取和更新。据说利用这种方式，可引起大量比特位翻转。</p>
-<p>&emsp;&emsp;利用比特位翻转，很多事情都可以做，比如说执行未经授权的代码。这就是所谓的Rowhammer。这是一种颠覆人类对安全认知的攻击技术，软件层面几乎解决无望。先前已经有研究人员演示，如何用Rowhammer来进行提权，以及打破安全沙盒。</p>
-<p>&emsp;&emsp;不过看原理就知道，这种攻击实在有够理想化，存在诸多不确定性，因为攻击者根本无法精准控制比特位如何翻转。比如说，这种攻击对数据所在的内存位置首先就有要求，这样才能实施内存翻转：但敏感数据存储在这些位置的几率可能并不算高。</p>
-<h3 id="RAMBleed概况"><a href="#RAMBleed概况" class="headerlink" title="RAMBleed概况"></a>RAMBleed概况</h3><p>&emsp;&emsp;该攻击<strong>基于位翻转漏洞Rowhammer</strong>，可绕过ECC机制，允许黑客使用普通用户权限从OpenSSH服务器中提取签名密钥。黑客通过观察Rowhammer引发的位翻转，<strong>可推断出附近DRAM行中的值，</strong>进而读取其它进程中的物理内存。</p>
-<h3 id="获取物理地址"><a href="#获取物理地址" class="headerlink" title="获取物理地址"></a>获取物理地址</h3><p>&emsp;&emsp;该攻击的重点是获取到虚拟地址到物理地址之间的映射。</p>
-<h4 id="伙伴算法"><a href="#伙伴算法" class="headerlink" title="伙伴算法"></a>伙伴算法</h4><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/buddy-memory-allocation.jpg" width="500px" height="300px"></p>
-<p>首先我们假设我们一个内存块有1024K，当我们需要给A分配70K内存的时候，</p>
-<ol>
-<li>我们发现1024K的一半大于70K，然后我们就把1024K的内存分成两半，一半512K。</li>
-<li>然后我们发现512K的一半仍然大于70K，于是我们再把512K的内存再分成两半，一半是128K。</li>
-<li>此时，我们发现128K的一半小于70K，于是我们就分配为A分配128K的内存。</li>
-</ol>
-<p>&emsp;后面的，B，C，D都这样，而释放内存时，则会把相邻的块一步一步地合并起来（合并也必需按分裂的逆操作进行合并）。</p>
-<p>&emsp;&emsp;论文<a href="http://export.arxiv.org/pdf/1511.08756" target="_blank" rel="noopener">DRAMA</a>中提到只要获得了物理上连续的$2MiB$空间，采用反向工程即可获取低22位物理空间地址。</p>
-<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片13.jpg" width="600px" height="450px"></p>
-<p>&emsp;&emsp;基于Linux内存的伙伴分配算法，分配空间大小为$4KiB*2^N$，此处取$N = 10$,即分配$4MiB$空间，并将此 $4MiB$ 物理空间分裂为两个 $2MiB$ 的物理空间，通过$MMap$系统调用，消耗掉前面低于$2MiB$的存储空间，最后剩余的空间一定是一个连续的 $2MiB$ 的物理空间。</p>
-<h3 id="内存风水逆转"><a href="#内存风水逆转" class="headerlink" title="内存风水逆转"></a>内存风水逆转</h3><p>&emsp;&emsp;针对Rowhammer的内存位置限制，有人开发出一种名为 <a href="https://www.usenix.org/system/files/conference/usenixsecurity16/sec16_paper_razavi.pdf" target="_blank" rel="noopener">Flip Feng Shui</a>（风水翻转）的攻击技术，这本质上也是Rowhammer。这种攻击就是篡改deduplication操作——deduplication在云端主机中应用得很常见，这种技术可让两个或者更多虚拟主机共享特定的数据块，起到节约内存资源的作用。</p>
-<p>&emsp;&emsp;Flip Feng Shui在<strong>物理内存</strong>上做手脚，可致加密密钥和其他敏感数据存储到<strong>内存特定的位置</strong>——这些位置就很容易受Rowhammer的影响了。所以才叫风水翻转，就是让数据在内存中的“风水”位置变更好，Rowhammer攻击变得更可靠。</p>
-<h3 id="RAMBleed攻击"><a href="#RAMBleed攻击" class="headerlink" title="RAMBleed攻击"></a>RAMBleed攻击</h3><h4 id="比特翻转"><a href="#比特翻转" class="headerlink" title="比特翻转"></a>比特翻转</h4><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片11.jpg" width="600px" height="450px"></p>
-<p>&emsp;&emsp;本文提到，在$Row1$与$Row3$加载相同的目标内容，并对其进行锤击操作，即Rowhammer攻击，则会使得$Row2$中对应的比特位发生比特翻转。经过试验证明，当$Row3-Row2-Row1$ 存储内容为$0-1-0$时，此时在Rowhammer攻击下很有可能发生比特翻转，而当$Row3-Row2-Row1$ 存储内容为$1-1-1$时，此时在Rowhammer攻击下发生比特翻转的可能性很小，因此，基于两种概率大小的不同，可以判断出目标信息中存储的绝大多数信息内容。其中$Row2$中存储的是已知内容。</p>
-<h4 id="Frame-Feng-Shui"><a href="#Frame-Feng-Shui" class="headerlink" title="Frame Feng Shui"></a>Frame Feng Shui</h4><p>&emsp;&emsp;上文提到，Feng Shui可以将目标信息加载到指定的存储空间中。如下图所示，红色部分存储目标信息，$A0,A1,A2$ 存储攻击者内容，因此根据比特翻转是否发生，则<strong>很有可能</strong>推断出指定比特位存储的信息。</p>
-<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片17.jpg" width="600px" height="450px"></p>
-<h4 id="RAMBleed-on-ECC-Memory"><a href="#RAMBleed-on-ECC-Memory" class="headerlink" title="RAMBleed on ECC Memory"></a>RAMBleed on ECC Memory</h4><p>&emsp;&emsp;ECC Memory指的是Error-Correcting Code Memory，DRAM的纠错机制。</p>
-<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片21.jpg" width="600px" height="450px"></p>
-<p>&emsp;&emsp;在<a href="https://www.computer.org/csdl/pds/api/csdl/proceedings/download-article/19skfwyNp5e/pdf?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjc2RsX2FwaSIsImF1ZCI6ImNzZGxfYXBpX2Rvd25sb2FkX3Rva2VuIiwic3ViIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImVtYWlsIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImV4cCI6MTU5MjMxODY5OX0.uN4RLcw4bjEbBeqINhfDoXY7dyJM2-GWgE90zZJt2y4" target="_blank" rel="noopener">ECCPloit</a>这篇论文中指出，比特纠错所产生的时间延迟是十分明显的，这种情况下可根据纠错产生的时间延迟判断是否发生了比特翻转。</p>
-<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片19.jpg" width="600px" height="450px"></p>
-<p>&emsp;&emsp;相对来说，采用了ECC纠错的方式，获取到的结果更可信，而没有采取比特纠错方式获取的结果是在一定程度上可信的。本文通过实验测得，通过Feng Shui方式，成功将目标信息加载到指定存储位置也是有一定概率的，文中提到这个概率在83%， 通过Rowhammer攻击获取到比特翻转成功的概率为82%，因此，最终获取到目标信息的量在68%。由于此攻击针对的是秘钥信息，获取的秘钥信息量在27%以上，就可成功破解，因此，68%的信息量足以支持对秘钥的破译。综上，此方式是行得通的。</p>
-<p>&emsp;&emsp;本文的目的，旨在阐述这种攻击方式的行之有效，因此并未对其产生的额外代价、时间成本考虑在内。</p>
-<p>&emsp;&emsp;研究人员已向英特尔、AMD、OpenSSH、微软、苹果和红帽通报了调查结果，本论文发表在2020年5月举行的第41届IEEE安全和隐私研讨会。</p>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://blog.csdn.net/wojiuguowei/article/details/79377228" target="_blank" rel="noopener">伙伴分配器的一个极简实现</a></p>
-<p>[2] <a href="https://www.freebuf.com/column/133871.html" target="_blank" rel="noopener">神乎其神的Rowhammer</a></p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>System Security</tag>
-        <tag>Rowhammer attack</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>云虚拟化安全攻防实践</title>
-    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
-<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
-<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>virtualization overview</title>
     <url>/2020/11/27/virtualization-overview/</url>
     <content><![CDATA[<h3 id="虚拟化技术概览"><a href="#虚拟化技术概览" class="headerlink" title="虚拟化技术概览"></a>虚拟化技术概览</h3><p>注：本文主要是整理了看过的博客以及部分论文。</p>
@@ -4650,6 +4599,108 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
+    <title>RAMBleed Reading Bits in Memory Without Accessing Them</title>
+    <url>/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://rambleed.com/docs/20190603-rambleed-web.pdf" target="_blank" rel="noopener">RAMBleed Reading Bits in Memory Without Accessing Them</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">University of Michigan;Graz University of Technology;University of Adelaide and Data61</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">Rowhammer attack,Bit Flips</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">Microarchitecture attacks</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文利用DRAM中临位的比特反转(bit flips)所得到的信息，推断出内存中的数据项，并依次读取目标信息。</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">扩展信息</td>
+<td style="text-align:center"><a href="https://rambleed.com/" target="_blank" rel="noopener">RAMBleed</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Rowhammer-Attack"><a href="#Rowhammer-Attack" class="headerlink" title="Rowhammer Attack"></a>Rowhammer Attack</h3><p>&emsp;&emsp;Rowhammer比特翻转攻击是指利用临近内存单元之间电子的互相影响，在足够多的访问次数后让某个单元的值从1变成0，反之亦然。这种攻击可以在不访问目标内存区域的前提下使其产生数据错误。 这次的攻击与操作系统和软件无关，纯粹是硬件上的漏洞导致的。</p>
+<p>&emsp;&emsp;这是个特别针对Memory的攻击技术，但不是缓冲区破坏或溢出攻击。一般的计算机Memory介质中，每个存储单元（晶体管+电容器）存放1bit数据，这个比特位要么是0，要么是1——存储单元中充满电子表示1，清空表示0。内存就是由上亿这样的存储单元构成的，数据也因此得以存储。</p>
+<p>&emsp;&emsp;不过电容器会泄露，一个电容器充满电子后，只需要几毫秒就会泄露殆尽。这就要求CPU（内存控制器）对电容进行充电，让“1”这个值能够保持住。整个过程是由内存控制器先读取电容器中的值，然后再把数据写回去。这种刷新操作，每秒会执行几千次。</p>
+<p>&emsp;&emsp;内存容量正在大幅度上涨，所以存储比特位的电容器也就越来越小，排列越来越近。要防止相邻的电容之间相互干扰，难度也就变得更大。如果能够快速、反复访问一排电容，相邻行的电容更容易产生干扰错误和所谓的“比特位翻转”，也就是0变成1。</p>
+<p>&emsp;&emsp;其实正常的数据读写一般是不会发生比特位翻转的，可是如果对某些行进行<strong>反复读写</strong>，问题就有可能产生。2014年卡内基梅陇大学的研究人员层发表过一篇论文，题为《无访问情况下的内存比特位翻转——DRAM干扰行错误的试验研究》，其本质是通过机器码指令CLFUSH或Cache Line Flush，强制进行这种比特位的读取和更新。据说利用这种方式，可引起大量比特位翻转。</p>
+<p>&emsp;&emsp;利用比特位翻转，很多事情都可以做，比如说执行未经授权的代码。这就是所谓的Rowhammer。这是一种颠覆人类对安全认知的攻击技术，软件层面几乎解决无望。先前已经有研究人员演示，如何用Rowhammer来进行提权，以及打破安全沙盒。</p>
+<p>&emsp;&emsp;不过看原理就知道，这种攻击实在有够理想化，存在诸多不确定性，因为攻击者根本无法精准控制比特位如何翻转。比如说，这种攻击对数据所在的内存位置首先就有要求，这样才能实施内存翻转：但敏感数据存储在这些位置的几率可能并不算高。</p>
+<h3 id="RAMBleed概况"><a href="#RAMBleed概况" class="headerlink" title="RAMBleed概况"></a>RAMBleed概况</h3><p>&emsp;&emsp;该攻击<strong>基于位翻转漏洞Rowhammer</strong>，可绕过ECC机制，允许黑客使用普通用户权限从OpenSSH服务器中提取签名密钥。黑客通过观察Rowhammer引发的位翻转，<strong>可推断出附近DRAM行中的值，</strong>进而读取其它进程中的物理内存。</p>
+<h3 id="获取物理地址"><a href="#获取物理地址" class="headerlink" title="获取物理地址"></a>获取物理地址</h3><p>&emsp;&emsp;该攻击的重点是获取到虚拟地址到物理地址之间的映射。</p>
+<h4 id="伙伴算法"><a href="#伙伴算法" class="headerlink" title="伙伴算法"></a>伙伴算法</h4><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/buddy-memory-allocation.jpg" width="500px" height="300px"></p>
+<p>首先我们假设我们一个内存块有1024K，当我们需要给A分配70K内存的时候，</p>
+<ol>
+<li>我们发现1024K的一半大于70K，然后我们就把1024K的内存分成两半，一半512K。</li>
+<li>然后我们发现512K的一半仍然大于70K，于是我们再把512K的内存再分成两半，一半是128K。</li>
+<li>此时，我们发现128K的一半小于70K，于是我们就分配为A分配128K的内存。</li>
+</ol>
+<p>&emsp;后面的，B，C，D都这样，而释放内存时，则会把相邻的块一步一步地合并起来（合并也必需按分裂的逆操作进行合并）。</p>
+<p>&emsp;&emsp;论文<a href="http://export.arxiv.org/pdf/1511.08756" target="_blank" rel="noopener">DRAMA</a>中提到只要获得了物理上连续的$2MiB$空间，采用反向工程即可获取低22位物理空间地址。</p>
+<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片13.jpg" width="600px" height="450px"></p>
+<p>&emsp;&emsp;基于Linux内存的伙伴分配算法，分配空间大小为$4KiB*2^N$，此处取$N = 10$,即分配$4MiB$空间，并将此 $4MiB$ 物理空间分裂为两个 $2MiB$ 的物理空间，通过$MMap$系统调用，消耗掉前面低于$2MiB$的存储空间，最后剩余的空间一定是一个连续的 $2MiB$ 的物理空间。</p>
+<h3 id="内存风水逆转"><a href="#内存风水逆转" class="headerlink" title="内存风水逆转"></a>内存风水逆转</h3><p>&emsp;&emsp;针对Rowhammer的内存位置限制，有人开发出一种名为 <a href="https://www.usenix.org/system/files/conference/usenixsecurity16/sec16_paper_razavi.pdf" target="_blank" rel="noopener">Flip Feng Shui</a>（风水翻转）的攻击技术，这本质上也是Rowhammer。这种攻击就是篡改deduplication操作——deduplication在云端主机中应用得很常见，这种技术可让两个或者更多虚拟主机共享特定的数据块，起到节约内存资源的作用。</p>
+<p>&emsp;&emsp;Flip Feng Shui在<strong>物理内存</strong>上做手脚，可致加密密钥和其他敏感数据存储到<strong>内存特定的位置</strong>——这些位置就很容易受Rowhammer的影响了。所以才叫风水翻转，就是让数据在内存中的“风水”位置变更好，Rowhammer攻击变得更可靠。</p>
+<h3 id="RAMBleed攻击"><a href="#RAMBleed攻击" class="headerlink" title="RAMBleed攻击"></a>RAMBleed攻击</h3><h4 id="比特翻转"><a href="#比特翻转" class="headerlink" title="比特翻转"></a>比特翻转</h4><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片11.jpg" width="600px" height="450px"></p>
+<p>&emsp;&emsp;本文提到，在$Row1$与$Row3$加载相同的目标内容，并对其进行锤击操作，即Rowhammer攻击，则会使得$Row2$中对应的比特位发生比特翻转。经过试验证明，当$Row3-Row2-Row1$ 存储内容为$0-1-0$时，此时在Rowhammer攻击下很有可能发生比特翻转，而当$Row3-Row2-Row1$ 存储内容为$1-1-1$时，此时在Rowhammer攻击下发生比特翻转的可能性很小，因此，基于两种概率大小的不同，可以判断出目标信息中存储的绝大多数信息内容。其中$Row2$中存储的是已知内容。</p>
+<h4 id="Frame-Feng-Shui"><a href="#Frame-Feng-Shui" class="headerlink" title="Frame Feng Shui"></a>Frame Feng Shui</h4><p>&emsp;&emsp;上文提到，Feng Shui可以将目标信息加载到指定的存储空间中。如下图所示，红色部分存储目标信息，$A0,A1,A2$ 存储攻击者内容，因此根据比特翻转是否发生，则<strong>很有可能</strong>推断出指定比特位存储的信息。</p>
+<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片17.jpg" width="600px" height="450px"></p>
+<h4 id="RAMBleed-on-ECC-Memory"><a href="#RAMBleed-on-ECC-Memory" class="headerlink" title="RAMBleed on ECC Memory"></a>RAMBleed on ECC Memory</h4><p>&emsp;&emsp;ECC Memory指的是Error-Correcting Code Memory，DRAM的纠错机制。</p>
+<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片21.jpg" width="600px" height="450px"></p>
+<p>&emsp;&emsp;在<a href="https://www.computer.org/csdl/pds/api/csdl/proceedings/download-article/19skfwyNp5e/pdf?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjc2RsX2FwaSIsImF1ZCI6ImNzZGxfYXBpX2Rvd25sb2FkX3Rva2VuIiwic3ViIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImVtYWlsIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImV4cCI6MTU5MjMxODY5OX0.uN4RLcw4bjEbBeqINhfDoXY7dyJM2-GWgE90zZJt2y4" target="_blank" rel="noopener">ECCPloit</a>这篇论文中指出，比特纠错所产生的时间延迟是十分明显的，这种情况下可根据纠错产生的时间延迟判断是否发生了比特翻转。</p>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片19.jpg" width="600px" height="450px"></p>
+<p>&emsp;&emsp;相对来说，采用了ECC纠错的方式，获取到的结果更可信，而没有采取比特纠错方式获取的结果是在一定程度上可信的。本文通过实验测得，通过Feng Shui方式，成功将目标信息加载到指定存储位置也是有一定概率的，文中提到这个概率在83%， 通过Rowhammer攻击获取到比特翻转成功的概率为82%，因此，最终获取到目标信息的量在68%。由于此攻击针对的是秘钥信息，获取的秘钥信息量在27%以上，就可成功破解，因此，68%的信息量足以支持对秘钥的破译。综上，此方式是行得通的。</p>
+<p>&emsp;&emsp;本文的目的，旨在阐述这种攻击方式的行之有效，因此并未对其产生的额外代价、时间成本考虑在内。</p>
+<p>&emsp;&emsp;研究人员已向英特尔、AMD、OpenSSH、微软、苹果和红帽通报了调查结果，本论文发表在2020年5月举行的第41届IEEE安全和隐私研讨会。</p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://blog.csdn.net/wojiuguowei/article/details/79377228" target="_blank" rel="noopener">伙伴分配器的一个极简实现</a></p>
+<p>[2] <a href="https://www.freebuf.com/column/133871.html" target="_blank" rel="noopener">神乎其神的Rowhammer</a></p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>System Security</tag>
+        <tag>Rowhammer attack</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>云虚拟化安全攻防实践</title>
+    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
+<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
+<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
+      <tags>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>从硬件层认识计算机</title>
     <url>/2020/11/23/%E4%BB%8E%E7%A1%AC%E4%BB%B6%E5%B1%82%E8%AE%A4%E8%AF%86%E8%AE%A1%E7%AE%97%E6%9C%BA/</url>
     <content><![CDATA[]]></content>
@@ -4754,21 +4805,6 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
-    <title>泉城济南</title>
-    <url>/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/</url>
-    <content><![CDATA[<h3 id="泉城济南"><a href="#泉城济南" class="headerlink" title="泉城济南"></a>泉城济南</h3><p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-7.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-8.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-2.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-3.jpg" width="500px" height="350px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-4.jpg" width="500px" height="390px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-5.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-6.jpg" width="500px" height="400px"></p>
-]]></content>
-      <tags>
-        <tag>picture</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>求最大间隔分离超平面</title>
     <url>/2020/04/20/%E6%B1%82%E6%9C%80%E5%A4%A7%E9%97%B4%E9%9A%94%E5%88%86%E7%A6%BB%E8%B6%85%E5%B9%B3%E9%9D%A2/</url>
     <content><![CDATA[<p>在利用向量机进行最大间隔分离超平面和分类决策函数的求解时，解题过程如下</p>
@@ -4816,6 +4852,21 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       <tags>
         <tag>homework</tag>
         <tag>Machine Learning</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>泉城济南</title>
+    <url>/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/</url>
+    <content><![CDATA[<h3 id="泉城济南"><a href="#泉城济南" class="headerlink" title="泉城济南"></a>泉城济南</h3><p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-7.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-8.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-2.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-3.jpg" width="500px" height="350px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-4.jpg" width="500px" height="390px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-5.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-6.jpg" width="500px" height="400px"></p>
+]]></content>
+      <tags>
+        <tag>picture</tag>
       </tags>
   </entry>
   <entry>
@@ -4887,57 +4938,6 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
 <script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
       <tags>
         <tag>essay</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Transient Execution Attacks</title>
-    <url>/2020/12/30/Transient-Execution-Attacks/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.cs.princeton.edu/courses/archive/spr06/cos592/bib/pioneer-seshadri-sosp05.pdf" target="_blank" rel="noopener">Pioneer</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">CMU/CyLab</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">one-on-one 方式检测内存信息是否有差别</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">安全检测</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">通过one-on-one 的方法对非可信主机进行检测，从而构造出一个可信的执行环境。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>瞬时攻击</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>OSDI</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
       </tags>
   </entry>
 </search>
