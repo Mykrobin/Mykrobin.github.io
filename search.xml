@@ -4940,4 +4940,9 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
         <tag>essay</tag>
       </tags>
   </entry>
+  <entry>
+    <title>GiantVM</title>
+    <url>/2021/04/26/GiantVM/</url>
+    <content><![CDATA[]]></content>
+  </entry>
 </search>
