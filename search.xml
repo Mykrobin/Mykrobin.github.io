@@ -3829,6 +3829,7 @@ reboot
 #include <xenctrl.h>
 #include <xen/sys/privcmd.h>
 #include <string.h>
+
 int main()
 {
         int fd, ret;
@@ -4790,13 +4791,14 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
 <p>贝叶斯网络中的三种独立性[2]</p>
 <blockquote>
 <ol>
-<li><p>head-to-head</p>
-</li>
-<li><p>head-to-tail</p>
-</li>
+<li>head-to-head</li>
+<li>head-to-tail</li>
 <li>tail-to-tail</li>
 </ol>
 </blockquote>
+<p>访问者地图：</p>
+<pre class=" language-lang-js"><code class="language-lang-js"><script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=9nibrzSssCrLxZLVOV0AmZ9oXduSzwtvr83E1sae0y4&cl=ffffff&w=a"></script>
+</code></pre>
 <h1 id="References"><a href="#References" class="headerlink" title="References"></a>References</h1><p>[1] <a href="https://www.cnblogs.com/leoo2sk/archive/2010/09/18/bayes-network.html" target="_blank" rel="noopener">https://www.cnblogs.com/leoo2sk/archive/2010/09/18/bayes-network.html</a></p>
 <p>[2] <a href="https://zhuanlan.zhihu.com/p/30139208" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/30139208</a></p>
 ]]></content>
