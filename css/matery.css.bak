@@ -44,7 +44,7 @@ body {
     /* background-color: #eaeaea;*/
     background: linear-gradient(60deg, rgba(255,165,155,0.5), rgba(0,228,255,0.3));
     background-attachment: fixed;
-    /*cursor:url(/cursor.svg),auto;*/
+    cursor:url(/cursor.svg),auto;
     margin: 0;
     color: #7F95D1;
 }
