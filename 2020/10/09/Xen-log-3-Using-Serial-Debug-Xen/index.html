@@ -4,7 +4,7 @@
 
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="keywords" content="Xen log 3 Using Serial Debug Xen, MYKRobin&#39;S BLOG">
+    <meta name="keywords" content="Xen log 3 Using Serial Debug Xen, MYKRobin&#39;s Realm">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Xen log 3 Using Serial Debug Xen | MYKRobin&#39;S BLOG</title>
+    <title>Xen log 3 Using Serial Debug Xen | MYKRobin&#39;s Realm</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -29,7 +29,11 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 4.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<meta name="generator" content="Hexo 4.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
 
 
 <body>
@@ -41,7 +45,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">MYKRobin&#39;S BLOG</span>
+                    <span class="logo-span">MYKRobin&#39;s Realm</span>
                 </a>
             </div>
             
@@ -213,7 +217,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">MYKRobin&#39;S BLOG</div>
+        <div class="logo-name">MYKRobin&#39;s Realm</div>
         <div class="logo-desc">
             
             Never really desperate, only the lost of the soul.
@@ -569,7 +573,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    908
+                    902
                 </div>
                 
 
@@ -637,10 +641,10 @@ ttyS5 at I/O 0xc0c8 (irq = 16, base_baud = 115200) is a XR16850
 <h4 id="测试串口通讯情况"><a href="#测试串口通讯情况" class="headerlink" title="测试串口通讯情况"></a>测试串口通讯情况</h4><p>在Xen设备的<code>minicom</code> 上设置默认的端口为<code>ttyS5</code> 看两台机器是否能够正常通讯，即，在读取设备输入，在Xen设备上可以输出相应内容，反之亦然。</p>
 <h4 id="修改Grub文件"><a href="#修改Grub文件" class="headerlink" title="修改Grub文件"></a>修改Grub文件</h4><p>在<code>/etc/default/grub</code>文件中 添加如下内容</p>
 <pre><code class="lang-sh"># This can guarantee sync output when using `printk`
-GRUB_CMDLINE_XEN=&quot;loglvl=all guest_loglvl=all sync_console console_to_ring com1=115200,8n1,0x3080 console=com1,vga com0_mem=4096&quot;
+GRUB_CMDLINE_XEN="loglvl=all guest_loglvl=all sync_console console_to_ring com1=115200,8n1,0x3080 console=com1,vga com0_mem=4096"
 
-GRUB_CMDLINE_LINUX_DEFAULT=&quot;console=tty0 console=ttyS5,115200n8&quot;
-GRUB_CMDLINE_LINUX=&quot;console=hvc0 earlyprintk=xen&quot;
+GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS5,115200n8"
+GRUB_CMDLINE_LINUX="console=hvc0 earlyprintk=xen"
 </code></pre>
 <ul>
 <li><code>sync_console</code>: 保证输出是同步的，以防一些内容在xen crash之前打不出来</li>
@@ -1275,7 +1279,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">78.9k</span>&nbsp;字
+                class="white-color">78.3k</span>&nbsp;字
             
             
             

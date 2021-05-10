@@ -4,7 +4,7 @@
 
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="keywords" content="TimeCrypt, MYKRobin&#39;S BLOG">
+    <meta name="keywords" content="TimeCrypt, MYKRobin&#39;s Realm">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>TimeCrypt | MYKRobin&#39;S BLOG</title>
+    <title>TimeCrypt | MYKRobin&#39;s Realm</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -29,7 +29,11 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 4.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<meta name="generator" content="Hexo 4.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
 
 
 <body>
@@ -41,7 +45,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">MYKRobin&#39;S BLOG</span>
+                    <span class="logo-span">MYKRobin&#39;s Realm</span>
                 </a>
             </div>
             
@@ -213,7 +217,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">MYKRobin&#39;S BLOG</div>
+        <div class="logo-name">MYKRobin&#39;s Realm</div>
         <div class="logo-desc">
             
             Never really desperate, only the lost of the soul.
@@ -585,7 +589,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    12 Min
+                    11 Min
                 </div>
                 
 
@@ -653,7 +657,7 @@
 </tbody>
 </table>
 </div>
-<h3 id="研究背景"><a href="#研究背景" class="headerlink" title="研究背景"></a>研究背景</h3><p>&emsp; &emsp; 许多的设备都可以在云端存储一些时间序列信息，在云环境中，许多的服务都可以获取到这些时间序列信息，这是对用户隐私的一种侵犯。而且随着物联网的到来，更加速了这些数据的生成。目前，人们提高了对隐私数据的重视程度，致力于保护这些数据的机密性。</p>
+<h3 id="研究背景"><a href="#研究背景" class="headerlink" title="研究背景"></a>研究背景</h3><p>    许多的设备都可以在云端存储一些时间序列信息，在云环境中，许多的服务都可以获取到这些时间序列信息，这是对用户隐私的一种侵犯。而且随着物联网的到来，更加速了这些数据的生成。目前，人们提高了对隐私数据的重视程度，致力于保护这些数据的机密性。</p>
 <h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>本文是发表在NSDI‘20的一篇文章，目的是构建一个针对时序数据加密并且能够进行访问控制的系统。数据的加密与解密过程都存在与客户端，因此发送给服务器端（云平台）的数据都默认是加密的，数据加密防止了云平台对用户传输数据的窥探。</p>
 <h3 id="Background-Time-Series-Data"><a href="#Background-Time-Series-Data" class="headerlink" title="Background-Time Series Data"></a>Background-Time Series Data</h3><ol>
 <li><p>时间序列数据应用广泛：个人健康、农业、交通运输和智慧城市等</p>
@@ -668,7 +672,7 @@
 <p>b.通常这些时间数据由机器产生且是大量连续的，数据价值随着时间的推移递减，一般最近的数据要比较早的数据价值高，因此要对较早的数据进行聚合操作。</p>
 </li>
 </ol>
-<h3 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h3><p>&emsp; 许多的设备都可以在云端存储一些时间序列信息，在云环境中，许多的服务都可以获取到这些时间序列信息，这是对用户隐私的一种侵犯。而且随着物联网的到来，更加速了这些数据的生成。目前，人们提高了对隐私数据的重视程度，致力于保护这些数据的机密性。</p>
+<h3 id="Thread"><a href="#Thread" class="headerlink" title="Thread"></a>Thread</h3><p>  许多的设备都可以在云端存储一些时间序列信息，在云环境中，许多的服务都可以获取到这些时间序列信息，这是对用户隐私的一种侵犯。而且随着物联网的到来，更加速了这些数据的生成。目前，人们提高了对隐私数据的重视程度，致力于保护这些数据的机密性。</p>
 <h3 id="Related-Work"><a href="#Related-Work" class="headerlink" title="Related Work"></a>Related Work</h3><p>数据端到端的加密通常：不信任云供应商的安全性，因此在客户端对数据进行加密，传输密文到云中进行存储，客户端读取数据时进行解密。</p>
 <p>刚提到的是时间序列数据产生频率很高，数据量很大，它所需要的高吞吐低延时的查询，在对数据加密之后可以实现吗？</p>
 <h3 id="Challenge"><a href="#Challenge" class="headerlink" title="Challenge"></a>Challenge</h3><p>为了达到这个目的，本文面临的挑战是：数据的可扩展性以及与用户的交互性。</p>
@@ -719,10 +723,10 @@
 <p>[2] <a href="https://zh.wikipedia.org/wiki/同态加密" target="_blank" rel="noopener">https://zh.wikipedia.org/wiki/%E5%90%8C%E6%80%81%E5%8A%A0%E5%AF%86</a></p>
 <p>[3] <a href="https://www.zhihu.com/question/27645858/answer/37598506" target="_blank" rel="noopener">https://www.zhihu.com/question/27645858/answer/37598506</a></p>
 <blockquote id="fn_cassandra">
-<sup>cassandra</sup>. <strong>Apache Cassandra</strong>（社区内一般简称为C*）是一套开源分布式<a href="https://zh.wikipedia.org/wiki/NoSQL" target="_blank" rel="noopener">NoSQL</a>数据库系统。它最初由<a href="https://zh.wikipedia.org/wiki/Facebook" target="_blank" rel="noopener">Facebook</a>开发，用于改善电子邮件系统的搜索性能的简单格式数据，集<a href="https://zh.wikipedia.org/wiki/Google" target="_blank" rel="noopener">Google</a> <a href="https://zh.wikipedia.org/wiki/BigTable" target="_blank" rel="noopener">BigTable</a>的数据模型与<a href="https://zh.wikipedia.org/wiki/Amazon" target="_blank" rel="noopener">Amazon</a> <a href="https://zh.wikipedia.org/w/index.php?title=Dynamo&amp;action=edit&amp;redlink=1" target="_blank" rel="noopener">Dynamo</a>的完全分布式架构于一身。Facebook于2008将 Cassandra 开源，此后，由于Cassandra良好的<a href="https://zh.wikipedia.org/wiki/可扩展性" target="_blank" rel="noopener">可扩展性</a>和性能，被 Apple<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-1" target="_blank" rel="noopener">[1]</a>, Comcast<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-2" target="_blank" rel="noopener">[2]</a>,Instagram<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-3" target="_blank" rel="noopener">[3]</a>, Spotify<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-4" target="_blank" rel="noopener">[4]</a>, eBay<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-5" target="_blank" rel="noopener">[5]</a>, Rackspace<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-6" target="_blank" rel="noopener">[6]</a>, Netflix<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-7" target="_blank" rel="noopener">[7]</a>等知名网站所采用，成为了一种流行的分布式结构化数据存储方案。<a href="#reffn_cassandra" title="Jump back to footnote [cassandra] in the text."> &#8617;</a>
+<sup>cassandra</sup>. <strong>Apache Cassandra</strong>（社区内一般简称为C*）是一套开源分布式<a href="https://zh.wikipedia.org/wiki/NoSQL" target="_blank" rel="noopener">NoSQL</a>数据库系统。它最初由<a href="https://zh.wikipedia.org/wiki/Facebook" target="_blank" rel="noopener">Facebook</a>开发，用于改善电子邮件系统的搜索性能的简单格式数据，集<a href="https://zh.wikipedia.org/wiki/Google" target="_blank" rel="noopener">Google</a> <a href="https://zh.wikipedia.org/wiki/BigTable" target="_blank" rel="noopener">BigTable</a>的数据模型与<a href="https://zh.wikipedia.org/wiki/Amazon" target="_blank" rel="noopener">Amazon</a> <a href="https://zh.wikipedia.org/w/index.php?title=Dynamo&amp;action=edit&amp;redlink=1" target="_blank" rel="noopener">Dynamo</a>的完全分布式架构于一身。Facebook于2008将 Cassandra 开源，此后，由于Cassandra良好的<a href="https://zh.wikipedia.org/wiki/可扩展性" target="_blank" rel="noopener">可扩展性</a>和性能，被 Apple<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-1" target="_blank" rel="noopener">[1]</a>, Comcast<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-2" target="_blank" rel="noopener">[2]</a>,Instagram<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-3" target="_blank" rel="noopener">[3]</a>, Spotify<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-4" target="_blank" rel="noopener">[4]</a>, eBay<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-5" target="_blank" rel="noopener">[5]</a>, Rackspace<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-6" target="_blank" rel="noopener">[6]</a>, Netflix<a href="https://zh.wikipedia.org/wiki/Cassandra#cite_note-7" target="_blank" rel="noopener">[7]</a>等知名网站所采用，成为了一种流行的分布式结构化数据存储方案。<a href="#reffn_cassandra" title="Jump back to footnote [cassandra] in the text."> ↩</a>
 </blockquote>
 <blockquote id="fn_describe">
-<sup>describe</sup>. 加密过程是将明文对等加密，如果明文的长度低于256字节，则扩充为256字节长度之后再对其进行加密，由于本文的思想是对最小时间间隔的数据打包发送至云平台进行存储，因此在此间隔产生的数据大小是固定的，如果采用加密方式，则自然会增加加密的代价。同时传统的秘钥分发方式，解密过程也会有很高的延迟以及较大的IO.<a href="#reffn_describe" title="Jump back to footnote [describe] in the text."> &#8617;</a>
+<sup>describe</sup>. 加密过程是将明文对等加密，如果明文的长度低于256字节，则扩充为256字节长度之后再对其进行加密，由于本文的思想是对最小时间间隔的数据打包发送至云平台进行存储，因此在此间隔产生的数据大小是固定的，如果采用加密方式，则自然会增加加密的代价。同时传统的秘钥分发方式，解密过程也会有很高的延迟以及较大的IO.<a href="#reffn_describe" title="Jump back to footnote [describe] in the text."> ↩</a>
 </blockquote>
 
             </div>
@@ -1303,7 +1307,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">78.9k</span>&nbsp;字
+                class="white-color">78.3k</span>&nbsp;字
             
             
             

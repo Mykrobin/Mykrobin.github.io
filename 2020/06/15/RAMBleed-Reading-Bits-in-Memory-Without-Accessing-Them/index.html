@@ -4,7 +4,7 @@
 
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="keywords" content="RAMBleed Reading Bits in Memory Without Accessing Them, MYKRobin&#39;S BLOG">
+    <meta name="keywords" content="RAMBleed Reading Bits in Memory Without Accessing Them, MYKRobin&#39;s Realm">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>RAMBleed Reading Bits in Memory Without Accessing Them | MYKRobin&#39;S BLOG</title>
+    <title>RAMBleed Reading Bits in Memory Without Accessing Them | MYKRobin&#39;s Realm</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -29,7 +29,11 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 4.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<meta name="generator" content="Hexo 4.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
 
 
 <body>
@@ -41,7 +45,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">MYKRobin&#39;S BLOG</span>
+                    <span class="logo-span">MYKRobin&#39;s Realm</span>
                 </a>
             </div>
             
@@ -213,7 +217,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">MYKRobin&#39;S BLOG</div>
+        <div class="logo-name">MYKRobin&#39;s Realm</div>
         <div class="logo-desc">
             
             Never really desperate, only the lost of the soul.
@@ -647,15 +651,15 @@
 </tbody>
 </table>
 </div>
-<h3 id="Rowhammer-Attack"><a href="#Rowhammer-Attack" class="headerlink" title="Rowhammer Attack"></a>Rowhammer Attack</h3><p>&emsp;&emsp;Rowhammer比特翻转攻击是指利用临近内存单元之间电子的互相影响，在足够多的访问次数后让某个单元的值从1变成0，反之亦然。这种攻击可以在不访问目标内存区域的前提下使其产生数据错误。 这次的攻击与操作系统和软件无关，纯粹是硬件上的漏洞导致的。</p>
-<p>&emsp;&emsp;这是个特别针对Memory的攻击技术，但不是缓冲区破坏或溢出攻击。一般的计算机Memory介质中，每个存储单元（晶体管+电容器）存放1bit数据，这个比特位要么是0，要么是1——存储单元中充满电子表示1，清空表示0。内存就是由上亿这样的存储单元构成的，数据也因此得以存储。</p>
-<p>&emsp;&emsp;不过电容器会泄露，一个电容器充满电子后，只需要几毫秒就会泄露殆尽。这就要求CPU（内存控制器）对电容进行充电，让“1”这个值能够保持住。整个过程是由内存控制器先读取电容器中的值，然后再把数据写回去。这种刷新操作，每秒会执行几千次。</p>
-<p>&emsp;&emsp;内存容量正在大幅度上涨，所以存储比特位的电容器也就越来越小，排列越来越近。要防止相邻的电容之间相互干扰，难度也就变得更大。如果能够快速、反复访问一排电容，相邻行的电容更容易产生干扰错误和所谓的“比特位翻转”，也就是0变成1。</p>
-<p>&emsp;&emsp;其实正常的数据读写一般是不会发生比特位翻转的，可是如果对某些行进行<strong>反复读写</strong>，问题就有可能产生。2014年卡内基梅陇大学的研究人员层发表过一篇论文，题为《无访问情况下的内存比特位翻转——DRAM干扰行错误的试验研究》，其本质是通过机器码指令CLFUSH或Cache Line Flush，强制进行这种比特位的读取和更新。据说利用这种方式，可引起大量比特位翻转。</p>
-<p>&emsp;&emsp;利用比特位翻转，很多事情都可以做，比如说执行未经授权的代码。这就是所谓的Rowhammer。这是一种颠覆人类对安全认知的攻击技术，软件层面几乎解决无望。先前已经有研究人员演示，如何用Rowhammer来进行提权，以及打破安全沙盒。</p>
-<p>&emsp;&emsp;不过看原理就知道，这种攻击实在有够理想化，存在诸多不确定性，因为攻击者根本无法精准控制比特位如何翻转。比如说，这种攻击对数据所在的内存位置首先就有要求，这样才能实施内存翻转：但敏感数据存储在这些位置的几率可能并不算高。</p>
-<h3 id="RAMBleed概况"><a href="#RAMBleed概况" class="headerlink" title="RAMBleed概况"></a>RAMBleed概况</h3><p>&emsp;&emsp;该攻击<strong>基于位翻转漏洞Rowhammer</strong>，可绕过ECC机制，允许黑客使用普通用户权限从OpenSSH服务器中提取签名密钥。黑客通过观察Rowhammer引发的位翻转，<strong>可推断出附近DRAM行中的值，</strong>进而读取其它进程中的物理内存。</p>
-<h3 id="获取物理地址"><a href="#获取物理地址" class="headerlink" title="获取物理地址"></a>获取物理地址</h3><p>&emsp;&emsp;该攻击的重点是获取到虚拟地址到物理地址之间的映射。</p>
+<h3 id="Rowhammer-Attack"><a href="#Rowhammer-Attack" class="headerlink" title="Rowhammer Attack"></a>Rowhammer Attack</h3><p>  Rowhammer比特翻转攻击是指利用临近内存单元之间电子的互相影响，在足够多的访问次数后让某个单元的值从1变成0，反之亦然。这种攻击可以在不访问目标内存区域的前提下使其产生数据错误。 这次的攻击与操作系统和软件无关，纯粹是硬件上的漏洞导致的。</p>
+<p>  这是个特别针对Memory的攻击技术，但不是缓冲区破坏或溢出攻击。一般的计算机Memory介质中，每个存储单元（晶体管+电容器）存放1bit数据，这个比特位要么是0，要么是1——存储单元中充满电子表示1，清空表示0。内存就是由上亿这样的存储单元构成的，数据也因此得以存储。</p>
+<p>  不过电容器会泄露，一个电容器充满电子后，只需要几毫秒就会泄露殆尽。这就要求CPU（内存控制器）对电容进行充电，让“1”这个值能够保持住。整个过程是由内存控制器先读取电容器中的值，然后再把数据写回去。这种刷新操作，每秒会执行几千次。</p>
+<p>  内存容量正在大幅度上涨，所以存储比特位的电容器也就越来越小，排列越来越近。要防止相邻的电容之间相互干扰，难度也就变得更大。如果能够快速、反复访问一排电容，相邻行的电容更容易产生干扰错误和所谓的“比特位翻转”，也就是0变成1。</p>
+<p>  其实正常的数据读写一般是不会发生比特位翻转的，可是如果对某些行进行<strong>反复读写</strong>，问题就有可能产生。2014年卡内基梅陇大学的研究人员层发表过一篇论文，题为《无访问情况下的内存比特位翻转——DRAM干扰行错误的试验研究》，其本质是通过机器码指令CLFUSH或Cache Line Flush，强制进行这种比特位的读取和更新。据说利用这种方式，可引起大量比特位翻转。</p>
+<p>  利用比特位翻转，很多事情都可以做，比如说执行未经授权的代码。这就是所谓的Rowhammer。这是一种颠覆人类对安全认知的攻击技术，软件层面几乎解决无望。先前已经有研究人员演示，如何用Rowhammer来进行提权，以及打破安全沙盒。</p>
+<p>  不过看原理就知道，这种攻击实在有够理想化，存在诸多不确定性，因为攻击者根本无法精准控制比特位如何翻转。比如说，这种攻击对数据所在的内存位置首先就有要求，这样才能实施内存翻转：但敏感数据存储在这些位置的几率可能并不算高。</p>
+<h3 id="RAMBleed概况"><a href="#RAMBleed概况" class="headerlink" title="RAMBleed概况"></a>RAMBleed概况</h3><p>  该攻击<strong>基于位翻转漏洞Rowhammer</strong>，可绕过ECC机制，允许黑客使用普通用户权限从OpenSSH服务器中提取签名密钥。黑客通过观察Rowhammer引发的位翻转，<strong>可推断出附近DRAM行中的值，</strong>进而读取其它进程中的物理内存。</p>
+<h3 id="获取物理地址"><a href="#获取物理地址" class="headerlink" title="获取物理地址"></a>获取物理地址</h3><p>  该攻击的重点是获取到虚拟地址到物理地址之间的映射。</p>
 <h4 id="伙伴算法"><a href="#伙伴算法" class="headerlink" title="伙伴算法"></a>伙伴算法</h4><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/buddy-memory-allocation.jpg" width="500px" height="300px"></p>
 <p>首先我们假设我们一个内存块有1024K，当我们需要给A分配70K内存的时候，</p>
 <ol>
@@ -663,23 +667,23 @@
 <li>然后我们发现512K的一半仍然大于70K，于是我们再把512K的内存再分成两半，一半是128K。</li>
 <li>此时，我们发现128K的一半小于70K，于是我们就分配为A分配128K的内存。</li>
 </ol>
-<p>&emsp;后面的，B，C，D都这样，而释放内存时，则会把相邻的块一步一步地合并起来（合并也必需按分裂的逆操作进行合并）。</p>
-<p>&emsp;&emsp;论文<a href="http://export.arxiv.org/pdf/1511.08756" target="_blank" rel="noopener">DRAMA</a>中提到只要获得了物理上连续的$2MiB$空间，采用反向工程即可获取低22位物理空间地址。</p>
+<p> 后面的，B，C，D都这样，而释放内存时，则会把相邻的块一步一步地合并起来（合并也必需按分裂的逆操作进行合并）。</p>
+<p>  论文<a href="http://export.arxiv.org/pdf/1511.08756" target="_blank" rel="noopener">DRAMA</a>中提到只要获得了物理上连续的$2MiB$空间，采用反向工程即可获取低22位物理空间地址。</p>
 <p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片13.jpg" width="600px" height="450px"></p>
-<p>&emsp;&emsp;基于Linux内存的伙伴分配算法，分配空间大小为$4KiB*2^N$，此处取$N = 10$,即分配$4MiB$空间，并将此 $4MiB$ 物理空间分裂为两个 $2MiB$ 的物理空间，通过$MMap$系统调用，消耗掉前面低于$2MiB$的存储空间，最后剩余的空间一定是一个连续的 $2MiB$ 的物理空间。</p>
-<h3 id="内存风水逆转"><a href="#内存风水逆转" class="headerlink" title="内存风水逆转"></a>内存风水逆转</h3><p>&emsp;&emsp;针对Rowhammer的内存位置限制，有人开发出一种名为 <a href="https://www.usenix.org/system/files/conference/usenixsecurity16/sec16_paper_razavi.pdf" target="_blank" rel="noopener">Flip Feng Shui</a>（风水翻转）的攻击技术，这本质上也是Rowhammer。这种攻击就是篡改deduplication操作——deduplication在云端主机中应用得很常见，这种技术可让两个或者更多虚拟主机共享特定的数据块，起到节约内存资源的作用。</p>
-<p>&emsp;&emsp;Flip Feng Shui在<strong>物理内存</strong>上做手脚，可致加密密钥和其他敏感数据存储到<strong>内存特定的位置</strong>——这些位置就很容易受Rowhammer的影响了。所以才叫风水翻转，就是让数据在内存中的“风水”位置变更好，Rowhammer攻击变得更可靠。</p>
+<p>  基于Linux内存的伙伴分配算法，分配空间大小为$4KiB*2^N$，此处取$N = 10$,即分配$4MiB$空间，并将此 $4MiB$ 物理空间分裂为两个 $2MiB$ 的物理空间，通过$MMap$系统调用，消耗掉前面低于$2MiB$的存储空间，最后剩余的空间一定是一个连续的 $2MiB$ 的物理空间。</p>
+<h3 id="内存风水逆转"><a href="#内存风水逆转" class="headerlink" title="内存风水逆转"></a>内存风水逆转</h3><p>  针对Rowhammer的内存位置限制，有人开发出一种名为 <a href="https://www.usenix.org/system/files/conference/usenixsecurity16/sec16_paper_razavi.pdf" target="_blank" rel="noopener">Flip Feng Shui</a>（风水翻转）的攻击技术，这本质上也是Rowhammer。这种攻击就是篡改deduplication操作——deduplication在云端主机中应用得很常见，这种技术可让两个或者更多虚拟主机共享特定的数据块，起到节约内存资源的作用。</p>
+<p>  Flip Feng Shui在<strong>物理内存</strong>上做手脚，可致加密密钥和其他敏感数据存储到<strong>内存特定的位置</strong>——这些位置就很容易受Rowhammer的影响了。所以才叫风水翻转，就是让数据在内存中的“风水”位置变更好，Rowhammer攻击变得更可靠。</p>
 <h3 id="RAMBleed攻击"><a href="#RAMBleed攻击" class="headerlink" title="RAMBleed攻击"></a>RAMBleed攻击</h3><h4 id="比特翻转"><a href="#比特翻转" class="headerlink" title="比特翻转"></a>比特翻转</h4><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片11.jpg" width="600px" height="450px"></p>
-<p>&emsp;&emsp;本文提到，在$Row1$与$Row3$加载相同的目标内容，并对其进行锤击操作，即Rowhammer攻击，则会使得$Row2$中对应的比特位发生比特翻转。经过试验证明，当$Row3-Row2-Row1$ 存储内容为$0-1-0$时，此时在Rowhammer攻击下很有可能发生比特翻转，而当$Row3-Row2-Row1$ 存储内容为$1-1-1$时，此时在Rowhammer攻击下发生比特翻转的可能性很小，因此，基于两种概率大小的不同，可以判断出目标信息中存储的绝大多数信息内容。其中$Row2$中存储的是已知内容。</p>
-<h4 id="Frame-Feng-Shui"><a href="#Frame-Feng-Shui" class="headerlink" title="Frame Feng Shui"></a>Frame Feng Shui</h4><p>&emsp;&emsp;上文提到，Feng Shui可以将目标信息加载到指定的存储空间中。如下图所示，红色部分存储目标信息，$A0,A1,A2$ 存储攻击者内容，因此根据比特翻转是否发生，则<strong>很有可能</strong>推断出指定比特位存储的信息。</p>
+<p>  本文提到，在$Row1$与$Row3$加载相同的目标内容，并对其进行锤击操作，即Rowhammer攻击，则会使得$Row2$中对应的比特位发生比特翻转。经过试验证明，当$Row3-Row2-Row1$ 存储内容为$0-1-0$时，此时在Rowhammer攻击下很有可能发生比特翻转，而当$Row3-Row2-Row1$ 存储内容为$1-1-1$时，此时在Rowhammer攻击下发生比特翻转的可能性很小，因此，基于两种概率大小的不同，可以判断出目标信息中存储的绝大多数信息内容。其中$Row2$中存储的是已知内容。</p>
+<h4 id="Frame-Feng-Shui"><a href="#Frame-Feng-Shui" class="headerlink" title="Frame Feng Shui"></a>Frame Feng Shui</h4><p>  上文提到，Feng Shui可以将目标信息加载到指定的存储空间中。如下图所示，红色部分存储目标信息，$A0,A1,A2$ 存储攻击者内容，因此根据比特翻转是否发生，则<strong>很有可能</strong>推断出指定比特位存储的信息。</p>
 <p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片17.jpg" width="600px" height="450px"></p>
-<h4 id="RAMBleed-on-ECC-Memory"><a href="#RAMBleed-on-ECC-Memory" class="headerlink" title="RAMBleed on ECC Memory"></a>RAMBleed on ECC Memory</h4><p>&emsp;&emsp;ECC Memory指的是Error-Correcting Code Memory，DRAM的纠错机制。</p>
+<h4 id="RAMBleed-on-ECC-Memory"><a href="#RAMBleed-on-ECC-Memory" class="headerlink" title="RAMBleed on ECC Memory"></a>RAMBleed on ECC Memory</h4><p>  ECC Memory指的是Error-Correcting Code Memory，DRAM的纠错机制。</p>
 <p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片21.jpg" width="600px" height="450px"></p>
-<p>&emsp;&emsp;在<a href="https://www.computer.org/csdl/pds/api/csdl/proceedings/download-article/19skfwyNp5e/pdf?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjc2RsX2FwaSIsImF1ZCI6ImNzZGxfYXBpX2Rvd25sb2FkX3Rva2VuIiwic3ViIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImVtYWlsIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImV4cCI6MTU5MjMxODY5OX0.uN4RLcw4bjEbBeqINhfDoXY7dyJM2-GWgE90zZJt2y4" target="_blank" rel="noopener">ECCPloit</a>这篇论文中指出，比特纠错所产生的时间延迟是十分明显的，这种情况下可根据纠错产生的时间延迟判断是否发生了比特翻转。</p>
+<p>  在<a href="https://www.computer.org/csdl/pds/api/csdl/proceedings/download-article/19skfwyNp5e/pdf?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjc2RsX2FwaSIsImF1ZCI6ImNzZGxfYXBpX2Rvd25sb2FkX3Rva2VuIiwic3ViIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImVtYWlsIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImV4cCI6MTU5MjMxODY5OX0.uN4RLcw4bjEbBeqINhfDoXY7dyJM2-GWgE90zZJt2y4" target="_blank" rel="noopener">ECCPloit</a>这篇论文中指出，比特纠错所产生的时间延迟是十分明显的，这种情况下可根据纠错产生的时间延迟判断是否发生了比特翻转。</p>
 <h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片19.jpg" width="600px" height="450px"></p>
-<p>&emsp;&emsp;相对来说，采用了ECC纠错的方式，获取到的结果更可信，而没有采取比特纠错方式获取的结果是在一定程度上可信的。本文通过实验测得，通过Feng Shui方式，成功将目标信息加载到指定存储位置也是有一定概率的，文中提到这个概率在83%， 通过Rowhammer攻击获取到比特翻转成功的概率为82%，因此，最终获取到目标信息的量在68%。由于此攻击针对的是秘钥信息，获取的秘钥信息量在27%以上，就可成功破解，因此，68%的信息量足以支持对秘钥的破译。综上，此方式是行得通的。</p>
-<p>&emsp;&emsp;本文的目的，旨在阐述这种攻击方式的行之有效，因此并未对其产生的额外代价、时间成本考虑在内。</p>
-<p>&emsp;&emsp;研究人员已向英特尔、AMD、OpenSSH、微软、苹果和红帽通报了调查结果，本论文发表在2020年5月举行的第41届IEEE安全和隐私研讨会。</p>
+<p>  相对来说，采用了ECC纠错的方式，获取到的结果更可信，而没有采取比特纠错方式获取的结果是在一定程度上可信的。本文通过实验测得，通过Feng Shui方式，成功将目标信息加载到指定存储位置也是有一定概率的，文中提到这个概率在83%， 通过Rowhammer攻击获取到比特翻转成功的概率为82%，因此，最终获取到目标信息的量在68%。由于此攻击针对的是秘钥信息，获取的秘钥信息量在27%以上，就可成功破解，因此，68%的信息量足以支持对秘钥的破译。综上，此方式是行得通的。</p>
+<p>  本文的目的，旨在阐述这种攻击方式的行之有效，因此并未对其产生的额外代价、时间成本考虑在内。</p>
+<p>  研究人员已向英特尔、AMD、OpenSSH、微软、苹果和红帽通报了调查结果，本论文发表在2020年5月举行的第41届IEEE安全和隐私研讨会。</p>
 <h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://blog.csdn.net/wojiuguowei/article/details/79377228" target="_blank" rel="noopener">伙伴分配器的一个极简实现</a></p>
 <p>[2] <a href="https://www.freebuf.com/column/133871.html" target="_blank" rel="noopener">神乎其神的Rowhammer</a></p>
 
@@ -1257,7 +1261,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">78.9k</span>&nbsp;字
+                class="white-color">78.3k</span>&nbsp;字
             
             
             

@@ -4,7 +4,7 @@
 
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="keywords" content="Xen-log-Extend-SPECCPU2006安装与运行, MYKRobin&#39;S BLOG">
+    <meta name="keywords" content="Xen-log-Extend-SPECCPU2006安装与运行, MYKRobin&#39;s Realm">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Xen-log-Extend-SPECCPU2006安装与运行 | MYKRobin&#39;S BLOG</title>
+    <title>Xen-log-Extend-SPECCPU2006安装与运行 | MYKRobin&#39;s Realm</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -29,7 +29,11 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 4.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<meta name="generator" content="Hexo 4.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
 
 
 <body>
@@ -41,7 +45,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">MYKRobin&#39;S BLOG</span>
+                    <span class="logo-span">MYKRobin&#39;s Realm</span>
                 </a>
             </div>
             
@@ -213,7 +217,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">MYKRobin&#39;S BLOG</div>
+        <div class="logo-name">MYKRobin&#39;s Realm</div>
         <div class="logo-desc">
             
             Never really desperate, only the lost of the soul.
@@ -606,7 +610,7 @@ cd ./speccpu/
 </code></pre>
 <p>等待执行结束，进入<code>speccpu2006</code>目录准备安装<code>tools</code></p>
 <h4 id="tools"><a href="#tools" class="headerlink" title="tools"></a>tools</h4><p>进入<code>./specspu2006/tools/src/</code></p>
-<p>执行<code>PERLFLAGS=&quot;-A libs=-lm -A libs=-ldl&quot; ./buildtools</code></p>
+<p>执行<code>PERLFLAGS="-A libs=-lm -A libs=-ldl" ./buildtools</code></p>
 <p>可能会遇到的问题</p>
 <ul>
 <li><p>错误1: <code>error building specmd5sum</code></p>
@@ -624,7 +628,7 @@ cd ./speccpu/
 </ul>
 <p><img src="/2020/12/16/Xen-log-Extend-SPECCPU2006%E5%AE%89%E8%A3%85%E4%B8%8E%E8%BF%90%E8%A1%8C/command.png" width="600"></p>
 <ul>
-<li><p>错误4: <code>relocation R_X86_64_32S against &#39;.rodata&#39;....-fPIC</code></p>
+<li><p>错误4: <code>relocation R_X86_64_32S against '.rodata'....-fPIC</code></p>
 <p><img src="/2020/12/16/Xen-log-Extend-SPECCPU2006%E5%AE%89%E8%A3%85%E4%B8%8E%E8%BF%90%E8%A1%8C/relocation.png" width="600"></p>
 </li>
 <li><p>解决: 在<code>buildtools</code>对应命令位置添加 <code>-fPIC</code></p>
@@ -635,10 +639,10 @@ cd ./speccpu/
 <li><p>错误5: 缺少数学库</p>
 <p><img src="/2020/12/16/Xen-log-Extend-SPECCPU2006%E5%AE%89%E8%A3%85%E4%B8%8E%E8%BF%90%E8%A1%8C/lack-mathlib.png" width="600"></p>
 </li>
-<li><p>解决：添加 <code>-Dcc=&quot;gcc -lm&quot;</code></p>
+<li><p>解决：添加 <code>-Dcc="gcc -lm"</code></p>
 <p><img src="/2020/12/16/Xen-log-Extend-SPECCPU2006%E5%AE%89%E8%A3%85%E4%B8%8E%E8%BF%90%E8%A1%8C/lm-math.png" width="600"></p>
 </li>
-<li><p>错误6: <code>You haven&#39;t done a &quot;make depend&quot; yet!</code></p>
+<li><p>错误6: <code>You haven't done a "make depend" yet!</code></p>
 <p><img src="/2020/12/16/Xen-log-Extend-SPECCPU2006%E5%AE%89%E8%A3%85%E4%B8%8E%E8%BF%90%E8%A1%8C/depend.png" width="600"></p>
 </li>
 <li><p>解决：</p>
@@ -696,7 +700,7 @@ runspec -c linux64-amd64-gcc42.cfg -i ref -n 3 -I all
 <pre><code class="lang-shell">runspec -c config.cfg -i ref -l int
 runspec -c config.cfg -i ref -l fp
 </code></pre>
-<h4 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h4><p>运行结果显示 invalid， 官方网站给出的解释是:<code>If a run is marked &quot;invalid&quot; because some flags are &quot;unknown&quot;</code></p>
+<h4 id="运行结果"><a href="#运行结果" class="headerlink" title="运行结果"></a>运行结果</h4><p>运行结果显示 invalid， 官方网站给出的解释是:<code>If a run is marked "invalid" because some flags are "unknown"</code></p>
 <p><img src="/2020/12/16/Xen-log-Extend-SPECCPU2006%E5%AE%89%E8%A3%85%E4%B8%8E%E8%BF%90%E8%A1%8C/output.png" width="600"></p>
 <h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://www.spec.org/cpu2006/Docs/install-guide-unix.html" target="_blank" rel="noopener">官方教程</a> </p>
 <p>[2] <a href="https://sjp38.github.io/post/spec_cpu2006_install/" target="_blank" rel="noopener">Install / execute spec cpu2006 benchmark</a></p>
@@ -1257,7 +1261,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">78.9k</span>&nbsp;字
+                class="white-color">78.3k</span>&nbsp;字
             
             
             

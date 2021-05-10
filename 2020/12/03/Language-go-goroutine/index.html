@@ -4,7 +4,7 @@
 
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="keywords" content="Language-go-goroutine, MYKRobin&#39;S BLOG">
+    <meta name="keywords" content="Language-go-goroutine, MYKRobin&#39;s Realm">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Language-go-goroutine | MYKRobin&#39;S BLOG</title>
+    <title>Language-go-goroutine | MYKRobin&#39;s Realm</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -29,7 +29,11 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 4.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<meta name="generator" content="Hexo 4.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
 
 
 <body>
@@ -41,7 +45,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">MYKRobin&#39;S BLOG</span>
+                    <span class="logo-span">MYKRobin&#39;s Realm</span>
                 </a>
             </div>
             
@@ -213,7 +217,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">MYKRobin&#39;S BLOG</div>
+        <div class="logo-name">MYKRobin&#39;s Realm</div>
         <div class="logo-desc">
             
             Never really desperate, only the lost of the soul.
@@ -591,16 +595,16 @@
 <h4 id="启动单个goroutine"><a href="#启动单个goroutine" class="headerlink" title="启动单个goroutine"></a>启动单个goroutine</h4><pre><code class="lang-go">// goroutine_1.go
 package main
 
-import &quot;fmt&quot;
-import &quot;time&quot;
+import "fmt"
+import "time"
 
 func hello()  {
-    fmt.Println(&quot;Hello, Goroutine!&quot;)
+    fmt.Println("Hello, Goroutine!")
 }
 
 func main()  {
     go hello()  // 启动另外一个goroutine去执行hello函数
-    fmt.Println(&quot;main goroutine done!&quot;)
+    fmt.Println("main goroutine done!")
     time.Sleep(time.Second)
 }
 </code></pre>
@@ -608,7 +612,7 @@ func main()  {
 <p>如果要打印<code>hello()</code>函数中的内容，就要让<code>main</code>函数等一等。</p>
 <pre><code class="lang-go">func main() {
     go hello() // 启动另外一个goroutine去执行hello函数
-    fmt.Println(&quot;main goroutine done!&quot;)
+    fmt.Println("main goroutine done!")
     time.Sleep(time.Second)
 }
 </code></pre>
@@ -616,15 +620,15 @@ func main()  {
 <h4 id="启动多个-goroutine"><a href="#启动多个-goroutine" class="headerlink" title="启动多个 goroutine"></a>启动多个 goroutine</h4><p>使用<code>sync.WaitGroup</code>来实现goroutine的同步，实现并发执行，<code>goroutine</code>的调度是随机的。</p>
 <pre><code class="lang-go">package main
 
-import &quot;fmt&quot;
-// import &quot;time&quot;
-import &quot;sync&quot;
+import "fmt"
+// import "time"
+import "sync"
 
 var wg sync.WaitGroup
 
 func hello(i int)  {
     defer wg.Done()  // goroutine结束时登记 -1
-    fmt.Println(&quot;Hello, Goroutine!&quot;, i)
+    fmt.Println("Hello, Goroutine!", i)
 }
 
 func main()  {
@@ -632,7 +636,7 @@ func main()  {
     for i := 0; i &lt; 10; i++ {
         wg.Add(1) // 启动一个 goroutine 就 +1
         go hello(i)
-        // fmt.Println(&quot;main loop : i = &quot;, i)
+        // fmt.Println("main loop : i = ", i)
     }
 
     wg.Wait()  // 等待所有登记的goroutine都结束
@@ -644,8 +648,8 @@ func main()  {
 <pre><code class="lang-go">package main
 
 import (
-    &quot;sync&quot;
-    &quot;fmt&quot;
+    "sync"
+    "fmt"
 )
 
 var total struct {
@@ -656,7 +660,7 @@ var total struct {
 func worker(wg *sync.WaitGroup)  {
     defer wg.Done()
 
-    // fmt.Println(&quot;worker&quot;)
+    // fmt.Println("worker")
 
     for i := 0; i &lt; 10;  {
         total.Lock()
@@ -696,25 +700,25 @@ ch6 := make(chan []int)
 func main()  {
     ch := make(chan int, 1) // 创建一个容量为1 的有缓冲区通道
     ch &lt;- 10
-    fmt.Println(&quot;send success!&quot;)
+    fmt.Println("send success!")
 }
 </code></pre>
 <h4 id="创建无缓冲通道"><a href="#创建无缓冲通道" class="headerlink" title="创建无缓冲通道"></a>创建无缓冲通道</h4><pre><code class="lang-go">// goChannel_2.go
 
 package main
 
-import &quot;fmt&quot;
+import "fmt"
 
 func recv(c chan int)  {
     ret := &lt;-c
-    fmt.Println(&quot;receive success, ret = &quot;, ret)
+    fmt.Println("receive success, ret = ", ret)
 }
 
 func main()  {
     ch := make(chan int) // 创建一个无缓冲区通道
     go recv(ch)
     ch &lt;- 10
-    fmt.Println(&quot;send success!&quot;)
+    fmt.Println("send success!")
 }
 </code></pre>
 <p>在对无缓冲通道进行操作时，如果像设置了缓冲大小的有缓冲方式对通道进行传递参数，会报错，因此，使用<code>goroutine</code>进行传递参数。</p>
@@ -722,7 +726,7 @@ func main()  {
 
 package main
 
-import &quot;fmt&quot;
+import "fmt"
 
 func main()  {
     ch1 := make(chan int) // 创建一个无缓冲区通道
@@ -750,7 +754,7 @@ func main()  {
 
     // 在主goroutine 中接收ch2 值
     for i:= range ch2 { // 通道关闭后会退出 循环
-        fmt.Println(&quot;ch2 = &quot;,i)
+        fmt.Println("ch2 = ",i)
     }
 }
 </code></pre>
@@ -759,7 +763,7 @@ func main()  {
 
 package main
 
-import &quot;fmt&quot;
+import "fmt"
 
 func initValue(ch1 chan int)  {
     for i := 0; i &lt; 10; i++ {
@@ -792,7 +796,7 @@ func main()  {
 
     // 在主goroutine 中接收ch2 值
     for i:= range ch2 { // 通道关闭后会退出 循环
-        fmt.Println(&quot;ch2 = &quot;,i)
+        fmt.Println("ch2 = ",i)
     }
 }
 </code></pre>
@@ -804,7 +808,7 @@ func main()  {
 
 package main
 
-import &quot;fmt&quot;
+import "fmt"
 
 func counter(out chan&lt;- int)  {
     for i := 0; i &lt; 10; i++ {
@@ -1399,7 +1403,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">78.9k</span>&nbsp;字
+                class="white-color">78.3k</span>&nbsp;字
             
             
             

@@ -4,7 +4,7 @@
 
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="keywords" content="Socket编程基础总结, MYKRobin&#39;S BLOG">
+    <meta name="keywords" content="Socket编程基础总结, MYKRobin&#39;s Realm">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Socket编程基础总结 | MYKRobin&#39;S BLOG</title>
+    <title>Socket编程基础总结 | MYKRobin&#39;s Realm</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -29,7 +29,11 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 4.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<meta name="generator" content="Hexo 4.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
 
 
 <body>
@@ -41,7 +45,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">MYKRobin&#39;S BLOG</span>
+                    <span class="logo-span">MYKRobin&#39;s Realm</span>
                 </a>
             </div>
             
@@ -213,7 +217,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">MYKRobin&#39;S BLOG</div>
+        <div class="logo-name">MYKRobin&#39;s Realm</div>
         <div class="logo-desc">
             
             Never really desperate, only the lost of the soul.
@@ -572,7 +576,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>Read Times:&nbsp;&nbsp;
-                    18 Min
+                    17 Min
                 </div>
                 
 
@@ -619,7 +623,7 @@ int main(){
     struct sockaddr_in serv_addr;
     memset(&amp;serv_addr, 0, sizeof(serv_addr));  //每个字节都用0填充
     serv_addr.sin_family = AF_INET;  //使用IPv4地址
-    serv_addr.sin_addr.s_addr = inet_addr(&quot;127.0.0.1&quot;);  //具体的IP地址
+    serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");  //具体的IP地址
     serv_addr.sin_port = htons(1234);  //端口
     bind(serv_sock, (struct sockaddr*)&amp;serv_addr, sizeof(serv_addr));
 
@@ -632,7 +636,7 @@ int main(){
     int clnt_sock = accept(serv_sock, (struct sockaddr*)&amp;clnt_addr, &amp;clnt_addr_size);
 
     //向客户端发送数据
-    char str[] = &quot;Hello world!&quot;;
+    char str[] = "Hello world!";
     write(clnt_sock, str, sizeof(str));
 
     //关闭套接字
@@ -657,7 +661,7 @@ int main(){
     struct sockaddr_in serv_addr;
     memset(&amp;serv_addr, 0, sizeof(serv_addr));  //每个字节都用0填充
     serv_addr.sin_family = AF_INET;  //使用IPv4地址
-    serv_addr.sin_addr.s_addr = inet_addr(&quot;127.0.0.1&quot;);  //具体的IP地址(server的IP)
+    serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");  //具体的IP地址(server的IP)
     serv_addr.sin_port = htons(1234);  //端口
     connect(sock, (struct sockaddr*)&amp;serv_addr, sizeof(serv_addr));
 
@@ -665,7 +669,7 @@ int main(){
     char buffer[40];
     read(sock, buffer, sizeof(buffer)-1);
 
-    printf(&quot;Message form server: %s\n&quot;, buffer);
+    printf("Message form server: %s\n", buffer);
 
     //关闭套接字
     close(sock);
@@ -697,7 +701,7 @@ int main(){
 <p> <strong>client.cpp 中的代码</strong></p>
 <p>第 19 行代码通过 connect() 向服务器发起请求，服务器的IP地址和端口号保存在 sockaddr_in 结构体中。直到服务器传回数据后，connect() 才运行结束。</p>
 <p>第 23 行代码通过 read() 从套接字文件中读取数据。</p>
-<h3 id="socket-创建套接字"><a href="#socket-创建套接字" class="headerlink" title="socket()创建套接字"></a>socket()创建套接字</h3><p>在 Linux 下使用 <sys socket.h> 头文件中 socket() 函数来创建套接字，原型为：</sys></p>
+<h3 id="socket-创建套接字"><a href="#socket-创建套接字" class="headerlink" title="socket()创建套接字"></a>socket()创建套接字</h3><p>在 Linux 下使用 <sys socket.h=""> 头文件中 socket() 函数来创建套接字，原型为：</sys></p>
 <pre><code class="lang-c">int socket(int af, int type, int protocol);
 </code></pre>
 <p>1) af 为地址族（Address Family），也就是 IP 地址类型，常用的有 AF_INET 和 AF_INET6。AF 是“Address Family”的简写，INET是“Inetnet”的简写。AF_INET 表示 IPv4 地址，例如 127.0.0.1(本机IP)；AF_INET6 表示 IPv6 地址，例如 1030::C9B4:FF12:48AA:1A2B。PF前缀等价于AF前缀。</p>
@@ -727,7 +731,7 @@ int serv_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 struct sockaddr_in serv_addr;
 memset(&amp;serv_addr, 0, sizeof(serv_addr));  //每个字节都用0填充
 serv_addr.sin_family = AF_INET;            //使用IPv4地址
-serv_addr.sin_addr.s_addr = inet_addr(&quot;127.0.0.1&quot;);  //具体的IP地址
+serv_addr.sin_addr.s_addr = inet_addr("127.0.0.1");  //具体的IP地址
 serv_addr.sin_port = htons(1234);  //端口
 //将套接字和IP、端口绑定
 bind(serv_sock, (struct sockaddr*)&amp;serv_addr, sizeof(serv_addr));
@@ -755,8 +759,8 @@ bind(serv_sock, (struct sockaddr*)&amp;serv_addr, sizeof(serv_addr));
 };
 </code></pre>
 <p>in_addr_t 在头文件<code>&lt;netinet/in.h&gt;</code>中定义，等价于 unsigned long，长度为4个字节。也就是说，s_addr 是一个整数，而IP地址是一个字符串，所以需要 inet_addr() 函数进行转换，例如：</p>
-<pre><code class="lang-c">unsigned long ip = inet_addr(&quot;127.0.0.1&quot;);
-printf(&quot;%ld\n&quot;, ip); // 结果为 16777343
+<pre><code class="lang-c">unsigned long ip = inet_addr("127.0.0.1");
+printf("%ld\n", ip); // 结果为 16777343
 </code></pre>
 <p>图解 sockaddr_in 与 sockaddr结构体</p>
 <p><img src="/2020/10/19/Socket%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/addr_in.jpg" width="280"><img src="/2020/10/19/Socket%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/sockaddr.jpg" width="280"></p>
@@ -841,13 +845,13 @@ int main(void)
     // init sock
     serverAddr.sin_family = AF_INET;
     serverAddr.sin_port = htons(port);
-    serverAddr.sin_addr.s_addr = inet_addr(&quot;0.0.0.0&quot;); // 在server端默认写该IP地址，本机所有IP！
+    serverAddr.sin_addr.s_addr = inet_addr("0.0.0.0"); // 在server端默认写该IP地址，本机所有IP！
 
     // bind socket
     // bind(serverSock, (struct sockaddr*)&amp;serverAddr, sizeof(serverAddr));
     if (bind(serverSock, (struct sockaddr*)&amp;serverAddr, sizeof(serverAddr)) &lt; 0)
     {
-        printf(&quot;bind error = %d (%s)\n&quot;, errno, strerror(errno));
+        printf("bind error = %d (%s)\n", errno, strerror(errno));
         return 0;
     }
 
@@ -855,7 +859,7 @@ int main(void)
     // listen(serverSock, 10);
     if (listen(serverSock, 10) &lt; 0)
     {
-        printf(&quot;listen error = %d (%s)\n&quot;, errno, strerror(errno));
+        printf("listen error = %d (%s)\n", errno, strerror(errno));
         return 0;
     }
 
@@ -870,15 +874,15 @@ int main(void)
         int clientSock = accept(serverSock, (struct sockaddr*)&amp;clientAddr, &amp;addrlen);
 
         // output IP address
-        printf(&quot;output IP address\n&quot;);
-        printf(&quot;Client IP : %s \n&quot;, inet_ntoa(clientAddr.sin_addr));
+        printf("output IP address\n");
+        printf("Client IP : %s \n", inet_ntoa(clientAddr.sin_addr));
 
         // read from client
         int messagelen = read(clientSock, RecvBuffer, BUF_SIZE);
-        printf(&quot;Message from client : %s \n&quot;, RecvBuffer);
+        printf("Message from client : %s \n", RecvBuffer);
 
         // sent to client
-        printf(&quot;Send to client: \n&quot;);
+        printf("Send to client: \n");
         fgets(SendBuffer, sizeof(SendBuffer), stdin);
         write(clientSock, SendBuffer, messagelen);
 
@@ -912,7 +916,7 @@ int main(void)
     memset(&amp;clientAddr, 0, sizeof(clientAddr));
     clientAddr.sin_family = AF_INET;
     clientAddr.sin_port = htons(port);
-    clientAddr.sin_addr.s_addr = inet_addr(&quot;127.0.0.1&quot;); // 主机IP地址
+    clientAddr.sin_addr.s_addr = inet_addr("127.0.0.1"); // 主机IP地址
 
     char SendBuffer[BUF_SIZE] = {0};
     char RecvBuffer[BUF_SIZE] = {0};
@@ -926,19 +930,19 @@ int main(void)
 
         if (connect(clientSock, (struct sockaddr*)&amp;clientAddr, sizeof(clientAddr)) &lt; 0)
         {
-            printf(&quot;%s %d\n&quot;,strerror(errno), errno);
-            // perror(&quot;connect()&quot;);
+            printf("%s %d\n",strerror(errno), errno);
+            // perror("connect()");
             return 0;
         }
 
         // input message and sent to server
-        printf(&quot;Input a string: &quot;);
+        printf("Input a string: ");
         fgets(SendBuffer, sizeof(SendBuffer), stdin);
         write(clientSock, SendBuffer, BUF_SIZE);
 
         // receive message from server and print
         read(clientSock, RecvBuffer, BUF_SIZE);
-        printf(&quot;Message from server: %s \n&quot;, RecvBuffer);
+        printf("Message from server: %s \n", RecvBuffer);
 
         // reset buffer
         memset(SendBuffer, 0, BUF_SIZE);
@@ -1508,7 +1512,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">78.9k</span>&nbsp;字
+                class="white-color">78.3k</span>&nbsp;字
             
             
             

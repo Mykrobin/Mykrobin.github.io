@@ -4,7 +4,7 @@
 
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="keywords" content="Xen log plus Centos7源码安装Xen4.11, MYKRobin&#39;S BLOG">
+    <meta name="keywords" content="Xen log plus Centos7源码安装Xen4.11, MYKRobin&#39;s Realm">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Xen log plus Centos7源码安装Xen4.11 | MYKRobin&#39;S BLOG</title>
+    <title>Xen log plus Centos7源码安装Xen4.11 | MYKRobin&#39;s Realm</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -29,7 +29,11 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 4.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<meta name="generator" content="Hexo 4.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
 
 
 <body>
@@ -41,7 +45,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">MYKRobin&#39;S BLOG</span>
+                    <span class="logo-span">MYKRobin&#39;s Realm</span>
                 </a>
             </div>
             
@@ -213,7 +217,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">MYKRobin&#39;S BLOG</div>
+        <div class="logo-name">MYKRobin&#39;s Realm</div>
         <div class="logo-desc">
             
             Never really desperate, only the lost of the soul.
@@ -593,7 +597,7 @@
             <div id="articleContent">
                 <p>​        本文的安装步骤是参照<a href="https://wiki.xenproject.org/wiki/Compiling_Xen_From_Source#Build_Dependencies_-_RHEL_.2F_Centos" target="_blank" rel="noopener">官网</a>指导下进行的，因为实验需要扩展，所以打算在通用的CentOS上对Xen虚拟机进行部署，从而进行下一步实验。由于需要扩展到的主机上运行的服务比较多，为了避免安装失误，因此记录下此步骤进行参考。</p>
 <h3 id="CentOS换源-（先不换源试试）"><a href="#CentOS换源-（先不换源试试）" class="headerlink" title="CentOS换源 （先不换源试试）"></a>CentOS换源 （先不换源试试）</h3><p>目前没有执行换源操作 (采用官方源，速度ok)</p>
-<h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><pre><code class="lang-shell">yum groupinstall &quot;Development Tools&quot;
+<h3 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h3><pre><code class="lang-shell">yum groupinstall "Development Tools"
 
 yum install transfig wget tar less texi2html libaio-devel dev86 glibc-devel e2fsprogs-devel gitk mkinitrd iasl xz-devel bzip2-devel
 yum install pciutils-libs pciutils-devel SDL-devel libX11-devel gtk2-devel bridge-utils PyXML qemu-common qemu-img mercurial texinfo
@@ -669,14 +673,14 @@ make install
 linux 、linux16 -&gt; module
 </code></pre>
 <p>修改后的内容</p>
-<pre><code class="lang-shell">menuentry &#39;CentOS Linux (3.15.4) 7 (Core), with Linux 3.15.4 Xen&#39; --class centos --class gnu-linux --class gnu --class os --unrestricted $menuentry_id_option &#39;gnulinux-3.15.4-advanced-93383681-c2e1-4b56-a8a5-30da87350f60&#39; {
+<pre><code class="lang-shell">menuentry 'CentOS Linux (3.15.4) 7 (Core), with Linux 3.15.4 Xen' --class centos --class gnu-linux --class gnu --class os --unrestricted $menuentry_id_option 'gnulinux-3.15.4-advanced-93383681-c2e1-4b56-a8a5-30da87350f60' {
         load_video
         insmod gzio
         insmod part_msdos
         insmod xfs
-        set root=&#39;hd0,msdos1&#39;
+        set root='hd0,msdos1'
         if [ x$feature_platform_search_hint = xy ]; then
-          search --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos1 --hint-efi=hd0,msdos1 --hint-baremetal=ahci0,msdos1 --hint=&#39;hd0,msdos1&#39;  22b31dce-d2b9-4403-9a20-4090f6edc175
+          search --no-floppy --fs-uuid --set=root --hint-bios=hd0,msdos1 --hint-efi=hd0,msdos1 --hint-baremetal=ahci0,msdos1 --hint='hd0,msdos1'  22b31dce-d2b9-4403-9a20-4090f6edc175
         else
           search --no-floppy --fs-uuid --set=root 22b31dce-d2b9-4403-9a20-4090f6edc175
         fi
@@ -1261,7 +1265,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">78.9k</span>&nbsp;字
+                class="white-color">78.3k</span>&nbsp;字
             
             
             

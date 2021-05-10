@@ -4,7 +4,7 @@
 
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="keywords" content="Dancing with Wolves, MYKRobin&#39;S BLOG">
+    <meta name="keywords" content="Dancing with Wolves, MYKRobin&#39;s Realm">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Dancing with Wolves | MYKRobin&#39;S BLOG</title>
+    <title>Dancing with Wolves | MYKRobin&#39;s Realm</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -29,7 +29,11 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 4.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<meta name="generator" content="Hexo 4.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
 
 
 <body>
@@ -41,7 +45,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">MYKRobin&#39;S BLOG</span>
+                    <span class="logo-span">MYKRobin&#39;s Realm</span>
                 </a>
             </div>
             
@@ -213,7 +217,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">MYKRobin&#39;S BLOG</div>
+        <div class="logo-name">MYKRobin&#39;s Realm</div>
         <div class="logo-desc">
             
             Never really desperate, only the lost of the soul.
@@ -646,12 +650,12 @@
 </tbody>
 </table>
 </div>
-<h3 id="Main-idea"><a href="#Main-idea" class="headerlink" title="Main idea"></a>Main idea</h3><p>&emsp;&emsp;VMM的执行权限最高，一旦VMM受到威胁，那么其所处的整个云环境都会受到威胁。因此本文目标是对云计算中非可信的VMM实时攻击进行事件驱动监控。为了保证VMM事件监控的可靠性，需要保证monitor自身的可靠。在具体实现过程中，将VMM的特权级指令清空，并转移到monitor执行。通过IPR实现对VMM特权级指令的拦截，通过ASR技术防止VMM篡改hook函数位置和VMM自身的代码。</p>
-<p>&emsp;&emsp;Q: 为什么要提供事件监测？</p>
-<p>&emsp;&emsp;A: 因为对于瞬时攻击而言，仅通过轮询的方式对VMM进行完整性监测，很难捕捉到攻击的踪迹，但是基于事件的方式则可以对攻击所触发的事件进行拦截。</p>
+<h3 id="Main-idea"><a href="#Main-idea" class="headerlink" title="Main idea"></a>Main idea</h3><p>  VMM的执行权限最高，一旦VMM受到威胁，那么其所处的整个云环境都会受到威胁。因此本文目标是对云计算中非可信的VMM实时攻击进行事件驱动监控。为了保证VMM事件监控的可靠性，需要保证monitor自身的可靠。在具体实现过程中，将VMM的特权级指令清空，并转移到monitor执行。通过IPR实现对VMM特权级指令的拦截，通过ASR技术防止VMM篡改hook函数位置和VMM自身的代码。</p>
+<p>  Q: 为什么要提供事件监测？</p>
+<p>  A: 因为对于瞬时攻击而言，仅通过轮询的方式对VMM进行完整性监测，很难捕捉到攻击的踪迹，但是基于事件的方式则可以对攻击所触发的事件进行拦截。</p>
 <p>本文是国家自然基金项目支持，代码并未开源。</p>
-<h3 id="ED-monitor"><a href="#ED-monitor" class="headerlink" title="ED-monitor"></a>ED-monitor</h3><p>&emsp;&emsp;实现事件监控对monitor的要求：monitor与VMM具有相同的执行权限（避免了不同权限之间转换带来的性能损失），monitor需要及时频繁地被调用。</p>
-<p>&emsp;&emsp;读到这里，感觉再往下深入就是解决几个问题：</p>
+<h3 id="ED-monitor"><a href="#ED-monitor" class="headerlink" title="ED-monitor"></a>ED-monitor</h3><p>  实现事件监控对monitor的要求：monitor与VMM具有相同的执行权限（避免了不同权限之间转换带来的性能损失），monitor需要及时频繁地被调用。</p>
+<p>  读到这里，感觉再往下深入就是解决几个问题：</p>
 <ol>
 <li><p>如何实现ASR？</p>
 </li>
@@ -685,7 +689,7 @@
 <p>本意：如果及时并且频繁的调用该监控器，那么就可以阻止瞬时攻击？</p>
 <p>当事件被触发就可以调用monitor，从而对VMM进行保护？</p>
 <p>当VMM访问监控器数据的时候，将会及时地调用监控程序进行完整性评估</p>
-<h3 id="2-Overview"><a href="#2-Overview" class="headerlink" title="2 Overview"></a>2 Overview</h3><h4 id="2-1-Threat-model"><a href="#2-1-Threat-model" class="headerlink" title="2.1 Threat model"></a>2.1 Threat model</h4><p>&emsp;&emsp;认为威胁来自于VMM，VMM拥有最高的执行权限，而且能够获取到内存或者磁盘中任意数据。如果VMM受到攻击的话，则攻击者具备VMM的权限，威胁整个机器。不考虑硬件威胁，开机过程也受信任。</p>
+<h3 id="2-Overview"><a href="#2-Overview" class="headerlink" title="2 Overview"></a>2 Overview</h3><h4 id="2-1-Threat-model"><a href="#2-1-Threat-model" class="headerlink" title="2.1 Threat model"></a>2.1 Threat model</h4><p>  认为威胁来自于VMM，VMM拥有最高的执行权限，而且能够获取到内存或者磁盘中任意数据。如果VMM受到攻击的话，则攻击者具备VMM的权限，威胁整个机器。不考虑硬件威胁，开机过程也受信任。</p>
 <h4 id="2-2-Eventdriven-VMM-Monitoring"><a href="#2-2-Eventdriven-VMM-Monitoring" class="headerlink" title="2.2 Eventdriven VMM Monitoring"></a>2.2 Eventdriven VMM Monitoring</h4><p>hook 函数</p>
 <p>做什么的？</p>
 <p>钩子函数是置于VMM中的触发函数，目的是捕获指定的VMM事件行为，当产生这些行为的时候，VMM会运行钩子函数，从而激发对VMM完整性的检测。</p>
@@ -1009,8 +1013,8 @@
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            &emsp;&emsp;与不完美的自己和解，事情正在变得越来越好。
-&emsp;&emsp;中午终于完成了之前一直未完成的实验环境部署，可能是最近最令人兴奋的事情了。可能这里引用《士兵突击》老白的一句话比较合适：进步大源于起点低！哎，对于自
+                              与不完美的自己和解，事情正在变得越来越好。
+  中午终于完成了之前一直未完成的实验环境部署，可能是最近最令人兴奋的事情了。可能这里引用《士兵突击》老白的一句话比较合适：进步大源于起点低！哎，对于自己而言这终归是一个不小的成功吗，王老师说
                         
                     </div>
                     <div class="publish-info">
@@ -1261,7 +1265,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">78.9k</span>&nbsp;字
+                class="white-color">78.3k</span>&nbsp;字
             
             
             

@@ -4,7 +4,7 @@
 
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="keywords" content="Xen log 2 Add a new Hypercall, MYKRobin&#39;S BLOG">
+    <meta name="keywords" content="Xen log 2 Add a new Hypercall, MYKRobin&#39;s Realm">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Xen log 2 Add a new Hypercall | MYKRobin&#39;S BLOG</title>
+    <title>Xen log 2 Add a new Hypercall | MYKRobin&#39;s Realm</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -29,7 +29,11 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 4.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<meta name="generator" content="Hexo 4.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
 
 
 <body>
@@ -41,7 +45,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">MYKRobin&#39;S BLOG</span>
+                    <span class="logo-span">MYKRobin&#39;s Realm</span>
                 </a>
             </div>
             
@@ -213,7 +217,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">MYKRobin&#39;S BLOG</div>
+        <div class="logo-name">MYKRobin&#39;s Realm</div>
         <div class="logo-desc">
             
             Never really desperate, only the lost of the soul.
@@ -531,12 +535,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Hypervisor/">
-                                <span class="chip bg-color">Hypervisor</span>
-                            </a>
-                        
                             <a href="/tags/Virtualization/">
                                 <span class="chip bg-color">Virtualization</span>
+                            </a>
+                        
+                            <a href="/tags/Hypervisor/">
+                                <span class="chip bg-color">Hypervisor</span>
                             </a>
                         
                             <a href="/tags/Xen-log/">
@@ -573,7 +577,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    528
+                    510
                 </div>
                 
 
@@ -629,7 +633,7 @@
 </code></pre><p>添加内容</p>
 <pre><code class="lang-c">+ int do_Alice_op(void)
   {
-      printk(&quot;Alice Hypercall!\n&quot;);
+      printk("Alice Hypercall!\n");
     return 0;
   }
 </code></pre>
@@ -641,8 +645,7 @@ update-grub
 reboot
 </code></pre><p>重启之后测试下添加的hypercall能不能正常被调用</p>
 <p>采用privcmd工具实现</p>
-<pre><code class="lang-c">{AAA}
-#include &lt;stdio.h&gt;
+<pre><code class="lang-c">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt; 
 #include &lt;errno.h&gt;
 #include &lt;sys/ioctl.h&gt;
@@ -660,27 +663,26 @@ int main(void)
                 __HYPERVISOR_Alice_op,
                 {0,0,0,0,0}
         };
-        fd = open(&quot;/proc/xen/privcmd&quot;, O_RDWR);
+        fd = open("/proc/xen/privcmd", O_RDWR);
         if(fd&lt;0){
-                perror(&quot;can&#39;t open /proc/xen/privcmd&quot;);
+                perror("can't open /proc/xen/privcmd");
                 exit(1);
         } else {
-                printf(&quot;privcmd&#39;s fd = %d\n&quot;, fd);
+                printf("privcmd's fd = %d\n", fd);
         }
         ret = ioctl(fd, IOCTL_PRIVCMD_HYPERCALL, &amp;alice_op);
-        printf(&quot;ret = %d\n&quot;, ret);
+        printf("ret = %d\n", ret);
         return 0;
 }
 </code></pre>
 <p> 若代码显示不全，参见下图</p>
 <p><img src="/2020/07/19/Xen-log-2-Add-a-new-Hypercall/privcmd.jpg"></p>
-<p>#include &lt;a &gt;</p>
 <p>编译</p>
 <pre><code>gcc -o test privcmd.c
 </code></pre><p>执行</p>
 <pre><code>./test
 </code></pre><p>输出结果</p>
-<pre><code>privcmd&#39;s fd = 3
+<pre><code>privcmd's fd = 3
 ret = 0
 </code></pre><p>注：如果ioctl()函数返回值为-1，说明出错</p>
 <p>查看日志信息</p>
@@ -754,12 +756,12 @@ ret = 0
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Hypervisor/">
-                                    <span class="chip bg-color">Hypervisor</span>
-                                </a>
-                            
                                 <a href="/tags/Virtualization/">
                                     <span class="chip bg-color">Virtualization</span>
+                                </a>
+                            
+                                <a href="/tags/Hypervisor/">
+                                    <span class="chip bg-color">Hypervisor</span>
                                 </a>
                             
                                 <a href="/tags/Xen-log/">
@@ -1224,7 +1226,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">78.9k</span>&nbsp;字
+                class="white-color">78.3k</span>&nbsp;字
             
             
             

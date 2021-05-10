@@ -4,7 +4,7 @@
 
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="keywords" content="MIT-log-1-启动PC, MYKRobin&#39;S BLOG">
+    <meta name="keywords" content="MIT-log-1-启动PC, MYKRobin&#39;s Realm">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>MIT-log-1-启动PC | MYKRobin&#39;S BLOG</title>
+    <title>MIT-log-1-启动PC | MYKRobin&#39;s Realm</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -29,7 +29,11 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 4.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<meta name="generator" content="Hexo 4.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
 
 
 <body>
@@ -41,7 +45,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">MYKRobin&#39;S BLOG</span>
+                    <span class="logo-span">MYKRobin&#39;s Realm</span>
                 </a>
             </div>
             
@@ -213,7 +217,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">MYKRobin&#39;S BLOG</div>
+        <div class="logo-name">MYKRobin&#39;s Realm</div>
         <div class="logo-desc">
             
             Never really desperate, only the lost of the soul.
@@ -623,21 +627,21 @@
 </li>
 </ol>
 <p>此时，便可以进行调试了。</p>
-<p>&emsp; &emsp;在OS启动时，第一段加载的第一段程序是BIOS，BIOS的操作就是在控制、初始化、检测各种底层的设备，如：时钟，GDTR寄存器、设置中断向量表等，最重要的功能就是<strong>把操作系统从此磁盘中导入内存，然后把控制权交给操作系统。</strong>所以BIOS在运行的最后会去检测可以从当前系统的哪个设备中找到操作系统，通常来说是我们的磁盘。当BIOS确定操作系统位于磁盘中，那么它就会把这个磁盘的第一个扇区，通常把它叫做启动区（boot sector）先加载到内存中，这个启动区中包括一个非常重要的程序—<strong>boot loader，</strong>它会负责完成整个操作系统从磁盘导入内存的工作，以及一些其他的非常重要的配置工作。最后操作系统才会开始运行。</p>
+<p>   在OS启动时，第一段加载的第一段程序是BIOS，BIOS的操作就是在控制、初始化、检测各种底层的设备，如：时钟，GDTR寄存器、设置中断向量表等，最重要的功能就是<strong>把操作系统从此磁盘中导入内存，然后把控制权交给操作系统。</strong>所以BIOS在运行的最后会去检测可以从当前系统的哪个设备中找到操作系统，通常来说是我们的磁盘。当BIOS确定操作系统位于磁盘中，那么它就会把这个磁盘的第一个扇区，通常把它叫做启动区（boot sector）先加载到内存中，这个启动区中包括一个非常重要的程序—<strong>boot loader，</strong>它会负责完成整个操作系统从磁盘导入内存的工作，以及一些其他的非常重要的配置工作。最后操作系统才会开始运行。</p>
 <p>可见PC启动后的运行顺序为<code>BIOS --&gt; boot loader--&gt; OS内核</code></p>
 <h5 id="Exercise-2"><a href="#Exercise-2" class="headerlink" title="Exercise 2:"></a>Exercise 2:</h5><p>在gdb窗口中显示出PC机启动后运行BIOS的第一条命令为</p>
 <pre><code class="lang-shell">1. [f000:fff0]    0xffff0: ljmp   $0xf000,$0xe05b
 </code></pre>
-<p>&emsp; &emsp; 这是运行的第一条指令，为跳转指令，目标是<code>0xfe05b</code>. 当PC机启动后，CPU运行在实模式(real mode)<sup><a href="#fn_实模式" id="reffn_实模式">实模式</a></sup>下，而当进入操作系统内核后，将会运行在保护模式(protected mode)下[2]。其中实模式是早期CPU（如8088处理器）的工作模式，这类处理器只有20根地址线，所以只能访问<code>1MB</code>的内存空间。但是，CPU不断的发展，之后的<code>80286/80386</code>已经具备32根地址线，能够访问<code>4GB</code>的内存空间，为了能够很好的管理内存空间，提出了保护模式。所以现在的处理器都是工作在保护模式下的，但为了向后兼容，即原来的8088处理器的软件仍能够运行在现代处理器上，现代处理器的CPU在启动过程中都处于实模式，启动完成后进入保护模式。<code>BIOS</code>就是PC刚启动时运行的软件，所以工作在实模式下。</p>
-<p>&emsp; &emsp; 实模式下的地址：<code>段基址：段内偏移</code>，其中这两个字段的值都存放在寄存器中，段基地址必须存放在段寄存器中，如CS(代码段), DS(数据段), SS(堆栈段), ES(扩展段)。</p>
-<p> &emsp; &emsp; 由于8088CPU 寄存器中都是16位，而CPU总线是20位，则需要通过16位的寄存器拼接得到20位的地址：把段寄存器中值左移4位，形成20位段基址，然后和16位段内偏移地址相加，得到20位的真实地址，如：<code>0xf000&lt;&lt;4+0xe05b=0xfe05b</code></p>
+<p>    这是运行的第一条指令，为跳转指令，目标是<code>0xfe05b</code>. 当PC机启动后，CPU运行在实模式(real mode)<sup><a href="#fn_实模式" id="reffn_实模式">实模式</a></sup>下，而当进入操作系统内核后，将会运行在保护模式(protected mode)下[2]。其中实模式是早期CPU（如8088处理器）的工作模式，这类处理器只有20根地址线，所以只能访问<code>1MB</code>的内存空间。但是，CPU不断的发展，之后的<code>80286/80386</code>已经具备32根地址线，能够访问<code>4GB</code>的内存空间，为了能够很好的管理内存空间，提出了保护模式。所以现在的处理器都是工作在保护模式下的，但为了向后兼容，即原来的8088处理器的软件仍能够运行在现代处理器上，现代处理器的CPU在启动过程中都处于实模式，启动完成后进入保护模式。<code>BIOS</code>就是PC刚启动时运行的软件，所以工作在实模式下。</p>
+<p>    实模式下的地址：<code>段基址：段内偏移</code>，其中这两个字段的值都存放在寄存器中，段基地址必须存放在段寄存器中，如CS(代码段), DS(数据段), SS(堆栈段), ES(扩展段)。</p>
+<p>     由于8088CPU 寄存器中都是16位，而CPU总线是20位，则需要通过16位的寄存器拼接得到20位的地址：把段寄存器中值左移4位，形成20位段基址，然后和16位段内偏移地址相加，得到20位的真实地址，如：<code>0xf000&lt;&lt;4+0xe05b=0xfe05b</code></p>
 <p>使用gdb进行调试：<code>si</code> 查看下一条指令</p>
 <pre><code class="lang-shell">2. [f000:e05b]    0xfe05b: cmpl   $0x0,%cs:0x6ac8
 </code></pre>
-<p>&emsp;&emsp; 把<code>0x0</code> 这个立即数 与 <code>%cs:0x6ac8</code>代表的内存地址处的值进行比较。其中<code>% cs</code>代表CS段寄存器中的值。</p>
+<p>   把<code>0x0</code> 这个立即数 与 <code>%cs:0x6ac8</code>代表的内存地址处的值进行比较。其中<code>% cs</code>代表CS段寄存器中的值。</p>
 <pre><code class="lang-shell">3. [f000:e062]    0xfe062: jne    0xfd2e1
 </code></pre>
-<p>&emsp;&emsp; <code>jne</code>指令：如果ZF标志位为0的时候跳转，即上一条指令 <code>cmpl</code> 的结果不是0 的时候跳转，即 <code>%cs:0x6ac8</code> 地址处的值不是 <code>0x0</code>的时候跳转。</p>
+<p>   <code>jne</code>指令：如果ZF标志位为0的时候跳转，即上一条指令 <code>cmpl</code> 的结果不是0 的时候跳转，即 <code>%cs:0x6ac8</code> 地址处的值不是 <code>0x0</code>的时候跳转。</p>
 <blockquote>
 <p><code>cmpl</code>指令是将两个操作数相减，但计算结果不保存，只是更具计算结果改变<code>eflags</code>的标志位，如果两个操作数相同，则计算结果为0，ZF标志位为1 。</p>
 <p><code>gdb</code>查看寄存器中数值：</p>
@@ -668,20 +672,20 @@ gs             0x0      0
 </blockquote>
 <pre><code class="lang-shell">4. [f000:e066]    0xfe066: xor    %dx,%dx
 </code></pre>
-<p>&emsp;&emsp; 下一条指令的地址为<code>0xfe066</code>，可见并没有发生指令跳转，该指令功能是把dx寄存器内容清零。</p>
+<p>   下一条指令的地址为<code>0xfe066</code>，可见并没有发生指令跳转，该指令功能是把dx寄存器内容清零。</p>
 <pre><code class="lang-shell">5. [f000:e068]    0xfe068: mov    %dx,%ss
 6. [f000:e06a]    0xfe06a: mov    $0x7000,%esp
 7. [f000:e070]    0xfe070: mov    $0xf34c2,%edx
 8. [f000:e076]    0xfe076: jmp    0xfd15c  # 跳转到绝对地址
 9. [f000:d15c]    0xfd15c: mov    %eax,%ecx
 </code></pre>
-<p>&emsp; &emsp; 设置寄存器中的数值。</p>
+<p>    设置寄存器中的数值。</p>
 <pre><code class="lang-shell">10. [f000:d15f]    0xfd15f: cli
 </code></pre>
-<p>&emsp;&emsp; 关闭中断指令。PC启动时的操作是比较关键的，关中断指令用于关闭那些可以屏蔽的中断。</p>
+<p>   关闭中断指令。PC启动时的操作是比较关键的，关中断指令用于关闭那些可以屏蔽的中断。</p>
 <pre><code class="lang-shell">11. [f000:d160]    0xfd160: cld
 </code></pre>
-<p>&emsp; &emsp; 设置方向标识位为0，表示后续的串操作 [3] 比如MOVS操作，内存地址的变化方向，如果为0代表从低地址值变为高地址。</p>
+<p>    设置方向标识位为0，表示后续的串操作 [3] 比如MOVS操作，内存地址的变化方向，如果为0代表从低地址值变为高地址。</p>
 <pre><code class="lang-shell">12. [f000:d161]    0xfd161: mov    $0x8f,%eax
 # (gdb) info register eax
 # eax            0x0      0
@@ -692,7 +696,7 @@ gs             0x0      0
 # (gdb) info register al
 # al             0x8f     -113
 </code></pre>
-<p>&emsp; &emsp; CPU与外部设备通讯时，通常是通过访问、修改设备控制器中的寄存器来实现的。那么这些位于设备控制器当中的寄存器也叫做<strong>IO端口</strong>。为了方便管理，80x86CPU采用IO端口单独编址的方式，即所有设备的端口都被命名到一个IO端口地址空间中。这个空间是独立于内存地址空间的。所以必须采用和访问内存的指令不一样的指令来访问端口。</p>
+<p>    CPU与外部设备通讯时，通常是通过访问、修改设备控制器中的寄存器来实现的。那么这些位于设备控制器当中的寄存器也叫做<strong>IO端口</strong>。为了方便管理，80x86CPU采用IO端口单独编址的方式，即所有设备的端口都被命名到一个IO端口地址空间中。这个空间是独立于内存地址空间的。所以必须采用和访问内存的指令不一样的指令来访问端口。</p>
 <blockquote>
 <p>在向0x70端口写入值后，必须对0x71端口有操作(这里正好选用了in操作)，否则RTC就会处于an unknown state之中.</p>
 </blockquote>
@@ -700,8 +704,8 @@ gs             0x0      0
 in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
 # 标准规定，端口操作必须用到al/ax寄存器作为缓冲
 </code></pre>
-<p>&emsp; &emsp; 三条命令就是要操作端口0x70，0x71，根据清单[4] 中内容，可以知道0x70端口和0x71端口是用于控制系统中一个叫做CMOS的设备，这个设备是一个低功耗的存储设备，它可以用于在计算机关闭时存储一些信息，它是由独立的电池供电的[5]。 这个CMOS中可以控制跟PC相关的多个功能，其中最重要的就是<strong>时钟设备（Real Time Clock）</strong>的 ，它还可以控制是否<strong>响应不可屏蔽中断NMI(Non-Maskable Interrupt)</strong>。操作CMOS存储器中的内容需要两个端口，一个是0x70另一个就是0x71。其中0x70可以叫做索引寄存器，<strong>这个8位寄存器的最高位是不可屏蔽中断(NMI)使能位。如果你把这个位置1，则NMI不会被响应。低7位用于指定CMOS存储器中的存储单元地址</strong>，所以如果你想访问第1号存储单元，并且在访问时，我要使能NMI，那么你就应该向端口0x70里面送入0b10000001 = 0x81。</p>
-<p>&emsp; &emsp; 这三条指令可以看出，它首先关闭了NMI中断，并且要访问存储单元0xF的值，并且把值读到al中，但是在后面我们发现这个值并没有被利用，所以可以认为<strong>这三条指令是用来关闭NMI中断的。</strong></p>
+<p>    三条命令就是要操作端口0x70，0x71，根据清单[4] 中内容，可以知道0x70端口和0x71端口是用于控制系统中一个叫做CMOS的设备，这个设备是一个低功耗的存储设备，它可以用于在计算机关闭时存储一些信息，它是由独立的电池供电的[5]。 这个CMOS中可以控制跟PC相关的多个功能，其中最重要的就是<strong>时钟设备（Real Time Clock）</strong>的 ，它还可以控制是否<strong>响应不可屏蔽中断NMI(Non-Maskable Interrupt)</strong>。操作CMOS存储器中的内容需要两个端口，一个是0x70另一个就是0x71。其中0x70可以叫做索引寄存器，<strong>这个8位寄存器的最高位是不可屏蔽中断(NMI)使能位。如果你把这个位置1，则NMI不会被响应。低7位用于指定CMOS存储器中的存储单元地址</strong>，所以如果你想访问第1号存储单元，并且在访问时，我要使能NMI，那么你就应该向端口0x70里面送入0b10000001 = 0x81。</p>
+<p>    这三条指令可以看出，它首先关闭了NMI中断，并且要访问存储单元0xF的值，并且把值读到al中，但是在后面我们发现这个值并没有被利用，所以可以认为<strong>这三条指令是用来关闭NMI中断的。</strong></p>
 <pre><code class="lang-shell">15. [f000:d16b]    0xfd16b: in     $0x92,%al 
 # (gdb) info register al
 # al             0x0      0
@@ -710,20 +714,20 @@ in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
 # (gdb) info register al
 # al             0x2      2
 </code></pre>
-<p>&emsp; &emsp; 它控制的是 PS/2系统控制端口A，而第16，17步的操作是在把这个端口的1号bit置为1。这个端口的bit1的功能是<code>bit 1= 1 indicates A20 active</code>,即A20位，即第21个地址线被使能，如果A20地址线被激活，那么系统工作在保护模式下。但是在之后的boot loader程序中，计算机首先要工作在实模式下啊。所以这里的这个操作，根据[6]应该是去测试可用内存空间。在boot loader之前，它肯定还会转换回实模式。</p>
+<p>    它控制的是 PS/2系统控制端口A，而第16，17步的操作是在把这个端口的1号bit置为1。这个端口的bit1的功能是<code>bit 1= 1 indicates A20 active</code>,即A20位，即第21个地址线被使能，如果A20地址线被激活，那么系统工作在保护模式下。但是在之后的boot loader程序中，计算机首先要工作在实模式下啊。所以这里的这个操作，根据[6]应该是去测试可用内存空间。在boot loader之前，它肯定还会转换回实模式。</p>
 <pre><code class="lang-shell">or # 只要有一个输入位是 1，则输出位就是 1
 </code></pre>
 <pre><code class="lang-shell">18. [f000:d171]    0xfd171: lidtw  %cs:0x6ab8
 </code></pre>
-<p>&emsp; &emsp; 加载中断向量表寄存器(IDTR)。这个指令会把从地址0xf6ab8起始的后面6个字节的数据读入到中断向量表寄存器(IDTR)中。中断是操作系统中非常重要的一部分，有了中断操作系统才能真正实现进程。每一种中断都有自己对应的中断处理程序，那么这个中断的处理程序的首地址就叫做这个中断的中断向量。中断向量表[7]是存放所有中断向量的表。</p>
+<p>    加载中断向量表寄存器(IDTR)。这个指令会把从地址0xf6ab8起始的后面6个字节的数据读入到中断向量表寄存器(IDTR)中。中断是操作系统中非常重要的一部分，有了中断操作系统才能真正实现进程。每一种中断都有自己对应的中断处理程序，那么这个中断的处理程序的首地址就叫做这个中断的中断向量。中断向量表[7]是存放所有中断向量的表。</p>
 <pre><code class="lang-shell">19. [f000:d177]    0xfd177: lgdtw  %cs:0x6a74
 </code></pre>
-<p>&emsp; &emsp; 把从<code>0xf6a74</code>为起始地址处的6个字节的值加载到全局描述符表格寄存器中GDTR中.</p>
+<p>    把从<code>0xf6a74</code>为起始地址处的6个字节的值加载到全局描述符表格寄存器中GDTR中.</p>
 <pre><code class="lang-shell">20. [f000:d17d]    0xfd17d: mov    %cr0,%eax
 21. [f000:d180]    0xfd180: or     $0x1,%eax
 22. [f000:d184]    0xfd184: mov    %eax,%cr0
 </code></pre>
-<p>&emsp; &emsp; 计算机中包含CR0-CR3四个控制寄存器，用来控制和确定处理器的操作模式。其中这三个语句的操作是要把CR0寄存器的最低位(0bit)置1。CR0寄存器的0bit是PE位，启动保护位，当该位被置1，代表开启了保护模式。但是这里出现了问题，我们刚刚说过BIOS是工作在实模式之下，后面的boot loader开始的时候也是工作在实模式下，所以这里把它切换为保护模式，显然是自相矛盾。所以只能推测它在检测机器是否能工作在保护模式下。</p>
+<p>    计算机中包含CR0-CR3四个控制寄存器，用来控制和确定处理器的操作模式。其中这三个语句的操作是要把CR0寄存器的最低位(0bit)置1。CR0寄存器的0bit是PE位，启动保护位，当该位被置1，代表开启了保护模式。但是这里出现了问题，我们刚刚说过BIOS是工作在实模式之下，后面的boot loader开始的时候也是工作在实模式下，所以这里把它切换为保护模式，显然是自相矛盾。所以只能推测它在检测机器是否能工作在保护模式下。</p>
 <pre><code class="lang-shell">23. [f000:d187]    0xfd187: ljmpl  $0x8,$0xfd18f
 # The target architecture is assumed to be i386
 24. =&gt; 0xfd18f:     mov    $0x10,%eax
@@ -733,7 +737,7 @@ in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
 28. =&gt; 0xfd19a:     mov    %eax,%fs
 29. =&gt; 0xfd19c:     mov    %eax,%gs
 </code></pre>
-<p>&emsp; &emsp; 这里的23~29步之所以这么做是按照规定来的，[8]中指出，如果刚刚加载完GDTR寄存器我们必须要重新加载所有的段寄存器的值，而其中CS段寄存器必须通过长跳转指令，即23号指令来进行加载。所以这些步骤是在第19步完成后必须要做的。这样才能是GDTR的值生效。</p>
+<p>    这里的23~29步之所以这么做是按照规定来的，[8]中指出，如果刚刚加载完GDTR寄存器我们必须要重新加载所有的段寄存器的值，而其中CS段寄存器必须通过长跳转指令，即23号指令来进行加载。所以这些步骤是在第19步完成后必须要做的。这样才能是GDTR的值生效。</p>
 <h3 id="Part-2-引导加载程序"><a href="#Part-2-引导加载程序" class="headerlink" title="Part 2: 引导加载程序"></a>Part 2: 引导加载程序</h3><h3 id="Part-3-内核"><a href="#Part-3-内核" class="headerlink" title="Part 3: 内核"></a>Part 3: 内核</h3><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p>[1] <a href="https://github.com/shishujuan/mit6.828-2017.git" target="_blank" rel="noopener">https://github.com/shishujuan/mit6.828-2017.git</a></p>
 <p>[2] <a href="https://blog.csdn.net/zdwzzu2006/article/details/4030948" target="_blank" rel="noopener">https://blog.csdn.net/zdwzzu2006/article/details/4030948</a></p>
 <p>[3] <a href="https://www.cnblogs.com/cykun/archive/2010/10/27/1862940.html" target="_blank" rel="noopener">https://www.cnblogs.com/cykun/archive/2010/10/27/1862940.html</a></p>
@@ -1259,7 +1263,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">78.9k</span>&nbsp;字
+                class="white-color">78.3k</span>&nbsp;字
             
             
             

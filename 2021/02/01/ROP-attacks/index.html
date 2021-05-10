@@ -4,7 +4,7 @@
 
 <head>
     <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-    <meta name="keywords" content="ROP attacks, MYKRobin&#39;S BLOG">
+    <meta name="keywords" content="ROP attacks, MYKRobin&#39;s Realm">
     <meta name="description" content="">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>ROP attacks | MYKRobin&#39;S BLOG</title>
+    <title>ROP attacks | MYKRobin&#39;s Realm</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -29,7 +29,11 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 4.2.0"><!-- hexo-inject:begin --><!-- hexo-inject:end --></head>
+<meta name="generator" content="Hexo 4.2.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
 
 
 <body>
@@ -41,7 +45,7 @@
                     
                     <img src="/medias/logo.png" class="logo-img" alt="LOGO">
                     
-                    <span class="logo-span">MYKRobin&#39;S BLOG</span>
+                    <span class="logo-span">MYKRobin&#39;s Realm</span>
                 </a>
             </div>
             
@@ -213,7 +217,7 @@
         
         <img src="/medias/logo.png" class="logo-img circle responsive-img">
         
-        <div class="logo-name">MYKRobin&#39;S BLOG</div>
+        <div class="logo-name">MYKRobin&#39;s Realm</div>
         <div class="logo-desc">
             
             Never really desperate, only the lost of the soul.
@@ -619,7 +623,7 @@ Procedure BuILDFROM(index pos, instruction parent_insn):
     for step from 1 to max_insn_len do:
         if bytes [( pos-step )···(pos-1)] decode as a valid instruction insn then:
             ensure insn is in the trie as a child of parent_insn; 
-            if insn isn&#39;t boring then:
+            if insn isn't boring then:
                 call BUILDFROM (pos-step,insn).
 </code></pre>
 <p>扫描二进制找到 ret（c3）指令，将其作为 trie 的根节点，然后回溯解析前面的指令，如果是有效指令，将其添加为子节点，再判断是否 boring；如果不是，就继续递归回溯。举个例子，在一个 trie 中一个表示 pop %eax 的节点是表示 ret 的根节点的子节点，则这个 gadget 为 pop %eax; ret。<br>如此就能把有用的 gadgets 都找出来了。boring 指令则分为三种情况：<br>（1）该指令是 leave，后跟一个 ret 指令；<br>（2）该指令是一个 pop %ebp，后跟一个 ret 指令；<br>（3）该指令是返回或者非条件跳转。<br>实际上，有很多工具可以帮助我们完成 gadget 搜索的工作，常用的有 ROPgadget、Ropper 等，还可以直接在 ropshell 网站上搜索。gadgets 在多个体系架构上都是图灵完备的，允许任意复杂度的计算，也就是说基本上只要能想到的事情它都可以做。下面简单介绍几种用法。<br>（1）保存栈数据到寄存器。弹出栈顶数据到寄存器中，然后跳转到新的栈顶地址。所以当返回<br>地址被一个 gadget 的地址覆盖，程序将在返回后执行该指令序列。例如：pop eax; ret；<br>（2）保存内存数据到寄存器。例如：mov ecx,[eax]; ret；<br>（3）保存寄存器数据到内存。例如：mov [eax],ecx; ret；<br>（4）算数和逻辑运算。add、sub、mul、xor 等。例如：add eax,ebx; ret, xor edx,edx; ret；<br>（5）系统调用。执行内核中断。例如：int 0x80; ret, call gs:[0x10]; ret；<br>（6）会影响栈帧的 gadget。这些 gadget 会改变 ebp 的值，从而影响栈帧，在一些操作如 stack<br>pivot 时我们需要这样的指令来转移栈帧。例如：leave; ret, pop ebp; ret。</p>
@@ -634,7 +638,7 @@ Procedure BuILDFROM(index pos, instruction parent_insn):
 </li>
 </ol>
 <h3 id="how-does-ROP-effect-the-OS"><a href="#how-does-ROP-effect-the-OS" class="headerlink" title="how does ROP effect the OS"></a>how does ROP effect the OS</h3><p>[6] 文中举的例子：</p>
-<p>攻击者扫描已有的动态链接库和可执行文件，提取出可以利用的指令片段(gadget)，这些指令片段均以ret指令结尾，即用ret指令实现指令片段执行流的衔接。操作系统通过栈来进行函数的调用和返回。函数的调用和返回就是通过压栈和出栈来实现的。每个程序都会维护一个程序运行栈，栈为所有函数共享，每次函数调用，系统会分配一个栈桢给当前被调用函数，用于参数的传递、局部变量的维护、返回地址的填入等。栈帧是程序运行栈的一部分 ，在<a href>Linux</a>中 ，通过%esp和 %ebp寄存器维护栈顶指针和栈帧的起始地址 ，%eip是<a href>程序计数器</a>寄存器 。而ROP攻击则是利用以ret结尾的程序片段 ，操作这些栈相关寄存器，控制程序的流程，执行相应的gadget，实施攻击者预设目标 。ROP不同于retum-to-libc攻击之处在于，<strong>ROP攻击以ret指令结尾的函数代码片段</strong> ，而不是整个函数本身去完成预定的操作。从广义角度讲 ，return-to-libc攻击是ROP攻的特例。最初ROP攻击实现在x86体系结构下，随后扩展到各种体系结构.。与以往攻击技术不同的是，<strong>ROP恶意代码不包含任何指令</strong>，将自己的恶意代码隐藏在正常代码中。因而，它可以绕过W⊕X的防御技术。</p>
+<p>攻击者扫描已有的动态链接库和可执行文件，提取出可以利用的指令片段(gadget)，这些指令片段均以ret指令结尾，即用ret指令实现指令片段执行流的衔接。操作系统通过栈来进行函数的调用和返回。函数的调用和返回就是通过压栈和出栈来实现的。每个程序都会维护一个程序运行栈，栈为所有函数共享，每次函数调用，系统会分配一个栈桢给当前被调用函数，用于参数的传递、局部变量的维护、返回地址的填入等。栈帧是程序运行栈的一部分 ，在<a href="">Linux</a>中 ，通过%esp和 %ebp寄存器维护栈顶指针和栈帧的起始地址 ，%eip是<a href="">程序计数器</a>寄存器 。而ROP攻击则是利用以ret结尾的程序片段 ，操作这些栈相关寄存器，控制程序的流程，执行相应的gadget，实施攻击者预设目标 。ROP不同于retum-to-libc攻击之处在于，<strong>ROP攻击以ret指令结尾的函数代码片段</strong> ，而不是整个函数本身去完成预定的操作。从广义角度讲 ，return-to-libc攻击是ROP攻的特例。最初ROP攻击实现在x86体系结构下，随后扩展到各种体系结构.。与以往攻击技术不同的是，<strong>ROP恶意代码不包含任何指令</strong>，将自己的恶意代码隐藏在正常代码中。因而，它可以绕过W⊕X的防御技术。</p>
 <p><img src="/2021/02/01/ROP-attacks/example.png" width="500"></p>
 <h3 id="how-can-we-detect"><a href="#how-can-we-detect" class="headerlink" title="how can we detect"></a>how can we detect</h3><h3 id="how-could-it-apply-on-Xen"><a href="#how-could-it-apply-on-Xen" class="headerlink" title="how could it apply on Xen"></a>how could it apply on Xen</h3><h3 id="Xen-hypervisor-and-ROP"><a href="#Xen-hypervisor-and-ROP" class="headerlink" title="Xen hypervisor and ROP"></a>Xen hypervisor and ROP</h3><p>Control-flow Enforcement Technology (CET) is a set of features in hardware designed to combat Return-oriented Programming (ROP, also call/jump COP/¯JOP) attacks. Xen 4.14 can use these hardware features, if available, to protect itself from ROP attacks.[5]</p>
 <h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] Ding B, Wu Y, He Y, et al. Return-oriented programming attack on the xen hypervisor[C]//2012 Seventh International Conference on Availability, Reliability and Security. IEEE, 2012: 479-484.</p>
@@ -1214,7 +1218,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">78.9k</span>&nbsp;字
+                class="white-color">78.3k</span>&nbsp;字
             
             
             
