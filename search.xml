@@ -5102,6 +5102,27 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
   <entry>
     <title>m1racles</title>
     <url>/2021/05/31/m1racles/</url>
-    <content><![CDATA[]]></content>
+    <content><![CDATA[<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ol>
+<li>调研一下M1芯片漏洞；</li>
+<li>以及幽灵漏洞，熔断漏洞</li>
+</ol>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] <a href="https://m1racles.com/" target="_blank" rel="noopener">https://m1racles.com/</a></p>
+]]></content>
+      <tags>
+        <tag>TODO</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Read Data from LOL Client</title>
+    <url>/2021/05/31/Read-Data-from-LOL-Client/</url>
+    <content><![CDATA[<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><p>读取联盟客户端英雄数据</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] <a href="https://nickcano.com/reversing-league-of-legends-client/" target="_blank" rel="noopener">https://nickcano.com/reversing-league-of-legends-client/</a></p>
+<p>[2] <a href="http://www.rohitab.com/apimonitor" target="_blank" rel="noopener">http://www.rohitab.com/apimonitor</a></p>
+<p>[3] <a href="https://github.com/nickcano/LibCEF-API-Monitor-Definitions" target="_blank" rel="noopener">https://github.com/nickcano/LibCEF-API-Monitor-Definitions</a></p>
+<p>[4] <a href="https://riot-api-libraries.readthedocs.io/en/latest/" target="_blank" rel="noopener">https://riot-api-libraries.readthedocs.io/en/latest/</a></p>
+]]></content>
+      <tags>
+        <tag>TODO</tag>
+      </tags>
   </entry>
 </search>
