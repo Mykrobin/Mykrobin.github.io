@@ -645,8 +645,8 @@
 <h3 id="SGX-架构"><a href="#SGX-架构" class="headerlink" title="SGX 架构"></a>SGX 架构</h3><p><img src="/2021/05/24/CHANCEL/sgx-architecture-1.png" width="600px"></p>
 <h3 id="enclave"><a href="#enclave" class="headerlink" title="enclave"></a>enclave</h3><p>地理学上的解释</p>
 <blockquote>
-<p>外飞地（Exclave）： 某国家拥有一块与该国分离开来的领土，该领土被其他国家隔开，则该领土称为某国的外飞地。</p>
-<p>内飞地（Enclave）：某国家国境之内有块地区的主权属于别的国家，则该地区是这国家的内飞地，也同时是握有主权国家的外飞地。</p>
+<p>外飞地(Exclave)：某国家拥有一块与该国分离开来的领土，该领土被其他国家隔开，则该领土称为某国的外飞地。</p>
+<p>内飞地(Enclave): 某国家国境之内有块地区的主权属于别的国家，则该地区是这国家的内飞地，也同时是握有主权国家的外飞地。</p>
 </blockquote>
 <p>SGX允许应用程序实现一个被称为 enclave 的容器,在应用程序的地址空间中划分出一块被保护的区域,为容器内的代码和数据提供机密性和完整性的保护,免受拥有特殊权限的恶意软件的破坏.</p>
 <p>enclave 是一个被保护的容器，存放应用程序敏感数据和代码，SGX允许应用程序指定需要保护的代码和数据，创建enclave之前，不必对其进行分析，加载到enclave之后，必须被完整度量，且之后SGX保证其不能被外部软件所访问.  enclave都驻留在EPC（enclave page cache）中，这是系统内被保护的物理内存，用于存放enclave和SGX数据结构.以支持SGX的一种架构为例，如果在加密保护的DRAM (dynamic random access memory) 中实现EPC，那么他也支持BIOS保留一段PRM（processor reserved memory）的内存.</p>
@@ -753,6 +753,211 @@
       <categories>
         <category>paper</category>
         <category>NDSS</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>TEE</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CITM attacks</title>
+    <url>/2021/03/23/CITM-attacks/</url>
+    <content><![CDATA[<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:left">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:left">原文PDF</td>
+<td style="text-align:center"><a href="https://dl.acm.org/doi/pdf/10.1145/3372297.3417886" target="_blank" rel="noopener">cache-in-the-middle</a> <a href="https://ykma.gitee.io/files/docs/CITM-slides.pdf">CITM-slides</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:left">作者信息</td>
+<td style="text-align:center">中科院，乔治梅森大学 <a href="https://csis.gmu.edu/ksun/" target="_blank" rel="noopener">home-page</a></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:left">核心内容</td>
+<td style="text-align:center">基于ARM的CITM攻击原因分析</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:left">研究领域</td>
+<td style="text-align:center">TEE 可信计算环境</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:left">全文总览</td>
+<td style="text-align:center">本文发现了三种基于缓存的攻击（CITM），针对IEE数据保护模型和ARM缓存属性，分析了CITM的攻击原因并给出对策。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="研究动机"><a href="#研究动机" class="headerlink" title="研究动机"></a>研究动机</h2><p>本文聚焦在ARM TrustZone中的一个冲突矛盾点：</p>
+<p>在开发者眼中，想要通过在可信执行环境中约束第三方软件的安装起到最小化可信计算基的目的，而第三方软想要将其安装在可信环境中。</p>
+<p>已有的解决方案： IEE </p>
+<p>为了解决上述的矛盾点，研究者们在普通的执行环境中创建了一个隔离的执行环境，这样可以为安全敏感型应用提供保护。</p>
+<p>现有的IEE系统更多地关注于保护IEE敏感数据的主存，而在IEE系统中缓存的安全性还没有很好的研究。</p>
+<p>本文系统的研究了 IEE 的数据保护模型和 ARM cache的特征，发现了三种可以成为CITM的攻击能够泄露在IEE中保护的敏感数据。</p>
+<p>作者在三种IEE系统中测试了CITM攻击，最后分析了CITM攻击的根本原因，并提出了防御机制。</p>
+<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><p>TrustZone作为一种硬件辅助技术，将平台划分为两个执行环境： <strong>正常世界</strong> (非安全世界)和 <strong>安全世界</strong> ，其中</p>
+<ul>
+<li><strong>正常世界</strong> (NW)负责在rich Os上运行正常的应用程序</li>
+<li><strong>安全世界</strong> (SW)保护安全敏感的代码和数据</li>
+</ul>
+<p>对于支持TrustZone的ARM处理器，所有级别的缓存都扩展了一个额外的标记位(NS位)来记录它们的安全状态</p>
+<ul>
+<li><p>当从正常世界访问内存时，相应的cache line将设置为非安全的</p>
+</li>
+<li><p>当从安全世界访问内存时，相应的cache line将被设置为安全的</p>
+</li>
+<li><p>另外，cache line的NS位是由硬件自动设置的，软件不能修改</p>
+</li>
+<li><p>TZASC 硬件可以区分memory为 Secure 与 Non-secure</p>
+</li>
+<li><p>ARM 处理器配置了两级缓存</p>
+<p><img src="/2021/03/23/CITM-attacks/image-20210330093949863.png" width="400"></p>
+</li>
+</ul>
+<p>TrustZone的传统用法是在安全的环境中运行安全敏感的应用程序并存储它们的敏感数据，(也就是把这些敏感操作都放到安全世界中)，</p>
+<p><img src="/2021/03/23/CITM-attacks/image-20210330091547211.png" width="400"></p>
+<ul>
+<li><p>这便是可信执行环境 ( TEE )系统，其中安全敏感的应用程序在这里被实现为 可信应用程序 ( TA )，运行在安全世界(SW)中。</p>
+<ul>
+<li>(例：三星KNOX、OP-TEE、高通QSEE、华为安全操作系统)</li>
+</ul>
+</li>
+<li><p>TEE解决方案依赖于内置的硬件支持 来实施安全隔离，并防范来自不可信的rich Os的攻击。</p>
+<ul>
+<li>问题：设备制造商和第三方安全敏感的应用程序开发人员存在需求冲突 （制造商不想打开SW让你安第三方APP，他们更信任自己的应用，但第三方APP想进入SW以求安全可信）</li>
+</ul>
+</li>
+<li><p>为此，研究人员建议在正常世界中创建 <strong>孤立的执行环境</strong> (称为 <strong>IEE</strong> )</p>
+</li>
+</ul>
+<p><img src="/2021/03/23/CITM-attacks/image-20210330091804383.png" width="400"></p>
+<ul>
+<li><p>关键点：在安全的世界中使用可信参考监视器(例： <strong>IEE监视器</strong> )，确保只有经过授权的运行在IEE中的安全敏感应用程序才能访问相关的IEE敏感资源，从而保护一个IEE中的安全敏感应用程序不受其他IEEs和rich OS的影响。</p>
+<ul>
+<li>TrustICE 依赖于IEE监视器，通过动态控制IEE内存的安全属性来保护IEE内存。</li>
+<li>Ginseng 构建了IEEs来保护正常世界中的第三方应用程序的秘密，而不需要在安全世界中部署任何特定于应用程序的逻辑。</li>
+<li>SANCTUARY 将其IEE分配为per-core环境，以确保在正常世界中，为IEE指定的内存(以下简称IEE内存)不被任何其他非安全的内核访问。</li>
+</ul>
+</li>
+<li><p>IEE 优缺点：</p>
+<ul>
+<li><p>用“ <strong>switch out</strong> ”来表示一个内核的上下文从IEE切换到不可信的rich OS的进程；用“ <strong>switch in</strong> ”来表示每个内核上的逆向进程。</p>
+</li>
+<li><p>IEE系统能够最大限度地 <strong>减小SW的TCB</strong> ：仅在SW中安装IEE监视器即可将安全敏感应用程序转移到NW中。</p>
+</li>
+<li><p>IEE系统具有<strong>可移植性</strong> ，表现在：安全敏感的应用程序是在NW中安装和执行的。</p>
+</li>
+<li><p>但安全敏感的应用程序是由<strong>软件</strong>组件(例：IEE监视器)隔离和保护的，故IEE系统可能<strong>无法达到</strong>与TEE系统相同的安全保护级别。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="现存系统及CITM攻击"><a href="#现存系统及CITM攻击" class="headerlink" title="现存系统及CITM攻击"></a>现存系统及CITM攻击</h2><ul>
+<li>CITM可以操纵IEE保护的敏感数据：<ul>
+<li>在并发执行时，通过 <strong>跨核缓存</strong> [4] [5] 操作来操纵IEE数据<ul>
+<li>在多核平台上，防范并发运行的不可信的rich OS，仅确保在IEE内存上进行core-wise isolation是不安全的，因为缓存可能仍然对跨核访问开放，从而受到攻击者的操纵</li>
+<li><strong>SANCTUARY</strong> ：在并发执行过程中，攻击者通过跨核L1缓存操作成功窃取和修改SANCTUARY系统的IEE数据</li>
+</ul>
+</li>
+<li>操纵IEE内存的 <strong>非安全缓存映射</strong> 绕过其安全保护措施<ul>
+<li>当一个安全敏感的应用程序被挂起或完成时(即在“switch out”过程中)，IEE系统必须采取一些安全措施来保护IEE数据，防止以后被rich OS访问，攻击者可以通过操纵到用于安全措施的IEE内存的非安全缓存映射来绕过这些安全措施</li>
+<li><strong>Ginseng</strong> ：绕过“switch out”过程中强制执行的安全措施，窃取Ginseng系统的IEE数据</li>
+</ul>
+</li>
+<li>在“ <strong>switch out</strong> ”过程中 <strong>窃取</strong> IEE敏感数据，并在“ <strong>switch in</strong> ”过程中 <strong>篡改</strong> IEE数据<ul>
+<li>当IEE内存保护是通过动态地控制内存的安全属性(例如，配置它在“switch in”前不安全，而在“switch out”前安全)，缓存存在不完整的安全保护</li>
+<li><strong>TrustICE</strong> ：利用在环境交换过程中没有得到很好保护的环境交换内存的非安全缓存，窃取和篡改TrustICE系统的环境交换数据</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>CITM存在的根本原因：缓存和内存之间的安全相关属性不一致，缓存和内存之间的读写操作不同步。</li>
+<li>解决方案：安全配置IEE内存的缓存属性；在环境切换期间，清除到IEE内存的缓存映射</li>
+</ul>
+<p><strong>IEE的保护措施：</strong></p>
+<p>Model1: 非可信程序与敏感型应用并存的方式</p>
+<blockquote>
+<p>1.为每个安全敏感型应用分配内核隔离存储，处理在并发期间的敏感数据；</p>
+<p>2.当安全敏感应用程序的执行被暂停或完成时，在“切出”过程中清理内核隔离的存储，可以保护所有敏感数据免受不信任程序的侵害；</p>
+<p>3.在恢复或启动对安全敏感的应用程序的执行时，IEE监视器负责在“切入”过程中还原核心隔离的存储或分配空白的核心隔离的存储。</p>
+</blockquote>
+<p>Model2：不允许非可信程序与敏感型应用并存：</p>
+<blockquote>
+<p>单核情况下，运行敏感型应用，直接挂起非可信程序；</p>
+<p>多核情况下，即使有空闲核，也将非可信程序挂起。</p>
+</blockquote>
+<p><strong>本文发现的攻击方式：</strong></p>
+<p>可以通过在normal-world OS中操纵cache实现对IEE环境的威胁。以攻击者的视角出发，可以通过一下两种方式入侵IEE:</p>
+<blockquote>
+<p>1、并发执行期间操纵隔离的内存；</p>
+<p>2、篡改IEE中上下文的切换<sup><a href="#fn_switching" id="reffn_switching">switching</a></sup>。</p>
+</blockquote>
+<h2 id="攻击方法与防御方法"><a href="#攻击方法与防御方法" class="headerlink" title="攻击方法与防御方法"></a>攻击方法与防御方法</h2><h3 id="1-Type-I-并发执行时操纵核间隔离的内存"><a href="#1-Type-I-并发执行时操纵核间隔离的内存" class="headerlink" title="1. Type I 并发执行时操纵核间隔离的内存"></a>1. Type I 并发执行时操纵核间隔离的内存</h3><p><strong>攻击原理：</strong></p>
+<p>多核系统中，当主存用作安全敏感型应用程序的核心隔离存储时，并发运行的恶意程序会通过在正常情况下操纵缓存窃取或者修改核心隔离内存中IEE数据。</p>
+<p>具体过程：当核心隔离出的内存设置为cacheable时，IEE在内存中的数据将会映射到cache中，因为是在normal-world中的安全敏感型应用访问，所以该cache标记为不安全，并且可能由不受信任的OS操纵。TZC-400 可以用来对主存进行隔离，但是这个硬件不会对cache进行隔离。所以存在被攻击的可能。</p>
+<p><strong>SANCTUARY[6] 系统保护机制</strong></p>
+<p><code>该系统的核心隔离存储默认禁用L2 cache.</code></p>
+<p>IEE 结束后，需要switch out，这时在IEE 中运行的微内核会将属于IEE的内存中数据全置为0，通过这种方式清除敏感数据，同时会设置L1 cache为无效。</p>
+<p>IEE启动前，需要switch in，在secure world中的监控器会在IEE中构造一个纯净的执行环境，并且在敏感型应用加载之前设置L1 cache为无效。</p>
+<p><strong>SANCTUARY 面临的Type I 攻击</strong></p>
+<p><strong>攻击流程：</strong></p>
+<p><img src="/2021/03/23/CITM-attacks/image-20210325141138970.png" width="400"></p>
+<h3 id="2-Type-II-在换出过程中绕过安全措施"><a href="#2-Type-II-在换出过程中绕过安全措施" class="headerlink" title="2. Type II 在换出过程中绕过安全措施"></a>2. Type II 在换出过程中绕过安全措施</h3><p><strong>攻击原理：</strong></p>
+<p>攻击者目标是绕过在IEE上下文切换时的安全保护措施。</p>
+<p>因为运行在normal world 中的OS是非信任的，因此切入时的安全措施始终由安全环境中的IEE监视器启动和完成。这些相应的cache line被标记为secure，因此在normal world中无法对其进行更改。攻击者可以利用<strong>cache锁定技术</strong>阻止cache的替换，则IEE 内存中的数据将不会在安全敏感型应用挂起或结束后被清除。从而会被攻击者利用，实现攻击。</p>
+<p>【这里指出的切出程序，主要是在两种world间的切换】</p>
+<p>为了解决此问题，某些IEE系统选择通过有意从安全敏感的应用程序访问安全内存来引发安全环境中的外部异常中止，从而触发上下文切换。在这过程中，接入到normal world且映射到secure memory的cache lines不是安全的，恶意的OS将可能会操作相应的cache line绕过安全保护措施。(Ginseng [7] )</p>
+<p><strong>攻击示意图：</strong></p>
+<p><img src="/2021/03/23/CITM-attacks/image-20210326155423911.png" width="400"></p>
+<h3 id="3-Type-III-在上下文切换时误用安全性不完整的措施"><a href="#3-Type-III-在上下文切换时误用安全性不完整的措施" class="headerlink" title="3. Type III 在上下文切换时误用安全性不完整的措施"></a>3. Type III 在上下文切换时误用安全性不完整的措施</h3><p><strong>攻击原理：</strong></p>
+<p>IEE动态标记Switching程序的安全属性，换出（secure）换入（non-secure）</p>
+<p>这是针对的不完整的安全措施，那么就有可能存在切出泄露，切入覆盖原数据的情况。</p>
+<p><strong>攻击示意图：</strong></p>
+<p><img src="/2021/03/23/CITM-attacks/image-20210326155450688.png" width="400"></p>
+<h2 id="Cache-操作—-补充背景知识"><a href="#Cache-操作—-补充背景知识" class="headerlink" title="Cache 操作—- 补充背景知识"></a>Cache 操作—- 补充背景知识</h2><p><img src="/2021/03/23/CITM-attacks/image-20210303110802982.png" width="600"></p>
+<p><strong>non-cacheability</strong></p>
+<p>[1] 中详细介绍了cacheability与non-cacheability两者的区别</p>
+<p>Cache，就是一种缓存机制，它位于CPU和DDR之间，为CPU和DDR之间的读写提供一段内存缓冲区。cache一般是SRAM，它采用了和制作CPU相同的半导体工艺，它的价格比DDR要高，但读写速度要比DDR快不少。例如CPU要执行DDR里的指令，可以一次性的读一块区域的指令到cache里，下次就可以直接从cache里获取指令，而不用反复的去访问速度较慢的DDR。又例如，CPU要写一块数据到DDR里，它可以将数据快速地写到cache里，然后手动执行一条刷新cache的指令就可以将这片数据都更新到DDR里，或者干脆就不刷新，待cache到合适的时候，自己再将内容flush到DDR里。总之一句话，cache的存在意义就是拉近CPU和DDR直接的性能差异，提高整个系统性能。</p>
+<p>对于单CPU，不操作外设，只对DDR的读写，可以放心的使用cache。对于其它情况，有两种办法：<br>1 手动更新cache，这需要对外设的机制较为了解，且要找到合适的时机刷新(将cache里的数据flush到内存里)或无效(Invalidate，将cache里的内容清掉，下次再读取的时候需要去DDR里读最新的内容)<br>2 将内存设置为non-cache的，更准确的说是non-cacheable的</p>
+<p>在ARM处理器中，一般是采用编译链接时预设的方法来区分cache区域和non-cache区域，在链接脚本或者scatter file里定义不同的section，将需要设为non-cacheable的内存块放置到特定的section里。CPU在启动时会读取这些配置文件，在启动代码里对不同的section配置MMU或MPU，对non-cache的section映射到CPU认识的特拟地址。此后，CPU再访问内存的时候，经过MMU或者MPU，就会知道这块内存是cacheable还是non-cacheable的了。</p>
+<p><strong>write-back</strong></p>
+<p>CPU更新cache时，只是把更新的cache区标记一下，并不同步更新memory，在被替换时才写回下一级存储层次（memory）中。</p>
+<p>[2] 对比了write-through 和 write-back</p>
+<p><strong>write-through</strong></p>
+<p>CPU向cache写入数据时，同时向memory也写一份，使cache和memory的数据保持一致。</p>
+<p><strong>write-allocate</strong></p>
+<p>先把要写的数据载入到Cache中，写Cache，然后再通过flush方式写入到内存中。</p>
+<p>ARM缓存的状态还会受到其他维护操作的影响，比如 <strong>invalidation</strong> 和 <strong>cleaning</strong> 指令。</p>
+<ul>
+<li>当执行 <strong>invalidation</strong> 指令时，它直接使保存在缓存中的数据无效。</li>
+<li><strong>cleaning</strong> 指令将目标缓存的内容转发到下一级缓存或主存。</li>
+</ul>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://blog.csdn.net/wbwwf8685/article/details/52091900" target="_blank" rel="noopener">https://blog.csdn.net/wbwwf8685/article/details/52091900</a></p>
+<p>[2] <a href="http://witmax.cn/cache-writing-policies.html" target="_blank" rel="noopener">http://witmax.cn/cache-writing-policies.html</a></p>
+<p>[3] <a href="https://azeria-labs.com/trusted-execution-environments-tee-and-trustzone/" target="_blank" rel="noopener">https://azeria-labs.com/trusted-execution-environments-tee-and-trustzone/</a></p>
+<p>[4] <a href="https://segmentfault.com/a/1190000000387993" target="_blank" rel="noopener">https://segmentfault.com/a/1190000000387993</a></p>
+<p>[5] <a href="https://segmentfault.com/a/1190000000387968?utm_source=sf-similar-article" target="_blank" rel="noopener">https://segmentfault.com/a/1190000000387968?utm_source=sf-similar-article</a></p>
+<p>[6] Ferdinand Brasser, David Gens, Patrick Jauernig, Ahmad-Reza Sadeghi, and Emmanuel Stapf. 2019. SANCTUARY: ARMing TrustZone with User-space Enclaves.. In NDSS.</p>
+<p>[7] Min Hong Yun and Lin Zhong. 2019. Ginseng: Keeping Secrets in Registers When You Distrust the Operating System.. In NDSS.</p>
+<blockquote id="fn_switching">
+<sup>switching</sup>. 本文指出的换入换出指的是从IEE内部视角看，换出：上下文的切换由IEE到普通OS，换入：上下文切换从OS到IEE.<a href="#reffn_switching" title="Jump back to footnote [switching] in the text."> ↩</a>
+</blockquote>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>CCS</category>
       </categories>
       <tags>
         <tag>论文解读</tag>
@@ -1142,6 +1347,112 @@
       </tags>
   </entry>
   <entry>
+    <title>GiantVM</title>
+    <url>/2021/04/26/GiantVM/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
+    <title>FHEW</title>
+    <url>/2020/08/13/FHEW/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://eprint.iacr.org/2014/816.pdf" target="_blank" rel="noopener">FHEW</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Centrum Wiskunde &amp; Informatica, Amsterdam</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">对全同态加密中 bootstraping 进行优化</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">同态加密</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">优化影响同态加密效率的主要瓶颈——Gentry 的引导程序</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Cryptographic Techniques</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Homomorphic</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Google Technology</title>
+    <url>/2020/11/23/Google-Technology/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/gfs-sosp2003.pdf" target="_blank" rel="noopener">GFS</a> <a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf" target="_blank" rel="noopener">MapReduce</a> <a href="https://storage.googleapis.com/pub-tools-public-publication-data/pdf/68a74a85e1662fe02ff3967497f31fda7f32225c.pdf" target="_blank" rel="noopener">Bigtable</a> <a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/spanner-osdi2012.pdf" target="_blank" rel="noopener">Spanner</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">google</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">分布式文件系统、数据存储系统等技术</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>SOSP</category>
+        <category>OSDI</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Dancing with Wolves</title>
     <url>/2020/06/27/Dancing-with-Wolves/</url>
     <content><![CDATA[<div class="table-container">
@@ -1249,317 +1560,6 @@
         <tag>System Security</tag>
         <tag>Detection</tag>
         <tag>Event-driven</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CITM attacks</title>
-    <url>/2021/03/23/CITM-attacks/</url>
-    <content><![CDATA[<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:left">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:left">原文PDF</td>
-<td style="text-align:center"><a href="https://dl.acm.org/doi/pdf/10.1145/3372297.3417886" target="_blank" rel="noopener">cache-in-the-middle</a> <a href="https://ykma.gitee.io/files/docs/CITM-slides.pdf">CITM-slides</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:left">作者信息</td>
-<td style="text-align:center">中科院，乔治梅森大学 <a href="https://csis.gmu.edu/ksun/" target="_blank" rel="noopener">home-page</a></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:left">核心内容</td>
-<td style="text-align:center">基于ARM的CITM攻击原因分析</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:left">研究领域</td>
-<td style="text-align:center">TEE 可信计算环境</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:left">全文总览</td>
-<td style="text-align:center">本文发现了三种基于缓存的攻击（CITM），针对IEE数据保护模型和ARM缓存属性，分析了CITM的攻击原因并给出对策。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="研究动机"><a href="#研究动机" class="headerlink" title="研究动机"></a>研究动机</h2><p>本文聚焦在ARM TrustZone中的一个冲突矛盾点：</p>
-<p>在开发者眼中，想要通过在可信执行环境中约束第三方软件的安装起到最小化可信计算基的目的，而第三方软想要将其安装在可信环境中。</p>
-<p>已有的解决方案： IEE </p>
-<p>为了解决上述的矛盾点，研究者们在普通的执行环境中创建了一个隔离的执行环境，这样可以为安全敏感型应用提供保护。</p>
-<p>现有的IEE系统更多地关注于保护IEE敏感数据的主存，而在IEE系统中缓存的安全性还没有很好的研究。</p>
-<p>本文系统的研究了 IEE 的数据保护模型和 ARM cache的特征，发现了三种可以成为CITM的攻击能够泄露在IEE中保护的敏感数据。</p>
-<p>作者在三种IEE系统中测试了CITM攻击，最后分析了CITM攻击的根本原因，并提出了防御机制。</p>
-<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><p>TrustZone作为一种硬件辅助技术，将平台划分为两个执行环境： <strong>正常世界</strong> (非安全世界)和 <strong>安全世界</strong> ，其中</p>
-<ul>
-<li><strong>正常世界</strong> (NW)负责在rich Os上运行正常的应用程序</li>
-<li><strong>安全世界</strong> (SW)保护安全敏感的代码和数据</li>
-</ul>
-<p>对于支持TrustZone的ARM处理器，所有级别的缓存都扩展了一个额外的标记位(NS位)来记录它们的安全状态</p>
-<ul>
-<li><p>当从正常世界访问内存时，相应的cache line将设置为非安全的</p>
-</li>
-<li><p>当从安全世界访问内存时，相应的cache line将被设置为安全的</p>
-</li>
-<li><p>另外，cache line的NS位是由硬件自动设置的，软件不能修改</p>
-</li>
-<li><p>TZASC 硬件可以区分memory为 Secure 与 Non-secure</p>
-</li>
-<li><p>ARM 处理器配置了两级缓存</p>
-<p><img src="/2021/03/23/CITM-attacks/image-20210330093949863.png" width="400"></p>
-</li>
-</ul>
-<p>TrustZone的传统用法是在安全的环境中运行安全敏感的应用程序并存储它们的敏感数据，(也就是把这些敏感操作都放到安全世界中)，</p>
-<p><img src="/2021/03/23/CITM-attacks/image-20210330091547211.png" width="400"></p>
-<ul>
-<li><p>这便是可信执行环境 ( TEE )系统，其中安全敏感的应用程序在这里被实现为 可信应用程序 ( TA )，运行在安全世界(SW)中。</p>
-<ul>
-<li>(例：三星KNOX、OP-TEE、高通QSEE、华为安全操作系统)</li>
-</ul>
-</li>
-<li><p>TEE解决方案依赖于内置的硬件支持 来实施安全隔离，并防范来自不可信的rich Os的攻击。</p>
-<ul>
-<li>问题：设备制造商和第三方安全敏感的应用程序开发人员存在需求冲突 （制造商不想打开SW让你安第三方APP，他们更信任自己的应用，但第三方APP想进入SW以求安全可信）</li>
-</ul>
-</li>
-<li><p>为此，研究人员建议在正常世界中创建 <strong>孤立的执行环境</strong> (称为 <strong>IEE</strong> )</p>
-</li>
-</ul>
-<p><img src="/2021/03/23/CITM-attacks/image-20210330091804383.png" width="400"></p>
-<ul>
-<li><p>关键点：在安全的世界中使用可信参考监视器(例： <strong>IEE监视器</strong> )，确保只有经过授权的运行在IEE中的安全敏感应用程序才能访问相关的IEE敏感资源，从而保护一个IEE中的安全敏感应用程序不受其他IEEs和rich OS的影响。</p>
-<ul>
-<li>TrustICE 依赖于IEE监视器，通过动态控制IEE内存的安全属性来保护IEE内存。</li>
-<li>Ginseng 构建了IEEs来保护正常世界中的第三方应用程序的秘密，而不需要在安全世界中部署任何特定于应用程序的逻辑。</li>
-<li>SANCTUARY 将其IEE分配为per-core环境，以确保在正常世界中，为IEE指定的内存(以下简称IEE内存)不被任何其他非安全的内核访问。</li>
-</ul>
-</li>
-<li><p>IEE 优缺点：</p>
-<ul>
-<li><p>用“ <strong>switch out</strong> ”来表示一个内核的上下文从IEE切换到不可信的rich OS的进程；用“ <strong>switch in</strong> ”来表示每个内核上的逆向进程。</p>
-</li>
-<li><p>IEE系统能够最大限度地 <strong>减小SW的TCB</strong> ：仅在SW中安装IEE监视器即可将安全敏感应用程序转移到NW中。</p>
-</li>
-<li><p>IEE系统具有<strong>可移植性</strong> ，表现在：安全敏感的应用程序是在NW中安装和执行的。</p>
-</li>
-<li><p>但安全敏感的应用程序是由<strong>软件</strong>组件(例：IEE监视器)隔离和保护的，故IEE系统可能<strong>无法达到</strong>与TEE系统相同的安全保护级别。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="现存系统及CITM攻击"><a href="#现存系统及CITM攻击" class="headerlink" title="现存系统及CITM攻击"></a>现存系统及CITM攻击</h2><ul>
-<li>CITM可以操纵IEE保护的敏感数据：<ul>
-<li>在并发执行时，通过 <strong>跨核缓存</strong> [4] [5] 操作来操纵IEE数据<ul>
-<li>在多核平台上，防范并发运行的不可信的rich OS，仅确保在IEE内存上进行core-wise isolation是不安全的，因为缓存可能仍然对跨核访问开放，从而受到攻击者的操纵</li>
-<li><strong>SANCTUARY</strong> ：在并发执行过程中，攻击者通过跨核L1缓存操作成功窃取和修改SANCTUARY系统的IEE数据</li>
-</ul>
-</li>
-<li>操纵IEE内存的 <strong>非安全缓存映射</strong> 绕过其安全保护措施<ul>
-<li>当一个安全敏感的应用程序被挂起或完成时(即在“switch out”过程中)，IEE系统必须采取一些安全措施来保护IEE数据，防止以后被rich OS访问，攻击者可以通过操纵到用于安全措施的IEE内存的非安全缓存映射来绕过这些安全措施</li>
-<li><strong>Ginseng</strong> ：绕过“switch out”过程中强制执行的安全措施，窃取Ginseng系统的IEE数据</li>
-</ul>
-</li>
-<li>在“ <strong>switch out</strong> ”过程中 <strong>窃取</strong> IEE敏感数据，并在“ <strong>switch in</strong> ”过程中 <strong>篡改</strong> IEE数据<ul>
-<li>当IEE内存保护是通过动态地控制内存的安全属性(例如，配置它在“switch in”前不安全，而在“switch out”前安全)，缓存存在不完整的安全保护</li>
-<li><strong>TrustICE</strong> ：利用在环境交换过程中没有得到很好保护的环境交换内存的非安全缓存，窃取和篡改TrustICE系统的环境交换数据</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>CITM存在的根本原因：缓存和内存之间的安全相关属性不一致，缓存和内存之间的读写操作不同步。</li>
-<li>解决方案：安全配置IEE内存的缓存属性；在环境切换期间，清除到IEE内存的缓存映射</li>
-</ul>
-<p><strong>IEE的保护措施：</strong></p>
-<p>Model1: 非可信程序与敏感型应用并存的方式</p>
-<blockquote>
-<p>1.为每个安全敏感型应用分配内核隔离存储，处理在并发期间的敏感数据；</p>
-<p>2.当安全敏感应用程序的执行被暂停或完成时，在“切出”过程中清理内核隔离的存储，可以保护所有敏感数据免受不信任程序的侵害；</p>
-<p>3.在恢复或启动对安全敏感的应用程序的执行时，IEE监视器负责在“切入”过程中还原核心隔离的存储或分配空白的核心隔离的存储。</p>
-</blockquote>
-<p>Model2：不允许非可信程序与敏感型应用并存：</p>
-<blockquote>
-<p>单核情况下，运行敏感型应用，直接挂起非可信程序；</p>
-<p>多核情况下，即使有空闲核，也将非可信程序挂起。</p>
-</blockquote>
-<p><strong>本文发现的攻击方式：</strong></p>
-<p>可以通过在normal-world OS中操纵cache实现对IEE环境的威胁。以攻击者的视角出发，可以通过一下两种方式入侵IEE:</p>
-<blockquote>
-<p>1、并发执行期间操纵隔离的内存；</p>
-<p>2、篡改IEE中上下文的切换<sup><a href="#fn_switching" id="reffn_switching">switching</a></sup>。</p>
-</blockquote>
-<h2 id="攻击方法与防御方法"><a href="#攻击方法与防御方法" class="headerlink" title="攻击方法与防御方法"></a>攻击方法与防御方法</h2><h3 id="1-Type-I-并发执行时操纵核间隔离的内存"><a href="#1-Type-I-并发执行时操纵核间隔离的内存" class="headerlink" title="1. Type I 并发执行时操纵核间隔离的内存"></a>1. Type I 并发执行时操纵核间隔离的内存</h3><p><strong>攻击原理：</strong></p>
-<p>多核系统中，当主存用作安全敏感型应用程序的核心隔离存储时，并发运行的恶意程序会通过在正常情况下操纵缓存窃取或者修改核心隔离内存中IEE数据。</p>
-<p>具体过程：当核心隔离出的内存设置为cacheable时，IEE在内存中的数据将会映射到cache中，因为是在normal-world中的安全敏感型应用访问，所以该cache标记为不安全，并且可能由不受信任的OS操纵。TZC-400 可以用来对主存进行隔离，但是这个硬件不会对cache进行隔离。所以存在被攻击的可能。</p>
-<p><strong>SANCTUARY[6] 系统保护机制</strong></p>
-<p><code>该系统的核心隔离存储默认禁用L2 cache.</code></p>
-<p>IEE 结束后，需要switch out，这时在IEE 中运行的微内核会将属于IEE的内存中数据全置为0，通过这种方式清除敏感数据，同时会设置L1 cache为无效。</p>
-<p>IEE启动前，需要switch in，在secure world中的监控器会在IEE中构造一个纯净的执行环境，并且在敏感型应用加载之前设置L1 cache为无效。</p>
-<p><strong>SANCTUARY 面临的Type I 攻击</strong></p>
-<p><strong>攻击流程：</strong></p>
-<p><img src="/2021/03/23/CITM-attacks/image-20210325141138970.png" width="400"></p>
-<h3 id="2-Type-II-在换出过程中绕过安全措施"><a href="#2-Type-II-在换出过程中绕过安全措施" class="headerlink" title="2. Type II 在换出过程中绕过安全措施"></a>2. Type II 在换出过程中绕过安全措施</h3><p><strong>攻击原理：</strong></p>
-<p>攻击者目标是绕过在IEE上下文切换时的安全保护措施。</p>
-<p>因为运行在normal world 中的OS是非信任的，因此切入时的安全措施始终由安全环境中的IEE监视器启动和完成。这些相应的cache line被标记为secure，因此在normal world中无法对其进行更改。攻击者可以利用<strong>cache锁定技术</strong>阻止cache的替换，则IEE 内存中的数据将不会在安全敏感型应用挂起或结束后被清除。从而会被攻击者利用，实现攻击。</p>
-<p>【这里指出的切出程序，主要是在两种world间的切换】</p>
-<p>为了解决此问题，某些IEE系统选择通过有意从安全敏感的应用程序访问安全内存来引发安全环境中的外部异常中止，从而触发上下文切换。在这过程中，接入到normal world且映射到secure memory的cache lines不是安全的，恶意的OS将可能会操作相应的cache line绕过安全保护措施。(Ginseng [7] )</p>
-<p><strong>攻击示意图：</strong></p>
-<p><img src="/2021/03/23/CITM-attacks/image-20210326155423911.png" width="400"></p>
-<h3 id="3-Type-III-在上下文切换时误用安全性不完整的措施"><a href="#3-Type-III-在上下文切换时误用安全性不完整的措施" class="headerlink" title="3. Type III 在上下文切换时误用安全性不完整的措施"></a>3. Type III 在上下文切换时误用安全性不完整的措施</h3><p><strong>攻击原理：</strong></p>
-<p>IEE动态标记Switching程序的安全属性，换出（secure）换入（non-secure）</p>
-<p>这是针对的不完整的安全措施，那么就有可能存在切出泄露，切入覆盖原数据的情况。</p>
-<p><strong>攻击示意图：</strong></p>
-<p><img src="/2021/03/23/CITM-attacks/image-20210326155450688.png" width="400"></p>
-<h2 id="Cache-操作—-补充背景知识"><a href="#Cache-操作—-补充背景知识" class="headerlink" title="Cache 操作—- 补充背景知识"></a>Cache 操作—- 补充背景知识</h2><p><img src="/2021/03/23/CITM-attacks/image-20210303110802982.png" width="600"></p>
-<p><strong>non-cacheability</strong></p>
-<p>[1] 中详细介绍了cacheability与non-cacheability两者的区别</p>
-<p>Cache，就是一种缓存机制，它位于CPU和DDR之间，为CPU和DDR之间的读写提供一段内存缓冲区。cache一般是SRAM，它采用了和制作CPU相同的半导体工艺，它的价格比DDR要高，但读写速度要比DDR快不少。例如CPU要执行DDR里的指令，可以一次性的读一块区域的指令到cache里，下次就可以直接从cache里获取指令，而不用反复的去访问速度较慢的DDR。又例如，CPU要写一块数据到DDR里，它可以将数据快速地写到cache里，然后手动执行一条刷新cache的指令就可以将这片数据都更新到DDR里，或者干脆就不刷新，待cache到合适的时候，自己再将内容flush到DDR里。总之一句话，cache的存在意义就是拉近CPU和DDR直接的性能差异，提高整个系统性能。</p>
-<p>对于单CPU，不操作外设，只对DDR的读写，可以放心的使用cache。对于其它情况，有两种办法：<br>1 手动更新cache，这需要对外设的机制较为了解，且要找到合适的时机刷新(将cache里的数据flush到内存里)或无效(Invalidate，将cache里的内容清掉，下次再读取的时候需要去DDR里读最新的内容)<br>2 将内存设置为non-cache的，更准确的说是non-cacheable的</p>
-<p>在ARM处理器中，一般是采用编译链接时预设的方法来区分cache区域和non-cache区域，在链接脚本或者scatter file里定义不同的section，将需要设为non-cacheable的内存块放置到特定的section里。CPU在启动时会读取这些配置文件，在启动代码里对不同的section配置MMU或MPU，对non-cache的section映射到CPU认识的特拟地址。此后，CPU再访问内存的时候，经过MMU或者MPU，就会知道这块内存是cacheable还是non-cacheable的了。</p>
-<p><strong>write-back</strong></p>
-<p>CPU更新cache时，只是把更新的cache区标记一下，并不同步更新memory，在被替换时才写回下一级存储层次（memory）中。</p>
-<p>[2] 对比了write-through 和 write-back</p>
-<p><strong>write-through</strong></p>
-<p>CPU向cache写入数据时，同时向memory也写一份，使cache和memory的数据保持一致。</p>
-<p><strong>write-allocate</strong></p>
-<p>先把要写的数据载入到Cache中，写Cache，然后再通过flush方式写入到内存中。</p>
-<p>ARM缓存的状态还会受到其他维护操作的影响，比如 <strong>invalidation</strong> 和 <strong>cleaning</strong> 指令。</p>
-<ul>
-<li>当执行 <strong>invalidation</strong> 指令时，它直接使保存在缓存中的数据无效。</li>
-<li><strong>cleaning</strong> 指令将目标缓存的内容转发到下一级缓存或主存。</li>
-</ul>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://blog.csdn.net/wbwwf8685/article/details/52091900" target="_blank" rel="noopener">https://blog.csdn.net/wbwwf8685/article/details/52091900</a></p>
-<p>[2] <a href="http://witmax.cn/cache-writing-policies.html" target="_blank" rel="noopener">http://witmax.cn/cache-writing-policies.html</a></p>
-<p>[3] <a href="https://azeria-labs.com/trusted-execution-environments-tee-and-trustzone/" target="_blank" rel="noopener">https://azeria-labs.com/trusted-execution-environments-tee-and-trustzone/</a></p>
-<p>[4] <a href="https://segmentfault.com/a/1190000000387993" target="_blank" rel="noopener">https://segmentfault.com/a/1190000000387993</a></p>
-<p>[5] <a href="https://segmentfault.com/a/1190000000387968?utm_source=sf-similar-article" target="_blank" rel="noopener">https://segmentfault.com/a/1190000000387968?utm_source=sf-similar-article</a></p>
-<p>[6] Ferdinand Brasser, David Gens, Patrick Jauernig, Ahmad-Reza Sadeghi, and Emmanuel Stapf. 2019. SANCTUARY: ARMing TrustZone with User-space Enclaves.. In NDSS.</p>
-<p>[7] Min Hong Yun and Lin Zhong. 2019. Ginseng: Keeping Secrets in Registers When You Distrust the Operating System.. In NDSS.</p>
-<blockquote id="fn_switching">
-<sup>switching</sup>. 本文指出的换入换出指的是从IEE内部视角看，换出：上下文的切换由IEE到普通OS，换入：上下文切换从OS到IEE.<a href="#reffn_switching" title="Jump back to footnote [switching] in the text."> ↩</a>
-</blockquote>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>CCS</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>TEE</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>FHEW</title>
-    <url>/2020/08/13/FHEW/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://eprint.iacr.org/2014/816.pdf" target="_blank" rel="noopener">FHEW</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Centrum Wiskunde &amp; Informatica, Amsterdam</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">对全同态加密中 bootstraping 进行优化</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">同态加密</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">优化影响同态加密效率的主要瓶颈——Gentry 的引导程序</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Cryptographic Techniques</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>Homomorphic</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GiantVM</title>
-    <url>/2021/04/26/GiantVM/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
-    <title>Google Technology</title>
-    <url>/2020/11/23/Google-Technology/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/gfs-sosp2003.pdf" target="_blank" rel="noopener">GFS</a> <a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/mapreduce-osdi04.pdf" target="_blank" rel="noopener">MapReduce</a> <a href="https://storage.googleapis.com/pub-tools-public-publication-data/pdf/68a74a85e1662fe02ff3967497f31fda7f32225c.pdf" target="_blank" rel="noopener">Bigtable</a> <a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/spanner-osdi2012.pdf" target="_blank" rel="noopener">Spanner</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">google</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">分布式文件系统、数据存储系统等技术</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>SOSP</category>
-        <category>OSDI</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -1731,28 +1731,6 @@
       <tags>
         <tag>论文解读</tag>
         <tag>Protocol</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
-    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
-    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
-<ul>
-<li><strong>Active Monitoring（Synchronous）</strong></li>
-</ul>
-<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
-<ul>
-<li><strong>Passive Monitoring （Asynchronous）</strong></li>
-</ul>
-<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>虚拟化安全</tag>
       </tags>
   </entry>
   <entry>
@@ -2062,6 +2040,83 @@ func main()  {
       </tags>
   </entry>
   <entry>
+    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
+    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
+    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
+<ul>
+<li><strong>Active Monitoring（Synchronous）</strong></li>
+</ul>
+<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
+<ul>
+<li><strong>Passive Monitoring （Asynchronous）</strong></li>
+</ul>
+<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>虚拟化安全</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>MIT log 0 内存管理实验环境</title>
+    <url>/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/</url>
+    <content><![CDATA[<h3 id="内存实验环境搭建"><a href="#内存实验环境搭建" class="headerlink" title="内存实验环境搭建"></a>内存实验环境搭建</h3><p><strong>操作系统</strong>是计算机科学中十分重要的一门基础学科，是一名计算机专业毕业生必须要具备的基础知识。但是在学习这门课时，如果仅仅把目光停留在课本上一些关于操作系统概念上的叙述，并不能对操作系统有着深层次的理解。必须要结合动手实践，才能真正掌握核心的知识。<br>MIT的操作系统课程6.828是一门被广泛好评的入门课程。它最重要的特点就是它实践第一的教学原则。在这门课程中会涉及到非常丰富的实验，也会有非常多的动手机会。而且授课者更是亲自构建了一个简化的基于Unix内核的操作系统xv6。所有的实验都是在这个操作系统上完成。虽然它功能很简单，但是它能够帮助我们真正的了解操作系统在做什么[3]。<br>因此，以博客的形式记录自己学习6.828的过程，本系列博文尽量包括以下几个内容：</p>
+<ul>
+<li>所有实验的实验报告(Lab)</li>
+<li>所有实验中的练习(Exercise)</li>
+</ul>
+<p>下面开始实验环境的搭建：</p>
+<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h4><p>本次实验在ubuntu18系统上进行，所有的操作步骤都在Linux 操作系统上进行。</p>
+<h3 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h3><p>因为本实验的  操作系统是比较新的 Ubuntu18，其自带的软件版本可能比较新，对于此lab可能不太适配，所以需要对需要的软件进行一些配置。</p>
+<h4 id="gcc版本降级"><a href="#gcc版本降级" class="headerlink" title="gcc版本降级"></a>gcc版本降级</h4><p>目的： 将gcc 版本降级到 4.8 版本</p>
+<p>(1). 下载 <code>gcc/g++ 4.8</code></p>
+<pre><code class="lang-shell">apt-get install -y gcc-4.8
+apt-get install -y g++-4.8
+</code></pre>
+<p>(2). 链接gcc/g++实现降级</p>
+<pre><code class="lang-shell">cd /usr/bin
+sudo rm gcc
+sudo ln -s gcc-4.8 gcc
+sudo rm g++
+sudo ln -s g++-4.8 g++
+</code></pre>
+<h4 id="编译qemu"><a href="#编译qemu" class="headerlink" title="编译qemu"></a>编译qemu</h4><p><strong>安装依赖</strong> [4]</p>
+<pre><code class="lang-shell">apt-get install git build-essential binutils g++-multilib libgtk2.0-dev libtool-bin libsdl-dev -y
+</code></pre>
+<p><strong>下载qemu源码</strong></p>
+<pre><code class="lang-shell">git clone https://github.com/mit-pdos/6.828-qemu.git qemu
+</code></pre>
+<p><strong>下载 lab 源码</strong></p>
+<pre><code class="lang-shell">git clone https://pdos.csail.mit.edu/6.828/2018/jos.git lab # 只有第一实验的检查脚本
+</code></pre>
+<p><strong>安装步骤</strong></p>
+<p>进入<code>qemu</code>目录下</p>
+<pre><code class="lang-shell">./configure --disable-kvm --target-list="i386-softmmu x86_64-softmmu"
+sudo make &amp;&amp; make install
+</code></pre>
+<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu.png" height="260xp"></p>
+<p>它生成的最后一个信息 <code>mk obj/kern/kernel.img</code>，这个<code>kernel.img</code>就是内核映像文件，另外obj目录在make之前是没有的，它是make指令生成的，它里面将会有许多的文件我们之后会重点观察。编译完内核源码，我们就可以把它运行在<code>QEMU</code>上啦！[3]</p>
+<p><strong>安装结果测试</strong></p>
+<p>输入<code>/usr/local/bin/qemu-system-i386</code> 出现以下窗口则安装ok</p>
+<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu-test.png" height="300xp"></p>
+<p>在<code>lab</code>目录下输入  <code>make qemu</code> 出现如下结果</p>
+<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/make-qemu.png" height="300xp"></p>
+<p>至此，实验环境搭建完成！</p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://os.vampire.rip/" target="_blank" rel="noopener">https://os.vampire.rip/</a></p>
+<p>[2] <a href="https://zhuanlan.zhihu.com/p/74028717" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/74028717</a></p>
+<p>[3] <a href="https://www.cnblogs.com/fatsheep9146/p/5060292.html" target="_blank" rel="noopener">https://www.cnblogs.com/fatsheep9146/p/5060292.html</a></p>
+<p>[4] <a href="https://www.cnblogs.com/gatsby123/p/9746193.html" target="_blank" rel="noopener">https://www.cnblogs.com/gatsby123/p/9746193.html</a></p>
+]]></content>
+      <tags>
+        <tag>lab</tag>
+        <tag>OS Memory</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>MIT-log-1-启动PC</title>
     <url>/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/</url>
     <content><![CDATA[<h3 id="Part-1-PC-BootStrap"><a href="#Part-1-PC-BootStrap" class="headerlink" title="Part 1: PC BootStrap"></a>Part 1: PC BootStrap</h3><p><strong>PC物理地址空间</strong></p>
@@ -2232,59 +2287,10 @@ in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
       </tags>
   </entry>
   <entry>
-    <title>MIT log 0 内存管理实验环境</title>
-    <url>/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/</url>
-    <content><![CDATA[<h3 id="内存实验环境搭建"><a href="#内存实验环境搭建" class="headerlink" title="内存实验环境搭建"></a>内存实验环境搭建</h3><p><strong>操作系统</strong>是计算机科学中十分重要的一门基础学科，是一名计算机专业毕业生必须要具备的基础知识。但是在学习这门课时，如果仅仅把目光停留在课本上一些关于操作系统概念上的叙述，并不能对操作系统有着深层次的理解。必须要结合动手实践，才能真正掌握核心的知识。<br>MIT的操作系统课程6.828是一门被广泛好评的入门课程。它最重要的特点就是它实践第一的教学原则。在这门课程中会涉及到非常丰富的实验，也会有非常多的动手机会。而且授课者更是亲自构建了一个简化的基于Unix内核的操作系统xv6。所有的实验都是在这个操作系统上完成。虽然它功能很简单，但是它能够帮助我们真正的了解操作系统在做什么[3]。<br>因此，以博客的形式记录自己学习6.828的过程，本系列博文尽量包括以下几个内容：</p>
-<ul>
-<li>所有实验的实验报告(Lab)</li>
-<li>所有实验中的练习(Exercise)</li>
-</ul>
-<p>下面开始实验环境的搭建：</p>
-<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h4><p>本次实验在ubuntu18系统上进行，所有的操作步骤都在Linux 操作系统上进行。</p>
-<h3 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h3><p>因为本实验的  操作系统是比较新的 Ubuntu18，其自带的软件版本可能比较新，对于此lab可能不太适配，所以需要对需要的软件进行一些配置。</p>
-<h4 id="gcc版本降级"><a href="#gcc版本降级" class="headerlink" title="gcc版本降级"></a>gcc版本降级</h4><p>目的： 将gcc 版本降级到 4.8 版本</p>
-<p>(1). 下载 <code>gcc/g++ 4.8</code></p>
-<pre><code class="lang-shell">apt-get install -y gcc-4.8
-apt-get install -y g++-4.8
-</code></pre>
-<p>(2). 链接gcc/g++实现降级</p>
-<pre><code class="lang-shell">cd /usr/bin
-sudo rm gcc
-sudo ln -s gcc-4.8 gcc
-sudo rm g++
-sudo ln -s g++-4.8 g++
-</code></pre>
-<h4 id="编译qemu"><a href="#编译qemu" class="headerlink" title="编译qemu"></a>编译qemu</h4><p><strong>安装依赖</strong> [4]</p>
-<pre><code class="lang-shell">apt-get install git build-essential binutils g++-multilib libgtk2.0-dev libtool-bin libsdl-dev -y
-</code></pre>
-<p><strong>下载qemu源码</strong></p>
-<pre><code class="lang-shell">git clone https://github.com/mit-pdos/6.828-qemu.git qemu
-</code></pre>
-<p><strong>下载 lab 源码</strong></p>
-<pre><code class="lang-shell">git clone https://pdos.csail.mit.edu/6.828/2018/jos.git lab # 只有第一实验的检查脚本
-</code></pre>
-<p><strong>安装步骤</strong></p>
-<p>进入<code>qemu</code>目录下</p>
-<pre><code class="lang-shell">./configure --disable-kvm --target-list="i386-softmmu x86_64-softmmu"
-sudo make &amp;&amp; make install
-</code></pre>
-<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu.png" height="260xp"></p>
-<p>它生成的最后一个信息 <code>mk obj/kern/kernel.img</code>，这个<code>kernel.img</code>就是内核映像文件，另外obj目录在make之前是没有的，它是make指令生成的，它里面将会有许多的文件我们之后会重点观察。编译完内核源码，我们就可以把它运行在<code>QEMU</code>上啦！[3]</p>
-<p><strong>安装结果测试</strong></p>
-<p>输入<code>/usr/local/bin/qemu-system-i386</code> 出现以下窗口则安装ok</p>
-<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu-test.png" height="300xp"></p>
-<p>在<code>lab</code>目录下输入  <code>make qemu</code> 出现如下结果</p>
-<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/make-qemu.png" height="300xp"></p>
-<p>至此，实验环境搭建完成！</p>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://os.vampire.rip/" target="_blank" rel="noopener">https://os.vampire.rip/</a></p>
-<p>[2] <a href="https://zhuanlan.zhihu.com/p/74028717" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/74028717</a></p>
-<p>[3] <a href="https://www.cnblogs.com/fatsheep9146/p/5060292.html" target="_blank" rel="noopener">https://www.cnblogs.com/fatsheep9146/p/5060292.html</a></p>
-<p>[4] <a href="https://www.cnblogs.com/gatsby123/p/9746193.html" target="_blank" rel="noopener">https://www.cnblogs.com/gatsby123/p/9746193.html</a></p>
+    <title>MuonTrap-Preventing Cross-Domain Spectre-Like</title>
+    <url>/2021/03/15/MuonTrap-Preventing-Cross-Domain-Spectre-Like/</url>
+    <content><![CDATA[<p>清华安全公众号推荐</p>
 ]]></content>
-      <tags>
-        <tag>lab</tag>
-        <tag>OS Memory</tag>
-      </tags>
   </entry>
   <entry>
     <title>Operating Systems</title>
@@ -2293,12 +2299,6 @@ sudo make &amp;&amp; make install
       <tags>
         <tag>读书笔记</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>MuonTrap-Preventing Cross-Domain Spectre-Like</title>
-    <url>/2021/03/15/MuonTrap-Preventing-Cross-Domain-Spectre-Like/</url>
-    <content><![CDATA[<p>清华安全公众号推荐</p>
-]]></content>
   </entry>
   <entry>
     <title>PCA图像压缩</title>
@@ -2930,59 +2930,6 @@ func main()  {
     <content><![CDATA[]]></content>
   </entry>
   <entry>
-    <title>SP&#39;15 Last-Level Cache Side-Channel Attacks are Practical</title>
-    <url>/2020/05/18/SP-15-Last-Level-Cache-Side-Channel-Attacks-are-Practical/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://mykrobin.github.io/files/docs/CSCA-004-SP2015.pdf" target="_blank" rel="noopener">Last Level Cache Side Channel Attacks are Practical</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Department of Electrical Engineering, Princeton University</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">side channel attacks</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">security cross VM</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文详细地讲解了跨虚拟机的侧信道攻击</td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>side channel attack</tag>
-        <tag>cross VM</tag>
-        <tag>last level cache</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SecVisor</title>
     <url>/2020/07/21/SecVisor/</url>
     <content><![CDATA[<div class="table-container">
@@ -3456,6 +3403,59 @@ int main(void)
       </tags>
   </entry>
   <entry>
+    <title>SP&#39;15 Last-Level Cache Side-Channel Attacks are Practical</title>
+    <url>/2020/05/18/SP-15-Last-Level-Cache-Side-Channel-Attacks-are-Practical/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://mykrobin.github.io/files/docs/CSCA-004-SP2015.pdf" target="_blank" rel="noopener">Last Level Cache Side Channel Attacks are Practical</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Department of Electrical Engineering, Princeton University</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">side channel attacks</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">security cross VM</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文详细地讲解了跨虚拟机的侧信道攻击</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>side channel attack</tag>
+        <tag>cross VM</tag>
+        <tag>last level cache</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Systematic Review on FHE</title>
     <url>/2020/08/12/Systematic-Review-on-FHE/</url>
     <content><![CDATA[]]></content>
@@ -3809,58 +3809,6 @@ systemctl enable xen-watchdog.service
       </tags>
   </entry>
   <entry>
-    <title>Untrusted Hypervisor AMD Memory Encryption</title>
-    <url>/2021/01/11/Untrusted-Hypervisor-AMD-Memory-Encryption/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://ipads.se.sjtu.edu.cn/_media/publications/fidelius_hpca18.pdf" target="_blank" rel="noopener">Fidelius</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"><a href="https://ipads.se.sjtu.edu.cn/" target="_blank" rel="noopener">IPADS</a></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">在非可信的Hypervisor上通过加密内存对VM进行保护</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">系统安全</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文提出了系统Fidelius，该系统利用AMD硬件特性，在非可信Hypervisor上对内存进行加密处理，从而对客户机提供保护</td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>HPCA</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>Untrusted Hypervisor</tag>
-        <tag>Virtualization</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Xen log 1 服务器部署Debian9+Xen4.11记录</title>
     <url>/2020/07/17/Xen-log-1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2Debian9-Xen4-11%E8%AE%B0%E5%BD%95/</url>
     <content><![CDATA[<h3 id="服务器网络部署"><a href="#服务器网络部署" class="headerlink" title="服务器网络部署"></a>服务器网络部署</h3><p>目前遇到的这个问题可能不是普遍试用，但是在操作过程中的确遇到过。</p>
@@ -3952,6 +3900,58 @@ reboot
         <tag>Xen log</tag>
         <tag>Linux</tag>
         <tag>Debian</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Untrusted Hypervisor AMD Memory Encryption</title>
+    <url>/2021/01/11/Untrusted-Hypervisor-AMD-Memory-Encryption/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://ipads.se.sjtu.edu.cn/_media/publications/fidelius_hpca18.pdf" target="_blank" rel="noopener">Fidelius</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"><a href="https://ipads.se.sjtu.edu.cn/" target="_blank" rel="noopener">IPADS</a></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">在非可信的Hypervisor上通过加密内存对VM进行保护</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">系统安全</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文提出了系统Fidelius，该系统利用AMD硬件特性，在非可信Hypervisor上对内存进行加密处理，从而对客户机提供保护</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>HPCA</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Untrusted Hypervisor</tag>
+        <tag>Virtualization</tag>
       </tags>
   </entry>
   <entry>
@@ -4642,19 +4642,6 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
-    <title>m1racles</title>
-    <url>/2021/05/31/m1racles/</url>
-    <content><![CDATA[<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ol>
-<li>调研一下M1芯片漏洞；</li>
-<li>以及幽灵漏洞，熔断漏洞</li>
-</ol>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] <a href="https://m1racles.com/" target="_blank" rel="noopener">https://m1racles.com/</a></p>
-]]></content>
-      <tags>
-        <tag>TODO</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>RAMBleed Reading Bits in Memory Without Accessing Them</title>
     <url>/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/</url>
     <content><![CDATA[<div class="table-container">
@@ -4744,6 +4731,29 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
         <tag>论文解读</tag>
         <tag>System Security</tag>
         <tag>Rowhammer attack</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>m1racles</title>
+    <url>/2021/05/31/m1racles/</url>
+    <content><![CDATA[<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><ol>
+<li>调研一下M1芯片漏洞；</li>
+<li>以及幽灵漏洞，熔断漏洞</li>
+</ol>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] <a href="https://m1racles.com/" target="_blank" rel="noopener">https://m1racles.com/</a></p>
+]]></content>
+      <tags>
+        <tag>TODO</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>云虚拟化安全攻防实践</title>
+    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
+<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
+<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
+      <tags>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -4891,24 +4901,14 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
-    <title>内嵌汇编学习</title>
-    <url>/2020/11/30/%E5%86%85%E5%B5%8C%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>从硬件层认识计算机</title>
     <url>/2020/11/23/%E4%BB%8E%E7%A1%AC%E4%BB%B6%E5%B1%82%E8%AE%A4%E8%AF%86%E8%AE%A1%E7%AE%97%E6%9C%BA/</url>
     <content><![CDATA[]]></content>
   </entry>
   <entry>
-    <title>云虚拟化安全攻防实践</title>
-    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
-<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
-<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
-      <tags>
-        <tag>读书笔记</tag>
-      </tags>
+    <title>内嵌汇编学习</title>
+    <url>/2020/11/30/%E5%86%85%E5%B5%8C%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>博士学长有话说</title>
