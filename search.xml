@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>A FULLY HOMOMORPHIC ENCRYPTION SCHEME</title>
+    <url>/2020/08/13/A-FULLY-HOMOMORPHIC-ENCRYPTION-SCHEME/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>Advice for PhD</title>
     <url>/2021/02/17/Advice-for-PhD/</url>
     <content><![CDATA[<h3 id="Twenty-things-for-the-start-of-PhD"><a href="#Twenty-things-for-the-start-of-PhD" class="headerlink" title="Twenty things for the start of PhD"></a>Twenty things for the start of PhD</h3><p>Recent PhD graduate Lucy A. Taylor shares the advice she and her colleagues wish they had received.</p>
@@ -35,11 +40,6 @@
       <tags>
         <tag>essay</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>A FULLY HOMOMORPHIC ENCRYPTION SCHEME</title>
-    <url>/2020/08/13/A-FULLY-HOMOMORPHIC-ENCRYPTION-SCHEME/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
@@ -594,8 +594,8 @@
       </tags>
   </entry>
   <entry>
-    <title>CITM attacks</title>
-    <url>/2021/03/23/CITM-attacks/</url>
+    <title>CHANCEL</title>
+    <url>/2021/05/24/CHANCEL/</url>
     <content><![CDATA[<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><div class="table-container">
 <table>
 <thead>
@@ -609,17 +609,17 @@
 <tr>
 <td style="text-align:center">1</td>
 <td style="text-align:left">原文PDF</td>
-<td style="text-align:center"><a href="https://dl.acm.org/doi/pdf/10.1145/3372297.3417886" target="_blank" rel="noopener">cache-in-the-middle</a> <a href="https://ykma.gitee.io/files/docs/CITM-slides.pdf">CITM-slides</a></td>
+<td style="text-align:center"><a href="https://lifeasageek.github.io/papers/ahmad-chancel.pdf" target="_blank" rel="noopener">paper</a> <a href="https://lifeasageek.github.io/papers/ahmad-chancel-slides.pdf" target="_blank" rel="noopener">slides</a></td>
 </tr>
 <tr>
 <td style="text-align:center">2</td>
 <td style="text-align:left">作者信息</td>
-<td style="text-align:center">中科院，乔治梅森大学 <a href="https://csis.gmu.edu/ksun/" target="_blank" rel="noopener">home-page</a></td>
+<td style="text-align:center"><a href="https://web.ics.purdue.edu/~ahmad37/" target="_blank" rel="noopener">https://web.ics.purdue.edu/~ahmad37/</a> <a href="https://www.cs.purdue.edu/homes/pfonseca/" target="_blank" rel="noopener">https://www.cs.purdue.edu/homes/pfonseca/</a> <a href="https://lifeasageek.github.io/" target="_blank" rel="noopener">https://lifeasageek.github.io/</a></td>
 </tr>
 <tr>
 <td style="text-align:center">3</td>
 <td style="text-align:left">核心内容</td>
-<td style="text-align:center">基于ARM的CITM攻击原因分析</td>
+<td style="text-align:center">在飞地中为多个用户提供隔离保障</td>
 </tr>
 <tr>
 <td style="text-align:center">4</td>
@@ -629,169 +629,130 @@
 <tr>
 <td style="text-align:center">5</td>
 <td style="text-align:left">全文总览</td>
-<td style="text-align:center">本文发现了三种基于缓存的攻击（CITM），针对IEE数据保护模型和ARM缓存属性，分析了CITM的攻击原因并给出对策。</td>
+<td style="text-align:center">在飞地中为多个用户提供隔离保障，从而避免用户执行代码的漏洞导致的隐私数据泄露，在提供安全保证的同时，与多进程沙盒对比，有着明显的性能提升。</td>
 </tr>
 </tbody>
 </table>
 </div>
-<h2 id="研究动机"><a href="#研究动机" class="headerlink" title="研究动机"></a>研究动机</h2><p>本文聚焦在ARM TrustZone中的一个冲突矛盾点：</p>
-<p>在开发者眼中，想要通过在可信执行环境中约束第三方软件的安装起到最小化可信计算基的目的，而第三方软想要将其安装在可信环境中。</p>
-<p>已有的解决方案： IEE </p>
-<p>为了解决上述的矛盾点，研究者们在普通的执行环境中创建了一个隔离的执行环境，这样可以为安全敏感型应用提供保护。</p>
-<p>现有的IEE系统更多地关注于保护IEE敏感数据的主存，而在IEE系统中缓存的安全性还没有很好的研究。</p>
-<p>本文系统的研究了 IEE 的数据保护模型和 ARM cache的特征，发现了三种可以成为CITM的攻击能够泄露在IEE中保护的敏感数据。</p>
-<p>作者在三种IEE系统中测试了CITM攻击，最后分析了CITM攻击的根本原因，并提出了防御机制。</p>
-<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><p>TrustZone作为一种硬件辅助技术，将平台划分为两个执行环境： <strong>正常世界</strong> (非安全世界)和 <strong>安全世界</strong> ，其中</p>
-<ul>
-<li><strong>正常世界</strong> (NW)负责在rich Os上运行正常的应用程序</li>
-<li><strong>安全世界</strong> (SW)保护安全敏感的代码和数据</li>
-</ul>
-<p>对于支持TrustZone的ARM处理器，所有级别的缓存都扩展了一个额外的标记位(NS位)来记录它们的安全状态</p>
-<ul>
-<li><p>当从正常世界访问内存时，相应的cache line将设置为非安全的</p>
-</li>
-<li><p>当从安全世界访问内存时，相应的cache line将被设置为安全的</p>
-</li>
-<li><p>另外，cache line的NS位是由硬件自动设置的，软件不能修改</p>
-</li>
-<li><p>TZASC 硬件可以区分memory为 Secure 与 Non-secure</p>
-</li>
-<li><p>ARM 处理器配置了两级缓存</p>
-<p><img src="/2021/03/23/CITM-attacks/image-20210330093949863.png" width="400"></p>
-</li>
-</ul>
-<p>TrustZone的传统用法是在安全的环境中运行安全敏感的应用程序并存储它们的敏感数据，(也就是把这些敏感操作都放到安全世界中)，</p>
-<p><img src="/2021/03/23/CITM-attacks/image-20210330091547211.png" width="400"></p>
-<ul>
-<li><p>这便是可信执行环境 ( TEE )系统，其中安全敏感的应用程序在这里被实现为 可信应用程序 ( TA )，运行在安全世界(SW)中。</p>
-<ul>
-<li>(例：三星KNOX、OP-TEE、高通QSEE、华为安全操作系统)</li>
-</ul>
-</li>
-<li><p>TEE解决方案依赖于内置的硬件支持 来实施安全隔离，并防范来自不可信的rich Os的攻击。</p>
-<ul>
-<li>问题：设备制造商和第三方安全敏感的应用程序开发人员存在需求冲突 （制造商不想打开SW让你安第三方APP，他们更信任自己的应用，但第三方APP想进入SW以求安全可信）</li>
-</ul>
-</li>
-<li><p>为此，研究人员建议在正常世界中创建 <strong>孤立的执行环境</strong> (称为 <strong>IEE</strong> )</p>
-</li>
-</ul>
-<p><img src="/2021/03/23/CITM-attacks/image-20210330091804383.png" width="400"></p>
-<ul>
-<li><p>关键点：在安全的世界中使用可信参考监视器(例： <strong>IEE监视器</strong> )，确保只有经过授权的运行在IEE中的安全敏感应用程序才能访问相关的IEE敏感资源，从而保护一个IEE中的安全敏感应用程序不受其他IEEs和rich OS的影响。</p>
-<ul>
-<li>TrustICE 依赖于IEE监视器，通过动态控制IEE内存的安全属性来保护IEE内存。</li>
-<li>Ginseng 构建了IEEs来保护正常世界中的第三方应用程序的秘密，而不需要在安全世界中部署任何特定于应用程序的逻辑。</li>
-<li>SANCTUARY 将其IEE分配为per-core环境，以确保在正常世界中，为IEE指定的内存(以下简称IEE内存)不被任何其他非安全的内核访问。</li>
-</ul>
-</li>
-<li><p>IEE 优缺点：</p>
-<ul>
-<li><p>用“ <strong>switch out</strong> ”来表示一个内核的上下文从IEE切换到不可信的rich OS的进程；用“ <strong>switch in</strong> ”来表示每个内核上的逆向进程。</p>
-</li>
-<li><p>IEE系统能够最大限度地 <strong>减小SW的TCB</strong> ：仅在SW中安装IEE监视器即可将安全敏感应用程序转移到NW中。</p>
-</li>
-<li><p>IEE系统具有<strong>可移植性</strong> ，表现在：安全敏感的应用程序是在NW中安装和执行的。</p>
-</li>
-<li><p>但安全敏感的应用程序是由<strong>软件</strong>组件(例：IEE监视器)隔离和保护的，故IEE系统可能<strong>无法达到</strong>与TEE系统相同的安全保护级别。</p>
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="现存系统及CITM攻击"><a href="#现存系统及CITM攻击" class="headerlink" title="现存系统及CITM攻击"></a>现存系统及CITM攻击</h2><ul>
-<li>CITM可以操纵IEE保护的敏感数据：<ul>
-<li>在并发执行时，通过 <strong>跨核缓存</strong> [4] [5] 操作来操纵IEE数据<ul>
-<li>在多核平台上，防范并发运行的不可信的rich OS，仅确保在IEE内存上进行core-wise isolation是不安全的，因为缓存可能仍然对跨核访问开放，从而受到攻击者的操纵</li>
-<li><strong>SANCTUARY</strong> ：在并发执行过程中，攻击者通过跨核L1缓存操作成功窃取和修改SANCTUARY系统的IEE数据</li>
-</ul>
-</li>
-<li>操纵IEE内存的 <strong>非安全缓存映射</strong> 绕过其安全保护措施<ul>
-<li>当一个安全敏感的应用程序被挂起或完成时(即在“switch out”过程中)，IEE系统必须采取一些安全措施来保护IEE数据，防止以后被rich OS访问，攻击者可以通过操纵到用于安全措施的IEE内存的非安全缓存映射来绕过这些安全措施</li>
-<li><strong>Ginseng</strong> ：绕过“switch out”过程中强制执行的安全措施，窃取Ginseng系统的IEE数据</li>
-</ul>
-</li>
-<li>在“ <strong>switch out</strong> ”过程中 <strong>窃取</strong> IEE敏感数据，并在“ <strong>switch in</strong> ”过程中 <strong>篡改</strong> IEE数据<ul>
-<li>当IEE内存保护是通过动态地控制内存的安全属性(例如，配置它在“switch in”前不安全，而在“switch out”前安全)，缓存存在不完整的安全保护</li>
-<li><strong>TrustICE</strong> ：利用在环境交换过程中没有得到很好保护的环境交换内存的非安全缓存，窃取和篡改TrustICE系统的环境交换数据</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>CITM存在的根本原因：缓存和内存之间的安全相关属性不一致，缓存和内存之间的读写操作不同步。</li>
-<li>解决方案：安全配置IEE内存的缓存属性；在环境切换期间，清除到IEE内存的缓存映射</li>
-</ul>
-<p><strong>IEE的保护措施：</strong></p>
-<p>Model1: 非可信程序与敏感型应用并存的方式</p>
+<h2 id="研究动机"><a href="#研究动机" class="headerlink" title="研究动机"></a>研究动机</h2><p>SGX 能够在非可信的云端为用户保护隐私数据，但是应用的程序可能会包含很多漏洞，这些漏洞可能会泄露隐私数据。很多的研究为了解决这个问题，但是没有考虑在同一个飞地中多客户的隔离问题。因此本文的工作是在飞地中为多个用户提供隔离保障。</p>
+<p>本文提出CHANCEL，其允许程序的线程在处理请求时访问每个线程的内存区以及共享的只读内存区。每个线程一次处理一个客户端的请求，并且客户端之间是利用软件故障隔离方案相互隔离的。</p>
+<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><h3 id="SGX-总览"><a href="#SGX-总览" class="headerlink" title="SGX 总览"></a>SGX 总览</h3><p>SGX（software guard extensions）[1]</p>
+<p>SGX 是指<a href="https://software.intel.com/en-us/sgx" target="_blank" rel="noopener">英特尔® Software Guard Extensions</a>（英特尔® SGX）。这是一组指令，应用程序可以使用这些指令为选择的代码和数据留出受保护区域，以防止对执行代码或存储在内存中的数据进行直接攻击。SGX 允许应用程序实例化一个受保护的容器，称为 enclave，它可以防止外部软件访问，包括特权恶意软件。</p>
+<p>安全性是云计算中一项极为重要的需求,然而如何保护云计算中关键应用程序和数据的安全、防止云平台管理员泄露用户隐私,仍然是目前没有解决的难题.2013 年,Intel 公司提出了新的处理器安全技术 SGX,能够在计算平台上提供一个可信的隔离空间,保障用户关键代码和数据的机密性和完整性.作为系统安全领域的重大研究进展,SGX 对系统安全,尤其是云计算安全保护方面具有非常重要的意义.</p>
+<p>2013 年,Intel 推出 SGX(software guard extensions)指令集扩展,旨在以硬件安全为强制性保障,<strong>不依赖</strong>于<strong>固件和软件</strong>的安全状态,提供用户空间的可信执行环境,通过一组新的指令集扩展与访问控制机制,实现不同程序间的隔离运行,保障用户<strong>关键代码和数据的机密性与完整性</strong>不受恶意软件的破坏.不同于其他安全技术,SGX 的可信计算基(trusted computing base,简称 TCB)<strong>仅包括硬件</strong>,避免了基于软件的 TCB 自身存在软件安全漏洞与威胁的缺陷,极大地提升了系统安全保障;此外,SGX 可保障运行时的可信执行环境,恶意代码<strong>无法访问与篡改其他程序运行时的保护内容</strong>,进一步增强了系统的安全性;基于<strong>指令集的扩展</strong>与<strong>独立的认证</strong>方式,使得应用程序可以灵活调用这一安全功能并进行验证.</p>
+<p>SGX 的实现需要处理器、内存管理部件、BIOS、驱动程序、运行时环境等软硬件协同完成.SGX提供的功能大多数是在微指令中实现，但是保护内存不受物理攻击主要是由CPU中的MEE（memory encryption engine）硬件单元提供，这个硬件通过对保护内存读写的解密加密，保证了数据只有在CPU中的enclave内存中才是明文.</p>
+<p><strong>功能：</strong>内存隔离/保护安全属性/远程认证/密封.</p>
+<h3 id="SGX-架构"><a href="#SGX-架构" class="headerlink" title="SGX 架构"></a>SGX 架构</h3><p><img src="/2021/05/24/CHANCEL/sgx-architecture-1.png" width="600px"></p>
+<h3 id="enclave"><a href="#enclave" class="headerlink" title="enclave"></a>enclave</h3><p>地理学上的解释</p>
 <blockquote>
-<p>1.为每个安全敏感型应用分配内核隔离存储，处理在并发期间的敏感数据；</p>
-<p>2.当安全敏感应用程序的执行被暂停或完成时，在“切出”过程中清理内核隔离的存储，可以保护所有敏感数据免受不信任程序的侵害；</p>
-<p>3.在恢复或启动对安全敏感的应用程序的执行时，IEE监视器负责在“切入”过程中还原核心隔离的存储或分配空白的核心隔离的存储。</p>
+<p>外飞地（Exclave）： 某国家拥有一块与该国分离开来的领土，该领土被其他国家隔开，则该领土称为某国的外飞地。</p>
+<p>内飞地（Enclave）：某国家国境之内有块地区的主权属于别的国家，则该地区是这国家的内飞地，也同时是握有主权国家的外飞地。</p>
 </blockquote>
-<p>Model2：不允许非可信程序与敏感型应用并存：</p>
+<p>SGX允许应用程序实现一个被称为 enclave 的容器,在应用程序的地址空间中划分出一块被保护的区域,为容器内的代码和数据提供机密性和完整性的保护,免受拥有特殊权限的恶意软件的破坏.</p>
+<p>enclave 是一个被保护的容器，存放应用程序敏感数据和代码，SGX允许应用程序指定需要保护的代码和数据，创建enclave之前，不必对其进行分析，加载到enclave之后，必须被完整度量，且之后SGX保证其不能被外部软件所访问.  enclave都驻留在EPC（enclave page cache）中，这是系统内被保护的物理内存，用于存放enclave和SGX数据结构.以支持SGX的一种架构为例，如果在加密保护的DRAM (dynamic random access memory) 中实现EPC，那么他也支持BIOS保留一段PRM（processor reserved memory）的内存.</p>
+<p><strong>enclave 特征：</strong></p>
 <blockquote>
-<p>单核情况下，运行敏感型应用，直接挂起非可信程序；</p>
-<p>多核情况下，即使有空闲核，也将非可信程序挂起。</p>
+<p>有自己的代码和数据/机密性保护/完整性保护/可控的入口点/支持多线程/内存具有最高访问权限.</p>
+<p>TCS (thread control structure) 保存着进入或者退出enclave时的线程信息, 每一个enclave中的线程都和一个TCS关联, 需要4K对齐.</p>
 </blockquote>
-<p><strong>本文发现的攻击方式：</strong></p>
-<p>可以通过在normal-world OS中操纵cache实现对IEE环境的威胁。以攻击者的视角出发，可以通过一下两种方式入侵IEE:</p>
+<p><strong>enclave 架构图：</strong></p>
+<p><img src="/2021/05/24/CHANCEL/sgx-prm-enclave.png" width="800"></p>
+<p><img src="/2021/05/24/CHANCEL/enclave-layout.png" width="500"></p>
+<p><img src="/2021/05/24/CHANCEL/enclave-privileged.png" width="500"></p>
+<p><strong>远端验证：</strong> enclave 可以向远端认证者证明自己的身份，访问该enclave的用户也持有独立的访问秘钥.</p>
+<p><strong>Physical Memory Organization:</strong> （下文详细介绍）</p>
+<p><img src="/2021/05/24/CHANCEL/enclave-physical-mem-1.png" width="800"></p>
+<p><img src="/2021/05/24/CHANCEL/enclave-mem-map-1.png" width="800"></p>
+<p><strong>SGX memory control:</strong></p>
+<p><img src="/2021/05/24/CHANCEL/SGX-mem-control.png" width="500"></p>
+<p><strong>enclave 保护机制：</strong> 1. enclave内存访问语义变化, 2. 应用程序地址映射关系保护</p>
+<p><strong>1. 内存访问语义</strong></p>
 <blockquote>
-<p>1、并发执行期间操纵隔离的内存；</p>
-<p>2、篡改IEE中上下文的切换<sup><a href="#fn_switching" id="reffn_switching">switching</a></sup>。</p>
+<p>系统分配一块被保护的物理内存区域EPC，用于存放enclave和SGX数据结构，该段区域对于外部请求透明（不存在的内存访问）</p>
+<p>Fig.4 中的内存保护机制中，系统在SGX调用前处于保护模式，支持分页. SGX提供的内存保护机制，在保护模式提供的段保护、页保护机制基础上增加了进一步的保护机制：</p>
+<p>(1). enclave之外应用访问PRM外部内存，按照保护模式进行访问；</p>
+<p>(2). enclave之外应用访问EPC内部内存，该内存区域不存在（透明）；</p>
+<p>(3). enclave内部程序访问EPC内部内存，该内存区域不存在（透明）；</p>
+<p>(4). enclave内部程序访问PRM外部内存，按照保护模式进行访问；</p>
+<p>(5). enclave内部程序访问PRM内部内存，硬件阻止访问。</p>
+<p>简言之：enclave外部不能访问，内部只能访问属于自己的内存，PRM之外的内存按照系统的保护机制进行访问。</p>
 </blockquote>
-<h2 id="攻击方法与防御方法"><a href="#攻击方法与防御方法" class="headerlink" title="攻击方法与防御方法"></a>攻击方法与防御方法</h2><h3 id="1-Type-I-并发执行时操纵核间隔离的内存"><a href="#1-Type-I-并发执行时操纵核间隔离的内存" class="headerlink" title="1. Type I 并发执行时操纵核间隔离的内存"></a>1. Type I 并发执行时操纵核间隔离的内存</h3><p><strong>攻击原理：</strong></p>
-<p>多核系统中，当主存用作安全敏感型应用程序的核心隔离存储时，并发运行的恶意程序会通过在正常情况下操纵缓存窃取或者修改核心隔离内存中IEE数据。</p>
-<p>具体过程：当核心隔离出的内存设置为cacheable时，IEE在内存中的数据将会映射到cache中，因为是在normal-world中的安全敏感型应用访问，所以该cache标记为不安全，并且可能由不受信任的OS操纵。TZC-400 可以用来对主存进行隔离，但是这个硬件不会对cache进行隔离。所以存在被攻击的可能。</p>
-<p><strong>SANCTUARY[6] 系统保护机制</strong></p>
-<p><code>该系统的核心隔离存储默认禁用L2 cache.</code></p>
-<p>IEE 结束后，需要switch out，这时在IEE 中运行的微内核会将属于IEE的内存中数据全置为0，通过这种方式清除敏感数据，同时会设置L1 cache为无效。</p>
-<p>IEE启动前，需要switch in，在secure world中的监控器会在IEE中构造一个纯净的执行环境，并且在敏感型应用加载之前设置L1 cache为无效。</p>
-<p><strong>SANCTUARY 面临的Type I 攻击</strong></p>
-<p><strong>攻击流程：</strong></p>
-<p><img src="/2021/03/23/CITM-attacks/image-20210325141138970.png" width="400"></p>
-<h3 id="2-Type-II-在换出过程中绕过安全措施"><a href="#2-Type-II-在换出过程中绕过安全措施" class="headerlink" title="2. Type II 在换出过程中绕过安全措施"></a>2. Type II 在换出过程中绕过安全措施</h3><p><strong>攻击原理：</strong></p>
-<p>攻击者目标是绕过在IEE上下文切换时的安全保护措施。</p>
-<p>因为运行在normal world 中的OS是非信任的，因此切入时的安全措施始终由安全环境中的IEE监视器启动和完成。这些相应的cache line被标记为secure，因此在normal world中无法对其进行更改。攻击者可以利用<strong>cache锁定技术</strong>阻止cache的替换，则IEE 内存中的数据将不会在安全敏感型应用挂起或结束后被清除。从而会被攻击者利用，实现攻击。</p>
-<p>【这里指出的切出程序，主要是在两种world间的切换】</p>
-<p>为了解决此问题，某些IEE系统选择通过有意从安全敏感的应用程序访问安全内存来引发安全环境中的外部异常中止，从而触发上下文切换。在这过程中，接入到normal world且映射到secure memory的cache lines不是安全的，恶意的OS将可能会操作相应的cache line绕过安全保护措施。(Ginseng [7] )</p>
-<p><strong>攻击示意图：</strong></p>
-<p><img src="/2021/03/23/CITM-attacks/image-20210326155423911.png" width="400"></p>
-<h3 id="3-Type-III-在上下文切换时误用安全性不完整的措施"><a href="#3-Type-III-在上下文切换时误用安全性不完整的措施" class="headerlink" title="3. Type III 在上下文切换时误用安全性不完整的措施"></a>3. Type III 在上下文切换时误用安全性不完整的措施</h3><p><strong>攻击原理：</strong></p>
-<p>IEE动态标记Switching程序的安全属性，换出（secure）换入（non-secure）</p>
-<p>这是针对的不完整的安全措施，那么就有可能存在切出泄露，切入覆盖原数据的情况。</p>
-<p><strong>攻击示意图：</strong></p>
-<p><img src="/2021/03/23/CITM-attacks/image-20210326155450688.png" width="400"></p>
-<h2 id="Cache-操作—-补充背景知识"><a href="#Cache-操作—-补充背景知识" class="headerlink" title="Cache 操作—- 补充背景知识"></a>Cache 操作—- 补充背景知识</h2><p><img src="/2021/03/23/CITM-attacks/image-20210303110802982.png" width="600"></p>
-<p><strong>non-cacheability</strong></p>
-<p>[1] 中详细介绍了cacheability与non-cacheability两者的区别</p>
-<p>Cache，就是一种缓存机制，它位于CPU和DDR之间，为CPU和DDR之间的读写提供一段内存缓冲区。cache一般是SRAM，它采用了和制作CPU相同的半导体工艺，它的价格比DDR要高，但读写速度要比DDR快不少。例如CPU要执行DDR里的指令，可以一次性的读一块区域的指令到cache里，下次就可以直接从cache里获取指令，而不用反复的去访问速度较慢的DDR。又例如，CPU要写一块数据到DDR里，它可以将数据快速地写到cache里，然后手动执行一条刷新cache的指令就可以将这片数据都更新到DDR里，或者干脆就不刷新，待cache到合适的时候，自己再将内容flush到DDR里。总之一句话，cache的存在意义就是拉近CPU和DDR直接的性能差异，提高整个系统性能。</p>
-<p>对于单CPU，不操作外设，只对DDR的读写，可以放心的使用cache。对于其它情况，有两种办法：<br>1 手动更新cache，这需要对外设的机制较为了解，且要找到合适的时机刷新(将cache里的数据flush到内存里)或无效(Invalidate，将cache里的内容清掉，下次再读取的时候需要去DDR里读最新的内容)<br>2 将内存设置为non-cache的，更准确的说是non-cacheable的</p>
-<p>在ARM处理器中，一般是采用编译链接时预设的方法来区分cache区域和non-cache区域，在链接脚本或者scatter file里定义不同的section，将需要设为non-cacheable的内存块放置到特定的section里。CPU在启动时会读取这些配置文件，在启动代码里对不同的section配置MMU或MPU，对non-cache的section映射到CPU认识的特拟地址。此后，CPU再访问内存的时候，经过MMU或者MPU，就会知道这块内存是cacheable还是non-cacheable的了。</p>
-<p><strong>write-back</strong></p>
-<p>CPU更新cache时，只是把更新的cache区标记一下，并不同步更新memory，在被替换时才写回下一级存储层次（memory）中。</p>
-<p>[2] 对比了write-through 和 write-back</p>
-<p><strong>write-through</strong></p>
-<p>CPU向cache写入数据时，同时向memory也写一份，使cache和memory的数据保持一致。</p>
-<p><strong>write-allocate</strong></p>
-<p>先把要写的数据载入到Cache中，写Cache，然后再通过flush方式写入到内存中。</p>
-<p>ARM缓存的状态还会受到其他维护操作的影响，比如 <strong>invalidation</strong> 和 <strong>cleaning</strong> 指令。</p>
-<ul>
-<li>当执行 <strong>invalidation</strong> 指令时，它直接使保存在缓存中的数据无效。</li>
-<li><strong>cleaning</strong> 指令将目标缓存的内容转发到下一级缓存或主存。</li>
-</ul>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://blog.csdn.net/wbwwf8685/article/details/52091900" target="_blank" rel="noopener">https://blog.csdn.net/wbwwf8685/article/details/52091900</a></p>
-<p>[2] <a href="http://witmax.cn/cache-writing-policies.html" target="_blank" rel="noopener">http://witmax.cn/cache-writing-policies.html</a></p>
-<p>[3] <a href="https://azeria-labs.com/trusted-execution-environments-tee-and-trustzone/" target="_blank" rel="noopener">https://azeria-labs.com/trusted-execution-environments-tee-and-trustzone/</a></p>
-<p>[4] <a href="https://segmentfault.com/a/1190000000387993" target="_blank" rel="noopener">https://segmentfault.com/a/1190000000387993</a></p>
-<p>[5] <a href="https://segmentfault.com/a/1190000000387968?utm_source=sf-similar-article" target="_blank" rel="noopener">https://segmentfault.com/a/1190000000387968?utm_source=sf-similar-article</a></p>
-<p>[6] Ferdinand Brasser, David Gens, Patrick Jauernig, Ahmad-Reza Sadeghi, and Emmanuel Stapf. 2019. SANCTUARY: ARMing TrustZone with User-space Enclaves.. In NDSS.</p>
-<p>[7] Min Hong Yun and Lin Zhong. 2019. Ginseng: Keeping Secrets in Registers When You Distrust the Operating System.. In NDSS.</p>
-<blockquote id="fn_switching">
-<sup>switching</sup>. 本文指出的换入换出指的是从IEE内部视角看，换出：上下文的切换由IEE到普通OS，换入：上下文切换从OS到IEE.<a href="#reffn_switching" title="Jump back to footnote [switching] in the text."> ↩</a>
+<p><strong>EPCM （Enclave Page Cache Map）逻辑结构：</strong></p>
+<p><img src="/2021/05/24/CHANCEL/EPCM-structure.png" width="500"></p>
+<p><strong>2. 内存地址映射保护</strong></p>
+<p>EPC内存以页为单位进行管理，页的控制信息保存在EPCM中，类似于OS中的页表，功能是在CPU地址映射过程中执行enclave页面的访问控制，通过PMH(page miss handler)硬件模块访问，在保护模式的段、页保护机制上增加了一层安全的访问控制.</p>
+<p><strong>enclave 机密性和完整性保护：</strong></p>
+<blockquote>
+<p>(1). 由应用程序申请创建一个enclave, 页面分配，复制程序代码、数据并进行度量，度量结果保存在enclave的控制结构中；</p>
+<p>(2). 创建好之后，SGX通过初始化指令将结果与enclave所有者签名证书的完整性值进行比较，匹配的话，则进行绑定，否则创建失败；</p>
+<p>(3). 成功之后，指定用户可以访问对应的enclave, SGX提供内存保护以及地址映射保护，从而保证enclave的机密性与完整性，远端认证者可以通过enclave的完整性度量结果以及身份，确保其enclave正确创建.</p>
 </blockquote>
+<h3 id="SGX-漏洞"><a href="#SGX-漏洞" class="headerlink" title="SGX 漏洞"></a>SGX 漏洞</h3><p><strong>1.侧信道攻击</strong></p>
+<p>侧信道攻击主要目标是攻击 enclave 数据的机密性.</p>
+<p>攻击者来自 non-enclave 部分,包括应用程序和系统软件.系统软件包括 OS,hypervisor,SMM(system management mode),BIOS 等特权级软件.</p>
+<p><strong>三个假设：</strong></p>
+<blockquote>
+<p>1.侧信道攻击者指导enclave初始化的代码和数据，知道内存布局；</p>
+<p>2.攻击者知道enclave的输入数据，可以反复多次触发enclave，记录并观察结果；</p>
+<p>3.攻击者知道运行enclave平台的配置(CPU、TLB、Cache、DRAM、页表、中断以及异常等)</p>
+</blockquote>
+<p><strong>enclave运行使用的物理资源及攻击方式总览：</strong></p>
+<blockquote>
+<p>CPU: 间接访问pipeline/BPB(branch prediction buffer)，可以泄露enclave的控制流或者数据流；</p>
+<p>TLB : TLB包括 iTLB,dTLB和 L2 TLB.如果Hyper-Threading打开,两个逻辑核共享一个物理核,这时会大大增加侧信道攻击的可能;</p>
+<p>Cache: Cache 包括 L1 instruction Cache,L1 data Cache,L2 Cache 和 L3 Cache(又叫 LLC Cache);</p>
+<p>DRAM：DRAM 包括 channels,DIMMs(dual inline memory module),ranks,banks.每个 banks 又包括 rows, columns 和 row buffer;</p>
+<p>页表：页表可以通过权限控制来触发缺页异常,也可以通过页表的状态位来表明 CPU 的某些操作.</p>
+</blockquote>
+<p><img src="/2021/05/24/CHANCEL/SGX-side-channel-attack-surface.png" width="600"></p>
+<p><strong>2. SGX 多线程同步</strong></p>
+<p>[4] 指出在使用SGX后以往被视为无害的同步漏洞可能会变为严重的安全漏洞。通过在enclave代码中利用UAF(use-after-free)和TOCTTOU(time-of-check-to-time-of-use)漏洞，一个攻击者可以劫持它的控制流或者绕过访问控制。</p>
+<p><strong>Native Client</strong> </p>
+<p>Native client[5] 是一个用于执行不可信x86主机代码的沙箱，利用沙盒技术防止外来机器代码影响系统安全，限制程序读写的存储器范围，为基于浏览器的应用程序提供本地应用程序的计算性能，而不会影响安全性。09年提出。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>sgx 的设计是每个用户是一个单独进程，每个进程绑定一个enclave，enclave之间是相互隔离开的，不涉及数据共享，则会浪费内存空间，因此设计目标是在保证数据共享节约内存空间基础上实现用户的隔离。</p>
+<p><img src="/2021/05/24/CHANCEL/sgx-non-share.png" width="600"></p>
+<p>在实现多用户间隔离时，chancel保证共享数据的多个用户处于同一个进程空间中，每个用户是一个线程，实现线程级别隔离。</p>
+<p><img src="/2021/05/24/CHANCEL/mulit-client-SFI.png" width="600"></p>
+<p><img src="/2021/05/24/CHANCEL/chancel-design.png" width="600"></p>
+<h2 id="实验结论"><a href="#实验结论" class="headerlink" title="实验结论"></a>实验结论</h2><p>与多进程沙盒作对比，在保证安全的同时提升了4-53倍的性能</p>
+<p><img src="/2021/05/24/CHANCEL/benefit.png" width="600"></p>
+<h2 id="阅读问题记录"><a href="#阅读问题记录" class="headerlink" title="阅读问题记录"></a>阅读问题记录</h2><ol>
+<li><p>本文的核心是什么？多线程并发隔离？</p>
+</li>
+<li><p><strong>Section V:</strong>本文与原始SGX对比有哪些改动？原始的SGX提供了什么？</p>
+</li>
+<li><p>SGX与enclave的关系？enclave是一个用户一个还是多用户共享？</p>
+<blockquote>
+<p>Enclave是SGX提供给用户的一个隔离的执行环境，初始化时建立对应的enclave</p>
+</blockquote>
+</li>
+<li><p>Section V: 文中提到的SecureLayer是什么？MCSFI是本文构建的吗？</p>
+</li>
+<li><p>r14,15寄存器作用？</p>
+<blockquote>
+<p>本文r14指向单独线程的私有空间地址，r15指向该进程的共享数据空间。</p>
+</blockquote>
+</li>
+<li><p>native sgx 与 native client 指的是什么？</p>
+<blockquote>
+<p>sgx 只内存中开辟的空间，nacl指的是挂载到该空间的客户</p>
+</blockquote>
+</li>
+<li><p>SGX 真实的使用中代码的大小有多少？64MB？</p>
+</li>
+</ol>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>说明：本文的一些截图来自于以下论文或者网站，图片序号没有标注，其中sgx101[2]是一个不错的sgx学习网站.</p>
+<p>[1] 王鹃, 樊成阳, 程越强, 赵波, 韦韬, 严飞, 张焕国,&amp; 马婧. (2018). SGX 技术的分析和研究. <em>软件学报</em>, <em>29</em>(9), 2778-2798.</p>
+<p>[2] <a href="https://sslab-gatech.github.io/sgx101/pages/enclave.html" target="_blank" rel="noopener">https://sslab-gatech.github.io/sgx101/pages/enclave.html</a></p>
+<p>[3] Costan, V., &amp; Devadas, S. (2016). Intel SGX Explained. <em>IACR</em> <em>Cryptol**.</em> <em>ePrint</em> <em>Arch.</em>, <em>2016</em>(86), 1-118. <a href="https://eprint.iacr.org/2016/086.pdf" target="_blank" rel="noopener">https://eprint.iacr.org/2016/086.pdf</a></p>
+<p>[4] Weichbrodt N, Kurmus A, Pietzuch P, Kapitza R. AsyncShock: Exploiting synchronisation bugs in Intel SGX enclaves. In: Proc. of the Computer Security (ESORICS 2016). 2016. 440−457. </p>
+<p>[5] Yee, B., Sehr, D., Dardyk, G., Chen, J. B., Muth, R., Ormandy, T., &amp; Fullagar, N. (2009, May). Native client: A sandbox for portable, untrusted x86 native code. In <em>2009 30th IEEE Symposium on Security and Privacy</em> (pp. 79-93). IEEE.</p>
+<p>[6] <a href="https://zhuanlan.zhihu.com/p/50894009" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/50894009</a></p>
+<p>[7] Xing, B. C., Shanahan, M., &amp; Leslie-Hurd, R. (2016). Intel® Software Guard Extensions (Intel® SGX) software support for dynamic memory allocation inside an enclave. In <em>Proceedings of the Hardware and Architectural Support for Security and Privacy 2016</em> (pp. 1-9).</p>
 ]]></content>
       <categories>
         <category>paper</category>
-        <category>CCS</category>
+        <category>NDSS</category>
       </categories>
       <tags>
         <tag>论文解读</tag>
@@ -1024,172 +985,6 @@
       </tags>
   </entry>
   <entry>
-    <title>CHANCEL</title>
-    <url>/2021/05/24/CHANCEL/</url>
-    <content><![CDATA[<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:left">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:left">原文PDF</td>
-<td style="text-align:center"><a href="https://lifeasageek.github.io/papers/ahmad-chancel.pdf" target="_blank" rel="noopener">paper</a> <a href="https://lifeasageek.github.io/papers/ahmad-chancel-slides.pdf" target="_blank" rel="noopener">slides</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:left">作者信息</td>
-<td style="text-align:center"><a href="https://web.ics.purdue.edu/~ahmad37/" target="_blank" rel="noopener">https://web.ics.purdue.edu/~ahmad37/</a> <a href="https://www.cs.purdue.edu/homes/pfonseca/" target="_blank" rel="noopener">https://www.cs.purdue.edu/homes/pfonseca/</a> <a href="https://lifeasageek.github.io/" target="_blank" rel="noopener">https://lifeasageek.github.io/</a></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:left">核心内容</td>
-<td style="text-align:center">在飞地中为多个用户提供隔离保障</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:left">研究领域</td>
-<td style="text-align:center">TEE 可信计算环境</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:left">全文总览</td>
-<td style="text-align:center">在飞地中为多个用户提供隔离保障，从而避免用户执行代码的漏洞导致的隐私数据泄露，在提供安全保证的同时，与多进程沙盒对比，有着明显的性能提升。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="研究动机"><a href="#研究动机" class="headerlink" title="研究动机"></a>研究动机</h2><p>SGX 能够在非可信的云端为用户保护隐私数据，但是应用的程序可能会包含很多漏洞，这些漏洞可能会泄露隐私数据。很多的研究为了解决这个问题，但是没有考虑在同一个飞地中多客户的隔离问题。因此本文的工作是在飞地中为多个用户提供隔离保障。</p>
-<p>本文提出CHANCEL，其允许程序的线程在处理请求时访问每个线程的内存区以及共享的只读内存区。每个线程一次处理一个客户端的请求，并且客户端之间是利用软件故障隔离方案相互隔离的。</p>
-<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><h3 id="SGX-总览"><a href="#SGX-总览" class="headerlink" title="SGX 总览"></a>SGX 总览</h3><p>SGX（software guard extensions）[1]</p>
-<p>SGX 是指<a href="https://software.intel.com/en-us/sgx" target="_blank" rel="noopener">英特尔® Software Guard Extensions</a>（英特尔® SGX）。这是一组指令，应用程序可以使用这些指令为选择的代码和数据留出受保护区域，以防止对执行代码或存储在内存中的数据进行直接攻击。SGX 允许应用程序实例化一个受保护的容器，称为 enclave，它可以防止外部软件访问，包括特权恶意软件。</p>
-<p>安全性是云计算中一项极为重要的需求,然而如何保护云计算中关键应用程序和数据的安全、防止云平台管理员泄露用户隐私,仍然是目前没有解决的难题.2013 年,Intel 公司提出了新的处理器安全技术 SGX,能够在计算平台上提供一个可信的隔离空间,保障用户关键代码和数据的机密性和完整性.作为系统安全领域的重大研究进展,SGX 对系统安全,尤其是云计算安全保护方面具有非常重要的意义.</p>
-<p>2013 年,Intel 推出 SGX(software guard extensions)指令集扩展,旨在以硬件安全为强制性保障,<strong>不依赖</strong>于<strong>固件和软件</strong>的安全状态,提供用户空间的可信执行环境,通过一组新的指令集扩展与访问控制机制,实现不同程序间的隔离运行,保障用户<strong>关键代码和数据的机密性与完整性</strong>不受恶意软件的破坏.不同于其他安全技术,SGX 的可信计算基(trusted computing base,简称 TCB)<strong>仅包括硬件</strong>,避免了基于软件的 TCB 自身存在软件安全漏洞与威胁的缺陷,极大地提升了系统安全保障;此外,SGX 可保障运行时的可信执行环境,恶意代码<strong>无法访问与篡改其他程序运行时的保护内容</strong>,进一步增强了系统的安全性;基于<strong>指令集的扩展</strong>与<strong>独立的认证</strong>方式,使得应用程序可以灵活调用这一安全功能并进行验证.</p>
-<p>SGX 的实现需要处理器、内存管理部件、BIOS、驱动程序、运行时环境等软硬件协同完成.SGX提供的功能大多数是在微指令中实现，但是保护内存不受物理攻击主要是由CPU中的MEE（memory encryption engine）硬件单元提供，这个硬件通过对保护内存读写的解密加密，保证了数据只有在CPU中的enclave内存中才是明文.</p>
-<p><strong>功能：</strong>内存隔离/保护安全属性/远程认证/密封.</p>
-<h3 id="SGX-架构"><a href="#SGX-架构" class="headerlink" title="SGX 架构"></a>SGX 架构</h3><p><img src="/2021/05/24/CHANCEL/sgx-architecture-1.png" width="600px"></p>
-<h3 id="enclave"><a href="#enclave" class="headerlink" title="enclave"></a>enclave</h3><p>地理学上的解释</p>
-<blockquote>
-<p>外飞地（Exclave）： 某国家拥有一块与该国分离开来的领土，该领土被其他国家隔开，则该领土称为某国的外飞地。</p>
-<p>内飞地（Enclave）：某国家国境之内有块地区的主权属于别的国家，则该地区是这国家的内飞地，也同时是握有主权国家的外飞地。</p>
-</blockquote>
-<p>SGX允许应用程序实现一个被称为 enclave 的容器,在应用程序的地址空间中划分出一块被保护的区域,为容器内的代码和数据提供机密性和完整性的保护,免受拥有特殊权限的恶意软件的破坏.</p>
-<p>enclave 是一个被保护的容器，存放应用程序敏感数据和代码，SGX允许应用程序指定需要保护的代码和数据，创建enclave之前，不必对其进行分析，加载到enclave之后，必须被完整度量，且之后SGX保证其不能被外部软件所访问.  enclave都驻留在EPC（enclave page cache）中，这是系统内被保护的物理内存，用于存放enclave和SGX数据结构.以支持SGX的一种架构为例，如果在加密保护的DRAM (dynamic random access memory) 中实现EPC，那么他也支持BIOS保留一段PRM（processor reserved memory）的内存.</p>
-<p><strong>enclave 特征：</strong></p>
-<blockquote>
-<p>有自己的代码和数据/机密性保护/完整性保护/可控的入口点/支持多线程/内存具有最高访问权限.</p>
-<p>TCS (thread control structure) 保存着进入或者退出enclave时的线程信息, 每一个enclave中的线程都和一个TCS关联, 需要4K对齐.</p>
-</blockquote>
-<p><strong>enclave 架构图：</strong></p>
-<p><img src="/2021/05/24/CHANCEL/sgx-prm-enclave.png" width="800"></p>
-<p><img src="/2021/05/24/CHANCEL/enclave-layout.png" width="500"></p>
-<p><img src="/2021/05/24/CHANCEL/enclave-privileged.png" width="500"></p>
-<p><strong>远端验证：</strong> enclave 可以向远端认证者证明自己的身份，访问该enclave的用户也持有独立的访问秘钥.</p>
-<p><strong>Physical Memory Organization:</strong> （下文详细介绍）</p>
-<p><img src="/2021/05/24/CHANCEL/enclave-physical-mem-1.png" width="800"></p>
-<p><img src="/2021/05/24/CHANCEL/enclave-mem-map-1.png" width="800"></p>
-<p><strong>SGX memory control:</strong></p>
-<p><img src="/2021/05/24/CHANCEL/SGX-mem-control.png" width="500"></p>
-<p><strong>enclave 保护机制：</strong> 1. enclave内存访问语义变化, 2. 应用程序地址映射关系保护</p>
-<p><strong>1. 内存访问语义</strong></p>
-<blockquote>
-<p>系统分配一块被保护的物理内存区域EPC，用于存放enclave和SGX数据结构，该段区域对于外部请求透明（不存在的内存访问）</p>
-<p>Fig.4 中的内存保护机制中，系统在SGX调用前处于保护模式，支持分页. SGX提供的内存保护机制，在保护模式提供的段保护、页保护机制基础上增加了进一步的保护机制：</p>
-<p>(1). enclave之外应用访问PRM外部内存，按照保护模式进行访问；</p>
-<p>(2). enclave之外应用访问EPC内部内存，该内存区域不存在（透明）；</p>
-<p>(3). enclave内部程序访问EPC内部内存，该内存区域不存在（透明）；</p>
-<p>(4). enclave内部程序访问PRM外部内存，按照保护模式进行访问；</p>
-<p>(5). enclave内部程序访问PRM内部内存，硬件阻止访问。</p>
-<p>简言之：enclave外部不能访问，内部只能访问属于自己的内存，PRM之外的内存按照系统的保护机制进行访问。</p>
-</blockquote>
-<p><strong>EPCM （Enclave Page Cache Map）逻辑结构：</strong></p>
-<p><img src="/2021/05/24/CHANCEL/EPCM-structure.png" width="500"></p>
-<p><strong>2. 内存地址映射保护</strong></p>
-<p>EPC内存以页为单位进行管理，页的控制信息保存在EPCM中，类似于OS中的页表，功能是在CPU地址映射过程中执行enclave页面的访问控制，通过PMH(page miss handler)硬件模块访问，在保护模式的段、页保护机制上增加了一层安全的访问控制.</p>
-<p><strong>enclave 机密性和完整性保护：</strong></p>
-<blockquote>
-<p>(1). 由应用程序申请创建一个enclave, 页面分配，复制程序代码、数据并进行度量，度量结果保存在enclave的控制结构中；</p>
-<p>(2). 创建好之后，SGX通过初始化指令将结果与enclave所有者签名证书的完整性值进行比较，匹配的话，则进行绑定，否则创建失败；</p>
-<p>(3). 成功之后，指定用户可以访问对应的enclave, SGX提供内存保护以及地址映射保护，从而保证enclave的机密性与完整性，远端认证者可以通过enclave的完整性度量结果以及身份，确保其enclave正确创建.</p>
-</blockquote>
-<h3 id="SGX-漏洞"><a href="#SGX-漏洞" class="headerlink" title="SGX 漏洞"></a>SGX 漏洞</h3><p><strong>1.侧信道攻击</strong></p>
-<p>侧信道攻击主要目标是攻击 enclave 数据的机密性.</p>
-<p>攻击者来自 non-enclave 部分,包括应用程序和系统软件.系统软件包括 OS,hypervisor,SMM(system management mode),BIOS 等特权级软件.</p>
-<p><strong>三个假设：</strong></p>
-<blockquote>
-<p>1.侧信道攻击者指导enclave初始化的代码和数据，知道内存布局；</p>
-<p>2.攻击者知道enclave的输入数据，可以反复多次触发enclave，记录并观察结果；</p>
-<p>3.攻击者知道运行enclave平台的配置(CPU、TLB、Cache、DRAM、页表、中断以及异常等)</p>
-</blockquote>
-<p><strong>enclave运行使用的物理资源及攻击方式总览：</strong></p>
-<blockquote>
-<p>CPU: 间接访问pipeline/BPB(branch prediction buffer)，可以泄露enclave的控制流或者数据流；</p>
-<p>TLB : TLB包括 iTLB,dTLB和 L2 TLB.如果Hyper-Threading打开,两个逻辑核共享一个物理核,这时会大大增加侧信道攻击的可能;</p>
-<p>Cache: Cache 包括 L1 instruction Cache,L1 data Cache,L2 Cache 和 L3 Cache(又叫 LLC Cache);</p>
-<p>DRAM：DRAM 包括 channels,DIMMs(dual inline memory module),ranks,banks.每个 banks 又包括 rows, columns 和 row buffer;</p>
-<p>页表：页表可以通过权限控制来触发缺页异常,也可以通过页表的状态位来表明 CPU 的某些操作.</p>
-</blockquote>
-<p><img src="/2021/05/24/CHANCEL/SGX-side-channel-attack-surface.png" width="600"></p>
-<p><strong>2. SGX 多线程同步</strong></p>
-<p>[4] 指出在使用SGX后以往被视为无害的同步漏洞可能会变为严重的安全漏洞。通过在enclave代码中利用UAF(use-after-free)和TOCTTOU(time-of-check-to-time-of-use)漏洞，一个攻击者可以劫持它的控制流或者绕过访问控制。</p>
-<p><strong>Native Client</strong> </p>
-<p>Native client[5] 是一个用于执行不可信x86主机代码的沙箱，利用沙盒技术防止外来机器代码影响系统安全，限制程序读写的存储器范围，为基于浏览器的应用程序提供本地应用程序的计算性能，而不会影响安全性。09年提出。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>sgx 的设计是每个用户是一个单独进程，每个进程绑定一个enclave，enclave之间是相互隔离开的，不涉及数据共享，则会浪费内存空间，因此设计目标是在保证数据共享节约内存空间基础上实现用户的隔离。</p>
-<p><img src="/2021/05/24/CHANCEL/sgx-non-share.png" width="600"></p>
-<p>在实现多用户间隔离时，chancel保证共享数据的多个用户处于同一个进程空间中，每个用户是一个线程，实现线程级别隔离。</p>
-<p><img src="/2021/05/24/CHANCEL/mulit-client-SFI.png" width="600"></p>
-<p><img src="/2021/05/24/CHANCEL/chancel-design.png" width="600"></p>
-<h2 id="实验结论"><a href="#实验结论" class="headerlink" title="实验结论"></a>实验结论</h2><p>与多进程沙盒作对比，在保证安全的同时提升了4-53倍的性能</p>
-<p><img src="/2021/05/24/CHANCEL/benefit.png" width="600"></p>
-<h2 id="阅读问题记录"><a href="#阅读问题记录" class="headerlink" title="阅读问题记录"></a>阅读问题记录</h2><ol>
-<li><p>本文的核心是什么？多线程并发隔离？</p>
-</li>
-<li><p><strong>Section V:</strong>本文与原始SGX对比有哪些改动？原始的SGX提供了什么？</p>
-</li>
-<li><p>SGX与enclave的关系？enclave是一个用户一个还是多用户共享？</p>
-<blockquote>
-<p>Enclave是SGX提供给用户的一个隔离的执行环境，初始化时建立对应的enclave</p>
-</blockquote>
-</li>
-<li><p>Section V: 文中提到的SecureLayer是什么？MCSFI是本文构建的吗？</p>
-</li>
-<li><p>r14,15寄存器作用？</p>
-<blockquote>
-<p>本文r14指向单独线程的私有空间地址，r15指向该进程的共享数据空间。</p>
-</blockquote>
-</li>
-<li><p>native sgx 与 native client 指的是什么？</p>
-<blockquote>
-<p>sgx 只内存中开辟的空间，nacl指的是挂载到该空间的客户</p>
-</blockquote>
-</li>
-<li><p>SGX 真实的使用中代码的大小有多少？64MB？</p>
-</li>
-</ol>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>说明：本文的一些截图来自于以下论文或者网站，图片序号没有标注，其中sgx101[2]是一个不错的sgx学习网站.</p>
-<p>[1] 王鹃, 樊成阳, 程越强, 赵波, 韦韬, 严飞, 张焕国,&amp; 马婧. (2018). SGX 技术的分析和研究. <em>软件学报</em>, <em>29</em>(9), 2778-2798.</p>
-<p>[2] <a href="https://sslab-gatech.github.io/sgx101/pages/enclave.html" target="_blank" rel="noopener">https://sslab-gatech.github.io/sgx101/pages/enclave.html</a></p>
-<p>[3] Costan, V., &amp; Devadas, S. (2016). Intel SGX Explained. <em>IACR</em> <em>Cryptol**.</em> <em>ePrint</em> <em>Arch.</em>, <em>2016</em>(86), 1-118. <a href="https://eprint.iacr.org/2016/086.pdf" target="_blank" rel="noopener">https://eprint.iacr.org/2016/086.pdf</a></p>
-<p>[4] Weichbrodt N, Kurmus A, Pietzuch P, Kapitza R. AsyncShock: Exploiting synchronisation bugs in Intel SGX enclaves. In: Proc. of the Computer Security (ESORICS 2016). 2016. 440−457. </p>
-<p>[5] Yee, B., Sehr, D., Dardyk, G., Chen, J. B., Muth, R., Ormandy, T., &amp; Fullagar, N. (2009, May). Native client: A sandbox for portable, untrusted x86 native code. In <em>2009 30th IEEE Symposium on Security and Privacy</em> (pp. 79-93). IEEE.</p>
-<p>[6] <a href="https://zhuanlan.zhihu.com/p/50894009" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/50894009</a></p>
-<p>[7] Xing, B. C., Shanahan, M., &amp; Leslie-Hurd, R. (2016). Intel® Software Guard Extensions (Intel® SGX) software support for dynamic memory allocation inside an enclave. In <em>Proceedings of the Hardware and Architectural Support for Security and Privacy 2016</em> (pp. 1-9).</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>NDSS</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>TEE</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>DORY</title>
     <url>/2021/01/08/DORY/</url>
     <content><![CDATA[<div class="table-container">
@@ -1347,57 +1142,6 @@
       </tags>
   </entry>
   <entry>
-    <title>FHEW</title>
-    <url>/2020/08/13/FHEW/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://eprint.iacr.org/2014/816.pdf" target="_blank" rel="noopener">FHEW</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Centrum Wiskunde &amp; Informatica, Amsterdam</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">对全同态加密中 bootstraping 进行优化</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">同态加密</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">优化影响同态加密效率的主要瓶颈——Gentry 的引导程序</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Cryptographic Techniques</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>Homomorphic</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Dancing with Wolves</title>
     <url>/2020/06/27/Dancing-with-Wolves/</url>
     <content><![CDATA[<div class="table-container">
@@ -1505,6 +1249,262 @@
         <tag>System Security</tag>
         <tag>Detection</tag>
         <tag>Event-driven</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>CITM attacks</title>
+    <url>/2021/03/23/CITM-attacks/</url>
+    <content><![CDATA[<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:left">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:left">原文PDF</td>
+<td style="text-align:center"><a href="https://dl.acm.org/doi/pdf/10.1145/3372297.3417886" target="_blank" rel="noopener">cache-in-the-middle</a> <a href="https://ykma.gitee.io/files/docs/CITM-slides.pdf">CITM-slides</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:left">作者信息</td>
+<td style="text-align:center">中科院，乔治梅森大学 <a href="https://csis.gmu.edu/ksun/" target="_blank" rel="noopener">home-page</a></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:left">核心内容</td>
+<td style="text-align:center">基于ARM的CITM攻击原因分析</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:left">研究领域</td>
+<td style="text-align:center">TEE 可信计算环境</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:left">全文总览</td>
+<td style="text-align:center">本文发现了三种基于缓存的攻击（CITM），针对IEE数据保护模型和ARM缓存属性，分析了CITM的攻击原因并给出对策。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="研究动机"><a href="#研究动机" class="headerlink" title="研究动机"></a>研究动机</h2><p>本文聚焦在ARM TrustZone中的一个冲突矛盾点：</p>
+<p>在开发者眼中，想要通过在可信执行环境中约束第三方软件的安装起到最小化可信计算基的目的，而第三方软想要将其安装在可信环境中。</p>
+<p>已有的解决方案： IEE </p>
+<p>为了解决上述的矛盾点，研究者们在普通的执行环境中创建了一个隔离的执行环境，这样可以为安全敏感型应用提供保护。</p>
+<p>现有的IEE系统更多地关注于保护IEE敏感数据的主存，而在IEE系统中缓存的安全性还没有很好的研究。</p>
+<p>本文系统的研究了 IEE 的数据保护模型和 ARM cache的特征，发现了三种可以成为CITM的攻击能够泄露在IEE中保护的敏感数据。</p>
+<p>作者在三种IEE系统中测试了CITM攻击，最后分析了CITM攻击的根本原因，并提出了防御机制。</p>
+<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><p>TrustZone作为一种硬件辅助技术，将平台划分为两个执行环境： <strong>正常世界</strong> (非安全世界)和 <strong>安全世界</strong> ，其中</p>
+<ul>
+<li><strong>正常世界</strong> (NW)负责在rich Os上运行正常的应用程序</li>
+<li><strong>安全世界</strong> (SW)保护安全敏感的代码和数据</li>
+</ul>
+<p>对于支持TrustZone的ARM处理器，所有级别的缓存都扩展了一个额外的标记位(NS位)来记录它们的安全状态</p>
+<ul>
+<li><p>当从正常世界访问内存时，相应的cache line将设置为非安全的</p>
+</li>
+<li><p>当从安全世界访问内存时，相应的cache line将被设置为安全的</p>
+</li>
+<li><p>另外，cache line的NS位是由硬件自动设置的，软件不能修改</p>
+</li>
+<li><p>TZASC 硬件可以区分memory为 Secure 与 Non-secure</p>
+</li>
+<li><p>ARM 处理器配置了两级缓存</p>
+<p><img src="/2021/03/23/CITM-attacks/image-20210330093949863.png" width="400"></p>
+</li>
+</ul>
+<p>TrustZone的传统用法是在安全的环境中运行安全敏感的应用程序并存储它们的敏感数据，(也就是把这些敏感操作都放到安全世界中)，</p>
+<p><img src="/2021/03/23/CITM-attacks/image-20210330091547211.png" width="400"></p>
+<ul>
+<li><p>这便是可信执行环境 ( TEE )系统，其中安全敏感的应用程序在这里被实现为 可信应用程序 ( TA )，运行在安全世界(SW)中。</p>
+<ul>
+<li>(例：三星KNOX、OP-TEE、高通QSEE、华为安全操作系统)</li>
+</ul>
+</li>
+<li><p>TEE解决方案依赖于内置的硬件支持 来实施安全隔离，并防范来自不可信的rich Os的攻击。</p>
+<ul>
+<li>问题：设备制造商和第三方安全敏感的应用程序开发人员存在需求冲突 （制造商不想打开SW让你安第三方APP，他们更信任自己的应用，但第三方APP想进入SW以求安全可信）</li>
+</ul>
+</li>
+<li><p>为此，研究人员建议在正常世界中创建 <strong>孤立的执行环境</strong> (称为 <strong>IEE</strong> )</p>
+</li>
+</ul>
+<p><img src="/2021/03/23/CITM-attacks/image-20210330091804383.png" width="400"></p>
+<ul>
+<li><p>关键点：在安全的世界中使用可信参考监视器(例： <strong>IEE监视器</strong> )，确保只有经过授权的运行在IEE中的安全敏感应用程序才能访问相关的IEE敏感资源，从而保护一个IEE中的安全敏感应用程序不受其他IEEs和rich OS的影响。</p>
+<ul>
+<li>TrustICE 依赖于IEE监视器，通过动态控制IEE内存的安全属性来保护IEE内存。</li>
+<li>Ginseng 构建了IEEs来保护正常世界中的第三方应用程序的秘密，而不需要在安全世界中部署任何特定于应用程序的逻辑。</li>
+<li>SANCTUARY 将其IEE分配为per-core环境，以确保在正常世界中，为IEE指定的内存(以下简称IEE内存)不被任何其他非安全的内核访问。</li>
+</ul>
+</li>
+<li><p>IEE 优缺点：</p>
+<ul>
+<li><p>用“ <strong>switch out</strong> ”来表示一个内核的上下文从IEE切换到不可信的rich OS的进程；用“ <strong>switch in</strong> ”来表示每个内核上的逆向进程。</p>
+</li>
+<li><p>IEE系统能够最大限度地 <strong>减小SW的TCB</strong> ：仅在SW中安装IEE监视器即可将安全敏感应用程序转移到NW中。</p>
+</li>
+<li><p>IEE系统具有<strong>可移植性</strong> ，表现在：安全敏感的应用程序是在NW中安装和执行的。</p>
+</li>
+<li><p>但安全敏感的应用程序是由<strong>软件</strong>组件(例：IEE监视器)隔离和保护的，故IEE系统可能<strong>无法达到</strong>与TEE系统相同的安全保护级别。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="现存系统及CITM攻击"><a href="#现存系统及CITM攻击" class="headerlink" title="现存系统及CITM攻击"></a>现存系统及CITM攻击</h2><ul>
+<li>CITM可以操纵IEE保护的敏感数据：<ul>
+<li>在并发执行时，通过 <strong>跨核缓存</strong> [4] [5] 操作来操纵IEE数据<ul>
+<li>在多核平台上，防范并发运行的不可信的rich OS，仅确保在IEE内存上进行core-wise isolation是不安全的，因为缓存可能仍然对跨核访问开放，从而受到攻击者的操纵</li>
+<li><strong>SANCTUARY</strong> ：在并发执行过程中，攻击者通过跨核L1缓存操作成功窃取和修改SANCTUARY系统的IEE数据</li>
+</ul>
+</li>
+<li>操纵IEE内存的 <strong>非安全缓存映射</strong> 绕过其安全保护措施<ul>
+<li>当一个安全敏感的应用程序被挂起或完成时(即在“switch out”过程中)，IEE系统必须采取一些安全措施来保护IEE数据，防止以后被rich OS访问，攻击者可以通过操纵到用于安全措施的IEE内存的非安全缓存映射来绕过这些安全措施</li>
+<li><strong>Ginseng</strong> ：绕过“switch out”过程中强制执行的安全措施，窃取Ginseng系统的IEE数据</li>
+</ul>
+</li>
+<li>在“ <strong>switch out</strong> ”过程中 <strong>窃取</strong> IEE敏感数据，并在“ <strong>switch in</strong> ”过程中 <strong>篡改</strong> IEE数据<ul>
+<li>当IEE内存保护是通过动态地控制内存的安全属性(例如，配置它在“switch in”前不安全，而在“switch out”前安全)，缓存存在不完整的安全保护</li>
+<li><strong>TrustICE</strong> ：利用在环境交换过程中没有得到很好保护的环境交换内存的非安全缓存，窃取和篡改TrustICE系统的环境交换数据</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>CITM存在的根本原因：缓存和内存之间的安全相关属性不一致，缓存和内存之间的读写操作不同步。</li>
+<li>解决方案：安全配置IEE内存的缓存属性；在环境切换期间，清除到IEE内存的缓存映射</li>
+</ul>
+<p><strong>IEE的保护措施：</strong></p>
+<p>Model1: 非可信程序与敏感型应用并存的方式</p>
+<blockquote>
+<p>1.为每个安全敏感型应用分配内核隔离存储，处理在并发期间的敏感数据；</p>
+<p>2.当安全敏感应用程序的执行被暂停或完成时，在“切出”过程中清理内核隔离的存储，可以保护所有敏感数据免受不信任程序的侵害；</p>
+<p>3.在恢复或启动对安全敏感的应用程序的执行时，IEE监视器负责在“切入”过程中还原核心隔离的存储或分配空白的核心隔离的存储。</p>
+</blockquote>
+<p>Model2：不允许非可信程序与敏感型应用并存：</p>
+<blockquote>
+<p>单核情况下，运行敏感型应用，直接挂起非可信程序；</p>
+<p>多核情况下，即使有空闲核，也将非可信程序挂起。</p>
+</blockquote>
+<p><strong>本文发现的攻击方式：</strong></p>
+<p>可以通过在normal-world OS中操纵cache实现对IEE环境的威胁。以攻击者的视角出发，可以通过一下两种方式入侵IEE:</p>
+<blockquote>
+<p>1、并发执行期间操纵隔离的内存；</p>
+<p>2、篡改IEE中上下文的切换<sup><a href="#fn_switching" id="reffn_switching">switching</a></sup>。</p>
+</blockquote>
+<h2 id="攻击方法与防御方法"><a href="#攻击方法与防御方法" class="headerlink" title="攻击方法与防御方法"></a>攻击方法与防御方法</h2><h3 id="1-Type-I-并发执行时操纵核间隔离的内存"><a href="#1-Type-I-并发执行时操纵核间隔离的内存" class="headerlink" title="1. Type I 并发执行时操纵核间隔离的内存"></a>1. Type I 并发执行时操纵核间隔离的内存</h3><p><strong>攻击原理：</strong></p>
+<p>多核系统中，当主存用作安全敏感型应用程序的核心隔离存储时，并发运行的恶意程序会通过在正常情况下操纵缓存窃取或者修改核心隔离内存中IEE数据。</p>
+<p>具体过程：当核心隔离出的内存设置为cacheable时，IEE在内存中的数据将会映射到cache中，因为是在normal-world中的安全敏感型应用访问，所以该cache标记为不安全，并且可能由不受信任的OS操纵。TZC-400 可以用来对主存进行隔离，但是这个硬件不会对cache进行隔离。所以存在被攻击的可能。</p>
+<p><strong>SANCTUARY[6] 系统保护机制</strong></p>
+<p><code>该系统的核心隔离存储默认禁用L2 cache.</code></p>
+<p>IEE 结束后，需要switch out，这时在IEE 中运行的微内核会将属于IEE的内存中数据全置为0，通过这种方式清除敏感数据，同时会设置L1 cache为无效。</p>
+<p>IEE启动前，需要switch in，在secure world中的监控器会在IEE中构造一个纯净的执行环境，并且在敏感型应用加载之前设置L1 cache为无效。</p>
+<p><strong>SANCTUARY 面临的Type I 攻击</strong></p>
+<p><strong>攻击流程：</strong></p>
+<p><img src="/2021/03/23/CITM-attacks/image-20210325141138970.png" width="400"></p>
+<h3 id="2-Type-II-在换出过程中绕过安全措施"><a href="#2-Type-II-在换出过程中绕过安全措施" class="headerlink" title="2. Type II 在换出过程中绕过安全措施"></a>2. Type II 在换出过程中绕过安全措施</h3><p><strong>攻击原理：</strong></p>
+<p>攻击者目标是绕过在IEE上下文切换时的安全保护措施。</p>
+<p>因为运行在normal world 中的OS是非信任的，因此切入时的安全措施始终由安全环境中的IEE监视器启动和完成。这些相应的cache line被标记为secure，因此在normal world中无法对其进行更改。攻击者可以利用<strong>cache锁定技术</strong>阻止cache的替换，则IEE 内存中的数据将不会在安全敏感型应用挂起或结束后被清除。从而会被攻击者利用，实现攻击。</p>
+<p>【这里指出的切出程序，主要是在两种world间的切换】</p>
+<p>为了解决此问题，某些IEE系统选择通过有意从安全敏感的应用程序访问安全内存来引发安全环境中的外部异常中止，从而触发上下文切换。在这过程中，接入到normal world且映射到secure memory的cache lines不是安全的，恶意的OS将可能会操作相应的cache line绕过安全保护措施。(Ginseng [7] )</p>
+<p><strong>攻击示意图：</strong></p>
+<p><img src="/2021/03/23/CITM-attacks/image-20210326155423911.png" width="400"></p>
+<h3 id="3-Type-III-在上下文切换时误用安全性不完整的措施"><a href="#3-Type-III-在上下文切换时误用安全性不完整的措施" class="headerlink" title="3. Type III 在上下文切换时误用安全性不完整的措施"></a>3. Type III 在上下文切换时误用安全性不完整的措施</h3><p><strong>攻击原理：</strong></p>
+<p>IEE动态标记Switching程序的安全属性，换出（secure）换入（non-secure）</p>
+<p>这是针对的不完整的安全措施，那么就有可能存在切出泄露，切入覆盖原数据的情况。</p>
+<p><strong>攻击示意图：</strong></p>
+<p><img src="/2021/03/23/CITM-attacks/image-20210326155450688.png" width="400"></p>
+<h2 id="Cache-操作—-补充背景知识"><a href="#Cache-操作—-补充背景知识" class="headerlink" title="Cache 操作—- 补充背景知识"></a>Cache 操作—- 补充背景知识</h2><p><img src="/2021/03/23/CITM-attacks/image-20210303110802982.png" width="600"></p>
+<p><strong>non-cacheability</strong></p>
+<p>[1] 中详细介绍了cacheability与non-cacheability两者的区别</p>
+<p>Cache，就是一种缓存机制，它位于CPU和DDR之间，为CPU和DDR之间的读写提供一段内存缓冲区。cache一般是SRAM，它采用了和制作CPU相同的半导体工艺，它的价格比DDR要高，但读写速度要比DDR快不少。例如CPU要执行DDR里的指令，可以一次性的读一块区域的指令到cache里，下次就可以直接从cache里获取指令，而不用反复的去访问速度较慢的DDR。又例如，CPU要写一块数据到DDR里，它可以将数据快速地写到cache里，然后手动执行一条刷新cache的指令就可以将这片数据都更新到DDR里，或者干脆就不刷新，待cache到合适的时候，自己再将内容flush到DDR里。总之一句话，cache的存在意义就是拉近CPU和DDR直接的性能差异，提高整个系统性能。</p>
+<p>对于单CPU，不操作外设，只对DDR的读写，可以放心的使用cache。对于其它情况，有两种办法：<br>1 手动更新cache，这需要对外设的机制较为了解，且要找到合适的时机刷新(将cache里的数据flush到内存里)或无效(Invalidate，将cache里的内容清掉，下次再读取的时候需要去DDR里读最新的内容)<br>2 将内存设置为non-cache的，更准确的说是non-cacheable的</p>
+<p>在ARM处理器中，一般是采用编译链接时预设的方法来区分cache区域和non-cache区域，在链接脚本或者scatter file里定义不同的section，将需要设为non-cacheable的内存块放置到特定的section里。CPU在启动时会读取这些配置文件，在启动代码里对不同的section配置MMU或MPU，对non-cache的section映射到CPU认识的特拟地址。此后，CPU再访问内存的时候，经过MMU或者MPU，就会知道这块内存是cacheable还是non-cacheable的了。</p>
+<p><strong>write-back</strong></p>
+<p>CPU更新cache时，只是把更新的cache区标记一下，并不同步更新memory，在被替换时才写回下一级存储层次（memory）中。</p>
+<p>[2] 对比了write-through 和 write-back</p>
+<p><strong>write-through</strong></p>
+<p>CPU向cache写入数据时，同时向memory也写一份，使cache和memory的数据保持一致。</p>
+<p><strong>write-allocate</strong></p>
+<p>先把要写的数据载入到Cache中，写Cache，然后再通过flush方式写入到内存中。</p>
+<p>ARM缓存的状态还会受到其他维护操作的影响，比如 <strong>invalidation</strong> 和 <strong>cleaning</strong> 指令。</p>
+<ul>
+<li>当执行 <strong>invalidation</strong> 指令时，它直接使保存在缓存中的数据无效。</li>
+<li><strong>cleaning</strong> 指令将目标缓存的内容转发到下一级缓存或主存。</li>
+</ul>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://blog.csdn.net/wbwwf8685/article/details/52091900" target="_blank" rel="noopener">https://blog.csdn.net/wbwwf8685/article/details/52091900</a></p>
+<p>[2] <a href="http://witmax.cn/cache-writing-policies.html" target="_blank" rel="noopener">http://witmax.cn/cache-writing-policies.html</a></p>
+<p>[3] <a href="https://azeria-labs.com/trusted-execution-environments-tee-and-trustzone/" target="_blank" rel="noopener">https://azeria-labs.com/trusted-execution-environments-tee-and-trustzone/</a></p>
+<p>[4] <a href="https://segmentfault.com/a/1190000000387993" target="_blank" rel="noopener">https://segmentfault.com/a/1190000000387993</a></p>
+<p>[5] <a href="https://segmentfault.com/a/1190000000387968?utm_source=sf-similar-article" target="_blank" rel="noopener">https://segmentfault.com/a/1190000000387968?utm_source=sf-similar-article</a></p>
+<p>[6] Ferdinand Brasser, David Gens, Patrick Jauernig, Ahmad-Reza Sadeghi, and Emmanuel Stapf. 2019. SANCTUARY: ARMing TrustZone with User-space Enclaves.. In NDSS.</p>
+<p>[7] Min Hong Yun and Lin Zhong. 2019. Ginseng: Keeping Secrets in Registers When You Distrust the Operating System.. In NDSS.</p>
+<blockquote id="fn_switching">
+<sup>switching</sup>. 本文指出的换入换出指的是从IEE内部视角看，换出：上下文的切换由IEE到普通OS，换入：上下文切换从OS到IEE.<a href="#reffn_switching" title="Jump back to footnote [switching] in the text."> ↩</a>
+</blockquote>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>CCS</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>TEE</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>FHEW</title>
+    <url>/2020/08/13/FHEW/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://eprint.iacr.org/2014/816.pdf" target="_blank" rel="noopener">FHEW</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Centrum Wiskunde &amp; Informatica, Amsterdam</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">对全同态加密中 bootstraping 进行优化</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">同态加密</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">优化影响同态加密效率的主要瓶颈——Gentry 的引导程序</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Cryptographic Techniques</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>Homomorphic</tag>
       </tags>
   </entry>
   <entry>
@@ -1731,6 +1731,28 @@
       <tags>
         <tag>论文解读</tag>
         <tag>Protocol</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
+    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
+    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
+<ul>
+<li><strong>Active Monitoring（Synchronous）</strong></li>
+</ul>
+<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
+<ul>
+<li><strong>Passive Monitoring （Asynchronous）</strong></li>
+</ul>
+<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
+]]></content>
+      <categories>
+        <category>paper</category>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>虚拟化安全</tag>
       </tags>
   </entry>
   <entry>
@@ -2040,83 +2062,6 @@ func main()  {
       </tags>
   </entry>
   <entry>
-    <title>MIT log 0 内存管理实验环境</title>
-    <url>/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/</url>
-    <content><![CDATA[<h3 id="内存实验环境搭建"><a href="#内存实验环境搭建" class="headerlink" title="内存实验环境搭建"></a>内存实验环境搭建</h3><p><strong>操作系统</strong>是计算机科学中十分重要的一门基础学科，是一名计算机专业毕业生必须要具备的基础知识。但是在学习这门课时，如果仅仅把目光停留在课本上一些关于操作系统概念上的叙述，并不能对操作系统有着深层次的理解。必须要结合动手实践，才能真正掌握核心的知识。<br>MIT的操作系统课程6.828是一门被广泛好评的入门课程。它最重要的特点就是它实践第一的教学原则。在这门课程中会涉及到非常丰富的实验，也会有非常多的动手机会。而且授课者更是亲自构建了一个简化的基于Unix内核的操作系统xv6。所有的实验都是在这个操作系统上完成。虽然它功能很简单，但是它能够帮助我们真正的了解操作系统在做什么[3]。<br>因此，以博客的形式记录自己学习6.828的过程，本系列博文尽量包括以下几个内容：</p>
-<ul>
-<li>所有实验的实验报告(Lab)</li>
-<li>所有实验中的练习(Exercise)</li>
-</ul>
-<p>下面开始实验环境的搭建：</p>
-<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h4><p>本次实验在ubuntu18系统上进行，所有的操作步骤都在Linux 操作系统上进行。</p>
-<h3 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h3><p>因为本实验的  操作系统是比较新的 Ubuntu18，其自带的软件版本可能比较新，对于此lab可能不太适配，所以需要对需要的软件进行一些配置。</p>
-<h4 id="gcc版本降级"><a href="#gcc版本降级" class="headerlink" title="gcc版本降级"></a>gcc版本降级</h4><p>目的： 将gcc 版本降级到 4.8 版本</p>
-<p>(1). 下载 <code>gcc/g++ 4.8</code></p>
-<pre><code class="lang-shell">apt-get install -y gcc-4.8
-apt-get install -y g++-4.8
-</code></pre>
-<p>(2). 链接gcc/g++实现降级</p>
-<pre><code class="lang-shell">cd /usr/bin
-sudo rm gcc
-sudo ln -s gcc-4.8 gcc
-sudo rm g++
-sudo ln -s g++-4.8 g++
-</code></pre>
-<h4 id="编译qemu"><a href="#编译qemu" class="headerlink" title="编译qemu"></a>编译qemu</h4><p><strong>安装依赖</strong> [4]</p>
-<pre><code class="lang-shell">apt-get install git build-essential binutils g++-multilib libgtk2.0-dev libtool-bin libsdl-dev -y
-</code></pre>
-<p><strong>下载qemu源码</strong></p>
-<pre><code class="lang-shell">git clone https://github.com/mit-pdos/6.828-qemu.git qemu
-</code></pre>
-<p><strong>下载 lab 源码</strong></p>
-<pre><code class="lang-shell">git clone https://pdos.csail.mit.edu/6.828/2018/jos.git lab # 只有第一实验的检查脚本
-</code></pre>
-<p><strong>安装步骤</strong></p>
-<p>进入<code>qemu</code>目录下</p>
-<pre><code class="lang-shell">./configure --disable-kvm --target-list="i386-softmmu x86_64-softmmu"
-sudo make &amp;&amp; make install
-</code></pre>
-<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu.png" height="260xp"></p>
-<p>它生成的最后一个信息 <code>mk obj/kern/kernel.img</code>，这个<code>kernel.img</code>就是内核映像文件，另外obj目录在make之前是没有的，它是make指令生成的，它里面将会有许多的文件我们之后会重点观察。编译完内核源码，我们就可以把它运行在<code>QEMU</code>上啦！[3]</p>
-<p><strong>安装结果测试</strong></p>
-<p>输入<code>/usr/local/bin/qemu-system-i386</code> 出现以下窗口则安装ok</p>
-<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu-test.png" height="300xp"></p>
-<p>在<code>lab</code>目录下输入  <code>make qemu</code> 出现如下结果</p>
-<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/make-qemu.png" height="300xp"></p>
-<p>至此，实验环境搭建完成！</p>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://os.vampire.rip/" target="_blank" rel="noopener">https://os.vampire.rip/</a></p>
-<p>[2] <a href="https://zhuanlan.zhihu.com/p/74028717" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/74028717</a></p>
-<p>[3] <a href="https://www.cnblogs.com/fatsheep9146/p/5060292.html" target="_blank" rel="noopener">https://www.cnblogs.com/fatsheep9146/p/5060292.html</a></p>
-<p>[4] <a href="https://www.cnblogs.com/gatsby123/p/9746193.html" target="_blank" rel="noopener">https://www.cnblogs.com/gatsby123/p/9746193.html</a></p>
-]]></content>
-      <tags>
-        <tag>lab</tag>
-        <tag>OS Memory</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
-    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
-    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
-<ul>
-<li><strong>Active Monitoring（Synchronous）</strong></li>
-</ul>
-<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
-<ul>
-<li><strong>Passive Monitoring （Asynchronous）</strong></li>
-</ul>
-<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
-]]></content>
-      <categories>
-        <category>paper</category>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>虚拟化安全</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MIT-log-1-启动PC</title>
     <url>/2020/12/11/MIT-log-1-%E5%90%AF%E5%8A%A8PC/</url>
     <content><![CDATA[<h3 id="Part-1-PC-BootStrap"><a href="#Part-1-PC-BootStrap" class="headerlink" title="Part 1: PC BootStrap"></a>Part 1: PC BootStrap</h3><p><strong>PC物理地址空间</strong></p>
@@ -2287,10 +2232,59 @@ in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
       </tags>
   </entry>
   <entry>
-    <title>MuonTrap-Preventing Cross-Domain Spectre-Like</title>
-    <url>/2021/03/15/MuonTrap-Preventing-Cross-Domain-Spectre-Like/</url>
-    <content><![CDATA[<p>清华安全公众号推荐</p>
+    <title>MIT log 0 内存管理实验环境</title>
+    <url>/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/</url>
+    <content><![CDATA[<h3 id="内存实验环境搭建"><a href="#内存实验环境搭建" class="headerlink" title="内存实验环境搭建"></a>内存实验环境搭建</h3><p><strong>操作系统</strong>是计算机科学中十分重要的一门基础学科，是一名计算机专业毕业生必须要具备的基础知识。但是在学习这门课时，如果仅仅把目光停留在课本上一些关于操作系统概念上的叙述，并不能对操作系统有着深层次的理解。必须要结合动手实践，才能真正掌握核心的知识。<br>MIT的操作系统课程6.828是一门被广泛好评的入门课程。它最重要的特点就是它实践第一的教学原则。在这门课程中会涉及到非常丰富的实验，也会有非常多的动手机会。而且授课者更是亲自构建了一个简化的基于Unix内核的操作系统xv6。所有的实验都是在这个操作系统上完成。虽然它功能很简单，但是它能够帮助我们真正的了解操作系统在做什么[3]。<br>因此，以博客的形式记录自己学习6.828的过程，本系列博文尽量包括以下几个内容：</p>
+<ul>
+<li>所有实验的实验报告(Lab)</li>
+<li>所有实验中的练习(Exercise)</li>
+</ul>
+<p>下面开始实验环境的搭建：</p>
+<h4 id="实验环境"><a href="#实验环境" class="headerlink" title="实验环境"></a>实验环境</h4><p>本次实验在ubuntu18系统上进行，所有的操作步骤都在Linux 操作系统上进行。</p>
+<h3 id="准备阶段"><a href="#准备阶段" class="headerlink" title="准备阶段"></a>准备阶段</h3><p>因为本实验的  操作系统是比较新的 Ubuntu18，其自带的软件版本可能比较新，对于此lab可能不太适配，所以需要对需要的软件进行一些配置。</p>
+<h4 id="gcc版本降级"><a href="#gcc版本降级" class="headerlink" title="gcc版本降级"></a>gcc版本降级</h4><p>目的： 将gcc 版本降级到 4.8 版本</p>
+<p>(1). 下载 <code>gcc/g++ 4.8</code></p>
+<pre><code class="lang-shell">apt-get install -y gcc-4.8
+apt-get install -y g++-4.8
+</code></pre>
+<p>(2). 链接gcc/g++实现降级</p>
+<pre><code class="lang-shell">cd /usr/bin
+sudo rm gcc
+sudo ln -s gcc-4.8 gcc
+sudo rm g++
+sudo ln -s g++-4.8 g++
+</code></pre>
+<h4 id="编译qemu"><a href="#编译qemu" class="headerlink" title="编译qemu"></a>编译qemu</h4><p><strong>安装依赖</strong> [4]</p>
+<pre><code class="lang-shell">apt-get install git build-essential binutils g++-multilib libgtk2.0-dev libtool-bin libsdl-dev -y
+</code></pre>
+<p><strong>下载qemu源码</strong></p>
+<pre><code class="lang-shell">git clone https://github.com/mit-pdos/6.828-qemu.git qemu
+</code></pre>
+<p><strong>下载 lab 源码</strong></p>
+<pre><code class="lang-shell">git clone https://pdos.csail.mit.edu/6.828/2018/jos.git lab # 只有第一实验的检查脚本
+</code></pre>
+<p><strong>安装步骤</strong></p>
+<p>进入<code>qemu</code>目录下</p>
+<pre><code class="lang-shell">./configure --disable-kvm --target-list="i386-softmmu x86_64-softmmu"
+sudo make &amp;&amp; make install
+</code></pre>
+<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu.png" height="260xp"></p>
+<p>它生成的最后一个信息 <code>mk obj/kern/kernel.img</code>，这个<code>kernel.img</code>就是内核映像文件，另外obj目录在make之前是没有的，它是make指令生成的，它里面将会有许多的文件我们之后会重点观察。编译完内核源码，我们就可以把它运行在<code>QEMU</code>上啦！[3]</p>
+<p><strong>安装结果测试</strong></p>
+<p>输入<code>/usr/local/bin/qemu-system-i386</code> 出现以下窗口则安装ok</p>
+<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/qemu-test.png" height="300xp"></p>
+<p>在<code>lab</code>目录下输入  <code>make qemu</code> 出现如下结果</p>
+<p><img src="/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/make-qemu.png" height="300xp"></p>
+<p>至此，实验环境搭建完成！</p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://os.vampire.rip/" target="_blank" rel="noopener">https://os.vampire.rip/</a></p>
+<p>[2] <a href="https://zhuanlan.zhihu.com/p/74028717" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/74028717</a></p>
+<p>[3] <a href="https://www.cnblogs.com/fatsheep9146/p/5060292.html" target="_blank" rel="noopener">https://www.cnblogs.com/fatsheep9146/p/5060292.html</a></p>
+<p>[4] <a href="https://www.cnblogs.com/gatsby123/p/9746193.html" target="_blank" rel="noopener">https://www.cnblogs.com/gatsby123/p/9746193.html</a></p>
 ]]></content>
+      <tags>
+        <tag>lab</tag>
+        <tag>OS Memory</tag>
+      </tags>
   </entry>
   <entry>
     <title>Operating Systems</title>
@@ -2301,51 +2295,10 @@ in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
       </tags>
   </entry>
   <entry>
-    <title>PUBG JNG</title>
-    <url>/2020/04/18/PUBG-JNG/</url>
-    <content><![CDATA[<h3 id="JNG战队发展历程回顾"><a href="#JNG战队发展历程回顾" class="headerlink" title="JNG战队发展历程回顾"></a>JNG战队发展历程回顾</h3><h4 id="JNG初次相遇"><a href="#JNG初次相遇" class="headerlink" title="JNG初次相遇"></a>JNG初次相遇</h4><p>很久很久以前，这支战队的几个骚年游荡在这样一个空旷的平原上</p>
-<p><img src="/2020/04/18/PUBG-JNG/1.jpg" alt="IMG_0814"></p>
-<p>这个寒假的某一天，他们在飞机上相遇，并开启了他们相识到并肩作战的征程</p>
-<p><img src="/2020/04/18/PUBG-JNG/2.jpg" alt="IMG_0815"></p>
-<h4 id="睡衣战队红极一时"><a href="#睡衣战队红极一时" class="headerlink" title="睡衣战队红极一时"></a>睡衣战队红极一时</h4><p>在他们相遇不久，便迎来了队伍的第一次胜利</p>
-<p><img src="/2020/04/18/PUBG-JNG/3.jpg" alt="IMG_0823"></p>
-<p>当时他们采取的是著名的车轮战，即3辆装甲车并驾齐驱，纵横四海的战术</p>
-<p><img src="/2020/04/18/PUBG-JNG/4.jpg" alt="IMG_0822"></p>
-<h4 id="各种模式吃鸡常态化"><a href="#各种模式吃鸡常态化" class="headerlink" title="各种模式吃鸡常态化"></a>各种模式吃鸡常态化</h4><p>在经历了短短几天的磨合后，这几个小伙子已经将吃鸡常态化</p>
-<p>普通模式</p>
-<p><img src="/2020/04/18/PUBG-JNG/5.jpg" alt="IMG_0863"></p>
-<p><img src="/2020/04/18/PUBG-JNG/20.jpg" alt=""></p>
-<p>特种兵模式</p>
-<p><img src="/2020/04/18/PUBG-JNG/6.jpg" alt="IMG_0833"></p>
-<p>一日两鸡已是正常</p>
-<p><img src="/2020/04/18/PUBG-JNG/7.jpg" alt="IMG_0838"></p>
-<p><img src="/2020/04/18/PUBG-JNG/8.jpg" alt="IMG_0852"></p>
-<h4 id="雪地扔雷，对手一片哀嚎"><a href="#雪地扔雷，对手一片哀嚎" class="headerlink" title="雪地扔雷，对手一片哀嚎"></a>雪地扔雷，对手一片哀嚎</h4><p><img src="/2020/04/18/PUBG-JNG/9.jpg" alt="IMG_0858"></p>
-<p><img src="/2020/04/18/PUBG-JNG/10.jpg" alt="IMG_0869"></p>
-<p><img src="/2020/04/18/PUBG-JNG/11.jpg" alt="IMG_0871"></p>
-<p><img src="/2020/04/18/PUBG-JNG/12.jpg" alt="IMG_0903"></p>
-<h4 id="最后一次征战雪地"><a href="#最后一次征战雪地" class="headerlink" title="最后一次征战雪地"></a>最后一次征战雪地</h4><p>在一次极寒模式对决中，几个小伙子竟然连锅端掉了一个满编RMB玩家。在这之后，光子工作室终于对他们下手了，出于人道主义，并不能直接限制玩家们参与游戏，于是乎，默默地移除了他们最擅长的极寒模式，他们再也不用落地寻找暖宝宝了，再也听不到系统提示：“暴风雪还有60秒到达，打开背包，利用打火机生火取暖”。但系统为了其余玩家的游戏体验，只能如此。</p>
-<p><img src="/2020/04/18/PUBG-JNG/13.jpg" alt="IMG_0909"></p>
-<h4 id="插曲"><a href="#插曲" class="headerlink" title="插曲"></a>插曲</h4><p>性感小wei在线比心</p>
-<p><img src="/2020/04/18/PUBG-JNG/14.jpg" alt="IMG_0834"></p>
-<h3 id="JNG-建队"><a href="#JNG-建队" class="headerlink" title="JNG 建队"></a>JNG 建队</h3><p>终于，在2020年4月17日，这支战队正式成立了</p>
-<p><img src="/2020/04/18/PUBG-JNG/15.jpg" alt="IMG_0855"></p>
-<p>属于JNG（Jining Gaming）的时刻已经来临</p>
-<p><img src="/2020/04/18/PUBG-JNG/16.jpg" alt=""></p>
-<p>今晚，请锁定和平精英，关注这支战队！</p>
-<p><img src="/2020/04/18/PUBG-JNG/21.jpg" alt=""></p>
-<p>建队首鸡</p>
-<p><img src="/2020/04/18/PUBG-JNG/18.jpg" alt=""></p>
-<p><img src="/2020/04/18/PUBG-JNG/19.jpg" alt=""></p>
-<p>一支穿云箭，千军万马来相见</p>
-<p><img src="/2020/04/18/PUBG-JNG/22.jpg" alt=""></p>
-<p>雪地彩蛋</p>
-<p><img src="/2020/04/18/PUBG-JNG/23.jpg" alt=""></p>
+    <title>MuonTrap-Preventing Cross-Domain Spectre-Like</title>
+    <url>/2021/03/15/MuonTrap-Preventing-Cross-Domain-Spectre-Like/</url>
+    <content><![CDATA[<p>清华安全公众号推荐</p>
 ]]></content>
-      <tags>
-        <tag>game-for-peace</tag>
-        <tag>JNG</tag>
-      </tags>
   </entry>
   <entry>
     <title>PCA图像压缩</title>
@@ -2495,6 +2448,53 @@ end
 ]]></content>
       <tags>
         <tag>homework</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PUBG JNG</title>
+    <url>/2020/04/18/PUBG-JNG/</url>
+    <content><![CDATA[<h3 id="JNG战队发展历程回顾"><a href="#JNG战队发展历程回顾" class="headerlink" title="JNG战队发展历程回顾"></a>JNG战队发展历程回顾</h3><h4 id="JNG初次相遇"><a href="#JNG初次相遇" class="headerlink" title="JNG初次相遇"></a>JNG初次相遇</h4><p>很久很久以前，这支战队的几个骚年游荡在这样一个空旷的平原上</p>
+<p><img src="/2020/04/18/PUBG-JNG/1.jpg" alt="IMG_0814"></p>
+<p>这个寒假的某一天，他们在飞机上相遇，并开启了他们相识到并肩作战的征程</p>
+<p><img src="/2020/04/18/PUBG-JNG/2.jpg" alt="IMG_0815"></p>
+<h4 id="睡衣战队红极一时"><a href="#睡衣战队红极一时" class="headerlink" title="睡衣战队红极一时"></a>睡衣战队红极一时</h4><p>在他们相遇不久，便迎来了队伍的第一次胜利</p>
+<p><img src="/2020/04/18/PUBG-JNG/3.jpg" alt="IMG_0823"></p>
+<p>当时他们采取的是著名的车轮战，即3辆装甲车并驾齐驱，纵横四海的战术</p>
+<p><img src="/2020/04/18/PUBG-JNG/4.jpg" alt="IMG_0822"></p>
+<h4 id="各种模式吃鸡常态化"><a href="#各种模式吃鸡常态化" class="headerlink" title="各种模式吃鸡常态化"></a>各种模式吃鸡常态化</h4><p>在经历了短短几天的磨合后，这几个小伙子已经将吃鸡常态化</p>
+<p>普通模式</p>
+<p><img src="/2020/04/18/PUBG-JNG/5.jpg" alt="IMG_0863"></p>
+<p><img src="/2020/04/18/PUBG-JNG/20.jpg" alt=""></p>
+<p>特种兵模式</p>
+<p><img src="/2020/04/18/PUBG-JNG/6.jpg" alt="IMG_0833"></p>
+<p>一日两鸡已是正常</p>
+<p><img src="/2020/04/18/PUBG-JNG/7.jpg" alt="IMG_0838"></p>
+<p><img src="/2020/04/18/PUBG-JNG/8.jpg" alt="IMG_0852"></p>
+<h4 id="雪地扔雷，对手一片哀嚎"><a href="#雪地扔雷，对手一片哀嚎" class="headerlink" title="雪地扔雷，对手一片哀嚎"></a>雪地扔雷，对手一片哀嚎</h4><p><img src="/2020/04/18/PUBG-JNG/9.jpg" alt="IMG_0858"></p>
+<p><img src="/2020/04/18/PUBG-JNG/10.jpg" alt="IMG_0869"></p>
+<p><img src="/2020/04/18/PUBG-JNG/11.jpg" alt="IMG_0871"></p>
+<p><img src="/2020/04/18/PUBG-JNG/12.jpg" alt="IMG_0903"></p>
+<h4 id="最后一次征战雪地"><a href="#最后一次征战雪地" class="headerlink" title="最后一次征战雪地"></a>最后一次征战雪地</h4><p>在一次极寒模式对决中，几个小伙子竟然连锅端掉了一个满编RMB玩家。在这之后，光子工作室终于对他们下手了，出于人道主义，并不能直接限制玩家们参与游戏，于是乎，默默地移除了他们最擅长的极寒模式，他们再也不用落地寻找暖宝宝了，再也听不到系统提示：“暴风雪还有60秒到达，打开背包，利用打火机生火取暖”。但系统为了其余玩家的游戏体验，只能如此。</p>
+<p><img src="/2020/04/18/PUBG-JNG/13.jpg" alt="IMG_0909"></p>
+<h4 id="插曲"><a href="#插曲" class="headerlink" title="插曲"></a>插曲</h4><p>性感小wei在线比心</p>
+<p><img src="/2020/04/18/PUBG-JNG/14.jpg" alt="IMG_0834"></p>
+<h3 id="JNG-建队"><a href="#JNG-建队" class="headerlink" title="JNG 建队"></a>JNG 建队</h3><p>终于，在2020年4月17日，这支战队正式成立了</p>
+<p><img src="/2020/04/18/PUBG-JNG/15.jpg" alt="IMG_0855"></p>
+<p>属于JNG（Jining Gaming）的时刻已经来临</p>
+<p><img src="/2020/04/18/PUBG-JNG/16.jpg" alt=""></p>
+<p>今晚，请锁定和平精英，关注这支战队！</p>
+<p><img src="/2020/04/18/PUBG-JNG/21.jpg" alt=""></p>
+<p>建队首鸡</p>
+<p><img src="/2020/04/18/PUBG-JNG/18.jpg" alt=""></p>
+<p><img src="/2020/04/18/PUBG-JNG/19.jpg" alt=""></p>
+<p>一支穿云箭，千军万马来相见</p>
+<p><img src="/2020/04/18/PUBG-JNG/22.jpg" alt=""></p>
+<p>雪地彩蛋</p>
+<p><img src="/2020/04/18/PUBG-JNG/23.jpg" alt=""></p>
+]]></content>
+      <tags>
+        <tag>game-for-peace</tag>
+        <tag>JNG</tag>
       </tags>
   </entry>
   <entry>
@@ -3407,11 +3407,6 @@ int main(void)
       </tags>
   </entry>
   <entry>
-    <title>Systematic Review on FHE</title>
-    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
-    <content><![CDATA[]]></content>
-  </entry>
-  <entry>
     <title>Software ROT</title>
     <url>/2020/12/02/Software-ROT/</url>
     <content><![CDATA[<div class="table-container">
@@ -3459,6 +3454,11 @@ int main(void)
       <tags>
         <tag>论文解读</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Systematic Review on FHE</title>
+    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>TPM overview</title>
@@ -3703,6 +3703,112 @@ int main(void)
       </tags>
   </entry>
   <entry>
+    <title>Xen log 0 Ubuntu18源码安装Xen4.11</title>
+    <url>/2020/05/22/Xen-log-0-Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/</url>
+    <content><![CDATA[<p>在部署Xen的时候采用的是Ubuntu18.04(英文版) + Xen4.11</p>
+<p>由于安装Ubuntu后，使用国外的源比较慢，修改为国内源，这样速度快很多。</p>
+<h3 id="Ubuntu换源"><a href="#Ubuntu换源" class="headerlink" title="Ubuntu换源"></a>Ubuntu换源</h3><p>我采用的是修改阿里源为Ubuntu18.04的源</p>
+<p><strong>备份 sources.list</strong></p>
+<pre><code>cp /etc/apt/sources.list /etc/apt/sources.list.bak
+</code></pre><p><strong>添加阿里源</strong></p>
+<p>在<strong>/etc/apt/sources.list</strong>文件前添加如下条目</p>
+<pre><code>deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+</code></pre><p><strong>更新源</strong></p>
+<pre><code>sudo apt-get update
+sudo apt-get upgrade
+</code></pre><h3 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h3><p><strong>For Ubuntu 18.04:</strong></p>
+<pre><code class="lang-sh">apt-get install build-essential
+apt-get install bcc bin86 gawk bridge-utils iproute2 libcurl4 libcurl4-openssl-dev bzip2 module-init-tools transfig tgif
+apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial
+apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev libjpeg-dev
+apt-get install libnl-route-3-200 libnl-3-dev libnl-cli-3-dev libnl-genl-3-dev libnl-route-3-dev
+apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev
+apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc
+
+apt-get install libc6-dev-i386
+apt-get install lzma lzma-dev liblzma-dev
+apt-get install libsystemd-dev
+</code></pre>
+<h3 id="下载Xen4-11源码"><a href="#下载Xen4-11源码" class="headerlink" title="下载Xen4.11源码"></a>下载Xen4.11源码</h3><pre><code>git clone git://xenbits.xen.org/xen.git
+cd xen
+git checkout origin/stable-4.11
+</code></pre><p>或者</p>
+<pre><code class="lang-sh">git clone -b stable-4.11 git://xenbits.xen.org/xen.git
+</code></pre>
+<h3 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h3><p>解压之后进入Xen目录下</p>
+<pre><code class="lang-sh">./configure --enable-systemd
+make dist // 也可以使用 make world(same like make clean &amp;&amp; make dist).
+make install
+</code></pre>
+<p>上两步make过程会等很久(使用 make dist -j8 可以加速，开启8个线程操作)</p>
+<p>或者参考Debain下的安装方法</p>
+<pre><code class="lang-sh">./confiugre
+make xen -j8
+make tools -j8
+sudo make install-xen
+sudo make install-tools
+</code></pre>
+<p>ps：若在<code>make install</code> 时遇到error，可以先对下面的<code>xen-tools</code> 进行make.</p>
+<p><strong>可能会遇到的问题</strong></p>
+<p>如果遇到error信息如下，预编译器不识别<strong>sizeof</strong> 函数导致</p>
+<p><img src="/2020/05/22/Xen-log-0-Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/1.png" width="500px" height="300px"></p>
+<p>解决方法：</p>
+<pre><code class="lang-C"> #define BITS_PER_LONG           (sizeof (unsigned long) * BITS_PER_BYTE)
+ 改成
+ #define BITS_PER_LONG           (__SIZEOF_LONG__ * BITS_PER_BYTE)
+</code></pre>
+<p>解决完问题后，重复安装过程。</p>
+<h3 id="Post-Install"><a href="#Post-Install" class="headerlink" title="Post-Install"></a>Post-Install</h3><p><strong>Reload dynamic libraries:</strong></p>
+<pre><code>/sbin/ldconfig
+</code></pre><h3 id="Grube-Settings"><a href="#Grube-Settings" class="headerlink" title="Grube-Settings"></a>Grube-Settings</h3><pre><code>mkdir -p /etc/default/grub.d
+</code></pre><p><strong>Create /etc/default/grub.d/xen.cfg:</strong></p>
+<pre><code>gedit /etc/default/grub.d/xen.cfg
+</code></pre><p><strong>在打开的文本中添加下面内容</strong></p>
+<p>Be careful! The last settings depends on your system-language! </p>
+<pre><code>GRUB_DISABLE_OS_PROBER=true
+GRUB_CMDLINE_XEN_DEFAULT="dom0_mem=2560M,max:2560M"
+GRUB_DEFAULT="Ubuntu GNU/Linux, with Xen-Hypervisor"
+</code></pre><p><strong>Update grub:</strong></p>
+<pre><code>update-grub
+</code></pre><p><strong>删除xendomains</strong></p>
+<p>当前版本有一个小bug，需要删除一个xendomains文件</p>
+<pre><code>rm /etc/init.d/xendomains
+</code></pre><h3 id="安装-xen-tools"><a href="#安装-xen-tools" class="headerlink" title="安装 xen-tools"></a>安装 xen-tools</h3><pre><code>apt install lvm2 debootstrap libconfig-inifiles-perl libdata-validate-domain-perl libdata-validate-ip-perl libdata-validate-uri-perl libfile-slurp-perl libfile-which-perl libsort-versions-perl libterm-ui-perl libtext-template-perl openssh-client perl debian-archive-keyring rinse libtest-notabs-perl
+</code></pre><h4 id="Download-and-make"><a href="#Download-and-make" class="headerlink" title="Download and make"></a>Download and make</h4><p>(最好是放在Xen目录下)</p>
+<pre><code>git clone https://github.com/xen-tools/xen-tools.git
+cd xen-tools
+make install
+</code></pre><h3 id="开启xen-services"><a href="#开启xen-services" class="headerlink" title="开启xen services"></a>开启xen services</h3><pre><code>systemctl enable xen-qemu-dom0-disk-backend.service
+systemctl enable xen-init-dom0.service
+systemctl enable xenconsoled.service
+systemctl enable xenstored.service
+systemctl enable xendomains.service
+systemctl enable xen-watchdog.service
+</code></pre><h3 id="Reboot"><a href="#Reboot" class="headerlink" title="Reboot"></a>Reboot</h3><p>重启选择带有xen-hypervisor 4.11 启动</p>
+<p><strong>安装成功与否测试</strong></p>
+<pre><code>xentop
+</code></pre><p>如果出现下图的domain0则说明安装成功</p>
+<p><img src="/2020/05/22/Xen-log-0-Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/2.jpg" width="500px" height="100px"></p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="www.baudi.com">Build Xen for ubuntu</a></p>
+<p>[2] <a href="https://wiki.xenproject.org/wiki/Compiling_Xen_From_Source" target="_blank" rel="noopener">Compiling Xen From Source</a></p>
+<p>[3] <a href="https://www.linuxidc.com/Linux/2018-08/153709.htm" target="_blank" rel="noopener">Ubuntu 18.04修改默认源为国内源</a></p>
+<p>[4] <a href="https://blog.csdn.net/FJDJFKDJFKDJFKD/article/details/105982709" target="_blank" rel="noopener">qemu 安装  error</a></p>
+]]></content>
+      <tags>
+        <tag>虚拟机</tag>
+        <tag>Xen log</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Untrusted Hypervisor AMD Memory Encryption</title>
     <url>/2021/01/11/Untrusted-Hypervisor-AMD-Memory-Encryption/</url>
     <content><![CDATA[<div class="table-container">
@@ -3843,192 +3949,9 @@ reboot
 <p>此文档记录了在集群上部署xen的方法，目的是为后面的分布式检测做准备。</p>
 ]]></content>
       <tags>
+        <tag>Xen log</tag>
         <tag>Linux</tag>
         <tag>Debian</tag>
-        <tag>Xen log</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Xen log 3 Using Serial Debug Xen</title>
-    <url>/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/</url>
-    <content><![CDATA[<p>注：本文的配置是在<a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">官网</a>指导下进行的，因为在配置过程中遇到一点问题，记录下配置过程。</p>
-<p>Xen的log信息是打印在内存中的，读取打印信息需要<code>xl dm</code> 进行查看，如果在查看之前xen崩溃的话，是读取不到任何信息的，通过串口的方式可以将数据实时的打印出来，方便调试。</p>
-<p>这里使用的是usb转rs232.</p>
-<h3 id="配置读取设备"><a href="#配置读取设备" class="headerlink" title="配置读取设备"></a>配置读取设备</h3><p>在读取设备和Xen机器上配置<code>minicom</code> 用于测试串口。</p>
-<pre><code class="lang-sh">Ubuntu dmesg | grep tty
-</code></pre>
-<p>输出信息如下</p>
-<pre><code class="lang-sh">[    0.094791] printk: console [tty0] enabled
-[    0.757835] 00:02: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-[    0.779505] 0000:00:16.3: ttyS4 at I/O 0xf060 (irq = 19, base_baud = 115200) is a 16550A
-[    2.825408] usb 1-13: pl2303 converter now attached to ttyUSB0
-[ 3435.257916] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0
-[ 3437.386713] usb 1-14: pl2303 converter now attached to ttyUSB0
-[13860.597447] pl2303 ttyUSB0: pl2303_set_control_lines - failed: -19
-[13860.597451] pl2303 ttyUSB0: error sending break = -19
-[13860.597584] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0
-[13863.385826] usb 1-8: pl2303 converter now attached to ttyUSB0
-</code></pre>
-<p>于是设置默认串口为 <code>ttyUSB0</code> ,使用<code>minicom -s</code> 进入<code>serial prot setup</code> 进行设置</p>
-<p><img src="/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/xen-3.png" width="500px" height="300px"> </p>
-<p>(配置完没有截图，取自 [2] )，配置好读取设备后，静置，备用。</p>
-<h3 id="配置Xen-设备"><a href="#配置Xen-设备" class="headerlink" title="配置Xen 设备"></a>配置Xen 设备</h3><p>读取Xen设备信息</p>
-<pre><code class="lang-sh">dmesg | grep tty
-</code></pre>
-<p>输出信息</p>
-<pre><code class="lang-sh">console [tty0] enabled
-ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-ttyS4 at I/O 0xc0c0 (irq = 16, base_baud = 115200) is a XR16850
-ttyS5 at I/O 0xc0c8 (irq = 16, base_baud = 115200) is a XR16850
-</code></pre>
-<p>这里看到 tty0 、ttyS0  、 ttyS4 、ttyS5 （如果没有输出全部信息的话，执行下面的命令查看）</p>
-<pre><code class="lang-sh">cat /proc/tty/driver/serial
-</code></pre>
-<p>输出信息</p>
-<pre><code class="lang-sh">serinfo:1.0 driver revision:
-0: uart:16550A port:000003F8 irq:4 tx:0 rx:0
-1: uart:unknown port:000002F8 irq:3
-2: uart:unknown port:000003E8 irq:4
-3: uart:unknown port:000002E8 irq:3
-4: uart:XR16850 port:0000C0C0 irq:16 tx:0 rx:0
-5: uart:XR16850 port:0000C0C8 irq:16 tx:0 rx:0 CTS|DTR|DSR|CD|RI
-</code></pre>
-<p>可以确定，Xen设备的串口是<code>ttyS5</code> 物理地址为 <code>0xc0c8</code> </p>
-<h4 id="测试串口通讯情况"><a href="#测试串口通讯情况" class="headerlink" title="测试串口通讯情况"></a>测试串口通讯情况</h4><p>在Xen设备的<code>minicom</code> 上设置默认的端口为<code>ttyS5</code> 看两台机器是否能够正常通讯，即，在读取设备输入，在Xen设备上可以输出相应内容，反之亦然。</p>
-<h4 id="修改Grub文件"><a href="#修改Grub文件" class="headerlink" title="修改Grub文件"></a>修改Grub文件</h4><p>在<code>/etc/default/grub</code>文件中 添加如下内容</p>
-<pre><code class="lang-sh"># This can guarantee sync output when using `printk`
-GRUB_CMDLINE_XEN="loglvl=all guest_loglvl=all sync_console console_to_ring com1=115200,8n1,0x3080 console=com1,vga com0_mem=4096"
-
-GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS5,115200n8"
-GRUB_CMDLINE_LINUX="console=hvc0 earlyprintk=xen"
-</code></pre>
-<ul>
-<li><code>sync_console</code>: 保证输出是同步的，以防一些内容在xen crash之前打不出来</li>
-<li><code>console_to_ring</code>: 将Guest的log同步到dom0中打印输出.</li>
-<li><code>console=com1,vga</code>: 将终端连到com1上，这样我们就可以通过串口输入用户名密码登陆</li>
-</ul>
-<p>输入 <code>sudo update-grub</code> 更新grub文件，重启</p>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在自定义<a href="https://ykma.gitee.io/2020/07/19/Xen-log-2-Add-a-new-Hypercall/">Hypercall</a> 后，执行<code>privcmd.c</code> 文件会在读取设备上看到相应的log信息，这里不放图了。</p>
-<h3 id="踩坑指南"><a href="#踩坑指南" class="headerlink" title="踩坑指南"></a>踩坑指南</h3><p>我刚配置串口的时候，采用Ubuntu18读取日志信息，Debian9编译Xen，两台机器通信正常，<code>reboot</code> Xen设备后会打印开机日志，随后便是一通乱码，不输出用户自定义log信息。调整两台设备的编码格式、语言（en.utf-8）等均未果，至今没有解决这个bug</p>
-<p>感受一下乱码：分别是正常读取与16进制读取的结果</p>
-<pre><code class="lang-sh">�`�f���f�����`�f���f���怀�`�f���f����~x�~~x�~�`�f���f���怀�`�f��~怀
-
-�`�f���f枞f�~x��枘�����f��ff��~��~fx�f��~������~��~��~��fx�
-
-06 fe 60 e6 66 fe 06 f8 00 f8 66 fe 00 f8 e6 80 06 fe 60 e6 66 fe 06 f8 00 f8 6
-</code></pre>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">https://wiki.xenproject.org/wiki/Xen_Serial_Console</a><br>[2] <a href="** https://silentming.net/blog/2016/09/18/xen-log-5-debug-xen/**">Xen Log 5-Debug Xen on Physical Machine</a><br>[3] <a href="https://xenbits.xen.org/docs/unstable/misc/xen-command-line.html" target="_blank" rel="noopener">https://xenbits.xen.org/docs/unstable/misc/xen-command-line.html</a></p>
-]]></content>
-      <tags>
-        <tag>Virtualization</tag>
-        <tag>Linux</tag>
-        <tag>Xen log</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Xen log 0 Ubuntu18源码安装Xen4.11</title>
-    <url>/2020/05/22/Xen-log-0-Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/</url>
-    <content><![CDATA[<p>在部署Xen的时候采用的是Ubuntu18.04(英文版) + Xen4.11</p>
-<p>由于安装Ubuntu后，使用国外的源比较慢，修改为国内源，这样速度快很多。</p>
-<h3 id="Ubuntu换源"><a href="#Ubuntu换源" class="headerlink" title="Ubuntu换源"></a>Ubuntu换源</h3><p>我采用的是修改阿里源为Ubuntu18.04的源</p>
-<p><strong>备份 sources.list</strong></p>
-<pre><code>cp /etc/apt/sources.list /etc/apt/sources.list.bak
-</code></pre><p><strong>添加阿里源</strong></p>
-<p>在<strong>/etc/apt/sources.list</strong>文件前添加如下条目</p>
-<pre><code>deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
-deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
-deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
-</code></pre><p><strong>更新源</strong></p>
-<pre><code>sudo apt-get update
-sudo apt-get upgrade
-</code></pre><h3 id="安装依赖包"><a href="#安装依赖包" class="headerlink" title="安装依赖包"></a>安装依赖包</h3><p><strong>For Ubuntu 18.04:</strong></p>
-<pre><code class="lang-sh">apt-get install build-essential
-apt-get install bcc bin86 gawk bridge-utils iproute2 libcurl4 libcurl4-openssl-dev bzip2 module-init-tools transfig tgif
-apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial
-apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev libjpeg-dev
-apt-get install libnl-route-3-200 libnl-3-dev libnl-cli-3-dev libnl-genl-3-dev libnl-route-3-dev
-apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev
-apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc
-
-apt-get install libc6-dev-i386
-apt-get install lzma lzma-dev liblzma-dev
-apt-get install libsystemd-dev
-</code></pre>
-<h3 id="下载Xen4-11源码"><a href="#下载Xen4-11源码" class="headerlink" title="下载Xen4.11源码"></a>下载Xen4.11源码</h3><pre><code>git clone git://xenbits.xen.org/xen.git
-cd xen
-git checkout origin/stable-4.11
-</code></pre><p>或者</p>
-<pre><code class="lang-sh">git clone -b stable-4.11 git://xenbits.xen.org/xen.git
-</code></pre>
-<h3 id="Install"><a href="#Install" class="headerlink" title="Install"></a>Install</h3><p>解压之后进入Xen目录下</p>
-<pre><code class="lang-sh">./configure --enable-systemd
-make dist // 也可以使用 make world(same like make clean &amp;&amp; make dist).
-make install
-</code></pre>
-<p>上两步make过程会等很久(使用 make dist -j8 可以加速，开启8个线程操作)</p>
-<p>或者参考Debain下的安装方法</p>
-<pre><code class="lang-sh">./confiugre
-make xen -j8
-make tools -j8
-sudo make install-xen
-sudo make install-tools
-</code></pre>
-<p>ps：若在<code>make install</code> 时遇到error，可以先对下面的<code>xen-tools</code> 进行make.</p>
-<p><strong>可能会遇到的问题</strong></p>
-<p>如果遇到error信息如下，预编译器不识别<strong>sizeof</strong> 函数导致</p>
-<p><img src="/2020/05/22/Xen-log-0-Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/1.png" width="500px" height="300px"></p>
-<p>解决方法：</p>
-<pre><code class="lang-C"> #define BITS_PER_LONG           (sizeof (unsigned long) * BITS_PER_BYTE)
- 改成
- #define BITS_PER_LONG           (__SIZEOF_LONG__ * BITS_PER_BYTE)
-</code></pre>
-<p>解决完问题后，重复安装过程。</p>
-<h3 id="Post-Install"><a href="#Post-Install" class="headerlink" title="Post-Install"></a>Post-Install</h3><p><strong>Reload dynamic libraries:</strong></p>
-<pre><code>/sbin/ldconfig
-</code></pre><h3 id="Grube-Settings"><a href="#Grube-Settings" class="headerlink" title="Grube-Settings"></a>Grube-Settings</h3><pre><code>mkdir -p /etc/default/grub.d
-</code></pre><p><strong>Create /etc/default/grub.d/xen.cfg:</strong></p>
-<pre><code>gedit /etc/default/grub.d/xen.cfg
-</code></pre><p><strong>在打开的文本中添加下面内容</strong></p>
-<p>Be careful! The last settings depends on your system-language! </p>
-<pre><code>GRUB_DISABLE_OS_PROBER=true
-GRUB_CMDLINE_XEN_DEFAULT="dom0_mem=2560M,max:2560M"
-GRUB_DEFAULT="Ubuntu GNU/Linux, with Xen-Hypervisor"
-</code></pre><p><strong>Update grub:</strong></p>
-<pre><code>update-grub
-</code></pre><p><strong>删除xendomains</strong></p>
-<p>当前版本有一个小bug，需要删除一个xendomains文件</p>
-<pre><code>rm /etc/init.d/xendomains
-</code></pre><h3 id="安装-xen-tools"><a href="#安装-xen-tools" class="headerlink" title="安装 xen-tools"></a>安装 xen-tools</h3><pre><code>apt install lvm2 debootstrap libconfig-inifiles-perl libdata-validate-domain-perl libdata-validate-ip-perl libdata-validate-uri-perl libfile-slurp-perl libfile-which-perl libsort-versions-perl libterm-ui-perl libtext-template-perl openssh-client perl debian-archive-keyring rinse libtest-notabs-perl
-</code></pre><h4 id="Download-and-make"><a href="#Download-and-make" class="headerlink" title="Download and make"></a>Download and make</h4><p>(最好是放在Xen目录下)</p>
-<pre><code>git clone https://github.com/xen-tools/xen-tools.git
-cd xen-tools
-make install
-</code></pre><h3 id="开启xen-services"><a href="#开启xen-services" class="headerlink" title="开启xen services"></a>开启xen services</h3><pre><code>systemctl enable xen-qemu-dom0-disk-backend.service
-systemctl enable xen-init-dom0.service
-systemctl enable xenconsoled.service
-systemctl enable xenstored.service
-systemctl enable xendomains.service
-systemctl enable xen-watchdog.service
-</code></pre><h3 id="Reboot"><a href="#Reboot" class="headerlink" title="Reboot"></a>Reboot</h3><p>重启选择带有xen-hypervisor 4.11 启动</p>
-<p><strong>安装成功与否测试</strong></p>
-<pre><code>xentop
-</code></pre><p>如果出现下图的domain0则说明安装成功</p>
-<p><img src="/2020/05/22/Xen-log-0-Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/2.jpg" width="500px" height="100px"></p>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="www.baudi.com">Build Xen for ubuntu</a></p>
-<p>[2] <a href="https://wiki.xenproject.org/wiki/Compiling_Xen_From_Source" target="_blank" rel="noopener">Compiling Xen From Source</a></p>
-<p>[3] <a href="https://www.linuxidc.com/Linux/2018-08/153709.htm" target="_blank" rel="noopener">Ubuntu 18.04修改默认源为国内源</a></p>
-<p>[4] <a href="https://blog.csdn.net/FJDJFKDJFKDJFKD/article/details/105982709" target="_blank" rel="noopener">qemu 安装  error</a></p>
-]]></content>
-      <tags>
-        <tag>Xen log</tag>
-        <tag>虚拟机</tag>
       </tags>
   </entry>
   <entry>
@@ -4132,8 +4055,85 @@ ret = 0
       <tags>
         <tag>Virtualization</tag>
         <tag>Hypervisor</tag>
-        <tag>Linux</tag>
         <tag>Xen log</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Xen log 3 Using Serial Debug Xen</title>
+    <url>/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/</url>
+    <content><![CDATA[<p>注：本文的配置是在<a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">官网</a>指导下进行的，因为在配置过程中遇到一点问题，记录下配置过程。</p>
+<p>Xen的log信息是打印在内存中的，读取打印信息需要<code>xl dm</code> 进行查看，如果在查看之前xen崩溃的话，是读取不到任何信息的，通过串口的方式可以将数据实时的打印出来，方便调试。</p>
+<p>这里使用的是usb转rs232.</p>
+<h3 id="配置读取设备"><a href="#配置读取设备" class="headerlink" title="配置读取设备"></a>配置读取设备</h3><p>在读取设备和Xen机器上配置<code>minicom</code> 用于测试串口。</p>
+<pre><code class="lang-sh">Ubuntu dmesg | grep tty
+</code></pre>
+<p>输出信息如下</p>
+<pre><code class="lang-sh">[    0.094791] printk: console [tty0] enabled
+[    0.757835] 00:02: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+[    0.779505] 0000:00:16.3: ttyS4 at I/O 0xf060 (irq = 19, base_baud = 115200) is a 16550A
+[    2.825408] usb 1-13: pl2303 converter now attached to ttyUSB0
+[ 3435.257916] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0
+[ 3437.386713] usb 1-14: pl2303 converter now attached to ttyUSB0
+[13860.597447] pl2303 ttyUSB0: pl2303_set_control_lines - failed: -19
+[13860.597451] pl2303 ttyUSB0: error sending break = -19
+[13860.597584] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0
+[13863.385826] usb 1-8: pl2303 converter now attached to ttyUSB0
+</code></pre>
+<p>于是设置默认串口为 <code>ttyUSB0</code> ,使用<code>minicom -s</code> 进入<code>serial prot setup</code> 进行设置</p>
+<p><img src="/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/xen-3.png" width="500px" height="300px"> </p>
+<p>(配置完没有截图，取自 [2] )，配置好读取设备后，静置，备用。</p>
+<h3 id="配置Xen-设备"><a href="#配置Xen-设备" class="headerlink" title="配置Xen 设备"></a>配置Xen 设备</h3><p>读取Xen设备信息</p>
+<pre><code class="lang-sh">dmesg | grep tty
+</code></pre>
+<p>输出信息</p>
+<pre><code class="lang-sh">console [tty0] enabled
+ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+ttyS4 at I/O 0xc0c0 (irq = 16, base_baud = 115200) is a XR16850
+ttyS5 at I/O 0xc0c8 (irq = 16, base_baud = 115200) is a XR16850
+</code></pre>
+<p>这里看到 tty0 、ttyS0  、 ttyS4 、ttyS5 （如果没有输出全部信息的话，执行下面的命令查看）</p>
+<pre><code class="lang-sh">cat /proc/tty/driver/serial
+</code></pre>
+<p>输出信息</p>
+<pre><code class="lang-sh">serinfo:1.0 driver revision:
+0: uart:16550A port:000003F8 irq:4 tx:0 rx:0
+1: uart:unknown port:000002F8 irq:3
+2: uart:unknown port:000003E8 irq:4
+3: uart:unknown port:000002E8 irq:3
+4: uart:XR16850 port:0000C0C0 irq:16 tx:0 rx:0
+5: uart:XR16850 port:0000C0C8 irq:16 tx:0 rx:0 CTS|DTR|DSR|CD|RI
+</code></pre>
+<p>可以确定，Xen设备的串口是<code>ttyS5</code> 物理地址为 <code>0xc0c8</code> </p>
+<h4 id="测试串口通讯情况"><a href="#测试串口通讯情况" class="headerlink" title="测试串口通讯情况"></a>测试串口通讯情况</h4><p>在Xen设备的<code>minicom</code> 上设置默认的端口为<code>ttyS5</code> 看两台机器是否能够正常通讯，即，在读取设备输入，在Xen设备上可以输出相应内容，反之亦然。</p>
+<h4 id="修改Grub文件"><a href="#修改Grub文件" class="headerlink" title="修改Grub文件"></a>修改Grub文件</h4><p>在<code>/etc/default/grub</code>文件中 添加如下内容</p>
+<pre><code class="lang-sh"># This can guarantee sync output when using `printk`
+GRUB_CMDLINE_XEN="loglvl=all guest_loglvl=all sync_console console_to_ring com1=115200,8n1,0x3080 console=com1,vga com0_mem=4096"
+
+GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS5,115200n8"
+GRUB_CMDLINE_LINUX="console=hvc0 earlyprintk=xen"
+</code></pre>
+<ul>
+<li><code>sync_console</code>: 保证输出是同步的，以防一些内容在xen crash之前打不出来</li>
+<li><code>console_to_ring</code>: 将Guest的log同步到dom0中打印输出.</li>
+<li><code>console=com1,vga</code>: 将终端连到com1上，这样我们就可以通过串口输入用户名密码登陆</li>
+</ul>
+<p>输入 <code>sudo update-grub</code> 更新grub文件，重启</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在自定义<a href="https://ykma.gitee.io/2020/07/19/Xen-log-2-Add-a-new-Hypercall/">Hypercall</a> 后，执行<code>privcmd.c</code> 文件会在读取设备上看到相应的log信息，这里不放图了。</p>
+<h3 id="踩坑指南"><a href="#踩坑指南" class="headerlink" title="踩坑指南"></a>踩坑指南</h3><p>我刚配置串口的时候，采用Ubuntu18读取日志信息，Debian9编译Xen，两台机器通信正常，<code>reboot</code> Xen设备后会打印开机日志，随后便是一通乱码，不输出用户自定义log信息。调整两台设备的编码格式、语言（en.utf-8）等均未果，至今没有解决这个bug</p>
+<p>感受一下乱码：分别是正常读取与16进制读取的结果</p>
+<pre><code class="lang-sh">�`�f���f�����`�f���f���怀�`�f���f����~x�~~x�~�`�f���f���怀�`�f��~怀
+
+�`�f���f枞f�~x��枘�����f��ff��~��~fx�f��~������~��~��~��fx�
+
+06 fe 60 e6 66 fe 06 f8 00 f8 66 fe 00 f8 e6 80 06 fe 60 e6 66 fe 06 f8 00 f8 6
+</code></pre>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">https://wiki.xenproject.org/wiki/Xen_Serial_Console</a><br>[2] <a href="** https://silentming.net/blog/2016/09/18/xen-log-5-debug-xen/**">Xen Log 5-Debug Xen on Physical Machine</a><br>[3] <a href="https://xenbits.xen.org/docs/unstable/misc/xen-command-line.html" target="_blank" rel="noopener">https://xenbits.xen.org/docs/unstable/misc/xen-command-line.html</a></p>
+]]></content>
+      <tags>
+        <tag>Virtualization</tag>
+        <tag>Xen log</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -4342,8 +4342,8 @@ cp mm.c /${workdir}/../xen/xen/arch/x86/
 <p>​    2020年8月5日      创建<br>​    2020年9月30日    增加<code>xen</code> 的脚本命令</p>
 ]]></content>
       <tags>
-        <tag>Linux</tag>
         <tag>Xen log</tag>
+        <tag>Linux</tag>
         <tag>Shell</tag>
       </tags>
   </entry>
@@ -4506,9 +4506,17 @@ grub2-editenv list # 查看默认启动顺序
 <p>[6] <a href="https://wiki.centos.org/zh/HowTos/Grub2" target="_blank" rel="noopener">https://wiki.centos.org/zh/HowTos/Grub2</a></p>
 ]]></content>
       <tags>
-        <tag>Linux</tag>
         <tag>Xen log</tag>
+        <tag>Linux</tag>
         <tag>CentOS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Xen虚拟化技术完全导读</title>
+    <url>/2020/07/19/Xen%E8%99%9A%E6%8B%9F%E5%8C%96%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E5%AF%BC%E8%AF%BB/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -4631,14 +4639,6 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       <tags>
         <tag>算法</tag>
         <tag>dp</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Xen虚拟化技术完全导读</title>
-    <url>/2020/07/19/Xen%E8%99%9A%E6%8B%9F%E5%8C%96%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E5%AF%BC%E8%AF%BB/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>读书笔记</tag>
       </tags>
   </entry>
   <entry>
@@ -4891,6 +4891,11 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
+    <title>内嵌汇编学习</title>
+    <url>/2020/11/30/%E5%86%85%E5%B5%8C%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>从硬件层认识计算机</title>
     <url>/2020/11/23/%E4%BB%8E%E7%A1%AC%E4%BB%B6%E5%B1%82%E8%AE%A4%E8%AF%86%E8%AE%A1%E7%AE%97%E6%9C%BA/</url>
     <content><![CDATA[]]></content>
@@ -4904,11 +4909,6 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       <tags>
         <tag>读书笔记</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>内嵌汇编学习</title>
-    <url>/2020/11/30/%E5%86%85%E5%B5%8C%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>博士学长有话说</title>
