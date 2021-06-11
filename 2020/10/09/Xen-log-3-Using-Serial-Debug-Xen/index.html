@@ -18,21 +18,22 @@
 
     <title>Xen log 3 Using Serial Debug Xen | MYKRobin&#39;s Realm</title>
     <link rel="icon" type="image/png" href="/favicon.png">
-
+    <link rel="stylesheet" type="text/css" href="/libs/artitalk/artitalk.min.css">
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
     <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
     <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
     <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
     <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+
     <link rel="stylesheet" type="text/css" href="/css/matery.css">
     <link rel="stylesheet" type="text/css" href="/css/my.css">
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
 <meta name="generator" content="Hexo 4.2.1">
-<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
 
 
@@ -156,6 +157,17 @@
       <i class="fas fa-comments" style="zoom: 0.6;"></i>
       
       <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/artitalk" class="waves-effect waves-light">
+      
+      <i class="fas fa-comment" style="zoom: 0.6;"></i>
+      
+      <span>Artitalk</span>
     </a>
     
   </li>
@@ -341,6 +353,17 @@
         
         <li class="m-nav-item">
 	  
+		<a href="/artitalk" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comment"></i>
+			
+			Artitalk
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
 		<a href="javascript:;">
 			
 				<i class="fa-fw fas fa-list"></i>
@@ -455,10 +478,14 @@
         top: 64px;
     }
 
-    .toc-widget {
+     .toc-widget {
         width: 345px;
         padding-left: 20px;
+        background-color: rgb(255, 255, 255,0.7);
+        border-radius: 10px;
+        box-shadow: 0 10px 35px 2px rgba(0, 0, 0, .15), 0 5px 15px rgba(0, 0, 0, .07), 0 2px 5px -5px rgba(0, 0, 0, .1) !important;
     }
+
 
     .toc-widget .toc-title {
         margin: 35px 0 15px 0;
@@ -652,7 +679,7 @@ GRUB_CMDLINE_LINUX="console=hvc0 earlyprintk=xen"
 <li><code>console=com1,vga</code>: 将终端连到com1上，这样我们就可以通过串口输入用户名密码登陆</li>
 </ul>
 <p>输入 <code>sudo update-grub</code> 更新grub文件，重启</p>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在自定义<a href="https://ykma.gitee.io/2020/07/19/Xen-log-2-Add-a-new-Hypercall/">Hypercall</a> 后，执行<code>privcmd.c</code> 文件会在读取设备上看到相应的log信息，这里不放图了。</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在自定义<a href="https://ykma.gitee.io/2020/07/19/Xen-log-2-Add-a-new-Hypercall/" target="_blank" rel="noopener">Hypercall</a> 后，执行<code>privcmd.c</code> 文件会在读取设备上看到相应的log信息，这里不放图了。</p>
 <h3 id="踩坑指南"><a href="#踩坑指南" class="headerlink" title="踩坑指南"></a>踩坑指南</h3><p>我刚配置串口的时候，采用Ubuntu18读取日志信息，Debian9编译Xen，两台机器通信正常，<code>reboot</code> Xen设备后会打印开机日志，随后便是一通乱码，不输出用户自定义log信息。调整两台设备的编码格式、语言（en.utf-8）等均未果，至今没有解决这个bug</p>
 <p>感受一下乱码：分别是正常读取与16进制读取的结果</p>
 <pre><code class="lang-sh">�`�f���f�����`�f���f���怀�`�f���f����~x�~~x�~�`�f���f���怀�`�f��~怀
@@ -687,7 +714,7 @@ GRUB_CMDLINE_LINUX="console=hvc0 earlyprintk=xen"
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://ykma.gitee.io/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/">https://ykma.gitee.io/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/</a>
+                    <a href="http://mykrobin.github.io/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/">http://mykrobin.github.io/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -1279,7 +1306,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">81.5k</span>&nbsp;字
+                class="white-color">81.6k</span>&nbsp;字
             
             
             
@@ -1461,7 +1488,7 @@ $(function () {
     <script src="/libs/instantpage/instantpage.js" type="module"></script>
     
     
-    <script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=d9P3pdW6olbhghmiX9CcXhvNkoz2kUAvDfxgmB4LvA4&cl=ffffff&w=a"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+    <a href="https://clustrmaps.com/site/1bied" target="_blank" rel="noopener" title="Visit tracker"><img src="//www.clustrmaps.com/map_v2.png?d=DvmDnzhya3QqdWXT_VAqZb9vgqxsE0O0E3Mhb_DrDNE&cl=ffffff"></a><!-- hexo-inject:begin --><!-- hexo-inject:end -->
    
 
 </body>
