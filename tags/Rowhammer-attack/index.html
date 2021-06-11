@@ -142,33 +142,34 @@
   <li class="hide-on-med-and-down nav-item">
     
     <a href="/about" class="waves-effect waves-light">
+
       
       <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
       
       <span>关于我</span>
+      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
     </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/contact" class="waves-effect waves-light">
+    <ul class="sub-nav menus_item_child ">
       
-      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      <li>
+        <a href="/contact">
+          
+          <i class="fas fa-comments" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>留言板</span>
+        </a>
+      </li>
       
-      <span>留言板</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/artitalk" class="waves-effect waves-light">
+      <li>
+        <a href="/artitalk">
+          
+          <i class="fas fa-comment" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>垃圾话箱</span>
+        </a>
+      </li>
       
-      <i class="fas fa-comment" style="zoom: 0.6;"></i>
-      
-      <span>Artitalk</span>
-    </a>
+    </ul>
     
   </li>
   
@@ -331,34 +332,36 @@
         
         <li class="m-nav-item">
 	  
-		<a href="/about" class="waves-effect waves-light">
+		<a href="javascript:;">
 			
-			    <i class="fa-fw fas fa-user-circle"></i>
+				<i class="fa-fw fas fa-user-circle"></i>
 			
 			关于我
+			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
 		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/contact" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-comments"></i>
-			
-			留言板
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/artitalk" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-comment"></i>
-			
-			Artitalk
-		</a>
+            <ul  style="background:  ;" >
+              
+                <li>
+
+                  <a href="/contact " style="margin-left:75px">
+				  
+				   <i class="fa fas fa-comments" style="position: absolute;left:50px" ></i>
+			      
+		          <span>留言板</span>
+                  </a>
+                </li>
+              
+                <li>
+
+                  <a href="/artitalk " style="margin-left:75px">
+				  
+				   <i class="fa fas fa-comment" style="position: absolute;left:50px" ></i>
+			      
+		          <span>垃圾话箱</span>
+                  </a>
+                </li>
+              
+            </ul>
           
         </li>
         
@@ -499,10 +502,19 @@
                 </a>
                 
                 
+                <a href="/tags/side-channel-attack/" title="side channel attack: 2">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            data-tagname="side channel attack" style="background-color: #E8F8F5;">side channel attack
+                        <span class="tag-length">2</span>
+                    </span>
+                </a>
+                
+                
                 <a href="/tags/TPM/" title="TPM: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="TPM" style="background-color: #E8F8F5;">TPM
+                            data-tagname="TPM" style="background-color: #FEF9E7;">TPM
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -511,7 +523,7 @@
                 <a href="/tags/Security/" title="Security: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="Security" style="background-color: #FEF9E7;">Security
+                            data-tagname="Security" style="background-color: #F8F9F9;">Security
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -520,7 +532,7 @@
                 <a href="/tags/Cloud-Computing/" title="Cloud Computing: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="Cloud Computing" style="background-color: #F8F9F9;">Cloud Computing
+                            data-tagname="Cloud Computing" style="background-color: #82E0AA;">Cloud Computing
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -529,7 +541,7 @@
                 <a href="/tags/%E5%8F%AF%E4%BF%A1%E8%AE%A1%E7%AE%97/" title="可信计算: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="可信计算" style="background-color: #82E0AA;">可信计算
+                            data-tagname="可信计算" style="background-color: #D7BDE2;">可信计算
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -538,7 +550,7 @@
                 <a href="/tags/Federal-Learning/" title="Federal Learning: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="Federal Learning" style="background-color: #D7BDE2;">Federal Learning
+                            data-tagname="Federal Learning" style="background-color: #A3E4D7;">Federal Learning
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -547,17 +559,8 @@
                 <a href="/tags/Homomorphic/" title="Homomorphic: 3">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="Homomorphic" style="background-color: #A3E4D7;">Homomorphic
+                            data-tagname="Homomorphic" style="background-color: #85C1E9;">Homomorphic
                         <span class="tag-length">3</span>
-                    </span>
-                </a>
-                
-                
-                <a href="/tags/side-channel-attack/" title="side channel attack: 2">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-default "
-                            data-tagname="side channel attack" style="background-color: #85C1E9;">side channel attack
-                        <span class="tag-length">2</span>
                     </span>
                 </a>
                 
@@ -634,19 +637,19 @@
                 </a>
                 
                 
-                <a href="/tags/Isolation/" title="Isolation: 1">
+                <a href="/tags/Protocol/" title="Protocol: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="Isolation" style="background-color: #E8F8F5;">Isolation
+                            data-tagname="Protocol" style="background-color: #F9EBEA;">Protocol
                         <span class="tag-length">1</span>
                     </span>
                 </a>
                 
                 
-                <a href="/tags/Protocol/" title="Protocol: 1">
+                <a href="/tags/Isolation/" title="Isolation: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="Protocol" style="background-color: #F9EBEA;">Protocol
+                            data-tagname="Isolation" style="background-color: #E8F8F5;">Isolation
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -904,6 +907,15 @@
                 </a>
                 
                 
+                <a href="/tags/Rowhammer-attack/" title="Rowhammer attack: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-active "
+                            data-tagname="Rowhammer attack" style="background-color: #E8F8F5;">Rowhammer attack
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
                 <a href="/tags/xen/" title="xen: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
@@ -917,15 +929,6 @@
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
                             data-tagname="virtualization" style="background-color: #F5EEF8;">virtualization
-                        <span class="tag-length">1</span>
-                    </span>
-                </a>
-                
-                
-                <a href="/tags/Rowhammer-attack/" title="Rowhammer attack: 1">
-                    <span class="chip center-align waves-effect waves-light
-                             chip-active "
-                            data-tagname="Rowhammer attack" style="background-color: #E8F8F5;">Rowhammer attack
                         <span class="tag-length">1</span>
                     </span>
                 </a>
@@ -949,19 +952,19 @@
                 </a>
                 
                 
-                <a href="/tags/%E8%99%9A%E6%8B%9F%E5%8C%96/" title="虚拟化: 1">
+                <a href="/tags/picture/" title="picture: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="虚拟化" style="background-color: #82E0AA;">虚拟化
+                            data-tagname="picture" style="background-color: #E8F8F5;">picture
                         <span class="tag-length">1</span>
                     </span>
                 </a>
                 
                 
-                <a href="/tags/picture/" title="picture: 1">
+                <a href="/tags/%E8%99%9A%E6%8B%9F%E5%8C%96/" title="虚拟化: 1">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
-                            data-tagname="picture" style="background-color: #E8F8F5;">picture
+                            data-tagname="虚拟化" style="background-color: #82E0AA;">虚拟化
                         <span class="tag-length">1</span>
                     </span>
                 </a>
