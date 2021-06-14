@@ -153,15 +153,24 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/about" class="waves-effect waves-light">
+    <a href="/" class="waves-effect waves-light">
 
       
       <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
       
-      <span>关于我</span>
+      <span>About</span>
       <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
     </a>
     <ul class="sub-nav menus_item_child ">
+      
+      <li>
+        <a href="/about">
+          
+          <i class="fas fa-user-circle" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>关于我</span>
+        </a>
+      </li>
       
       <li>
         <a href="/contact">
@@ -348,10 +357,20 @@
 			
 				<i class="fa-fw fas fa-user-circle"></i>
 			
-			关于我
+			About
 			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
 		</a>
             <ul  style="background:  ;" >
+              
+                <li>
+
+                  <a href="/about " style="margin-left:75px">
+				  
+				   <i class="fa fas fa-user-circle" style="position: absolute;left:50px" ></i>
+			      
+		          <span>关于我</span>
+                  </a>
+                </li>
               
                 <li>
 
@@ -557,6 +576,10 @@ HyperLock
                     
                     <div class="card-action article-tags">
                         
+                        <a href="/tags/TODO/">
+                            <span class="chip bg-color">TODO</span>
+                        </a>
+                        
                         <a href="/tags/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/">
                             <span class="chip bg-color">论文解读</span>
                         </a>
@@ -603,6 +626,14 @@ HyperLock
                         </div>
                     </div>
 
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/TODO/">
+                            <span class="chip bg-color">TODO</span>
+                        </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -737,6 +768,14 @@ Cen
                     </div>
 
                     
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/TODO/">
+                            <span class="chip bg-color">TODO</span>
+                        </a>
+                        
+                    </div>
+                    
                 </div>
             </div>
             
@@ -812,6 +851,10 @@ google
 
                     
                     <div class="card-action article-tags">
+                        
+                        <a href="/tags/TODO/">
+                            <span class="chip bg-color">TODO</span>
+                        </a>
                         
                         <a href="/tags/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/">
                             <span class="chip bg-color">论文解读</span>
@@ -892,6 +935,10 @@ one-on-one 方式检测内存信息是否有差别
 
                     
                     <div class="card-action article-tags">
+                        
+                        <a href="/tags/TODO/">
+                            <span class="chip bg-color">TODO</span>
+                        </a>
                         
                         <a href="/tags/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/">
                             <span class="chip bg-color">论文解读</span>
@@ -982,6 +1029,14 @@ one-on-one 方式检测内存信息是否有差别
                     </div>
 
                     
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/TODO/">
+                            <span class="chip bg-color">TODO</span>
+                        </a>
+                        
+                    </div>
+                    
                 </div>
             </div>
             
@@ -1021,6 +1076,10 @@ References[1] 基于Xen的可信虚拟机系统体系结构设计与若干关键
 
                     
                     <div class="card-action article-tags">
+                        
+                        <a href="/tags/TODO/">
+                            <span class="chip bg-color">TODO</span>
+                        </a>
                         
                         <a href="/tags/Technology-Overview/">
                             <span class="chip bg-color">Technology Overview</span>
@@ -1174,7 +1233,7 @@ Untrusted Hypervisor，解耦是嵌套虚拟化
             
         </div>
         <div class="page-info col m4 l4 hide-on-small-only">
-            <div class="center-align b-text-gray">3 / 7</div>
+            <div class="center-align b-text-gray">3 / 6</div>
         </div>
         <div class="col s6 m4 l4">
             
@@ -1205,7 +1264,7 @@ Untrusted Hypervisor，解耦是嵌套虚拟化
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">81.9k</span>&nbsp;字
+                class="white-color">77.6k</span>&nbsp;字
             
             
             
@@ -1522,6 +1581,15 @@ $(function () {
     </script>
     
 
+    <!--增加樱花显示特效-->
+    <script type="text/javascript">
+    //只在桌面版网页启用特效
+    var windowWidth = $(window).width();
+    if (windowWidth > 768) {
+        document.write('<script type="text/javascript" src="/js/sakura.js"><\/script>');
+    }
+    </script>
+
 	
     
 
@@ -1532,8 +1600,17 @@ $(function () {
     
 
     
-    <script src="/libs/instantpage/instantpage.js" type="module"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
     
+
+    <!--增加访问者地图-->
+    <!--TODO：需要更改为侧边栏显示-->
+    <a href="https://clustrmaps.com/site/1bied" target="_blank" rel="noopener" title="Visit tracker"><img src="//www.clustrmaps.com/map_v2.png?d=DvmDnzhya3QqdWXT_VAqZb9vgqxsE0O0E3Mhb_DrDNE&cl=ffffff"></a>
+
+    <!--增加动态线条背景-->
+    <!-- <script type="text/javascript" -->
+    <!-- color="122 103 238" opacity='0.7' zIndex="-2" count="200" src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js"> -->
+    <!-- </script> --><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 
 </body>
 
