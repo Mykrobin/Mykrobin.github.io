@@ -120,12 +120,31 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/categories" class="waves-effect waves-light">
+    <a href="" class="waves-effect waves-light">
+
       
-      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
-      
-      <span>论文阅读</span>
+      <span>资料仓库</span>
+      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
     </a>
+    <ul class="sub-nav menus_item_child ">
+      
+      <li>
+        <a href="/categories">
+          
+          <i class="fas fa-bookmark" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>PaperRepository</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/SJT-OS">
+          
+          <span>OS</span>
+        </a>
+      </li>
+      
+    </ul>
     
   </li>
   
@@ -142,7 +161,7 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/" class="waves-effect waves-light">
+    <a href="/about" class="waves-effect waves-light">
 
       
       <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
@@ -153,9 +172,9 @@
     <ul class="sub-nav menus_item_child ">
       
       <li>
-        <a href="/about">
+        <a href="/aboutme">
           
-          <i class="fas fa-user-circle" style="margin-top: -20px; zoom: 0.6;"></i>
+          <i class="fas fa-user-graduate" style="margin-top: -20px; zoom: 0.6;"></i>
           
           <span>关于我</span>
         </a>
@@ -237,6 +256,15 @@
           <i class="fas fa-paperclip" style="margin-top: -20px; zoom: 0.6;"></i>
           
           <span>Papers</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/books">
+          
+          <i class="fas fa-book" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>Books</span>
         </a>
       </li>
       
@@ -327,12 +355,34 @@
         
         <li class="m-nav-item">
 	  
-		<a href="/categories" class="waves-effect waves-light">
+		<a href="javascript:;">
 			
-			    <i class="fa-fw fas fa-bookmark"></i>
+				<i class="fas fa-fw fa-link"></i>
 			
-			论文阅读
+			资料仓库
+			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
 		</a>
+            <ul  style="background:  ;" >
+              
+                <li>
+
+                  <a href="/categories " style="margin-left:75px">
+				  
+				   <i class="fa fas fa-bookmark" style="position: absolute;left:50px" ></i>
+			      
+		          <span>PaperRepository</span>
+                  </a>
+                </li>
+              
+                <li>
+
+                  <a href="/SJT-OS " style="margin-left:75px">
+				  
+		          <span>OS</span>
+                  </a>
+                </li>
+              
+            </ul>
           
         </li>
         
@@ -360,9 +410,9 @@
               
                 <li>
 
-                  <a href="/about " style="margin-left:75px">
+                  <a href="/aboutme " style="margin-left:75px">
 				  
-				   <i class="fa fas fa-user-circle" style="position: absolute;left:50px" ></i>
+				   <i class="fa fas fa-user-graduate" style="position: absolute;left:50px" ></i>
 			      
 		          <span>关于我</span>
                   </a>
@@ -453,6 +503,16 @@
                   </a>
                 </li>
               
+                <li>
+
+                  <a href="/books " style="margin-left:75px">
+				  
+				   <i class="fa fas fa-book" style="position: absolute;left:50px" ></i>
+			      
+		          <span>Books</span>
+                  </a>
+                </li>
+              
             </ul>
           
         </li>
@@ -520,6 +580,226 @@
     <!-- 所有文章卡片 -->
     <article id="articles" class="container articles">
         <div class="row article-row">
+            
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2020/05/22/Xen-log-0-Ubuntu18%E6%BA%90%E7%A0%81%E5%AE%89%E8%A3%85Xen4-11/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="https://cdn.jsdelivr.net/gh/LuckyZmj/imgbed@master/posts/20200928015537.jpg" class="responsive-img" alt="Xen log 0 Ubuntu18源码安装Xen4.11">
+                            
+                            <span class="card-title">Xen log 0 Ubuntu18源码安装Xen4.11</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                在部署Xen的时候采用的是Ubuntu18.04(英文版) + Xen4.11
+由于安装Ubuntu后，使用国外的源比较慢，修改为国内源，这样速度快很多。
+Ubuntu换源我采用的是修改阿里源为Ubuntu18.04的源
+备份 source
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-22
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-user fa-fw"></i>
+                                Mykrobin
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E8%99%9A%E6%8B%9F%E6%9C%BA/">
+                            <span class="chip bg-color">虚拟机</span>
+                        </a>
+                        
+                        <a href="/tags/Xen-log/">
+                            <span class="chip bg-color">Xen log</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2020/05/18/SP-15-Last-Level-Cache-Side-Channel-Attacks-are-Practical/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="https://cdn.jsdelivr.net/gh/LuckyZmj/imgbed@master/posts/20200928012539.jpg" class="responsive-img" alt="SP&#39;15 Last-Level Cache Side-Channel Attacks are Practical">
+                            
+                            <span class="card-title">SP&#39;15 Last-Level Cache Side-Channel Attacks are Practical</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                
+
+
+
+序号
+属性
+内容
+
+
+
+
+1
+原文PDF
+Last Level Cache Side Channel Attacks are Practical
+
+
+2
+作者信息
+Department of Electrical Engineeri
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-18
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/Security-and-Privacy/" class="post-category">
+                                    Security and Privacy
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/TODO/">
+                            <span class="chip bg-color">TODO</span>
+                        </a>
+                        
+                        <a href="/tags/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/">
+                            <span class="chip bg-color">论文解读</span>
+                        </a>
+                        
+                        <a href="/tags/side-channel-attack/">
+                            <span class="chip bg-color">side channel attack</span>
+                        </a>
+                        
+                        <a href="/tags/cross-VM/">
+                            <span class="chip bg-color">cross VM</span>
+                        </a>
+                        
+                        <a href="/tags/last-level-cache/">
+                            <span class="chip bg-color">last level cache</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="https://cdn.jsdelivr.net/gh/LuckyZmj/imgbed@master/posts/20200928013346.png" class="responsive-img" alt="Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases">
+                            
+                            <span class="card-title">Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                
+
+
+
+序号
+属性
+内容
+
+
+
+
+1
+原文PDF
+Aurora
+
+
+2
+作者信息
+Amazon
+
+
+3
+核心内容
+分布式数据库
+
+
+4
+研究领域
+数据库
+
+
+5
+全文总览
+致力于构建一个分布式数据库
+
+
+
+
+0 研究背景 为什么出现Auro
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-15
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/SIGMOD/" class="post-category">
+                                    SIGMOD
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/">
+                            <span class="chip bg-color">论文解读</span>
+                        </a>
+                        
+                        <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/">
+                            <span class="chip bg-color">数据库</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
             
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
@@ -861,7 +1141,7 @@ I tried for about 12 hours to set up this simple website, right
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">81.2k</span>&nbsp;字
+                class="white-color">83.1k</span>&nbsp;字
             
             
             

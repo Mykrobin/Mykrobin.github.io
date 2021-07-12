@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>AOS-LEC-11-Scalable-Synchronization</title>
-    <url>/2021/07/06/AOS-LEC-11-Scalable-Synchronization/</url>
-    <content><![CDATA[<h2 id="多核VS对称多处理器"><a href="#多核VS对称多处理器" class="headerlink" title="多核VS对称多处理器"></a>多核VS对称多处理器</h2><p><img src="https://cdn.jsdelivr.net/gh/mykrobin/cdn/images/aos-slide-11-01-SMP.png" alt=""></p>
-<h2 id="NUMA架构"><a href="#NUMA架构" class="headerlink" title="NUMA架构"></a>NUMA架构</h2><p><img src="https://cdn.jsdelivr.net/gh/mykrobin/cdn/images/aos-slide-11-01-NUMA.png" alt=""></p>
-]]></content>
-      <tags>
-        <tag>THU-AOS</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>A FULLY HOMOMORPHIC ENCRYPTION SCHEME</title>
     <url>/2020/08/13/A-FULLY-HOMOMORPHIC-ENCRYPTION-SCHEME/</url>
     <content><![CDATA[]]></content>
@@ -58,6 +48,16 @@
 ]]></content>
       <tags>
         <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>AOS-LEC-11-Scalable-Synchronization</title>
+    <url>/2021/07/06/AOS-LEC-11-Scalable-Synchronization/</url>
+    <content><![CDATA[<h2 id="多核VS对称多处理器"><a href="#多核VS对称多处理器" class="headerlink" title="多核VS对称多处理器"></a>多核VS对称多处理器</h2><p><img src="https://cdn.jsdelivr.net/gh/mykrobin/cdn/images/aos-slide-11-01-SMP.png" alt=""></p>
+<h2 id="NUMA架构"><a href="#NUMA架构" class="headerlink" title="NUMA架构"></a>NUMA架构</h2><p><img src="https://cdn.jsdelivr.net/gh/mykrobin/cdn/images/aos-slide-11-01-NUMA.png" alt=""></p>
+]]></content>
+      <tags>
+        <tag>THU-AOS</tag>
       </tags>
   </entry>
   <entry>
@@ -161,6 +161,231 @@
       <tags>
         <tag>论文解读</tag>
         <tag>数据库</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Applying TPM to Cloud</title>
+    <url>/2020/10/12/Applying-TPM-to-Cloud/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:left">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:left">原文PDF</td>
+<td style="text-align:center"><a href="https://sci-hub.se/10.1002/spy2.93" target="_blank" rel="noopener">Survey</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:left">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:left">核心内容</td>
+<td style="text-align:center">调研了13年至18年的近120篇文献，且这些论文都利用TPM提高云计算安全。</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:left">研究领域</td>
+<td style="text-align:center">可信计算</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:left">全文总览</td>
+<td style="text-align:center">本文对TPM在云计算安全方面进行的细致的调研，并结合调研结果认为TPM在云计算安全的保护领域具有很大的趋势。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Paper-Source"><a href="#Paper-Source" class="headerlink" title="Paper Source"></a>Paper Source</h3><p><img src="/2020/10/12/Applying-TPM-to-Cloud/sources.png" width="500"></p>
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/papercountry.png" width="500"></p>
+<font color="DodgerBlue"> Paper Structure </font>
+
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Summary.png" width="600"></p>
+<h3 id="Answering-the-Following-Question"><a href="#Answering-the-Following-Question" class="headerlink" title="Answering the Following Question"></a>Answering the Following Question</h3><h4 id="RQ1-For-what-purposes-is-TPM-used-in-the-cloud"><a href="#RQ1-For-what-purposes-is-TPM-used-in-the-cloud" class="headerlink" title="RQ1: For what purposes is TPM used in the cloud?"></a>RQ1: For what purposes is TPM used in the cloud?</h4><blockquote>
+<p><strong>TPM 在云中的作用是什么？为什么要用到TPM？</strong></p>
+</blockquote>
+<h4 id="RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud"><a href="#RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud" class="headerlink" title="RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?"></a>RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?</h4><blockquote>
+<p><strong>TPM的确缓解了的云中的哪些攻击？</strong></p>
+</blockquote>
+<h4 id="RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？"><a href="#RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？" class="headerlink" title="RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？"></a>RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？</h4><blockquote>
+<p><strong>完整性度量的组件到底是什么？云中完整性度量的解释是什么？</strong></p>
+</blockquote>
+<h4 id="RQ4-At-what-level-are-TPM-primitives-invoked"><a href="#RQ4-At-what-level-are-TPM-primitives-invoked" class="headerlink" title="RQ4: At what level are TPM primitives invoked?"></a>RQ4: At what level are TPM primitives invoked?</h4><blockquote>
+<p><strong>TPM被调用的级别是什么？</strong></p>
+</blockquote>
+<h4 id="RQ5-At-which-phase-are-the-TPM-features-used"><a href="#RQ5-At-which-phase-are-the-TPM-features-used" class="headerlink" title="RQ5: At which phase are the TPM features used?"></a>RQ5: At which phase are the TPM features used?</h4><blockquote>
+<p><strong>在什么阶段用到了TPM？</strong><br><strong>A：boot time, run time and both.</strong></p>
+</blockquote>
+<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Phase.png"></p>
+<h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>​        可信计算利用硬件信任根以及与之关联的软件构建可信环境，提供信任和隐私保护。TPM这个模块，提供安全启动、远程验证、完整性检测以及机密功能。2011年发布了TPM1.2版本，2016年公布了TPM2.0版本。</p>
+<p>​        远程证明是可信计算技术提供的主要功能，它将信任逐步从较低级别扩展到较高级别和应用程序。 这被称为信任链。 在信任链方案中，所有将要加载的组件都被认为是不可信的，因此，在加载之前需要对其进行测量。 TPM包含平台配置寄存器（PCR）受保护的内存位置，该位置存储敏感的安全信息（例如测量信息）。</p>
+<p>​        除了强大的隔离存储，TPM还拥有用于加密操作的唯一认可密钥（EK）。该密钥是在TPM制造时生成的，密钥的私有部分永远不会离开TPM。 在远程认证时，为了保护平台身份的私密性，使用了认证身份密钥（AIK）。 当平台（证明者）收到（来自验证者的）远程证明请求时，它会发送一个完整性报告，该报告由PCR值及其数字签名（由AIK计算）组成。 由于AIK的私有部分从未离开过TPM，因此可以保证报告的完整性和真实性。</p>
+<p>​        初步理解，TPM有几种存在模式，比如：以芯片方式存在电脑主板上或者以firmware形式存在于BIOS中。</p>
+<h4 id="The-Aims-of-TPM"><a href="#The-Aims-of-TPM" class="headerlink" title="The Aims of TPM"></a>The Aims of TPM</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TPMAims.png" width="500" height="280"></p>
+<font color="DodgerBlue"> 远程验证（Remote Attestation ）</font>
+
+<blockquote>
+<ol>
+<li>请求验证者向被验证者发送验证请求，这个请求中包括 <em>nonce</em><sup><a href="#fn_1" id="reffn_1">1</a></sup> ，目的是防止重播攻击（Replay attack）</li>
+<li>接收到验证请求的一方向自己的TPM提出验证请求，TPM验证自身需要度量的模块</li>
+<li>验证后的结果发送给远端的验证发起者（发起者要验证(a)TPM 的真实性(b) 发送数值的真实性）</li>
+</ol>
+</blockquote>
+<font color="DodgerBlue"> 完整性度量 （Integrity Measurement）</font>
+
+<blockquote>
+<p>TPM计算并存储不同组件的哈希值，并将这些哈希值在哈希链中进行转换，并将结果与已经存储的数值相比较。<br>完整性度量分为静态与动态两种类型：<br>        静态：保证在运行之前没有发生篡改<br>        动态：保证在运行过程中没有发生恶意篡改</p>
+</blockquote>
+<font color="DodgerBlue"> Generation and secure storage ofkeys</font>
+
+<blockquote>
+<p>生成随机秘钥的方法：种子、随机数生成器、直接导入TPM中。<br>生成的秘钥保存在TPM中</p>
+</blockquote>
+<font color="DodgerBlue"> Trusted boot</font>
+
+<blockquote>
+<p>在开机时，TPM会检查硬件、软件、固件组件的异同，保证在启动系统之前的环境是可信的。</p>
+<p>本文的参考文献 [14] 利用TPM的可信启动构造一个可信的环境，保证在开机过程中没有恶意入侵。<br>[15] 提出一个用于监控整个云平台的框架，可信启动保证被监控环境的完整性，既对云中租户也是针对云供应商。</p>
+</blockquote>
+<font color="DodgerBlue"> Hardware root of trust</font>
+
+<blockquote>
+<p>信任根是可以在密码系统中信任的来源，加密安全依赖于秘钥来进行加密解密与生成或者验证数字签名，因此，在这种系统中包括不易损坏的硬件模块，并且提供了一定程度的信任保障。<br>TPM可以提供硬件信任根、提供开机与运行时的完整性度量并且保护度量结果。</p>
+</blockquote>
+<h4 id="Security-Threats"><a href="#Security-Threats" class="headerlink" title="Security Threats"></a>Security Threats</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TopThreats.png" width="380" height="500"></p>
+<h4 id="The-level-of-TPM-invoking"><a href="#The-level-of-TPM-invoking" class="headerlink" title="The level of TPM invoking"></a>The level of TPM invoking</h4><font color="DodgerBlue"> Hardware </font>
+
+<blockquote>
+<p>在IoT和云计算等分布式系统模型中，主机平台的安全性至关重要，因为它托管着存储或处理（大量）数据。 TPM是一种用于平台身份验证以及验证其完整性的强大解决方案。在参考文献90中提出的解决方案中，扩展了HCloud（用于医疗保健数据的私有云），并且TPM嵌入在主机平台上以对客户端进行身份验证，并测量静态和动态完整性。讨论了可信云可以提供外部认证服务并进行内部可信调度。提供给外部的每个服务都有一个唯一的映像/进程在内存中运行。加载到内存时，需要验证此过程。可以使用TPM执行静态测量，以验证存储在物理存储库中的文件和软件包。同样，使用TPM签名保护数据库的完整性，以提供硬件级别的安全性。对于过程的动态完整性测量，TPM PCR用于存储和显示逐步的测量值。 Yang等[86]提出了一种设计，旨在为客户提供有关存储在云中的数据的新鲜度，有效性和完整性的保证。为了实现此目标，他们在不受信任的服务器上使用受信任的硬件设备，使客户端能够验证其数据的新鲜度和完整性。在系统运行之前，需要验证平台是否以受信任的方式启动。参考文献91讨论TPM是衡量启动过程和确定平台启动完整性的关键步骤的信任基础。在虚拟环境中，TPM提供了根植于硬件的信任链，该信任链将扩展到虚拟机管理程序。如果关键组件（例如BIOS，固件和虚拟机管理程序）已证明其完整性，则可以确保平台引导的完整性。为了确保启动组件的完整性，需要执行两个步骤：首先，测量引导过程，其次，进行证明，即保证和已执行的组件是受信任的组件。</p>
+</blockquote>
+<font color="DodgerBlue"> Hypervisor </font>
+
+<blockquote>
+<p>本文参考文献28构造了基于Xen的迁移框架：</p>
+<p>Xen虚拟机管理程序的安全迁移框架。该设计使用可信计算和相邻完整性度量来动态监视相邻虚拟机管理程序的完整性。更具体地说，为确保始终监视主机，当主机初始化时，TPM模块会验证虚拟机监控程序并将更新消息发送到完整性验证表（该表包含受信任的虚拟机监控程序列表），并将该虚拟机监控程序标记为受信任的。这意味着，如果未收到此类消息，则认为该特定的管理程序不可信。此外，系统会动态监控虚拟机监控程序的运行状态，如果虚拟机监控程序遭到破坏，则会发送相应的更新消息以报告受到破坏的情况。根据此完整性表的结果，确定源虚拟机管理程序是否受信任以及是否应启动VM迁移过程。</p>
+</blockquote>
+<h4 id="Phase-of-integrity-measurement"><a href="#Phase-of-integrity-measurement" class="headerlink" title="Phase of integrity measurement"></a>Phase of integrity measurement</h4><font color="DodgerBlue"> Boot time </font>
+
+<blockquote>
+<p>可信平台技术追求的原则之一是在关键组件加载和执行之前验证它们的信任和完整性。因此，在运行时完整性检查之前，需要确保正确引导了系统并且正在运行适当的操作系统。受信任的平台通过创建信任链来实现这种信任，该信任链以BIOS引导块中的受信任代码（CRTM）为核心信任根。 CRTM衡量其他实体的完整性价值，并且在平台的整个生命周期内保持不变。 CRTM是普通BIOS的补充，它首先运行以测量BIOS块和硬件，然后将控制权传递给引导加载程序。然后在将控件传递给OS之前测量OS内核映像。在此引导过程的每个步骤中，都会获取测量值，并据此扩展相关的TPM PCR值。该测量过程证明了系统的完整性，并确保引导和操作系统软件是制造商想要的版本，并且未被恶意第三方或恶意软件篡改。100Nanavati等人74指出，在虚拟环境中，可信引导技术允许用户证明基础启动平台的身份，并确保加载的虚拟化平台值得信赖。这为用户提供了有关可以向其提交关键数据的虚拟化平台的具体保证。 TPM通过使用加密原语为虚拟化平台提供此受信任的引导，并为其建立信任根。在ALIBI可信监视框架中，17 TPM用于在服务提供商平台上提供信任根。 TPM PCR记录平台上正在执行的软件的状态，并且由于PCR值仅是附加值，因此仅通过重新启动才能消除以前的记录。 TPM还拥有一个公共-私人密钥对。私钥仅保留在TPM的安全环境中，并用于计算TPM生成的证明值（从经过身份验证的启动累积的度量）的签名。使用TPM的公钥，外部验证程序可以检查签名的有效性，并推断出PCR值表示平台软件的状态。</p>
+</blockquote>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>​        本文所统计并分析了120篇文献后，认为TPM技术在云中应用是一种趋势。在云中TPM技术的主要目标是远程验证以及完整性度量。本文主要分析了TPM的功能，TPM可应对云中的安全威胁，TPM提供完整性度量的阶段以及层次并指出了留有的研究空间，最后指出主要的研究差距。</p>
+<blockquote id="fn_1">
+<sup>1</sup>. 在加密技术中的初始向量和加密散列函数都发挥着重要作用，在各类验证协议的通信应用中确保验证信息不被重复使用以对抗重放攻击(Replay Attack)<a href="#reffn_1" title="Jump back to footnote [1] in the text."> ↩</a>
+</blockquote>
+<h3 id="引文延伸阅读"><a href="#引文延伸阅读" class="headerlink" title="引文延伸阅读"></a>引文延伸阅读</h3><p>Here are the papers worth reading further.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>theme</th>
+<th>Reference Number &amp; Summary</th>
+<th>Reference Number &amp; Summary</th>
+<th>more</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>远程验证</td>
+<td>6：TPM进行远程验证VMs</td>
+<td>7：验证用户所在地理位置</td>
+<td></td>
+</tr>
+<tr>
+<td>完整性度量</td>
+<td>10：多用户环境中数据拥有完整性</td>
+<td>11：动态的完成性度量的模型（Xen）</td>
+<td>8、9</td>
+</tr>
+<tr>
+<td>生成秘钥安全存储</td>
+<td>12</td>
+<td>13</td>
+<td></td>
+</tr>
+<tr>
+<td>安全启动</td>
+<td><a href="https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=2969&amp;context=sis_research" target="_blank" rel="noopener">14</a>：protect the hypervisor</td>
+<td>15 ：monitoring the cloud platform</td>
+<td></td>
+</tr>
+<tr>
+<td>硬件信任根</td>
+<td>17 25 33 34 35</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://www.zhihu.com/question/19790488/answer/19290308" target="_blank" rel="noopener">什么是彩虹表？</a> </p>
+]]></content>
+      <categories>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>TPM</tag>
+        <tag>Security</tag>
+        <tag>Cloud Computing</tag>
+        <tag>可信计算</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Attacks Directories, Not Caches</title>
+    <url>/2020/07/17/Attacks-Directories-Not-Caches/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="">Attack Directories, Not Caches: Side-Channel Attacks in a Non-Inclusive World</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">Side Channel Attack</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">Attack, Cache</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">基于缓存的侧信道攻击在新型缓存的攻击实践</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="0-Main-idea"><a href="#0-Main-idea" class="headerlink" title="0. Main idea"></a>0. Main idea</h3>]]></content>
+      <categories>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>TODO</tag>
+        <tag>论文解读</tag>
+        <tag>side channel attack</tag>
       </tags>
   </entry>
   <entry>
@@ -385,60 +610,9 @@
       </tags>
   </entry>
   <entry>
-    <title>Attacks Directories, Not Caches</title>
-    <url>/2020/07/17/Attacks-Directories-Not-Caches/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="">Attack Directories, Not Caches: Side-Channel Attacks in a Non-Inclusive World</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">Side Channel Attack</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">Attack, Cache</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">基于缓存的侧信道攻击在新型缓存的攻击实践</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="0-Main-idea"><a href="#0-Main-idea" class="headerlink" title="0. Main idea"></a>0. Main idea</h3>]]></content>
-      <categories>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>TODO</tag>
-        <tag>论文解读</tag>
-        <tag>side channel attack</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Applying TPM to Cloud</title>
-    <url>/2020/10/12/Applying-TPM-to-Cloud/</url>
-    <content><![CDATA[<div class="table-container">
+    <title>CHANCEL</title>
+    <url>/2021/05/24/CHANCEL/</url>
+    <content><![CDATA[<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><div class="table-container">
 <table>
 <thead>
 <tr>
@@ -451,162 +625,152 @@
 <tr>
 <td style="text-align:center">1</td>
 <td style="text-align:left">原文PDF</td>
-<td style="text-align:center"><a href="https://sci-hub.se/10.1002/spy2.93" target="_blank" rel="noopener">Survey</a></td>
+<td style="text-align:center"><a href="https://lifeasageek.github.io/papers/ahmad-chancel.pdf" target="_blank" rel="noopener">paper</a> <a href="https://lifeasageek.github.io/papers/ahmad-chancel-slides.pdf" target="_blank" rel="noopener">slides</a></td>
 </tr>
 <tr>
 <td style="text-align:center">2</td>
 <td style="text-align:left">作者信息</td>
-<td style="text-align:center"></td>
+<td style="text-align:center"><a href="https://web.ics.purdue.edu/~ahmad37/" target="_blank" rel="noopener">https://web.ics.purdue.edu/~ahmad37/</a> <a href="https://www.cs.purdue.edu/homes/pfonseca/" target="_blank" rel="noopener">https://www.cs.purdue.edu/homes/pfonseca/</a> <a href="https://lifeasageek.github.io/" target="_blank" rel="noopener">https://lifeasageek.github.io/</a></td>
 </tr>
 <tr>
 <td style="text-align:center">3</td>
 <td style="text-align:left">核心内容</td>
-<td style="text-align:center">调研了13年至18年的近120篇文献，且这些论文都利用TPM提高云计算安全。</td>
+<td style="text-align:center">在飞地中为多个用户提供隔离保障</td>
 </tr>
 <tr>
 <td style="text-align:center">4</td>
 <td style="text-align:left">研究领域</td>
-<td style="text-align:center">可信计算</td>
+<td style="text-align:center">TEE 可信计算环境</td>
 </tr>
 <tr>
 <td style="text-align:center">5</td>
 <td style="text-align:left">全文总览</td>
-<td style="text-align:center">本文对TPM在云计算安全方面进行的细致的调研，并结合调研结果认为TPM在云计算安全的保护领域具有很大的趋势。</td>
+<td style="text-align:center">在飞地中为多个用户提供隔离保障，从而避免用户执行代码的漏洞导致的隐私数据泄露，在提供安全保证的同时，与多进程沙盒对比，有着明显的性能提升。</td>
 </tr>
 </tbody>
 </table>
 </div>
-<h3 id="Paper-Source"><a href="#Paper-Source" class="headerlink" title="Paper Source"></a>Paper Source</h3><p><img src="/2020/10/12/Applying-TPM-to-Cloud/sources.png" width="500"></p>
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/papercountry.png" width="500"></p>
-<font color="DodgerBlue"> Paper Structure </font>
-
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Summary.png" width="600"></p>
-<h3 id="Answering-the-Following-Question"><a href="#Answering-the-Following-Question" class="headerlink" title="Answering the Following Question"></a>Answering the Following Question</h3><h4 id="RQ1-For-what-purposes-is-TPM-used-in-the-cloud"><a href="#RQ1-For-what-purposes-is-TPM-used-in-the-cloud" class="headerlink" title="RQ1: For what purposes is TPM used in the cloud?"></a>RQ1: For what purposes is TPM used in the cloud?</h4><blockquote>
-<p><strong>TPM 在云中的作用是什么？为什么要用到TPM？</strong></p>
-</blockquote>
-<h4 id="RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud"><a href="#RQ2-What-types-of-threats-have-been-reportedly-mitigated-via-the-utilization-of-TPM-in-cloud" class="headerlink" title="RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?"></a>RQ2: What types of threats have been reportedly mitigated via the utilization of TPM in cloud?</h4><blockquote>
-<p><strong>TPM的确缓解了的云中的哪些攻击？</strong></p>
-</blockquote>
-<h4 id="RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？"><a href="#RQ3-What-is-the-exact-component-of-the-assessment？What-interpretations-are-given-for-integrity-in-cloud？" class="headerlink" title="RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？"></a>RQ3: What is the exact component of the assessment？What interpretations are given for integrity in cloud？</h4><blockquote>
-<p><strong>完整性度量的组件到底是什么？云中完整性度量的解释是什么？</strong></p>
-</blockquote>
-<h4 id="RQ4-At-what-level-are-TPM-primitives-invoked"><a href="#RQ4-At-what-level-are-TPM-primitives-invoked" class="headerlink" title="RQ4: At what level are TPM primitives invoked?"></a>RQ4: At what level are TPM primitives invoked?</h4><blockquote>
-<p><strong>TPM被调用的级别是什么？</strong></p>
-</blockquote>
-<h4 id="RQ5-At-which-phase-are-the-TPM-features-used"><a href="#RQ5-At-which-phase-are-the-TPM-features-used" class="headerlink" title="RQ5: At which phase are the TPM features used?"></a>RQ5: At which phase are the TPM features used?</h4><blockquote>
-<p><strong>在什么阶段用到了TPM？</strong><br><strong>A：boot time, run time and both.</strong></p>
-</blockquote>
-<p><img src="/2020/10/12/Applying-TPM-to-Cloud/Phase.png"></p>
-<h3 id="TPM"><a href="#TPM" class="headerlink" title="TPM"></a>TPM</h3><p>​        可信计算利用硬件信任根以及与之关联的软件构建可信环境，提供信任和隐私保护。TPM这个模块，提供安全启动、远程验证、完整性检测以及机密功能。2011年发布了TPM1.2版本，2016年公布了TPM2.0版本。</p>
-<p>​        远程证明是可信计算技术提供的主要功能，它将信任逐步从较低级别扩展到较高级别和应用程序。 这被称为信任链。 在信任链方案中，所有将要加载的组件都被认为是不可信的，因此，在加载之前需要对其进行测量。 TPM包含平台配置寄存器（PCR）受保护的内存位置，该位置存储敏感的安全信息（例如测量信息）。</p>
-<p>​        除了强大的隔离存储，TPM还拥有用于加密操作的唯一认可密钥（EK）。该密钥是在TPM制造时生成的，密钥的私有部分永远不会离开TPM。 在远程认证时，为了保护平台身份的私密性，使用了认证身份密钥（AIK）。 当平台（证明者）收到（来自验证者的）远程证明请求时，它会发送一个完整性报告，该报告由PCR值及其数字签名（由AIK计算）组成。 由于AIK的私有部分从未离开过TPM，因此可以保证报告的完整性和真实性。</p>
-<p>​        初步理解，TPM有几种存在模式，比如：以芯片方式存在电脑主板上或者以firmware形式存在于BIOS中。</p>
-<h4 id="The-Aims-of-TPM"><a href="#The-Aims-of-TPM" class="headerlink" title="The Aims of TPM"></a>The Aims of TPM</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TPMAims.png" width="500" height="280"></p>
-<font color="DodgerBlue"> 远程验证（Remote Attestation ）</font>
-
+<h2 id="研究动机"><a href="#研究动机" class="headerlink" title="研究动机"></a>研究动机</h2><p>SGX 能够在非可信的云端为用户保护隐私数据，但是应用的程序可能会包含很多漏洞，这些漏洞可能会泄露隐私数据。很多的研究为了解决这个问题，但是没有考虑在同一个飞地中多客户的隔离问题。因此本文的工作是在飞地中为多个用户提供隔离保障。本文提出CHANCEL，其允许程序的线程在处理请求时访问每个线程的内存区以及共享的只读内存区。每个线程一次处理一个客户端的请求，并且客户端之间是利用软件故障隔离方案相互隔离的。</p>
+<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><h3 id="SGX-总览"><a href="#SGX-总览" class="headerlink" title="SGX 总览"></a>SGX 总览</h3><p>SGX（software guard extensions）[1]</p>
+<p>SGX 是指<a href="https://software.intel.com/en-us/sgx" target="_blank" rel="noopener">英特尔® Software Guard Extensions</a>（英特尔® SGX）。这是一组指令，应用程序可以使用这些指令为选择的代码和数据留出受保护区域，以防止对执行代码或存储在内存中的数据进行直接攻击。SGX 允许应用程序实例化一个受保护的容器，称为 enclave，它可以防止外部软件访问，包括特权恶意软件。</p>
+<p>安全性是云计算中一项极为重要的需求,然而如何保护云计算中关键应用程序和数据的安全、防止云平台管理员泄露用户隐私,仍然是目前没有解决的难题.2013 年,Intel 公司提出了新的处理器安全技术 SGX,能够在计算平台上提供一个可信的隔离空间,保障用户关键代码和数据的机密性和完整性.作为系统安全领域的重大研究进展,SGX 对系统安全,尤其是云计算安全保护方面具有非常重要的意义.</p>
+<p>2013 年,Intel 推出 SGX(software guard extensions)指令集扩展,旨在以硬件安全为强制性保障,<strong>不依赖</strong>于<strong>固件和软件</strong>的安全状态,提供用户空间的可信执行环境,通过一组新的指令集扩展与访问控制机制,实现不同程序间的隔离运行,保障用户<strong>关键代码和数据的机密性与完整性</strong>不受恶意软件的破坏.不同于其他安全技术,SGX 的可信计算基(trusted computing base,简称 TCB)<strong>仅包括硬件</strong>,避免了基于软件的 TCB 自身存在软件安全漏洞与威胁的缺陷,极大地提升了系统安全保障;此外,SGX 可保障运行时的可信执行环境,恶意代码<strong>无法访问与篡改其他程序运行时的保护内容</strong>,进一步增强了系统的安全性;基于<strong>指令集的扩展</strong>与<strong>独立的认证</strong>方式,使得应用程序可以灵活调用这一安全功能并进行验证.</p>
+<p>SGX 的实现需要处理器、内存管理部件、BIOS、驱动程序、运行时环境等软硬件协同完成.SGX提供的功能大多数是在微指令中实现，但是保护内存不受物理攻击主要是由CPU中的MEE（memory encryption engine）硬件单元提供，这个硬件通过对保护内存读写的解密加密，保证了数据只有在CPU中的enclave内存中才是明文.</p>
+<p><strong>功能：</strong>内存隔离/保护安全属性/远程认证/密封.</p>
+<h3 id="SGX-架构"><a href="#SGX-架构" class="headerlink" title="SGX 架构"></a>SGX 架构</h3><p><img src="/2021/05/24/CHANCEL/sgx-architecture-1.png" width="600px"></p>
+<h3 id="enclave"><a href="#enclave" class="headerlink" title="enclave"></a>enclave</h3><p>地理学上的解释</p>
 <blockquote>
-<ol>
-<li>请求验证者向被验证者发送验证请求，这个请求中包括 <em>nonce</em><sup><a href="#fn_1" id="reffn_1">1</a></sup> ，目的是防止重播攻击（Replay attack）</li>
-<li>接收到验证请求的一方向自己的TPM提出验证请求，TPM验证自身需要度量的模块</li>
-<li>验证后的结果发送给远端的验证发起者（发起者要验证(a)TPM 的真实性(b) 发送数值的真实性）</li>
+<p>外飞地(Exclave)：某国家拥有一块与该国分离开来的领土，该领土被其他国家隔开，则该领土称为某国的外飞地。</p>
+<p>内飞地(Enclave): 某国家国境之内有块地区的主权属于别的国家，则该地区是这国家的内飞地，也同时是握有主权国家的外飞地。</p>
+</blockquote>
+<p>SGX允许应用程序实现一个被称为 enclave 的容器,在应用程序的地址空间中划分出一块被保护的区域,为容器内的代码和数据提供机密性和完整性的保护,免受拥有特殊权限的恶意软件的破坏.</p>
+<p>enclave 是一个被保护的容器，存放应用程序敏感数据和代码，SGX允许应用程序指定需要保护的代码和数据，创建enclave之前，不必对其进行分析，加载到enclave之后，必须被完整度量，且之后SGX保证其不能被外部软件所访问.  enclave都驻留在EPC（enclave page cache）中，这是系统内被保护的物理内存，用于存放enclave和SGX数据结构.以支持SGX的一种架构为例，如果在加密保护的DRAM (dynamic random access memory) 中实现EPC，那么他也支持BIOS保留一段PRM（processor reserved memory）的内存.</p>
+<p><strong>enclave 特征：</strong></p>
+<blockquote>
+<p>有自己的代码和数据/机密性保护/完整性保护/可控的入口点/支持多线程/内存具有最高访问权限.</p>
+<p>TCS (thread control structure) 保存着进入或者退出enclave时的线程信息, 每一个enclave中的线程都和一个TCS关联, 需要4K对齐.</p>
+</blockquote>
+<p><strong>enclave 架构图：</strong></p>
+<p><img src="/2021/05/24/CHANCEL/sgx-prm-enclave.png" width="800"></p>
+<p><img src="/2021/05/24/CHANCEL/enclave-layout.png" width="500"></p>
+<p><img src="/2021/05/24/CHANCEL/enclave-privileged.png" width="500"></p>
+<p><strong>远端验证：</strong> enclave 可以向远端认证者证明自己的身份，访问该enclave的用户也持有独立的访问秘钥.</p>
+<p><strong>Physical Memory Organization:</strong> （下文详细介绍）</p>
+<p><img src="/2021/05/24/CHANCEL/enclave-physical-mem-1.png" width="800"></p>
+<p><img src="/2021/05/24/CHANCEL/enclave-mem-map-1.png" width="800"></p>
+<p><strong>SGX memory control:</strong></p>
+<p><img src="/2021/05/24/CHANCEL/SGX-mem-control.png" width="500"></p>
+<p><strong>enclave 保护机制：</strong> 1. enclave内存访问语义变化, 2. 应用程序地址映射关系保护</p>
+<p><strong>1. 内存访问语义</strong></p>
+<blockquote>
+<p>系统分配一块被保护的物理内存区域EPC，用于存放enclave和SGX数据结构，该段区域对于外部请求透明（不存在的内存访问）</p>
+<p>Fig.4 中的内存保护机制中，系统在SGX调用前处于保护模式，支持分页. SGX提供的内存保护机制，在保护模式提供的段保护、页保护机制基础上增加了进一步的保护机制：</p>
+<p>(1). enclave之外应用访问PRM外部内存，按照保护模式进行访问；</p>
+<p>(2). enclave之外应用访问EPC内部内存，该内存区域不存在（透明）；</p>
+<p>(3). enclave内部程序访问EPC内部内存，该内存区域不存在（透明）；</p>
+<p>(4). enclave内部程序访问PRM外部内存，按照保护模式进行访问；</p>
+<p>(5). enclave内部程序访问PRM内部内存，硬件阻止访问。</p>
+<p>简言之：enclave外部不能访问，内部只能访问属于自己的内存，PRM之外的内存按照系统的保护机制进行访问。</p>
+</blockquote>
+<p><strong>EPCM （Enclave Page Cache Map）逻辑结构：</strong></p>
+<p><img src="/2021/05/24/CHANCEL/EPCM-structure.png" width="500"></p>
+<p><strong>2. 内存地址映射保护</strong></p>
+<p>EPC内存以页为单位进行管理，页的控制信息保存在EPCM中，类似于OS中的页表，功能是在CPU地址映射过程中执行enclave页面的访问控制，通过PMH(page miss handler)硬件模块访问，在保护模式的段、页保护机制上增加了一层安全的访问控制.</p>
+<p><strong>enclave 机密性和完整性保护：</strong></p>
+<blockquote>
+<p>(1). 由应用程序申请创建一个enclave, 页面分配，复制程序代码、数据并进行度量，度量结果保存在enclave的控制结构中；</p>
+<p>(2). 创建好之后，SGX通过初始化指令将结果与enclave所有者签名证书的完整性值进行比较，匹配的话，则进行绑定，否则创建失败；</p>
+<p>(3). 成功之后，指定用户可以访问对应的enclave, SGX提供内存保护以及地址映射保护，从而保证enclave的机密性与完整性，远端认证者可以通过enclave的完整性度量结果以及身份，确保其enclave正确创建.</p>
+</blockquote>
+<h3 id="SGX-漏洞"><a href="#SGX-漏洞" class="headerlink" title="SGX 漏洞"></a>SGX 漏洞</h3><p><strong>1.侧信道攻击</strong></p>
+<p>侧信道攻击主要目标是攻击 enclave 数据的机密性.</p>
+<p>攻击者来自 non-enclave 部分,包括应用程序和系统软件.系统软件包括 OS,hypervisor,SMM(system management mode),BIOS 等特权级软件.</p>
+<p><strong>三个假设：</strong></p>
+<blockquote>
+<p>1.侧信道攻击者指导enclave初始化的代码和数据，知道内存布局；</p>
+<p>2.攻击者知道enclave的输入数据，可以反复多次触发enclave，记录并观察结果；</p>
+<p>3.攻击者知道运行enclave平台的配置(CPU、TLB、Cache、DRAM、页表、中断以及异常等)</p>
+</blockquote>
+<p><strong>enclave运行使用的物理资源及攻击方式总览：</strong></p>
+<blockquote>
+<p>CPU: 间接访问pipeline/BPB(branch prediction buffer)，可以泄露enclave的控制流或者数据流；</p>
+<p>TLB : TLB包括 iTLB,dTLB和 L2 TLB.如果Hyper-Threading打开,两个逻辑核共享一个物理核,这时会大大增加侧信道攻击的可能;</p>
+<p>Cache: Cache 包括 L1 instruction Cache,L1 data Cache,L2 Cache 和 L3 Cache(又叫 LLC Cache);</p>
+<p>DRAM：DRAM 包括 channels,DIMMs(dual inline memory module),ranks,banks.每个 banks 又包括 rows, columns 和 row buffer;</p>
+<p>页表：页表可以通过权限控制来触发缺页异常,也可以通过页表的状态位来表明 CPU 的某些操作.</p>
+</blockquote>
+<p><img src="/2021/05/24/CHANCEL/SGX-side-channel-attack-surface.png" width="600"></p>
+<p><strong>2. SGX 多线程同步</strong></p>
+<p>[4] 指出在使用SGX后以往被视为无害的同步漏洞可能会变为严重的安全漏洞。通过在enclave代码中利用UAF(use-after-free)和TOCTTOU(time-of-check-to-time-of-use)漏洞，一个攻击者可以劫持它的控制流或者绕过访问控制。</p>
+<p><strong>Native Client</strong> </p>
+<p>Native client[5] 是一个用于执行不可信x86主机代码的沙箱，利用沙盒技术防止外来机器代码影响系统安全，限制程序读写的存储器范围，为基于浏览器的应用程序提供本地应用程序的计算性能，而不会影响安全性。09年提出。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>sgx 的设计是每个用户是一个单独进程，每个进程绑定一个enclave，enclave之间是相互隔离开的，不涉及数据共享，则会浪费内存空间，因此设计目标是在保证数据共享节约内存空间基础上实现用户的隔离。</p>
+<p><img src="/2021/05/24/CHANCEL/sgx-non-share.png" width="600"></p>
+<p>在实现多用户间隔离时，chancel保证共享数据的多个用户处于同一个进程空间中，每个用户是一个线程，实现线程级别隔离。</p>
+<p><img src="/2021/05/24/CHANCEL/mulit-client-SFI.png" width="600"></p>
+<p><img src="/2021/05/24/CHANCEL/chancel-design.png" width="600"></p>
+<h2 id="实验结论"><a href="#实验结论" class="headerlink" title="实验结论"></a>实验结论</h2><p>与多进程沙盒作对比，在保证安全的同时提升了4-53倍的性能</p>
+<p><img src="/2021/05/24/CHANCEL/benefit.png" width="600"></p>
+<h2 id="阅读问题记录"><a href="#阅读问题记录" class="headerlink" title="阅读问题记录"></a>阅读问题记录</h2><ol>
+<li><p>本文的核心是什么？多线程并发隔离？</p>
+</li>
+<li><p><strong>Section V:</strong>本文与原始SGX对比有哪些改动？原始的SGX提供了什么？</p>
+</li>
+<li><p>SGX与enclave的关系？enclave是一个用户一个还是多用户共享？</p>
+<blockquote>
+<p>Enclave是SGX提供给用户的一个隔离的执行环境，初始化时建立对应的enclave</p>
+</blockquote>
+</li>
+<li><p>Section V: 文中提到的SecureLayer是什么？MCSFI是本文构建的吗？</p>
+</li>
+<li><p>r14,15寄存器作用？</p>
+<blockquote>
+<p>本文r14指向单独线程的私有空间地址，r15指向该进程的共享数据空间。</p>
+</blockquote>
+</li>
+<li><p>native sgx 与 native client 指的是什么？</p>
+<blockquote>
+<p>sgx 只内存中开辟的空间，nacl指的是挂载到该空间的客户</p>
+</blockquote>
+</li>
+<li><p>SGX 真实的使用中代码的大小有多少？64MB？</p>
+</li>
 </ol>
-</blockquote>
-<font color="DodgerBlue"> 完整性度量 （Integrity Measurement）</font>
-
-<blockquote>
-<p>TPM计算并存储不同组件的哈希值，并将这些哈希值在哈希链中进行转换，并将结果与已经存储的数值相比较。<br>完整性度量分为静态与动态两种类型：<br>        静态：保证在运行之前没有发生篡改<br>        动态：保证在运行过程中没有发生恶意篡改</p>
-</blockquote>
-<font color="DodgerBlue"> Generation and secure storage ofkeys</font>
-
-<blockquote>
-<p>生成随机秘钥的方法：种子、随机数生成器、直接导入TPM中。<br>生成的秘钥保存在TPM中</p>
-</blockquote>
-<font color="DodgerBlue"> Trusted boot</font>
-
-<blockquote>
-<p>在开机时，TPM会检查硬件、软件、固件组件的异同，保证在启动系统之前的环境是可信的。</p>
-<p>本文的参考文献 [14] 利用TPM的可信启动构造一个可信的环境，保证在开机过程中没有恶意入侵。<br>[15] 提出一个用于监控整个云平台的框架，可信启动保证被监控环境的完整性，既对云中租户也是针对云供应商。</p>
-</blockquote>
-<font color="DodgerBlue"> Hardware root of trust</font>
-
-<blockquote>
-<p>信任根是可以在密码系统中信任的来源，加密安全依赖于秘钥来进行加密解密与生成或者验证数字签名，因此，在这种系统中包括不易损坏的硬件模块，并且提供了一定程度的信任保障。<br>TPM可以提供硬件信任根、提供开机与运行时的完整性度量并且保护度量结果。</p>
-</blockquote>
-<h4 id="Security-Threats"><a href="#Security-Threats" class="headerlink" title="Security Threats"></a>Security Threats</h4><p><img src="/2020/10/12/Applying-TPM-to-Cloud/TopThreats.png" width="380" height="500"></p>
-<h4 id="The-level-of-TPM-invoking"><a href="#The-level-of-TPM-invoking" class="headerlink" title="The level of TPM invoking"></a>The level of TPM invoking</h4><font color="DodgerBlue"> Hardware </font>
-
-<blockquote>
-<p>在IoT和云计算等分布式系统模型中，主机平台的安全性至关重要，因为它托管着存储或处理（大量）数据。 TPM是一种用于平台身份验证以及验证其完整性的强大解决方案。在参考文献90中提出的解决方案中，扩展了HCloud（用于医疗保健数据的私有云），并且TPM嵌入在主机平台上以对客户端进行身份验证，并测量静态和动态完整性。讨论了可信云可以提供外部认证服务并进行内部可信调度。提供给外部的每个服务都有一个唯一的映像/进程在内存中运行。加载到内存时，需要验证此过程。可以使用TPM执行静态测量，以验证存储在物理存储库中的文件和软件包。同样，使用TPM签名保护数据库的完整性，以提供硬件级别的安全性。对于过程的动态完整性测量，TPM PCR用于存储和显示逐步的测量值。 Yang等[86]提出了一种设计，旨在为客户提供有关存储在云中的数据的新鲜度，有效性和完整性的保证。为了实现此目标，他们在不受信任的服务器上使用受信任的硬件设备，使客户端能够验证其数据的新鲜度和完整性。在系统运行之前，需要验证平台是否以受信任的方式启动。参考文献91讨论TPM是衡量启动过程和确定平台启动完整性的关键步骤的信任基础。在虚拟环境中，TPM提供了根植于硬件的信任链，该信任链将扩展到虚拟机管理程序。如果关键组件（例如BIOS，固件和虚拟机管理程序）已证明其完整性，则可以确保平台引导的完整性。为了确保启动组件的完整性，需要执行两个步骤：首先，测量引导过程，其次，进行证明，即保证和已执行的组件是受信任的组件。</p>
-</blockquote>
-<font color="DodgerBlue"> Hypervisor </font>
-
-<blockquote>
-<p>本文参考文献28构造了基于Xen的迁移框架：</p>
-<p>Xen虚拟机管理程序的安全迁移框架。该设计使用可信计算和相邻完整性度量来动态监视相邻虚拟机管理程序的完整性。更具体地说，为确保始终监视主机，当主机初始化时，TPM模块会验证虚拟机监控程序并将更新消息发送到完整性验证表（该表包含受信任的虚拟机监控程序列表），并将该虚拟机监控程序标记为受信任的。这意味着，如果未收到此类消息，则认为该特定的管理程序不可信。此外，系统会动态监控虚拟机监控程序的运行状态，如果虚拟机监控程序遭到破坏，则会发送相应的更新消息以报告受到破坏的情况。根据此完整性表的结果，确定源虚拟机管理程序是否受信任以及是否应启动VM迁移过程。</p>
-</blockquote>
-<h4 id="Phase-of-integrity-measurement"><a href="#Phase-of-integrity-measurement" class="headerlink" title="Phase of integrity measurement"></a>Phase of integrity measurement</h4><font color="DodgerBlue"> Boot time </font>
-
-<blockquote>
-<p>可信平台技术追求的原则之一是在关键组件加载和执行之前验证它们的信任和完整性。因此，在运行时完整性检查之前，需要确保正确引导了系统并且正在运行适当的操作系统。受信任的平台通过创建信任链来实现这种信任，该信任链以BIOS引导块中的受信任代码（CRTM）为核心信任根。 CRTM衡量其他实体的完整性价值，并且在平台的整个生命周期内保持不变。 CRTM是普通BIOS的补充，它首先运行以测量BIOS块和硬件，然后将控制权传递给引导加载程序。然后在将控件传递给OS之前测量OS内核映像。在此引导过程的每个步骤中，都会获取测量值，并据此扩展相关的TPM PCR值。该测量过程证明了系统的完整性，并确保引导和操作系统软件是制造商想要的版本，并且未被恶意第三方或恶意软件篡改。100Nanavati等人74指出，在虚拟环境中，可信引导技术允许用户证明基础启动平台的身份，并确保加载的虚拟化平台值得信赖。这为用户提供了有关可以向其提交关键数据的虚拟化平台的具体保证。 TPM通过使用加密原语为虚拟化平台提供此受信任的引导，并为其建立信任根。在ALIBI可信监视框架中，17 TPM用于在服务提供商平台上提供信任根。 TPM PCR记录平台上正在执行的软件的状态，并且由于PCR值仅是附加值，因此仅通过重新启动才能消除以前的记录。 TPM还拥有一个公共-私人密钥对。私钥仅保留在TPM的安全环境中，并用于计算TPM生成的证明值（从经过身份验证的启动累积的度量）的签名。使用TPM的公钥，外部验证程序可以检查签名的有效性，并推断出PCR值表示平台软件的状态。</p>
-</blockquote>
-<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>​        本文所统计并分析了120篇文献后，认为TPM技术在云中应用是一种趋势。在云中TPM技术的主要目标是远程验证以及完整性度量。本文主要分析了TPM的功能，TPM可应对云中的安全威胁，TPM提供完整性度量的阶段以及层次并指出了留有的研究空间，最后指出主要的研究差距。</p>
-<blockquote id="fn_1">
-<sup>1</sup>. 在加密技术中的初始向量和加密散列函数都发挥着重要作用，在各类验证协议的通信应用中确保验证信息不被重复使用以对抗重放攻击(Replay Attack)<a href="#reffn_1" title="Jump back to footnote [1] in the text."> ↩</a>
-</blockquote>
-<h3 id="引文延伸阅读"><a href="#引文延伸阅读" class="headerlink" title="引文延伸阅读"></a>引文延伸阅读</h3><p>Here are the papers worth reading further.</p>
-<div class="table-container">
-<table>
-<thead>
-<tr>
-<th>theme</th>
-<th>Reference Number &amp; Summary</th>
-<th>Reference Number &amp; Summary</th>
-<th>more</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>远程验证</td>
-<td>6：TPM进行远程验证VMs</td>
-<td>7：验证用户所在地理位置</td>
-<td></td>
-</tr>
-<tr>
-<td>完整性度量</td>
-<td>10：多用户环境中数据拥有完整性</td>
-<td>11：动态的完成性度量的模型（Xen）</td>
-<td>8、9</td>
-</tr>
-<tr>
-<td>生成秘钥安全存储</td>
-<td>12</td>
-<td>13</td>
-<td></td>
-</tr>
-<tr>
-<td>安全启动</td>
-<td><a href="https://ink.library.smu.edu.sg/cgi/viewcontent.cgi?article=2969&amp;context=sis_research" target="_blank" rel="noopener">14</a>：protect the hypervisor</td>
-<td>15 ：monitoring the cloud platform</td>
-<td></td>
-</tr>
-<tr>
-<td>硬件信任根</td>
-<td>17 25 33 34 35</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://www.zhihu.com/question/19790488/answer/19290308" target="_blank" rel="noopener">什么是彩虹表？</a> </p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>说明：本文的一些截图来自于以下论文或者网站，图片序号没有标注，其中sgx101[2]是一个不错的sgx学习网站.</p>
+<p>[1] 王鹃, 樊成阳, 程越强, 赵波, 韦韬, 严飞, 张焕国,&amp; 马婧. (2018). SGX 技术的分析和研究. <em>软件学报</em>, <em>29</em>(9), 2778-2798.</p>
+<p>[2] <a href="https://sslab-gatech.github.io/sgx101/pages/enclave.html" target="_blank" rel="noopener">https://sslab-gatech.github.io/sgx101/pages/enclave.html</a></p>
+<p>[3] Costan, V., &amp; Devadas, S. (2016). Intel SGX Explained. <em>IACR</em> <em>Cryptol**.</em> <em>ePrint</em> <em>Arch.</em>, <em>2016</em>(86), 1-118. <a href="https://eprint.iacr.org/2016/086.pdf" target="_blank" rel="noopener">https://eprint.iacr.org/2016/086.pdf</a></p>
+<p>[4] Weichbrodt N, Kurmus A, Pietzuch P, Kapitza R. AsyncShock: Exploiting synchronisation bugs in Intel SGX enclaves. In: Proc. of the Computer Security (ESORICS 2016). 2016. 440−457. </p>
+<p>[5] Yee, B., Sehr, D., Dardyk, G., Chen, J. B., Muth, R., Ormandy, T., &amp; Fullagar, N. (2009, May). Native client: A sandbox for portable, untrusted x86 native code. In <em>2009 30th IEEE Symposium on Security and Privacy</em> (pp. 79-93). IEEE.</p>
+<p>[6] <a href="https://zhuanlan.zhihu.com/p/50894009" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/50894009</a></p>
+<p>[7] Xing, B. C., Shanahan, M., &amp; Leslie-Hurd, R. (2016). Intel® Software Guard Extensions (Intel® SGX) software support for dynamic memory allocation inside an enclave. In <em>Proceedings of the Hardware and Architectural Support for Security and Privacy 2016</em> (pp. 1-9).</p>
 ]]></content>
       <categories>
-        <category>Security and Privacy</category>
+        <category>NDSS</category>
       </categories>
       <tags>
-        <tag>TPM</tag>
-        <tag>Security</tag>
-        <tag>Cloud Computing</tag>
-        <tag>可信计算</tag>
+        <tag>论文解读</tag>
+        <tag>TEE</tag>
       </tags>
   </entry>
   <entry>
@@ -832,170 +996,6 @@ after  modify ips =&gt;19&amp;.168.0.2&lt;
         <tag>TODO</tag>
         <tag>C语言</tag>
         <tag>字符串</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CHANCEL</title>
-    <url>/2021/05/24/CHANCEL/</url>
-    <content><![CDATA[<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:left">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:left">原文PDF</td>
-<td style="text-align:center"><a href="https://lifeasageek.github.io/papers/ahmad-chancel.pdf" target="_blank" rel="noopener">paper</a> <a href="https://lifeasageek.github.io/papers/ahmad-chancel-slides.pdf" target="_blank" rel="noopener">slides</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:left">作者信息</td>
-<td style="text-align:center"><a href="https://web.ics.purdue.edu/~ahmad37/" target="_blank" rel="noopener">https://web.ics.purdue.edu/~ahmad37/</a> <a href="https://www.cs.purdue.edu/homes/pfonseca/" target="_blank" rel="noopener">https://www.cs.purdue.edu/homes/pfonseca/</a> <a href="https://lifeasageek.github.io/" target="_blank" rel="noopener">https://lifeasageek.github.io/</a></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:left">核心内容</td>
-<td style="text-align:center">在飞地中为多个用户提供隔离保障</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:left">研究领域</td>
-<td style="text-align:center">TEE 可信计算环境</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:left">全文总览</td>
-<td style="text-align:center">在飞地中为多个用户提供隔离保障，从而避免用户执行代码的漏洞导致的隐私数据泄露，在提供安全保证的同时，与多进程沙盒对比，有着明显的性能提升。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="研究动机"><a href="#研究动机" class="headerlink" title="研究动机"></a>研究动机</h2><p>SGX 能够在非可信的云端为用户保护隐私数据，但是应用的程序可能会包含很多漏洞，这些漏洞可能会泄露隐私数据。很多的研究为了解决这个问题，但是没有考虑在同一个飞地中多客户的隔离问题。因此本文的工作是在飞地中为多个用户提供隔离保障。本文提出CHANCEL，其允许程序的线程在处理请求时访问每个线程的内存区以及共享的只读内存区。每个线程一次处理一个客户端的请求，并且客户端之间是利用软件故障隔离方案相互隔离的。</p>
-<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><h3 id="SGX-总览"><a href="#SGX-总览" class="headerlink" title="SGX 总览"></a>SGX 总览</h3><p>SGX（software guard extensions）[1]</p>
-<p>SGX 是指<a href="https://software.intel.com/en-us/sgx" target="_blank" rel="noopener">英特尔® Software Guard Extensions</a>（英特尔® SGX）。这是一组指令，应用程序可以使用这些指令为选择的代码和数据留出受保护区域，以防止对执行代码或存储在内存中的数据进行直接攻击。SGX 允许应用程序实例化一个受保护的容器，称为 enclave，它可以防止外部软件访问，包括特权恶意软件。</p>
-<p>安全性是云计算中一项极为重要的需求,然而如何保护云计算中关键应用程序和数据的安全、防止云平台管理员泄露用户隐私,仍然是目前没有解决的难题.2013 年,Intel 公司提出了新的处理器安全技术 SGX,能够在计算平台上提供一个可信的隔离空间,保障用户关键代码和数据的机密性和完整性.作为系统安全领域的重大研究进展,SGX 对系统安全,尤其是云计算安全保护方面具有非常重要的意义.</p>
-<p>2013 年,Intel 推出 SGX(software guard extensions)指令集扩展,旨在以硬件安全为强制性保障,<strong>不依赖</strong>于<strong>固件和软件</strong>的安全状态,提供用户空间的可信执行环境,通过一组新的指令集扩展与访问控制机制,实现不同程序间的隔离运行,保障用户<strong>关键代码和数据的机密性与完整性</strong>不受恶意软件的破坏.不同于其他安全技术,SGX 的可信计算基(trusted computing base,简称 TCB)<strong>仅包括硬件</strong>,避免了基于软件的 TCB 自身存在软件安全漏洞与威胁的缺陷,极大地提升了系统安全保障;此外,SGX 可保障运行时的可信执行环境,恶意代码<strong>无法访问与篡改其他程序运行时的保护内容</strong>,进一步增强了系统的安全性;基于<strong>指令集的扩展</strong>与<strong>独立的认证</strong>方式,使得应用程序可以灵活调用这一安全功能并进行验证.</p>
-<p>SGX 的实现需要处理器、内存管理部件、BIOS、驱动程序、运行时环境等软硬件协同完成.SGX提供的功能大多数是在微指令中实现，但是保护内存不受物理攻击主要是由CPU中的MEE（memory encryption engine）硬件单元提供，这个硬件通过对保护内存读写的解密加密，保证了数据只有在CPU中的enclave内存中才是明文.</p>
-<p><strong>功能：</strong>内存隔离/保护安全属性/远程认证/密封.</p>
-<h3 id="SGX-架构"><a href="#SGX-架构" class="headerlink" title="SGX 架构"></a>SGX 架构</h3><p><img src="/2021/05/24/CHANCEL/sgx-architecture-1.png" width="600px"></p>
-<h3 id="enclave"><a href="#enclave" class="headerlink" title="enclave"></a>enclave</h3><p>地理学上的解释</p>
-<blockquote>
-<p>外飞地(Exclave)：某国家拥有一块与该国分离开来的领土，该领土被其他国家隔开，则该领土称为某国的外飞地。</p>
-<p>内飞地(Enclave): 某国家国境之内有块地区的主权属于别的国家，则该地区是这国家的内飞地，也同时是握有主权国家的外飞地。</p>
-</blockquote>
-<p>SGX允许应用程序实现一个被称为 enclave 的容器,在应用程序的地址空间中划分出一块被保护的区域,为容器内的代码和数据提供机密性和完整性的保护,免受拥有特殊权限的恶意软件的破坏.</p>
-<p>enclave 是一个被保护的容器，存放应用程序敏感数据和代码，SGX允许应用程序指定需要保护的代码和数据，创建enclave之前，不必对其进行分析，加载到enclave之后，必须被完整度量，且之后SGX保证其不能被外部软件所访问.  enclave都驻留在EPC（enclave page cache）中，这是系统内被保护的物理内存，用于存放enclave和SGX数据结构.以支持SGX的一种架构为例，如果在加密保护的DRAM (dynamic random access memory) 中实现EPC，那么他也支持BIOS保留一段PRM（processor reserved memory）的内存.</p>
-<p><strong>enclave 特征：</strong></p>
-<blockquote>
-<p>有自己的代码和数据/机密性保护/完整性保护/可控的入口点/支持多线程/内存具有最高访问权限.</p>
-<p>TCS (thread control structure) 保存着进入或者退出enclave时的线程信息, 每一个enclave中的线程都和一个TCS关联, 需要4K对齐.</p>
-</blockquote>
-<p><strong>enclave 架构图：</strong></p>
-<p><img src="/2021/05/24/CHANCEL/sgx-prm-enclave.png" width="800"></p>
-<p><img src="/2021/05/24/CHANCEL/enclave-layout.png" width="500"></p>
-<p><img src="/2021/05/24/CHANCEL/enclave-privileged.png" width="500"></p>
-<p><strong>远端验证：</strong> enclave 可以向远端认证者证明自己的身份，访问该enclave的用户也持有独立的访问秘钥.</p>
-<p><strong>Physical Memory Organization:</strong> （下文详细介绍）</p>
-<p><img src="/2021/05/24/CHANCEL/enclave-physical-mem-1.png" width="800"></p>
-<p><img src="/2021/05/24/CHANCEL/enclave-mem-map-1.png" width="800"></p>
-<p><strong>SGX memory control:</strong></p>
-<p><img src="/2021/05/24/CHANCEL/SGX-mem-control.png" width="500"></p>
-<p><strong>enclave 保护机制：</strong> 1. enclave内存访问语义变化, 2. 应用程序地址映射关系保护</p>
-<p><strong>1. 内存访问语义</strong></p>
-<blockquote>
-<p>系统分配一块被保护的物理内存区域EPC，用于存放enclave和SGX数据结构，该段区域对于外部请求透明（不存在的内存访问）</p>
-<p>Fig.4 中的内存保护机制中，系统在SGX调用前处于保护模式，支持分页. SGX提供的内存保护机制，在保护模式提供的段保护、页保护机制基础上增加了进一步的保护机制：</p>
-<p>(1). enclave之外应用访问PRM外部内存，按照保护模式进行访问；</p>
-<p>(2). enclave之外应用访问EPC内部内存，该内存区域不存在（透明）；</p>
-<p>(3). enclave内部程序访问EPC内部内存，该内存区域不存在（透明）；</p>
-<p>(4). enclave内部程序访问PRM外部内存，按照保护模式进行访问；</p>
-<p>(5). enclave内部程序访问PRM内部内存，硬件阻止访问。</p>
-<p>简言之：enclave外部不能访问，内部只能访问属于自己的内存，PRM之外的内存按照系统的保护机制进行访问。</p>
-</blockquote>
-<p><strong>EPCM （Enclave Page Cache Map）逻辑结构：</strong></p>
-<p><img src="/2021/05/24/CHANCEL/EPCM-structure.png" width="500"></p>
-<p><strong>2. 内存地址映射保护</strong></p>
-<p>EPC内存以页为单位进行管理，页的控制信息保存在EPCM中，类似于OS中的页表，功能是在CPU地址映射过程中执行enclave页面的访问控制，通过PMH(page miss handler)硬件模块访问，在保护模式的段、页保护机制上增加了一层安全的访问控制.</p>
-<p><strong>enclave 机密性和完整性保护：</strong></p>
-<blockquote>
-<p>(1). 由应用程序申请创建一个enclave, 页面分配，复制程序代码、数据并进行度量，度量结果保存在enclave的控制结构中；</p>
-<p>(2). 创建好之后，SGX通过初始化指令将结果与enclave所有者签名证书的完整性值进行比较，匹配的话，则进行绑定，否则创建失败；</p>
-<p>(3). 成功之后，指定用户可以访问对应的enclave, SGX提供内存保护以及地址映射保护，从而保证enclave的机密性与完整性，远端认证者可以通过enclave的完整性度量结果以及身份，确保其enclave正确创建.</p>
-</blockquote>
-<h3 id="SGX-漏洞"><a href="#SGX-漏洞" class="headerlink" title="SGX 漏洞"></a>SGX 漏洞</h3><p><strong>1.侧信道攻击</strong></p>
-<p>侧信道攻击主要目标是攻击 enclave 数据的机密性.</p>
-<p>攻击者来自 non-enclave 部分,包括应用程序和系统软件.系统软件包括 OS,hypervisor,SMM(system management mode),BIOS 等特权级软件.</p>
-<p><strong>三个假设：</strong></p>
-<blockquote>
-<p>1.侧信道攻击者指导enclave初始化的代码和数据，知道内存布局；</p>
-<p>2.攻击者知道enclave的输入数据，可以反复多次触发enclave，记录并观察结果；</p>
-<p>3.攻击者知道运行enclave平台的配置(CPU、TLB、Cache、DRAM、页表、中断以及异常等)</p>
-</blockquote>
-<p><strong>enclave运行使用的物理资源及攻击方式总览：</strong></p>
-<blockquote>
-<p>CPU: 间接访问pipeline/BPB(branch prediction buffer)，可以泄露enclave的控制流或者数据流；</p>
-<p>TLB : TLB包括 iTLB,dTLB和 L2 TLB.如果Hyper-Threading打开,两个逻辑核共享一个物理核,这时会大大增加侧信道攻击的可能;</p>
-<p>Cache: Cache 包括 L1 instruction Cache,L1 data Cache,L2 Cache 和 L3 Cache(又叫 LLC Cache);</p>
-<p>DRAM：DRAM 包括 channels,DIMMs(dual inline memory module),ranks,banks.每个 banks 又包括 rows, columns 和 row buffer;</p>
-<p>页表：页表可以通过权限控制来触发缺页异常,也可以通过页表的状态位来表明 CPU 的某些操作.</p>
-</blockquote>
-<p><img src="/2021/05/24/CHANCEL/SGX-side-channel-attack-surface.png" width="600"></p>
-<p><strong>2. SGX 多线程同步</strong></p>
-<p>[4] 指出在使用SGX后以往被视为无害的同步漏洞可能会变为严重的安全漏洞。通过在enclave代码中利用UAF(use-after-free)和TOCTTOU(time-of-check-to-time-of-use)漏洞，一个攻击者可以劫持它的控制流或者绕过访问控制。</p>
-<p><strong>Native Client</strong> </p>
-<p>Native client[5] 是一个用于执行不可信x86主机代码的沙箱，利用沙盒技术防止外来机器代码影响系统安全，限制程序读写的存储器范围，为基于浏览器的应用程序提供本地应用程序的计算性能，而不会影响安全性。09年提出。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>sgx 的设计是每个用户是一个单独进程，每个进程绑定一个enclave，enclave之间是相互隔离开的，不涉及数据共享，则会浪费内存空间，因此设计目标是在保证数据共享节约内存空间基础上实现用户的隔离。</p>
-<p><img src="/2021/05/24/CHANCEL/sgx-non-share.png" width="600"></p>
-<p>在实现多用户间隔离时，chancel保证共享数据的多个用户处于同一个进程空间中，每个用户是一个线程，实现线程级别隔离。</p>
-<p><img src="/2021/05/24/CHANCEL/mulit-client-SFI.png" width="600"></p>
-<p><img src="/2021/05/24/CHANCEL/chancel-design.png" width="600"></p>
-<h2 id="实验结论"><a href="#实验结论" class="headerlink" title="实验结论"></a>实验结论</h2><p>与多进程沙盒作对比，在保证安全的同时提升了4-53倍的性能</p>
-<p><img src="/2021/05/24/CHANCEL/benefit.png" width="600"></p>
-<h2 id="阅读问题记录"><a href="#阅读问题记录" class="headerlink" title="阅读问题记录"></a>阅读问题记录</h2><ol>
-<li><p>本文的核心是什么？多线程并发隔离？</p>
-</li>
-<li><p><strong>Section V:</strong>本文与原始SGX对比有哪些改动？原始的SGX提供了什么？</p>
-</li>
-<li><p>SGX与enclave的关系？enclave是一个用户一个还是多用户共享？</p>
-<blockquote>
-<p>Enclave是SGX提供给用户的一个隔离的执行环境，初始化时建立对应的enclave</p>
-</blockquote>
-</li>
-<li><p>Section V: 文中提到的SecureLayer是什么？MCSFI是本文构建的吗？</p>
-</li>
-<li><p>r14,15寄存器作用？</p>
-<blockquote>
-<p>本文r14指向单独线程的私有空间地址，r15指向该进程的共享数据空间。</p>
-</blockquote>
-</li>
-<li><p>native sgx 与 native client 指的是什么？</p>
-<blockquote>
-<p>sgx 只内存中开辟的空间，nacl指的是挂载到该空间的客户</p>
-</blockquote>
-</li>
-<li><p>SGX 真实的使用中代码的大小有多少？64MB？</p>
-</li>
-</ol>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>说明：本文的一些截图来自于以下论文或者网站，图片序号没有标注，其中sgx101[2]是一个不错的sgx学习网站.</p>
-<p>[1] 王鹃, 樊成阳, 程越强, 赵波, 韦韬, 严飞, 张焕国,&amp; 马婧. (2018). SGX 技术的分析和研究. <em>软件学报</em>, <em>29</em>(9), 2778-2798.</p>
-<p>[2] <a href="https://sslab-gatech.github.io/sgx101/pages/enclave.html" target="_blank" rel="noopener">https://sslab-gatech.github.io/sgx101/pages/enclave.html</a></p>
-<p>[3] Costan, V., &amp; Devadas, S. (2016). Intel SGX Explained. <em>IACR</em> <em>Cryptol**.</em> <em>ePrint</em> <em>Arch.</em>, <em>2016</em>(86), 1-118. <a href="https://eprint.iacr.org/2016/086.pdf" target="_blank" rel="noopener">https://eprint.iacr.org/2016/086.pdf</a></p>
-<p>[4] Weichbrodt N, Kurmus A, Pietzuch P, Kapitza R. AsyncShock: Exploiting synchronisation bugs in Intel SGX enclaves. In: Proc. of the Computer Security (ESORICS 2016). 2016. 440−457. </p>
-<p>[5] Yee, B., Sehr, D., Dardyk, G., Chen, J. B., Muth, R., Ormandy, T., &amp; Fullagar, N. (2009, May). Native client: A sandbox for portable, untrusted x86 native code. In <em>2009 30th IEEE Symposium on Security and Privacy</em> (pp. 79-93). IEEE.</p>
-<p>[6] <a href="https://zhuanlan.zhihu.com/p/50894009" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/50894009</a></p>
-<p>[7] Xing, B. C., Shanahan, M., &amp; Leslie-Hurd, R. (2016). Intel® Software Guard Extensions (Intel® SGX) software support for dynamic memory allocation inside an enclave. In <em>Proceedings of the Hardware and Architectural Support for Security and Privacy 2016</em> (pp. 1-9).</p>
-]]></content>
-      <categories>
-        <category>NDSS</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>TEE</tag>
       </tags>
   </entry>
   <entry>
@@ -1308,6 +1308,11 @@ after  modify ips =&gt;19&amp;.168.0.2&lt;
       </tags>
   </entry>
   <entry>
+    <title>CubicleOS</title>
+    <url>/2021/06/16/CubicleOS/</url>
+    <content><![CDATA[]]></content>
+  </entry>
+  <entry>
     <title>CloudVisor-D</title>
     <url>/2020/10/18/CloudVisor-D/</url>
     <content><![CDATA[<div class="table-container">
@@ -1424,11 +1429,6 @@ after  modify ips =&gt;19&amp;.168.0.2&lt;
         <tag>Untrusted Hypervisor</tag>
         <tag>Virtualization</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>CubicleOS</title>
-    <url>/2021/06/16/CubicleOS/</url>
-    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>DORY</title>
@@ -1587,6 +1587,65 @@ after  modify ips =&gt;19&amp;.168.0.2&lt;
       </tags>
   </entry>
   <entry>
+    <title>GiantVM</title>
+    <url>/2021/04/26/GiantVM/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>TODO</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>FHEW</title>
+    <url>/2020/08/13/FHEW/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://eprint.iacr.org/2014/816.pdf" target="_blank" rel="noopener">FHEW</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Centrum Wiskunde &amp; Informatica, Amsterdam</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">对全同态加密中 bootstraping 进行优化</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">同态加密</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">优化影响同态加密效率的主要瓶颈——Gentry 的引导程序</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
+      <categories>
+        <category>Cryptographic Techniques</category>
+      </categories>
+      <tags>
+        <tag>TODO</tag>
+        <tag>论文解读</tag>
+        <tag>Homomorphic</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Dancing with Wolves</title>
     <url>/2020/06/27/Dancing-with-Wolves/</url>
     <content><![CDATA[<div class="table-container">
@@ -1696,65 +1755,6 @@ after  modify ips =&gt;19&amp;.168.0.2&lt;
       </tags>
   </entry>
   <entry>
-    <title>FHEW</title>
-    <url>/2020/08/13/FHEW/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://eprint.iacr.org/2014/816.pdf" target="_blank" rel="noopener">FHEW</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Centrum Wiskunde &amp; Informatica, Amsterdam</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">对全同态加密中 bootstraping 进行优化</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">同态加密</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">优化影响同态加密效率的主要瓶颈——Gentry 的引导程序</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3>]]></content>
-      <categories>
-        <category>Cryptographic Techniques</category>
-      </categories>
-      <tags>
-        <tag>TODO</tag>
-        <tag>论文解读</tag>
-        <tag>Homomorphic</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>GiantVM</title>
-    <url>/2021/04/26/GiantVM/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>TODO</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Google Technology</title>
     <url>/2020/11/23/Google-Technology/</url>
     <content><![CDATA[<div class="table-container">
@@ -1802,61 +1802,6 @@ after  modify ips =&gt;19&amp;.168.0.2&lt;
       <tags>
         <tag>TODO</tag>
         <tag>论文解读</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>HyperLock</title>
-    <url>/2020/12/01/HyperLock/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.cs.fsu.edu/~zwang/files/EuroSys12.pdf" target="_blank" rel="noopener">HyperLock</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">保护Hypervisor</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">保护虚拟机安全</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">1. 提出HyperLock保护Hypervisor和客户虚拟机；2. 提出Hypervisor 影子技术，为每个客户机分配一个Hypervisor，提高隔离性。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>​        本文主要指出是对Hypervisor的保护，实验的平台是KVM。<br>​        即便是部署虚拟机之后会带来很大的便利，但是Hypervisor软件bug是有可能被利用并发起攻击的。本文认为，因为客户机与主机的联系如此紧密，如果一个Hypervisor被攻击了，那么部署在其上面的许多客户机很有可能受到威胁。<br>​        为了隔离Hypervisor与各个客户机，本文提出了HyperLock来提供严格的隔离保证。具体来说，Hypervisor在运行时被隔离，他有自己独立的地址空间和受限制的指令集；另一种技术是Hypervisor shadow，有效的为每个客户机创建单独的Hypervisor，从而将可能受到的影响降到最小。</p>
-<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>​        现有对Hypervisor的攻击表明攻击者可以从客户机逃脱并直接攻击主机OS，并且受攻击的Hypervisor能够轻松的读取其他客户机的内容或者窃取敏感信息。</p>
-<p>（为了说明xen的不安全性，需要介绍几个对xen的攻击实例）</p>
-]]></content>
-      <categories>
-        <category>EuroSys</category>
-      </categories>
-      <tags>
-        <tag>TODO</tag>
-        <tag>论文解读</tag>
-        <tag>Detection</tag>
-        <tag>Isolation</tag>
       </tags>
   </entry>
   <entry>
@@ -1962,6 +1907,61 @@ after  modify ips =&gt;19&amp;.168.0.2&lt;
       </tags>
   </entry>
   <entry>
+    <title>HyperLock</title>
+    <url>/2020/12/01/HyperLock/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.cs.fsu.edu/~zwang/files/EuroSys12.pdf" target="_blank" rel="noopener">HyperLock</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">保护Hypervisor</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">保护虚拟机安全</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">1. 提出HyperLock保护Hypervisor和客户虚拟机；2. 提出Hypervisor 影子技术，为每个客户机分配一个Hypervisor，提高隔离性。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><p>​        本文主要指出是对Hypervisor的保护，实验的平台是KVM。<br>​        即便是部署虚拟机之后会带来很大的便利，但是Hypervisor软件bug是有可能被利用并发起攻击的。本文认为，因为客户机与主机的联系如此紧密，如果一个Hypervisor被攻击了，那么部署在其上面的许多客户机很有可能受到威胁。<br>​        为了隔离Hypervisor与各个客户机，本文提出了HyperLock来提供严格的隔离保证。具体来说，Hypervisor在运行时被隔离，他有自己独立的地址空间和受限制的指令集；另一种技术是Hypervisor shadow，有效的为每个客户机创建单独的Hypervisor，从而将可能受到的影响降到最小。</p>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>​        现有对Hypervisor的攻击表明攻击者可以从客户机逃脱并直接攻击主机OS，并且受攻击的Hypervisor能够轻松的读取其他客户机的内容或者窃取敏感信息。</p>
+<p>（为了说明xen的不安全性，需要介绍几个对xen的攻击实例）</p>
+]]></content>
+      <categories>
+        <category>EuroSys</category>
+      </categories>
+      <tags>
+        <tag>TODO</tag>
+        <tag>论文解读</tag>
+        <tag>Detection</tag>
+        <tag>Isolation</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Information theoretic framework</title>
     <url>/2021/03/15/Information-theoretic-framework/</url>
     <content><![CDATA[<h2 id="四条公理"><a href="#四条公理" class="headerlink" title="四条公理"></a>四条公理</h2><h2 id="两种模型"><a href="#两种模型" class="headerlink" title="两种模型"></a>两种模型</h2>]]></content>
@@ -1972,28 +1972,6 @@ after  modify ips =&gt;19&amp;.168.0.2&lt;
         <tag>TODO</tag>
         <tag>论文解读</tag>
         <tag>Protocol</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
-    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
-    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
-<ul>
-<li><strong>Active Monitoring（Synchronous）</strong></li>
-</ul>
-<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
-<ul>
-<li><strong>Passive Monitoring （Asynchronous）</strong></li>
-</ul>
-<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
-]]></content>
-      <categories>
-        <category>Security and Privacy</category>
-        <category>TODO</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>虚拟化安全</tag>
       </tags>
   </entry>
   <entry>
@@ -2303,6 +2281,28 @@ func main()  {
       </tags>
   </entry>
   <entry>
+    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
+    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
+    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
+<ul>
+<li><strong>Active Monitoring（Synchronous）</strong></li>
+</ul>
+<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
+<ul>
+<li><strong>Passive Monitoring （Asynchronous）</strong></li>
+</ul>
+<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
+]]></content>
+      <categories>
+        <category>Security and Privacy</category>
+        <category>TODO</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>虚拟化安全</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>LinnOS</title>
     <url>/2021/06/11/LinnOS/</url>
     <content><![CDATA[<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><div class="table-container">
@@ -2604,15 +2604,6 @@ git branch --all
       </tags>
   </entry>
   <entry>
-    <title>MuonTrap-Preventing Cross-Domain Spectre-Like</title>
-    <url>/2021/03/15/MuonTrap-Preventing-Cross-Domain-Spectre-Like/</url>
-    <content><![CDATA[<p>清华安全公众号推荐</p>
-]]></content>
-      <tags>
-        <tag>TODO</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>MIT log 0 内存管理实验环境</title>
     <url>/2020/11/09/MIT-log-0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83/</url>
     <content><![CDATA[<h3 id="内存实验环境搭建"><a href="#内存实验环境搭建" class="headerlink" title="内存实验环境搭建"></a>内存实验环境搭建</h3><p><strong>操作系统</strong>是计算机科学中十分重要的一门基础学科，是一名计算机专业毕业生必须要具备的基础知识。但是在学习这门课时，如果仅仅把目光停留在课本上一些关于操作系统概念上的叙述，并不能对操作系统有着深层次的理解。必须要结合动手实践，才能真正掌握核心的知识。<br>MIT的操作系统课程6.828是一门被广泛好评的入门课程。它最重要的特点就是它实践第一的教学原则。在这门课程中会涉及到非常丰富的实验，也会有非常多的动手机会。而且授课者更是亲自构建了一个简化的基于Unix内核的操作系统xv6。所有的实验都是在这个操作系统上完成。虽然它功能很简单，但是它能够帮助我们真正的了解操作系统在做什么[3]。<br>因此，以博客的形式记录自己学习6.828的过程，本系列博文尽量包括以下几个内容：</p>
@@ -2838,6 +2829,15 @@ in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
       </tags>
   </entry>
   <entry>
+    <title>MuonTrap-Preventing Cross-Domain Spectre-Like</title>
+    <url>/2021/03/15/MuonTrap-Preventing-Cross-Domain-Spectre-Like/</url>
+    <content><![CDATA[<p>清华安全公众号推荐</p>
+]]></content>
+      <tags>
+        <tag>TODO</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Operating Systems</title>
     <url>/2020/07/17/Operating-Systems/</url>
     <content><![CDATA[]]></content>
@@ -2891,6 +2891,57 @@ in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
       <tags>
         <tag>game-for-peace</tag>
         <tag>JNG</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PengLai-Enclave</title>
+    <url>/2021/07/07/PengLai-Enclave/</url>
+    <content><![CDATA[<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:left">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:left">原文PDF</td>
+<td style="text-align:center"><a href="https://www.usenix.org/system/files/osdi20-hao.pdf" target="_blank" rel="noopener">paper</a> <a href="https://www.usenix.org/sites/default/files/conference/protected-files/osdi20_slides_hao.pdf" target="_blank" rel="noopener">slides</a> <a href="https://penglai-enclave.systems/" target="_blank" rel="noopener">penglai</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:left">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:left">核心内容</td>
+<td style="text-align:center">LinnOS 实现一种轻量级神经网络细粒度推断SSD性能，实现性能可预测性。</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:left">研究领域</td>
+<td style="text-align:center">Storage</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:left">全文总览</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>OSDI</category>
+      </categories>
+      <tags>
+        <tag>TODO</tag>
+        <tag>论文解读</tag>
+        <tag>TEE</tag>
       </tags>
   </entry>
   <entry>
@@ -2957,23 +3008,6 @@ in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
       <tags>
         <tag>TODO</tag>
         <tag>论文解读</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Protocol-gossip</title>
-    <url>/2020/11/07/Protocol-gossip/</url>
-    <content><![CDATA[<h3 id="P2P-简介"><a href="#P2P-简介" class="headerlink" title="P2P 简介"></a>P2P 简介</h3><p>​        网络中节点数目的增加，使得传统的C/S计算模型不能满足用户对信息访问等要求，无法满足分布式应用的要求，其限制了网络资源的充分利用，可扩展性较差，无法支持不断增长的客户节点数量等问题越来越明显。</p>
-<p>​        P2P 主要解决网络负载不均衡的问题，用户有能力不通过服务器直接进行资源的的共享和交换。Napster是第一个被广泛应用的 Peer-to-Peer 音乐共享服务。</p>
-<h4 id="Peer-to-Peerr-分类"><a href="#Peer-to-Peerr-分类" class="headerlink" title="Peer-to-Peerr 分类"></a>Peer-to-Peerr 分类</h4><p>集中式P2P系统</p>
-<p>无结构P2P系统</p>
-<p>结构化P2P系统</p>
-<h3 id="分布式文件定位"><a href="#分布式文件定位" class="headerlink" title="分布式文件定位"></a>分布式文件定位</h3><h4 id="Useful-links"><a href="#Useful-links" class="headerlink" title="Useful links"></a>Useful links</h4><p><a href="https://www.cnblogs.com/zhufanyu/p/12101112.html" target="_blank" rel="noopener">RPC 远程调用</a></p>
-<p><a href="https://www.cnblogs.com/gzhcsu/p/11389235.html" target="_blank" rel="noopener">RPC </a></p>
-<p><a href="https://blog.csdn.net/daaikuaichuan/article/details/88595202?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare" target="_blank" rel="noopener">详解RPC </a></p>
-<p><a href="https://wiki.p2pfoundation.net/P2P_Computing" target="_blank" rel="noopener">https://wiki.p2pfoundation.net/P2P_Computing</a></p>
-]]></content>
-      <tags>
-        <tag>TODO</tag>
       </tags>
   </entry>
   <entry>
@@ -3058,6 +3092,23 @@ in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
       </tags>
   </entry>
   <entry>
+    <title>Protocol-gossip</title>
+    <url>/2020/11/07/Protocol-gossip/</url>
+    <content><![CDATA[<h3 id="P2P-简介"><a href="#P2P-简介" class="headerlink" title="P2P 简介"></a>P2P 简介</h3><p>​        网络中节点数目的增加，使得传统的C/S计算模型不能满足用户对信息访问等要求，无法满足分布式应用的要求，其限制了网络资源的充分利用，可扩展性较差，无法支持不断增长的客户节点数量等问题越来越明显。</p>
+<p>​        P2P 主要解决网络负载不均衡的问题，用户有能力不通过服务器直接进行资源的的共享和交换。Napster是第一个被广泛应用的 Peer-to-Peer 音乐共享服务。</p>
+<h4 id="Peer-to-Peerr-分类"><a href="#Peer-to-Peerr-分类" class="headerlink" title="Peer-to-Peerr 分类"></a>Peer-to-Peerr 分类</h4><p>集中式P2P系统</p>
+<p>无结构P2P系统</p>
+<p>结构化P2P系统</p>
+<h3 id="分布式文件定位"><a href="#分布式文件定位" class="headerlink" title="分布式文件定位"></a>分布式文件定位</h3><h4 id="Useful-links"><a href="#Useful-links" class="headerlink" title="Useful links"></a>Useful links</h4><p><a href="https://www.cnblogs.com/zhufanyu/p/12101112.html" target="_blank" rel="noopener">RPC 远程调用</a></p>
+<p><a href="https://www.cnblogs.com/gzhcsu/p/11389235.html" target="_blank" rel="noopener">RPC </a></p>
+<p><a href="https://blog.csdn.net/daaikuaichuan/article/details/88595202?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-3.compare" target="_blank" rel="noopener">详解RPC </a></p>
+<p><a href="https://wiki.p2pfoundation.net/P2P_Computing" target="_blank" rel="noopener">https://wiki.p2pfoundation.net/P2P_Computing</a></p>
+]]></content>
+      <tags>
+        <tag>TODO</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>RADAR</title>
     <url>/2020/07/18/RADAR/</url>
     <content><![CDATA[]]></content>
@@ -3067,20 +3118,6 @@ in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
       </categories>
       <tags>
         <tag>论文解读</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Read Data from LOL Client</title>
-    <url>/2021/05/31/Read-Data-from-LOL-Client/</url>
-    <content><![CDATA[<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><p>读取联盟客户端英雄数据</p>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] <a href="https://nickcano.com/reversing-league-of-legends-client/" target="_blank" rel="noopener">https://nickcano.com/reversing-league-of-legends-client/</a></p>
-<p>[2] <a href="http://www.rohitab.com/apimonitor" target="_blank" rel="noopener">http://www.rohitab.com/apimonitor</a></p>
-<p>[3] <a href="https://github.com/nickcano/LibCEF-API-Monitor-Definitions" target="_blank" rel="noopener">https://github.com/nickcano/LibCEF-API-Monitor-Definitions</a></p>
-<p>[4] <a href="https://riot-api-libraries.readthedocs.io/en/latest/" target="_blank" rel="noopener">https://riot-api-libraries.readthedocs.io/en/latest/</a></p>
-]]></content>
-      <tags>
-        <tag>TODO</tag>
-        <tag>windows 数据读取</tag>
       </tags>
   </entry>
   <entry>
@@ -3324,11 +3361,78 @@ func main()  {
       </tags>
   </entry>
   <entry>
+    <title>Read Data from LOL Client</title>
+    <url>/2021/05/31/Read-Data-from-LOL-Client/</url>
+    <content><![CDATA[<h2 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h2><p>读取联盟客户端英雄数据</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] <a href="https://nickcano.com/reversing-league-of-legends-client/" target="_blank" rel="noopener">https://nickcano.com/reversing-league-of-legends-client/</a></p>
+<p>[2] <a href="http://www.rohitab.com/apimonitor" target="_blank" rel="noopener">http://www.rohitab.com/apimonitor</a></p>
+<p>[3] <a href="https://github.com/nickcano/LibCEF-API-Monitor-Definitions" target="_blank" rel="noopener">https://github.com/nickcano/LibCEF-API-Monitor-Definitions</a></p>
+<p>[4] <a href="https://riot-api-libraries.readthedocs.io/en/latest/" target="_blank" rel="noopener">https://riot-api-libraries.readthedocs.io/en/latest/</a></p>
+]]></content>
+      <tags>
+        <tag>TODO</tag>
+        <tag>windows 数据读取</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>SOSP-Progress</title>
     <url>/2021/02/18/SOSP-Progress/</url>
     <content><![CDATA[]]></content>
       <tags>
         <tag>TODO</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>SP&#39;15 Last-Level Cache Side-Channel Attacks are Practical</title>
+    <url>/2020/05/18/SP-15-Last-Level-Cache-Side-Channel-Attacks-are-Practical/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://mykrobin.github.io/files/docs/CSCA-004-SP2015.pdf">Last Level Cache Side Channel Attacks are Practical</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Department of Electrical Engineering, Princeton University</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">side channel attacks</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">security cross VM</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文详细地讲解了跨虚拟机的侧信道攻击</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>TODO</tag>
+        <tag>论文解读</tag>
+        <tag>side channel attack</tag>
+        <tag>cross VM</tag>
+        <tag>last level cache</tag>
       </tags>
   </entry>
   <entry>
@@ -3380,55 +3484,6 @@ func main()  {
         <tag>TODO</tag>
         <tag>论文解读</tag>
         <tag>Detection</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Software ROT</title>
-    <url>/2020/12/02/Software-ROT/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.cylab.cmu.edu/_files/pdfs/tech_reports/CMUCyLab18003.pdf" target="_blank" rel="noopener">Software ROT</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">CMU/CyLab</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">Pioneer 工作的延续</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>NDSS</category>
-      </categories>
-      <tags>
-        <tag>TODO</tag>
-        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -3805,16 +3860,225 @@ int main(void)
       </tags>
   </entry>
   <entry>
-    <title>Systematic Review on FHE</title>
-    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
-    <content><![CDATA[]]></content>
+    <title>SystemInfo</title>
+    <url>/2021/07/10/SystemInfo/</url>
+    <content><![CDATA[<h2 id="Linux-实时显示资源利用率"><a href="#Linux-实时显示资源利用率" class="headerlink" title="Linux 实时显示资源利用率"></a>Linux 实时显示资源利用率</h2><ol>
+<li><p>添加indicator-sysmonitor的下载源</p>
+<pre><code class="lang-bash"> sudo add-apt-repository ppa:fossfreedom/indicator-sysmonitor
+</code></pre>
+</li>
+<li><p>更新 <code>sudo apt-get update</code></p>
+</li>
+<li><p>安装<code>indicator-sysmonitor</code></p>
+<pre><code class="lang-bash">sudo apt-get install indicator-sysmonitor
+</code></pre>
+</li>
+<li><p>启动</p>
+<pre><code class="lang-bash">indicator-sysmonitor &amp;
+</code></pre>
+</li>
+</ol>
+<h2 id="Python-读取实时系统信息-精简版"><a href="#Python-读取实时系统信息-精简版" class="headerlink" title="Python 读取实时系统信息-精简版"></a>Python 读取实时系统信息-精简版</h2><h3 id="一、-安装psutil"><a href="#一、-安装psutil" class="headerlink" title="一、 安装psutil"></a>一、 安装psutil</h3><pre><code class="lang-bash">　　pip install psutil
+</code></pre>
+<p> 二、 监控cpu信息</p>
+<pre><code class="lang-python">import psutil
+psutil.cpu_times()   #获取cpu（逻辑cpu的平均）占用时间的详细信息 
+psutil.cpu_times(percpu=True)   #获取每个cpu占用时间的详细信息
+psutil.cpt_times().user   #获取用户进程占用cpu的时间（user+sys+idle+wait=total）
+</code></pre>
+<p>三、 监控内存信息</p>
+<pre><code class="lang-python"> import psutil
+ psutil.virtual_memory()   #获取内存信息
+ psutil.virtual_memory().total   #获取内存总量
+ psutil.swap_memory()   #获取swap信息
+ psutil.swqp_memory()   #获取swap总量
+</code></pre>
+<p>四、 监控磁盘信息</p>
+<pre><code class="lang-python"> import psutil
+ psutil.disk_partitions()   #获取各分区的信息
+ psutil.disk_usage()   #获取各分区的使用情况
+ psutil.disk_io_counters(perdisk=True)   #获取各个分区的io情况
+ psutil.disk_io_counters(perdisk=True)['sda1'].read_count   #获取sda1的io读取情况
+</code></pre>
+<p>五、 监控网络信息</p>
+<pre><code class="lang-python"> import psutil
+ psutil.net_io_counters()   #获取所有网络接口io信息
+ psutil.net_io_counters(pernic=True)   #获取每个网络接口的io信息
+</code></pre>
+<p>六、进程信息</p>
+<pre><code class="lang-python">import psutil
+psutil.Process(pid)   #查看对应pid的进程信息
+ psutil.Process(pid).username()   #查看是哪个用户创建的该进程
+ psutil.Process(pid).cmdline()   #查看进程所在的路径
+</code></pre>
+<p>七、 登录用户信息</p>
+<pre><code class="lang-python"> import psutil
+ psutil.users()   #查看目前登录用户信息
+</code></pre>
+<h2 id="Python-读取实时系统信息-实例版"><a href="#Python-读取实时系统信息-实例版" class="headerlink" title="Python 读取实时系统信息-实例版"></a>Python 读取实时系统信息-实例版</h2><p>[2] Python中获取系统信息的另一个好办法是使用<code>psutil</code>这个第三方模块。顾名思义，psutil = process and system utilities.</p>
+<p><strong>安装psutil</strong></p>
+<pre><code class="lang-bash">$ pip install psutil
+</code></pre>
+<h3 id="获取CPU信息"><a href="#获取CPU信息" class="headerlink" title="获取CPU信息"></a>获取CPU信息</h3><pre><code>&gt;&gt;&gt; import psutil
+&gt;&gt;&gt; psutil.cpu_count() # CPU逻辑数量
+4
+&gt;&gt;&gt; psutil.cpu_count(logical=False) # CPU物理核心
+2
+# 2说明是双核超线程, 4则是4核非超线程
+</code></pre><p>统计CPU的用户／系统／空闲时间：</p>
+<pre><code>&gt;&gt;&gt; psutil.cpu_times()
+scputimes(user=10963.31, nice=0.0, system=5138.67, idle=356102.45)
+</code></pre><p>实现类似<code>top</code>命令的CPU使用率，每秒刷新一次，累计10次：</p>
+<pre><code>&gt;&gt;&gt; for x in range(10):
+...     print(psutil.cpu_percent(interval=1, percpu=True))
+... 
+[14.0, 4.0, 4.0, 4.0]
+[12.0, 3.0, 4.0, 3.0]
+[8.0, 4.0, 3.0, 4.0]
+[12.0, 3.0, 3.0, 3.0]
+[18.8, 5.1, 5.9, 5.0]
+[10.9, 5.0, 4.0, 3.0]
+[12.0, 5.0, 4.0, 5.0]
+[15.0, 5.0, 4.0, 4.0]
+[19.0, 5.0, 5.0, 4.0]
+[9.0, 3.0, 2.0, 3.0]
+</code></pre><h3 id="获取内存信息"><a href="#获取内存信息" class="headerlink" title="获取内存信息"></a>获取内存信息</h3><p>使用psutil获取物理内存和交换内存信息，分别使用：</p>
+<pre><code>&gt;&gt;&gt; psutil.virtual_memory()
+svmem(total=8589934592, available=2866520064, percent=66.6, used=7201386496, free=216178688, active=3342192640, inactive=2650341376, wired=1208852480)
+&gt;&gt;&gt; psutil.swap_memory()
+sswap(total=1073741824, used=150732800, free=923009024, percent=14.0, sin=10705981440, sout=40353792)
+</code></pre><p>返回的是字节为单位的整数，可以看到，总内存大小是8589934592 = 8 GB，已用7201386496 = 6.7 GB，使用了66.6%。</p>
+<p>而交换区大小是1073741824 = 1 GB。</p>
+<h3 id="获取磁盘信息"><a href="#获取磁盘信息" class="headerlink" title="获取磁盘信息"></a>获取磁盘信息</h3><p>可以通过psutil获取磁盘分区、磁盘使用率和磁盘IO信息：</p>
+<pre><code>&gt;&gt;&gt; psutil.disk_partitions() # 磁盘分区信息
+[sdiskpart(device='/dev/disk1', mountpoint='/', fstype='hfs', opts='rw,local,rootfs,dovolfs,journaled,multilabel')]
+&gt;&gt;&gt; psutil.disk_usage('/') # 磁盘使用情况
+sdiskusage(total=998982549504, used=390880133120, free=607840272384, percent=39.1)
+&gt;&gt;&gt; psutil.disk_io_counters() # 磁盘IO
+sdiskio(read_count=988513, write_count=274457, read_bytes=14856830464, write_bytes=17509420032, read_time=2228966, write_time=1618405)
+</code></pre><p>可以看到，磁盘<code>'/'</code>的总容量是998982549504 = 930 GB，使用了39.1%。文件格式是HFS，<code>opts</code>中包含<code>rw</code>表示可读写，<code>journaled</code>表示支持日志。</p>
+<h3 id="获取网络信息"><a href="#获取网络信息" class="headerlink" title="获取网络信息"></a>获取网络信息</h3><p>psutil可以获取网络接口和网络连接信息：</p>
+<pre><code>&gt;&gt;&gt; psutil.net_io_counters() # 获取网络读写字节／包的个数
+snetio(bytes_sent=3885744870, bytes_recv=10357676702, packets_sent=10613069, packets_recv=10423357, errin=0, errout=0, dropin=0, dropout=0)
+&gt;&gt;&gt; psutil.net_if_addrs() # 获取网络接口信息
+{
+  'lo0': [snic(family=&lt;AddressFamily.AF_INET: 2&gt;, address='127.0.0.1', netmask='255.0.0.0'), ...],
+  'en1': [snic(family=&lt;AddressFamily.AF_INET: 2&gt;, address='10.0.1.80', netmask='255.255.255.0'), ...],
+  'en0': [...],
+  'en2': [...],
+  'bridge0': [...]
+}
+&gt;&gt;&gt; psutil.net_if_stats() # 获取网络接口状态
+{
+  'lo0': snicstats(isup=True, duplex=&lt;NicDuplex.NIC_DUPLEX_UNKNOWN: 0&gt;, speed=0, mtu=16384),
+  'en0': snicstats(isup=True, duplex=&lt;NicDuplex.NIC_DUPLEX_UNKNOWN: 0&gt;, speed=0, mtu=1500),
+  'en1': snicstats(...),
+  'en2': snicstats(...),
+  'bridge0': snicstats(...)
+}
+</code></pre><p>要获取当前网络连接信息，使用<code>net_connections()</code>：</p>
+<pre><code>&gt;&gt;&gt; psutil.net_connections()
+Traceback (most recent call last):
+  ...
+PermissionError: [Errno 1] Operation not permitted
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  ...
+psutil.AccessDenied: psutil.AccessDenied (pid=3847)
+</code></pre><p>你可能会得到一个<code>AccessDenied</code>错误，原因是psutil获取信息也是要走系统接口，而获取网络连接信息需要root权限，这种情况下，可以退出Python交互环境，用<code>sudo</code>重新启动：</p>
+<pre><code class="lang-bash">$ sudo python3
+Password: ******
+Python 3.8 ... on darwin
+Type "help", ... for more information.
+&gt;&gt;&gt; import psutil
+&gt;&gt;&gt; psutil.net_connections()
+[
+    sconn(fd=83, family=&lt;AddressFamily.AF_INET6: 30&gt;, type=1, laddr=addr(ip='::127.0.0.1', port=62911), raddr=addr(ip='::127.0.0.1', port=3306), status='ESTABLISHED', pid=3725),
+    sconn(fd=84, family=&lt;AddressFamily.AF_INET6: 30&gt;, type=1, laddr=addr(ip='::127.0.0.1', port=62905), raddr=addr(ip='::127.0.0.1', port=3306), status='ESTABLISHED', pid=3725),
+    sconn(fd=93, family=&lt;AddressFamily.AF_INET6: 30&gt;, type=1, laddr=addr(ip='::', port=8080), raddr=(), status='LISTEN', pid=3725),
+    sconn(fd=103, family=&lt;AddressFamily.AF_INET6: 30&gt;, type=1, laddr=addr(ip='::127.0.0.1', port=62918), raddr=addr(ip='::127.0.0.1', port=3306), status='ESTABLISHED', pid=3725),
+    sconn(fd=105, family=&lt;AddressFamily.AF_INET6: 30&gt;, type=1, ..., pid=3725),
+    sconn(fd=106, family=&lt;AddressFamily.AF_INET6: 30&gt;, type=1, ..., pid=3725),
+    sconn(fd=107, family=&lt;AddressFamily.AF_INET6: 30&gt;, type=1, ..., pid=3725),
+    ...
+    sconn(fd=27, family=&lt;AddressFamily.AF_INET: 2&gt;, type=2, ..., pid=1)
+]
+</code></pre>
+<h3 id="获取进程信息"><a href="#获取进程信息" class="headerlink" title="获取进程信息"></a>获取进程信息</h3><p>通过psutil可以获取到所有进程的详细信息：</p>
+<pre><code class="lang-bash">&gt;&gt;&gt; psutil.pids() # 所有进程ID
+[3865, 3864, 3863, 3856, 3855, 3853, 3776, ..., 45, 44, 1, 0]
+&gt;&gt;&gt; p = psutil.Process(3776) # 获取指定进程ID=3776，其实就是当前Python交互环境
+&gt;&gt;&gt; p.name() # 进程名称
+'python3.6'
+&gt;&gt;&gt; p.exe() # 进程exe路径
+'/Users/michael/anaconda3/bin/python3.6'
+&gt;&gt;&gt; p.cwd() # 进程工作目录
+'/Users/michael'
+&gt;&gt;&gt; p.cmdline() # 进程启动的命令行
+['python3']
+&gt;&gt;&gt; p.ppid() # 父进程ID
+3765
+&gt;&gt;&gt; p.parent() # 父进程
+&lt;psutil.Process(pid=3765, name='bash') at 4503144040&gt;
+&gt;&gt;&gt; p.children() # 子进程列表
+[]
+&gt;&gt;&gt; p.status() # 进程状态
+'running'
+&gt;&gt;&gt; p.username() # 进程用户名
+'michael'
+&gt;&gt;&gt; p.create_time() # 进程创建时间
+1511052731.120333
+&gt;&gt;&gt; p.terminal() # 进程终端
+'/dev/ttys002'
+&gt;&gt;&gt; p.cpu_times() # 进程使用的CPU时间
+pcputimes(user=0.081150144, system=0.053269812, children_user=0.0, children_system=0.0)
+&gt;&gt;&gt; p.memory_info() # 进程使用的内存
+pmem(rss=8310784, vms=2481725440, pfaults=3207, pageins=18)
+&gt;&gt;&gt; p.open_files() # 进程打开的文件
+[]
+&gt;&gt;&gt; p.connections() # 进程相关网络连接
+[]
+&gt;&gt;&gt; p.num_threads() # 进程的线程数量
+1
+&gt;&gt;&gt; p.threads() # 所有线程信息
+[pthread(id=1, user_time=0.090318, system_time=0.062736)]
+&gt;&gt;&gt; p.environ() # 进程环境变量
+{'SHELL': '/bin/bash', 'PATH': '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:...', 'PWD': '/Users/michael', 'LANG': 'zh_CN.UTF-8', ...}
+&gt;&gt;&gt; p.terminate() # 结束进程
+Terminated: 15 &lt;-- 自己把自己结束了
+</code></pre>
+<p>和获取网络连接类似，获取一个root用户的进程需要root权限，启动Python交互环境或者<code>.py</code>文件时，需要<code>sudo</code>权限。</p>
+<p>psutil还提供了一个<code>test()</code>函数，可以模拟出<code>ps</code>命令的效果：</p>
+<pre><code class="lang-bash">$ sudo python3
+Password: ******
+Python 3.6.3 ... on darwin
+Type "help", ... for more information.
+&gt;&gt;&gt; import psutil
+&gt;&gt;&gt; psutil.test()
+USER         PID %MEM     VSZ     RSS TTY           START    TIME  COMMAND
+root           0 24.0 74270628 2016380 ?             Nov18   40:51  kernel_task
+root           1  0.1 2494140    9484 ?             Nov18   01:39  launchd
+root          44  0.4 2519872   36404 ?             Nov18   02:02  UserEventAgent
+root          45    ? 2474032    1516 ?             Nov18   00:14  syslogd
+root          47  0.1 2504768    8912 ?             Nov18   00:03  kextd
+root          48  0.1 2505544    4720 ?             Nov18   00:19  fseventsd
+_appleeven    52  0.1 2499748    5024 ?             Nov18   00:00  appleeventsd
+root          53  0.1 2500592    6132 ?             Nov18   00:02  configd
+...
+</code></pre>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1] <a href="https://www.cnblogs.com/hjw1/p/7901048.html" target="_blank" rel="noopener">https://www.cnblogs.com/hjw1/p/7901048.html</a></p>
+<p>[2] <a href="https://www.liaoxuefeng.com/wiki/1016959663602400/1183565811281984" target="_blank" rel="noopener">https://www.liaoxuefeng.com/wiki/1016959663602400/1183565811281984</a></p>
+<p>[3] <a href="https://stackoverflow.com/questions/62020140/psutil-network-monitoring-script" target="_blank" rel="noopener">https://stackoverflow.com/questions/62020140/psutil-network-monitoring-script</a></p>
+]]></content>
       <tags>
-        <tag>TODO</tag>
+        <tag>sysinfo</tag>
       </tags>
   </entry>
   <entry>
-    <title>SP&#39;15 Last-Level Cache Side-Channel Attacks are Practical</title>
-    <url>/2020/05/18/SP-15-Last-Level-Cache-Side-Channel-Attacks-are-Practical/</url>
+    <title>Software ROT</title>
+    <url>/2020/12/02/Software-ROT/</url>
     <content><![CDATA[<div class="table-container">
 <table>
 <thead>
@@ -3828,41 +4092,45 @@ int main(void)
 <tr>
 <td style="text-align:center">1</td>
 <td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://mykrobin.github.io/files/docs/CSCA-004-SP2015.pdf">Last Level Cache Side Channel Attacks are Practical</a></td>
+<td style="text-align:center"><a href="https://www.cylab.cmu.edu/_files/pdfs/tech_reports/CMUCyLab18003.pdf" target="_blank" rel="noopener">Software ROT</a></td>
 </tr>
 <tr>
 <td style="text-align:center">2</td>
 <td style="text-align:center">作者信息</td>
-<td style="text-align:center">Department of Electrical Engineering, Princeton University</td>
+<td style="text-align:center">CMU/CyLab</td>
 </tr>
 <tr>
 <td style="text-align:center">3</td>
 <td style="text-align:center">核心内容</td>
-<td style="text-align:center">side channel attacks</td>
+<td style="text-align:center">Pioneer 工作的延续</td>
 </tr>
 <tr>
 <td style="text-align:center">4</td>
 <td style="text-align:center">研究领域</td>
-<td style="text-align:center">security cross VM</td>
+<td style="text-align:center"></td>
 </tr>
 <tr>
 <td style="text-align:center">5</td>
 <td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文详细地讲解了跨虚拟机的侧信道攻击</td>
 </tr>
 </tbody>
 </table>
 </div>
 ]]></content>
       <categories>
-        <category>Security and Privacy</category>
+        <category>NDSS</category>
       </categories>
       <tags>
         <tag>TODO</tag>
         <tag>论文解读</tag>
-        <tag>side channel attack</tag>
-        <tag>cross VM</tag>
-        <tag>last level cache</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Systematic Review on FHE</title>
+    <url>/2020/08/12/Systematic-Review-on-FHE/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>TODO</tag>
       </tags>
   </entry>
   <entry>
@@ -3919,6 +4187,57 @@ int main(void)
       <tags>
         <tag>TODO</tag>
         <tag>paper</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Transient Execution Attacks</title>
+    <url>/2020/12/30/Transient-Execution-Attacks/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.cs.princeton.edu/courses/archive/spr06/cos592/bib/pioneer-seshadri-sosp05.pdf" target="_blank" rel="noopener">Pioneer</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">CMU/CyLab</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">one-on-one 方式检测内存信息是否有差别</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">安全检测</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">通过one-on-one 的方法对非可信主机进行检测，从而构造出一个可信的执行环境。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>瞬时攻击</p>
+]]></content>
+      <categories>
+        <category>OSDI</category>
+      </categories>
+      <tags>
+        <tag>TODO</tag>
+        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -4058,55 +4377,9 @@ int main(void)
       </tags>
   </entry>
   <entry>
-    <title>Transient Execution Attacks</title>
-    <url>/2020/12/30/Transient-Execution-Attacks/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.cs.princeton.edu/courses/archive/spr06/cos592/bib/pioneer-seshadri-sosp05.pdf" target="_blank" rel="noopener">Pioneer</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">CMU/CyLab</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">one-on-one 方式检测内存信息是否有差别</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">安全检测</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">通过one-on-one 的方法对非可信主机进行检测，从而构造出一个可信的执行环境。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>瞬时攻击</p>
-]]></content>
-      <categories>
-        <category>OSDI</category>
-      </categories>
-      <tags>
-        <tag>TODO</tag>
-        <tag>论文解读</tag>
-      </tags>
+    <title>Timing-Based Attestation</title>
+    <url>/2021/07/07/Timing-Based-Attestation/</url>
+    <content><![CDATA[]]></content>
   </entry>
   <entry>
     <title>Untrusted Hypervisor AMD Memory Encryption</title>
@@ -4268,6 +4541,100 @@ systemctl enable xen-watchdog.service
       </tags>
   </entry>
   <entry>
+    <title>Xen log 1 服务器部署Debian9+Xen4.11记录</title>
+    <url>/2020/07/17/Xen-log-1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2Debian9-Xen4-11%E8%AE%B0%E5%BD%95/</url>
+    <content><![CDATA[<h3 id="服务器网络部署"><a href="#服务器网络部署" class="headerlink" title="服务器网络部署"></a>服务器网络部署</h3><p>目前遇到的这个问题可能不是普遍试用，但是在操作过程中的确遇到过。</p>
+<h4 id="固件问题"><a href="#固件问题" class="headerlink" title="固件问题"></a>固件问题</h4><p><img src="/2020/07/17/Xen-log-1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2Debian9-Xen4-11%E8%AE%B0%E5%BD%95/firmwareError.png"></p>
+<p><img src="/2020/07/17/Xen-log-1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2Debian9-Xen4-11%E8%AE%B0%E5%BD%95/firmwareIP.png"></p>
+<p>安装系统或者配置网络时报错：</p>
+<pre><code class="lang-shell">some of your hardware needs non-free firmware files to operate.
+The missing firmware files are： bnx2/bnx2-mips-09-6.2.1b.fw
+</code></pre>
+<p><strong>解决方法</strong></p>
+<p>在官方公布的固件中找到自己需要的内容 <a href="https://wiki.debian.org/Firmware" target="_blank" rel="noopener">https://wiki.debian.org/Firmware</a></p>
+<p><a href="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/" target="_blank" rel="noopener">http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/</a></p>
+<p><strong>ubuntu 下的解决方法</strong></p>
+<p><img src="/2020/07/17/Xen-log-1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2Debian9-Xen4-11%E8%AE%B0%E5%BD%95/firmwareSolution.png"></p>
+<pre><code class="lang-sehll">1. 在USB中创建路径 /lib/firmware/bnx2/,将固件移动到此目录下
+2. 如果安装系统是无法发现固件，则先忽略该步骤，安装好系统后再搞
+3. ip link set enp3s0f0 up
+</code></pre>
+<h4 id="网络接口设置"><a href="#网络接口设置" class="headerlink" title="网络接口设置"></a>网络接口设置</h4><p>目前，该服务器预设网络接口4个，但是，仔细查验后发现，只有一个网络接口连接了网线，因此如果没有恰当的设置后，会出现机器ping 不通网络的问题。</p>
+<p><strong>解决方法</strong></p>
+<p>在安装系统过程中，记录下四个网口的名称，如果安装完系统后，ping网关不成功的话，说明网口设置有问题，需要修改，否则不需要。</p>
+<p>网口配置文件 /etc/network/interfaces</p>
+<pre><code># The primary network interface
+allow-hotplug XXXX
+iface XXXX inet static
+</code></pre><p>上述的XXXX为目标网口名称，更改为接入网线的口即可</p>
+<p>重启，ping网关，如果ping通，则OK</p>
+<h4 id="Ping-www-baidu-com"><a href="#Ping-www-baidu-com" class="headerlink" title="Ping www.baidu.com"></a>Ping www.baidu.com</h4><p>测试ping www.baidu.com失败</p>
+<p>可能是网关设置问题, /etc/resolv.conf</p>
+<pre><code>添加 namesever 8.8.8.8
+</code></pre><p>修改完，再测试下，ok</p>
+<h3 id="换源"><a href="#换源" class="headerlink" title="换源"></a>换源</h3><p>这里使用合适的国内源，进行挂载</p>
+<p>清华源</p>
+<pre><code>https://mirrors.tuna.tsinghua.edu.cn/help/debian/
+</code></pre><p>修改 /etc/apt/sources.list  </p>
+<pre><code>deb http://mirrors.163.com/debian/ stretch main non-free contrib
+deb http://mirrors.163.com/debian/ stretch-updates main non-free contrib
+deb http://mirrors.163.com/debian/ stretch-backports main non-free contrib
+deb-src http://mirrors.163.com/debian/ stretch main non-free contrib
+deb-src http://mirrors.163.com/debian/ stretch-updates main non-free contrib
+deb-src http://mirrors.163.com/debian/ stretch-backports main non-free contrib
+deb http://mirrors.163.com/debian-security/ stretch/updates main non-free contrib
+deb-src http://mirrors.163.com/debian-security/ stretch/updates main non-free contrib
+</code></pre><p>更新操作</p>
+<pre><code>apt update &amp;&amp; apt upgrade
+</code></pre><h3 id="部署Xen4-11"><a href="#部署Xen4-11" class="headerlink" title="部署Xen4.11"></a>部署Xen4.11</h3><h4 id="配置依赖环境"><a href="#配置依赖环境" class="headerlink" title="配置依赖环境"></a>配置依赖环境</h4><p>install the <em>build-essential</em> package:</p>
+<pre><code>apt-get install build-essential
+</code></pre><p>install these additional debs:</p>
+<pre><code>apt-get install bcc bin86 gawk bridge-utils iproute libcurl3 libcurl4-openssl-dev bzip2 transfig tgif 
+apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial
+apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev 
+apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev
+apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc
+</code></pre><p>under Debian :</p>
+<pre><code>apt-get build-dep xen
+</code></pre><p>failed to install (不安装的话，暂时没啥影响)</p>
+<pre><code># apt-get module-init-tools libjpeg62-dev
+</code></pre><h4 id="下载Xen"><a href="#下载Xen" class="headerlink" title="下载Xen"></a>下载Xen</h4><pre><code>git clone git://xenbits.xen.org/xen.git
+</code></pre><p>or </p>
+<pre><code>git clone -b stable-4.11 git://xenbits.xen.org/xen.git
+</code></pre><h4 id="安装Xen"><a href="#安装Xen" class="headerlink" title="安装Xen"></a>安装Xen</h4><pre><code>cd xen
+./configure
+make xen -j8
+make tools -j8
+make install-xen
+make install-tools
+# dpkg-divert --divert /etc/grub.d/08_linux_xen --rename /etc/grub.d/20_linux_xen (这句没执行)
+</code></pre><p>更新grub (此时重启电脑会出现 xen hypervisor 信息)</p>
+<pre><code>update-grub
+</code></pre><p>此时，开机时应当记录下机器默认的开机顺序，方便后续设置系统重启进入带有hypervisor的系统</p>
+<h3 id="开启服务"><a href="#开启服务" class="headerlink" title="开启服务"></a>开启服务</h3><pre><code>sudo service xendomains start
+sudo service xencommons start or restart
+sudo update-rc.d xencommons defaults 19 18
+sudo update-rc.d xendomains defaults 21 20
+ldconfig
+</code></pre><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><pre><code>xl list 或 xentop
+</code></pre><p>当出现 domain0 信息说明部署成功</p>
+<h3 id="再次设置-grub"><a href="#再次设置-grub" class="headerlink" title="再次设置 grub"></a>再次设置 grub</h3><p>根据首次重启后开机顺序，确定xen hypervisor的启动序号 n</p>
+<p>注意，序号从0开始计数，记录从上到下应当为0,1,2，$\cdots$</p>
+<pre><code>进入 /etc/default/grub 文件
+更改 GRUB_DEFAULT = x 为 GRUB_DEFAULT = n
+更新内容
+update-grub
+reboot
+</code></pre><hr>
+<p>此文档记录了在集群上部署xen的方法，目的是为后面的分布式检测做准备。</p>
+]]></content>
+      <tags>
+        <tag>Xen log</tag>
+        <tag>Linux</tag>
+        <tag>Debian</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Xen log 2 Add a new Hypercall</title>
     <url>/2020/07/19/Xen-log-2-Add-a-new-Hypercall/</url>
     <content><![CDATA[<p>当前使用的xen版本为Xen-4.11</p>
@@ -4381,177 +4748,6 @@ ret = 0
         <tag>Hypervisor</tag>
         <tag>Xen log</tag>
         <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Xen log 3 Using Serial Debug Xen</title>
-    <url>/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/</url>
-    <content><![CDATA[<p>注：本文的配置是在<a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">官网</a>指导下进行的，因为在配置过程中遇到一点问题，记录下配置过程。</p>
-<p>Xen的log信息是打印在内存中的，读取打印信息需要<code>xl dm</code> 进行查看，如果在查看之前xen崩溃的话，是读取不到任何信息的，通过串口的方式可以将数据实时的打印出来，方便调试。</p>
-<p>这里使用的是usb转rs232.</p>
-<h3 id="配置读取设备"><a href="#配置读取设备" class="headerlink" title="配置读取设备"></a>配置读取设备</h3><p>在读取设备和Xen机器上配置<code>minicom</code> 用于测试串口。</p>
-<pre><code class="lang-sh">Ubuntu dmesg | grep tty
-</code></pre>
-<p>输出信息如下</p>
-<pre><code class="lang-sh">[    0.094791] printk: console [tty0] enabled
-[    0.757835] 00:02: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-[    0.779505] 0000:00:16.3: ttyS4 at I/O 0xf060 (irq = 19, base_baud = 115200) is a 16550A
-[    2.825408] usb 1-13: pl2303 converter now attached to ttyUSB0
-[ 3435.257916] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0
-[ 3437.386713] usb 1-14: pl2303 converter now attached to ttyUSB0
-[13860.597447] pl2303 ttyUSB0: pl2303_set_control_lines - failed: -19
-[13860.597451] pl2303 ttyUSB0: error sending break = -19
-[13860.597584] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0
-[13863.385826] usb 1-8: pl2303 converter now attached to ttyUSB0
-</code></pre>
-<p>于是设置默认串口为 <code>ttyUSB0</code> ,使用<code>minicom -s</code> 进入<code>serial prot setup</code> 进行设置</p>
-<p><img src="/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/xen-3.png" width="500px" height="300px"> </p>
-<p>(配置完没有截图，取自 [2] )，配置好读取设备后，静置，备用。</p>
-<h3 id="配置Xen-设备"><a href="#配置Xen-设备" class="headerlink" title="配置Xen 设备"></a>配置Xen 设备</h3><p>读取Xen设备信息</p>
-<pre><code class="lang-sh">dmesg | grep tty
-</code></pre>
-<p>输出信息</p>
-<pre><code class="lang-sh">console [tty0] enabled
-ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-ttyS4 at I/O 0xc0c0 (irq = 16, base_baud = 115200) is a XR16850
-ttyS5 at I/O 0xc0c8 (irq = 16, base_baud = 115200) is a XR16850
-</code></pre>
-<p>这里看到 tty0 、ttyS0  、 ttyS4 、ttyS5 （如果没有输出全部信息的话，执行下面的命令查看）</p>
-<pre><code class="lang-sh">cat /proc/tty/driver/serial
-</code></pre>
-<p>输出信息</p>
-<pre><code class="lang-sh">serinfo:1.0 driver revision:
-0: uart:16550A port:000003F8 irq:4 tx:0 rx:0
-1: uart:unknown port:000002F8 irq:3
-2: uart:unknown port:000003E8 irq:4
-3: uart:unknown port:000002E8 irq:3
-4: uart:XR16850 port:0000C0C0 irq:16 tx:0 rx:0
-5: uart:XR16850 port:0000C0C8 irq:16 tx:0 rx:0 CTS|DTR|DSR|CD|RI
-</code></pre>
-<p>可以确定，Xen设备的串口是<code>ttyS5</code> 物理地址为 <code>0xc0c8</code> </p>
-<h4 id="测试串口通讯情况"><a href="#测试串口通讯情况" class="headerlink" title="测试串口通讯情况"></a>测试串口通讯情况</h4><p>在Xen设备的<code>minicom</code> 上设置默认的端口为<code>ttyS5</code> 看两台机器是否能够正常通讯，即，在读取设备输入，在Xen设备上可以输出相应内容，反之亦然。</p>
-<h4 id="修改Grub文件"><a href="#修改Grub文件" class="headerlink" title="修改Grub文件"></a>修改Grub文件</h4><p>在<code>/etc/default/grub</code>文件中 添加如下内容</p>
-<pre><code class="lang-sh"># This can guarantee sync output when using `printk`
-GRUB_CMDLINE_XEN="loglvl=all guest_loglvl=all sync_console console_to_ring com1=115200,8n1,0x3080 console=com1,vga com0_mem=4096"
-
-GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS5,115200n8"
-GRUB_CMDLINE_LINUX="console=hvc0 earlyprintk=xen"
-</code></pre>
-<ul>
-<li><code>sync_console</code>: 保证输出是同步的，以防一些内容在xen crash之前打不出来</li>
-<li><code>console_to_ring</code>: 将Guest的log同步到dom0中打印输出.</li>
-<li><code>console=com1,vga</code>: 将终端连到com1上，这样我们就可以通过串口输入用户名密码登陆</li>
-</ul>
-<p>输入 <code>sudo update-grub</code> 更新grub文件，重启</p>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在自定义<a href="https://ykma.gitee.io/2020/07/19/Xen-log-2-Add-a-new-Hypercall/" target="_blank" rel="noopener">Hypercall</a> 后，执行<code>privcmd.c</code> 文件会在读取设备上看到相应的log信息，这里不放图了。</p>
-<h3 id="踩坑指南"><a href="#踩坑指南" class="headerlink" title="踩坑指南"></a>踩坑指南</h3><p>我刚配置串口的时候，采用Ubuntu18读取日志信息，Debian9编译Xen，两台机器通信正常，<code>reboot</code> Xen设备后会打印开机日志，随后便是一通乱码，不输出用户自定义log信息。调整两台设备的编码格式、语言（en.utf-8）等均未果，至今没有解决这个bug</p>
-<p>感受一下乱码：分别是正常读取与16进制读取的结果</p>
-<pre><code class="lang-sh">�`�f���f�����`�f���f���怀�`�f���f����~x�~~x�~�`�f���f���怀�`�f��~怀
-
-�`�f���f枞f�~x��枘�����f��ff��~��~fx�f��~������~��~��~��fx�
-
-06 fe 60 e6 66 fe 06 f8 00 f8 66 fe 00 f8 e6 80 06 fe 60 e6 66 fe 06 f8 00 f8 6
-</code></pre>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">https://wiki.xenproject.org/wiki/Xen_Serial_Console</a><br>[2] <a href="** https://silentming.net/blog/2016/09/18/xen-log-5-debug-xen/**">Xen Log 5-Debug Xen on Physical Machine</a><br>[3] <a href="https://xenbits.xen.org/docs/unstable/misc/xen-command-line.html" target="_blank" rel="noopener">https://xenbits.xen.org/docs/unstable/misc/xen-command-line.html</a></p>
-]]></content>
-      <tags>
-        <tag>Virtualization</tag>
-        <tag>Xen log</tag>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Xen log 1 服务器部署Debian9+Xen4.11记录</title>
-    <url>/2020/07/17/Xen-log-1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2Debian9-Xen4-11%E8%AE%B0%E5%BD%95/</url>
-    <content><![CDATA[<h3 id="服务器网络部署"><a href="#服务器网络部署" class="headerlink" title="服务器网络部署"></a>服务器网络部署</h3><p>目前遇到的这个问题可能不是普遍试用，但是在操作过程中的确遇到过。</p>
-<h4 id="固件问题"><a href="#固件问题" class="headerlink" title="固件问题"></a>固件问题</h4><p><img src="/2020/07/17/Xen-log-1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2Debian9-Xen4-11%E8%AE%B0%E5%BD%95/firmwareError.png"></p>
-<p><img src="/2020/07/17/Xen-log-1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2Debian9-Xen4-11%E8%AE%B0%E5%BD%95/firmwareIP.png"></p>
-<p>安装系统或者配置网络时报错：</p>
-<pre><code class="lang-shell">some of your hardware needs non-free firmware files to operate.
-The missing firmware files are： bnx2/bnx2-mips-09-6.2.1b.fw
-</code></pre>
-<p><strong>解决方法</strong></p>
-<p>在官方公布的固件中找到自己需要的内容 <a href="https://wiki.debian.org/Firmware" target="_blank" rel="noopener">https://wiki.debian.org/Firmware</a></p>
-<p><a href="http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/" target="_blank" rel="noopener">http://cdimage.debian.org/cdimage/unofficial/non-free/firmware/</a></p>
-<p><strong>ubuntu 下的解决方法</strong></p>
-<p><img src="/2020/07/17/Xen-log-1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%83%A8%E7%BD%B2Debian9-Xen4-11%E8%AE%B0%E5%BD%95/firmwareSolution.png"></p>
-<pre><code class="lang-sehll">1. 在USB中创建路径 /lib/firmware/bnx2/,将固件移动到此目录下
-2. 如果安装系统是无法发现固件，则先忽略该步骤，安装好系统后再搞
-3. ip link set enp3s0f0 up
-</code></pre>
-<h4 id="网络接口设置"><a href="#网络接口设置" class="headerlink" title="网络接口设置"></a>网络接口设置</h4><p>目前，该服务器预设网络接口4个，但是，仔细查验后发现，只有一个网络接口连接了网线，因此如果没有恰当的设置后，会出现机器ping 不通网络的问题。</p>
-<p><strong>解决方法</strong></p>
-<p>在安装系统过程中，记录下四个网口的名称，如果安装完系统后，ping网关不成功的话，说明网口设置有问题，需要修改，否则不需要。</p>
-<p>网口配置文件 /etc/network/interfaces</p>
-<pre><code># The primary network interface
-allow-hotplug XXXX
-iface XXXX inet static
-</code></pre><p>上述的XXXX为目标网口名称，更改为接入网线的口即可</p>
-<p>重启，ping网关，如果ping通，则OK</p>
-<h4 id="Ping-www-baidu-com"><a href="#Ping-www-baidu-com" class="headerlink" title="Ping www.baidu.com"></a>Ping www.baidu.com</h4><p>测试ping www.baidu.com失败</p>
-<p>可能是网关设置问题, /etc/resolv.conf</p>
-<pre><code>添加 namesever 8.8.8.8
-</code></pre><p>修改完，再测试下，ok</p>
-<h3 id="换源"><a href="#换源" class="headerlink" title="换源"></a>换源</h3><p>这里使用合适的国内源，进行挂载</p>
-<p>清华源</p>
-<pre><code>https://mirrors.tuna.tsinghua.edu.cn/help/debian/
-</code></pre><p>修改 /etc/apt/sources.list  </p>
-<pre><code>deb http://mirrors.163.com/debian/ stretch main non-free contrib
-deb http://mirrors.163.com/debian/ stretch-updates main non-free contrib
-deb http://mirrors.163.com/debian/ stretch-backports main non-free contrib
-deb-src http://mirrors.163.com/debian/ stretch main non-free contrib
-deb-src http://mirrors.163.com/debian/ stretch-updates main non-free contrib
-deb-src http://mirrors.163.com/debian/ stretch-backports main non-free contrib
-deb http://mirrors.163.com/debian-security/ stretch/updates main non-free contrib
-deb-src http://mirrors.163.com/debian-security/ stretch/updates main non-free contrib
-</code></pre><p>更新操作</p>
-<pre><code>apt update &amp;&amp; apt upgrade
-</code></pre><h3 id="部署Xen4-11"><a href="#部署Xen4-11" class="headerlink" title="部署Xen4.11"></a>部署Xen4.11</h3><h4 id="配置依赖环境"><a href="#配置依赖环境" class="headerlink" title="配置依赖环境"></a>配置依赖环境</h4><p>install the <em>build-essential</em> package:</p>
-<pre><code>apt-get install build-essential
-</code></pre><p>install these additional debs:</p>
-<pre><code>apt-get install bcc bin86 gawk bridge-utils iproute libcurl3 libcurl4-openssl-dev bzip2 transfig tgif 
-apt-get install texinfo texlive-latex-base texlive-latex-recommended texlive-fonts-extra texlive-fonts-recommended pciutils-dev mercurial
-apt-get install make gcc libc6-dev zlib1g-dev python python-dev python-twisted libncurses5-dev patch libvncserver-dev libsdl-dev 
-apt-get install iasl libbz2-dev e2fslibs-dev git-core uuid-dev ocaml ocaml-findlib libx11-dev bison flex xz-utils libyajl-dev
-apt-get install gettext libpixman-1-dev libaio-dev markdown pandoc
-</code></pre><p>under Debian :</p>
-<pre><code>apt-get build-dep xen
-</code></pre><p>failed to install (不安装的话，暂时没啥影响)</p>
-<pre><code># apt-get module-init-tools libjpeg62-dev
-</code></pre><h4 id="下载Xen"><a href="#下载Xen" class="headerlink" title="下载Xen"></a>下载Xen</h4><pre><code>git clone git://xenbits.xen.org/xen.git
-</code></pre><p>or </p>
-<pre><code>git clone -b stable-4.11 git://xenbits.xen.org/xen.git
-</code></pre><h4 id="安装Xen"><a href="#安装Xen" class="headerlink" title="安装Xen"></a>安装Xen</h4><pre><code>cd xen
-./configure
-make xen -j8
-make tools -j8
-make install-xen
-make install-tools
-# dpkg-divert --divert /etc/grub.d/08_linux_xen --rename /etc/grub.d/20_linux_xen (这句没执行)
-</code></pre><p>更新grub (此时重启电脑会出现 xen hypervisor 信息)</p>
-<pre><code>update-grub
-</code></pre><p>此时，开机时应当记录下机器默认的开机顺序，方便后续设置系统重启进入带有hypervisor的系统</p>
-<h3 id="开启服务"><a href="#开启服务" class="headerlink" title="开启服务"></a>开启服务</h3><pre><code>sudo service xendomains start
-sudo service xencommons start or restart
-sudo update-rc.d xencommons defaults 19 18
-sudo update-rc.d xendomains defaults 21 20
-ldconfig
-</code></pre><h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><pre><code>xl list 或 xentop
-</code></pre><p>当出现 domain0 信息说明部署成功</p>
-<h3 id="再次设置-grub"><a href="#再次设置-grub" class="headerlink" title="再次设置 grub"></a>再次设置 grub</h3><p>根据首次重启后开机顺序，确定xen hypervisor的启动序号 n</p>
-<p>注意，序号从0开始计数，记录从上到下应当为0,1,2，$\cdots$</p>
-<pre><code>进入 /etc/default/grub 文件
-更改 GRUB_DEFAULT = x 为 GRUB_DEFAULT = n
-更新内容
-update-grub
-reboot
-</code></pre><hr>
-<p>此文档记录了在集群上部署xen的方法，目的是为后面的分布式检测做准备。</p>
-]]></content>
-      <tags>
-        <tag>Xen log</tag>
-        <tag>Linux</tag>
-        <tag>Debian</tag>
       </tags>
   </entry>
   <entry>
@@ -4679,6 +4875,83 @@ runspec -c config.cfg -i ref -l fp
       <tags>
         <tag>Xen log</tag>
         <tag>SPECCPU2006</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Xen log 3 Using Serial Debug Xen</title>
+    <url>/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/</url>
+    <content><![CDATA[<p>注：本文的配置是在<a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">官网</a>指导下进行的，因为在配置过程中遇到一点问题，记录下配置过程。</p>
+<p>Xen的log信息是打印在内存中的，读取打印信息需要<code>xl dm</code> 进行查看，如果在查看之前xen崩溃的话，是读取不到任何信息的，通过串口的方式可以将数据实时的打印出来，方便调试。</p>
+<p>这里使用的是usb转rs232.</p>
+<h3 id="配置读取设备"><a href="#配置读取设备" class="headerlink" title="配置读取设备"></a>配置读取设备</h3><p>在读取设备和Xen机器上配置<code>minicom</code> 用于测试串口。</p>
+<pre><code class="lang-sh">Ubuntu dmesg | grep tty
+</code></pre>
+<p>输出信息如下</p>
+<pre><code class="lang-sh">[    0.094791] printk: console [tty0] enabled
+[    0.757835] 00:02: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+[    0.779505] 0000:00:16.3: ttyS4 at I/O 0xf060 (irq = 19, base_baud = 115200) is a 16550A
+[    2.825408] usb 1-13: pl2303 converter now attached to ttyUSB0
+[ 3435.257916] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0
+[ 3437.386713] usb 1-14: pl2303 converter now attached to ttyUSB0
+[13860.597447] pl2303 ttyUSB0: pl2303_set_control_lines - failed: -19
+[13860.597451] pl2303 ttyUSB0: error sending break = -19
+[13860.597584] pl2303 ttyUSB0: pl2303 converter now disconnected from ttyUSB0
+[13863.385826] usb 1-8: pl2303 converter now attached to ttyUSB0
+</code></pre>
+<p>于是设置默认串口为 <code>ttyUSB0</code> ,使用<code>minicom -s</code> 进入<code>serial prot setup</code> 进行设置</p>
+<p><img src="/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/xen-3.png" width="500px" height="300px"> </p>
+<p>(配置完没有截图，取自 [2] )，配置好读取设备后，静置，备用。</p>
+<h3 id="配置Xen-设备"><a href="#配置Xen-设备" class="headerlink" title="配置Xen 设备"></a>配置Xen 设备</h3><p>读取Xen设备信息</p>
+<pre><code class="lang-sh">dmesg | grep tty
+</code></pre>
+<p>输出信息</p>
+<pre><code class="lang-sh">console [tty0] enabled
+ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+ttyS4 at I/O 0xc0c0 (irq = 16, base_baud = 115200) is a XR16850
+ttyS5 at I/O 0xc0c8 (irq = 16, base_baud = 115200) is a XR16850
+</code></pre>
+<p>这里看到 tty0 、ttyS0  、 ttyS4 、ttyS5 （如果没有输出全部信息的话，执行下面的命令查看）</p>
+<pre><code class="lang-sh">cat /proc/tty/driver/serial
+</code></pre>
+<p>输出信息</p>
+<pre><code class="lang-sh">serinfo:1.0 driver revision:
+0: uart:16550A port:000003F8 irq:4 tx:0 rx:0
+1: uart:unknown port:000002F8 irq:3
+2: uart:unknown port:000003E8 irq:4
+3: uart:unknown port:000002E8 irq:3
+4: uart:XR16850 port:0000C0C0 irq:16 tx:0 rx:0
+5: uart:XR16850 port:0000C0C8 irq:16 tx:0 rx:0 CTS|DTR|DSR|CD|RI
+</code></pre>
+<p>可以确定，Xen设备的串口是<code>ttyS5</code> 物理地址为 <code>0xc0c8</code> </p>
+<h4 id="测试串口通讯情况"><a href="#测试串口通讯情况" class="headerlink" title="测试串口通讯情况"></a>测试串口通讯情况</h4><p>在Xen设备的<code>minicom</code> 上设置默认的端口为<code>ttyS5</code> 看两台机器是否能够正常通讯，即，在读取设备输入，在Xen设备上可以输出相应内容，反之亦然。</p>
+<h4 id="修改Grub文件"><a href="#修改Grub文件" class="headerlink" title="修改Grub文件"></a>修改Grub文件</h4><p>在<code>/etc/default/grub</code>文件中 添加如下内容</p>
+<pre><code class="lang-sh"># This can guarantee sync output when using `printk`
+GRUB_CMDLINE_XEN="loglvl=all guest_loglvl=all sync_console console_to_ring com1=115200,8n1,0x3080 console=com1,vga com0_mem=4096"
+
+GRUB_CMDLINE_LINUX_DEFAULT="console=tty0 console=ttyS5,115200n8"
+GRUB_CMDLINE_LINUX="console=hvc0 earlyprintk=xen"
+</code></pre>
+<ul>
+<li><code>sync_console</code>: 保证输出是同步的，以防一些内容在xen crash之前打不出来</li>
+<li><code>console_to_ring</code>: 将Guest的log同步到dom0中打印输出.</li>
+<li><code>console=com1,vga</code>: 将终端连到com1上，这样我们就可以通过串口输入用户名密码登陆</li>
+</ul>
+<p>输入 <code>sudo update-grub</code> 更新grub文件，重启</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>在自定义<a href="https://ykma.gitee.io/2020/07/19/Xen-log-2-Add-a-new-Hypercall/" target="_blank" rel="noopener">Hypercall</a> 后，执行<code>privcmd.c</code> 文件会在读取设备上看到相应的log信息，这里不放图了。</p>
+<h3 id="踩坑指南"><a href="#踩坑指南" class="headerlink" title="踩坑指南"></a>踩坑指南</h3><p>我刚配置串口的时候，采用Ubuntu18读取日志信息，Debian9编译Xen，两台机器通信正常，<code>reboot</code> Xen设备后会打印开机日志，随后便是一通乱码，不输出用户自定义log信息。调整两台设备的编码格式、语言（en.utf-8）等均未果，至今没有解决这个bug</p>
+<p>感受一下乱码：分别是正常读取与16进制读取的结果</p>
+<pre><code class="lang-sh">�`�f���f�����`�f���f���怀�`�f���f����~x�~~x�~�`�f���f���怀�`�f��~怀
+
+�`�f���f枞f�~x��枘�����f��ff��~��~fx�f��~������~��~��~��fx�
+
+06 fe 60 e6 66 fe 06 f8 00 f8 66 fe 00 f8 e6 80 06 fe 60 e6 66 fe 06 f8 00 f8 6
+</code></pre>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">https://wiki.xenproject.org/wiki/Xen_Serial_Console</a><br>[2] <a href="** https://silentming.net/blog/2016/09/18/xen-log-5-debug-xen/**">Xen Log 5-Debug Xen on Physical Machine</a><br>[3] <a href="https://xenbits.xen.org/docs/unstable/misc/xen-command-line.html" target="_blank" rel="noopener">https://xenbits.xen.org/docs/unstable/misc/xen-command-line.html</a></p>
+]]></content>
+      <tags>
+        <tag>Virtualization</tag>
+        <tag>Xen log</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -5127,124 +5400,6 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
-    <title>云虚拟化安全攻防实践</title>
-    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
-    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
-<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
-<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
-      <tags>
-        <tag>TODO</tag>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>RAMBleed Reading Bits in Memory Without Accessing Them</title>
-    <url>/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://rambleed.com/docs/20190603-rambleed-web.pdf" target="_blank" rel="noopener">RAMBleed Reading Bits in Memory Without Accessing Them</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">University of Michigan;Graz University of Technology;University of Adelaide and Data61</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">Rowhammer attack,Bit Flips</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">Microarchitecture attacks</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">本文利用DRAM中临位的比特反转(bit flips)所得到的信息，推断出内存中的数据项，并依次读取目标信息。</td>
-</tr>
-<tr>
-<td style="text-align:center">6</td>
-<td style="text-align:center">扩展信息</td>
-<td style="text-align:center"><a href="https://rambleed.com/" target="_blank" rel="noopener">RAMBleed</a></td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="Rowhammer-Attack"><a href="#Rowhammer-Attack" class="headerlink" title="Rowhammer Attack"></a>Rowhammer Attack</h3><p>  Rowhammer比特翻转攻击是指利用临近内存单元之间电子的互相影响，在足够多的访问次数后让某个单元的值从1变成0，反之亦然。这种攻击可以在不访问目标内存区域的前提下使其产生数据错误。 这次的攻击与操作系统和软件无关，纯粹是硬件上的漏洞导致的。</p>
-<p>  这是个特别针对Memory的攻击技术，但不是缓冲区破坏或溢出攻击。一般的计算机Memory介质中，每个存储单元（晶体管+电容器）存放1bit数据，这个比特位要么是0，要么是1——存储单元中充满电子表示1，清空表示0。内存就是由上亿这样的存储单元构成的，数据也因此得以存储。</p>
-<p>  不过电容器会泄露，一个电容器充满电子后，只需要几毫秒就会泄露殆尽。这就要求CPU（内存控制器）对电容进行充电，让“1”这个值能够保持住。整个过程是由内存控制器先读取电容器中的值，然后再把数据写回去。这种刷新操作，每秒会执行几千次。</p>
-<p>  内存容量正在大幅度上涨，所以存储比特位的电容器也就越来越小，排列越来越近。要防止相邻的电容之间相互干扰，难度也就变得更大。如果能够快速、反复访问一排电容，相邻行的电容更容易产生干扰错误和所谓的“比特位翻转”，也就是0变成1。</p>
-<p>  其实正常的数据读写一般是不会发生比特位翻转的，可是如果对某些行进行<strong>反复读写</strong>，问题就有可能产生。2014年卡内基梅陇大学的研究人员层发表过一篇论文，题为《无访问情况下的内存比特位翻转——DRAM干扰行错误的试验研究》，其本质是通过机器码指令CLFUSH或Cache Line Flush，强制进行这种比特位的读取和更新。据说利用这种方式，可引起大量比特位翻转。</p>
-<p>  利用比特位翻转，很多事情都可以做，比如说执行未经授权的代码。这就是所谓的Rowhammer。这是一种颠覆人类对安全认知的攻击技术，软件层面几乎解决无望。先前已经有研究人员演示，如何用Rowhammer来进行提权，以及打破安全沙盒。</p>
-<p>  不过看原理就知道，这种攻击实在有够理想化，存在诸多不确定性，因为攻击者根本无法精准控制比特位如何翻转。比如说，这种攻击对数据所在的内存位置首先就有要求，这样才能实施内存翻转：但敏感数据存储在这些位置的几率可能并不算高。</p>
-<h3 id="RAMBleed概况"><a href="#RAMBleed概况" class="headerlink" title="RAMBleed概况"></a>RAMBleed概况</h3><p>  该攻击<strong>基于位翻转漏洞Rowhammer</strong>，可绕过ECC机制，允许黑客使用普通用户权限从OpenSSH服务器中提取签名密钥。黑客通过观察Rowhammer引发的位翻转，<strong>可推断出附近DRAM行中的值，</strong>进而读取其它进程中的物理内存。</p>
-<h3 id="获取物理地址"><a href="#获取物理地址" class="headerlink" title="获取物理地址"></a>获取物理地址</h3><p>  该攻击的重点是获取到虚拟地址到物理地址之间的映射。</p>
-<h4 id="伙伴算法"><a href="#伙伴算法" class="headerlink" title="伙伴算法"></a>伙伴算法</h4><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/buddy-memory-allocation.jpg" width="500px" height="300px"></p>
-<p>首先我们假设我们一个内存块有1024K，当我们需要给A分配70K内存的时候，</p>
-<ol>
-<li>我们发现1024K的一半大于70K，然后我们就把1024K的内存分成两半，一半512K。</li>
-<li>然后我们发现512K的一半仍然大于70K，于是我们再把512K的内存再分成两半，一半是128K。</li>
-<li>此时，我们发现128K的一半小于70K，于是我们就分配为A分配128K的内存。</li>
-</ol>
-<p> 后面的，B，C，D都这样，而释放内存时，则会把相邻的块一步一步地合并起来（合并也必需按分裂的逆操作进行合并）。</p>
-<p>  论文<a href="http://export.arxiv.org/pdf/1511.08756" target="_blank" rel="noopener">DRAMA</a>中提到只要获得了物理上连续的$2MiB$空间，采用反向工程即可获取低22位物理空间地址。</p>
-<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片13.jpg" width="600px" height="450px"></p>
-<p>  基于Linux内存的伙伴分配算法，分配空间大小为$4KiB*2^N$，此处取$N = 10$,即分配$4MiB$空间，并将此 $4MiB$ 物理空间分裂为两个 $2MiB$ 的物理空间，通过$MMap$系统调用，消耗掉前面低于$2MiB$的存储空间，最后剩余的空间一定是一个连续的 $2MiB$ 的物理空间。</p>
-<h3 id="内存风水逆转"><a href="#内存风水逆转" class="headerlink" title="内存风水逆转"></a>内存风水逆转</h3><p>  针对Rowhammer的内存位置限制，有人开发出一种名为 <a href="https://www.usenix.org/system/files/conference/usenixsecurity16/sec16_paper_razavi.pdf" target="_blank" rel="noopener">Flip Feng Shui</a>（风水翻转）的攻击技术，这本质上也是Rowhammer。这种攻击就是篡改deduplication操作——deduplication在云端主机中应用得很常见，这种技术可让两个或者更多虚拟主机共享特定的数据块，起到节约内存资源的作用。</p>
-<p>  Flip Feng Shui在<strong>物理内存</strong>上做手脚，可致加密密钥和其他敏感数据存储到<strong>内存特定的位置</strong>——这些位置就很容易受Rowhammer的影响了。所以才叫风水翻转，就是让数据在内存中的“风水”位置变更好，Rowhammer攻击变得更可靠。</p>
-<h3 id="RAMBleed攻击"><a href="#RAMBleed攻击" class="headerlink" title="RAMBleed攻击"></a>RAMBleed攻击</h3><h4 id="比特翻转"><a href="#比特翻转" class="headerlink" title="比特翻转"></a>比特翻转</h4><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片11.jpg" width="600px" height="450px"></p>
-<p>  本文提到，在$Row1$与$Row3$加载相同的目标内容，并对其进行锤击操作，即Rowhammer攻击，则会使得$Row2$中对应的比特位发生比特翻转。经过试验证明，当$Row3-Row2-Row1$ 存储内容为$0-1-0$时，此时在Rowhammer攻击下很有可能发生比特翻转，而当$Row3-Row2-Row1$ 存储内容为$1-1-1$时，此时在Rowhammer攻击下发生比特翻转的可能性很小，因此，基于两种概率大小的不同，可以判断出目标信息中存储的绝大多数信息内容。其中$Row2$中存储的是已知内容。</p>
-<h4 id="Frame-Feng-Shui"><a href="#Frame-Feng-Shui" class="headerlink" title="Frame Feng Shui"></a>Frame Feng Shui</h4><p>  上文提到，Feng Shui可以将目标信息加载到指定的存储空间中。如下图所示，红色部分存储目标信息，$A0,A1,A2$ 存储攻击者内容，因此根据比特翻转是否发生，则<strong>很有可能</strong>推断出指定比特位存储的信息。</p>
-<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片17.jpg" width="600px" height="450px"></p>
-<h4 id="RAMBleed-on-ECC-Memory"><a href="#RAMBleed-on-ECC-Memory" class="headerlink" title="RAMBleed on ECC Memory"></a>RAMBleed on ECC Memory</h4><p>  ECC Memory指的是Error-Correcting Code Memory，DRAM的纠错机制。</p>
-<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片21.jpg" width="600px" height="450px"></p>
-<p>  在<a href="https://www.computer.org/csdl/pds/api/csdl/proceedings/download-article/19skfwyNp5e/pdf?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjc2RsX2FwaSIsImF1ZCI6ImNzZGxfYXBpX2Rvd25sb2FkX3Rva2VuIiwic3ViIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImVtYWlsIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImV4cCI6MTU5MjMxODY5OX0.uN4RLcw4bjEbBeqINhfDoXY7dyJM2-GWgE90zZJt2y4" target="_blank" rel="noopener">ECCPloit</a>这篇论文中指出，比特纠错所产生的时间延迟是十分明显的，这种情况下可根据纠错产生的时间延迟判断是否发生了比特翻转。</p>
-<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片19.jpg" width="600px" height="450px"></p>
-<p>  相对来说，采用了ECC纠错的方式，获取到的结果更可信，而没有采取比特纠错方式获取的结果是在一定程度上可信的。本文通过实验测得，通过Feng Shui方式，成功将目标信息加载到指定存储位置也是有一定概率的，文中提到这个概率在83%， 通过Rowhammer攻击获取到比特翻转成功的概率为82%，因此，最终获取到目标信息的量在68%。由于此攻击针对的是秘钥信息，获取的秘钥信息量在27%以上，就可成功破解，因此，68%的信息量足以支持对秘钥的破译。综上，此方式是行得通的。</p>
-<p>  本文的目的，旨在阐述这种攻击方式的行之有效，因此并未对其产生的额外代价、时间成本考虑在内。</p>
-<p>  研究人员已向英特尔、AMD、OpenSSH、微软、苹果和红帽通报了调查结果，本论文发表在2020年5月举行的第41届IEEE安全和隐私研讨会。</p>
-<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://blog.csdn.net/wojiuguowei/article/details/79377228" target="_blank" rel="noopener">伙伴分配器的一个极简实现</a></p>
-<p>[2] <a href="https://www.freebuf.com/column/133871.html" target="_blank" rel="noopener">神乎其神的Rowhammer</a></p>
-]]></content>
-      <categories>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>System Security</tag>
-        <tag>Rowhammer attack</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>从硬件层认识计算机</title>
-    <url>/2020/11/23/%E4%BB%8E%E7%A1%AC%E4%BB%B6%E5%B1%82%E8%AE%A4%E8%AF%86%E8%AE%A1%E7%AE%97%E6%9C%BA/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>TODO</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>内嵌汇编学习</title>
-    <url>/2020/11/30/%E5%86%85%E5%B5%8C%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>TODO</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>virtualization overview</title>
     <url>/2020/11/27/virtualization-overview/</url>
     <content><![CDATA[<h3 id="虚拟化技术概览"><a href="#虚拟化技术概览" class="headerlink" title="虚拟化技术概览"></a>虚拟化技术概览</h3><p>注：本文主要是整理了看过的博客以及部分论文。</p>
@@ -5389,6 +5544,124 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
+    <title>RAMBleed Reading Bits in Memory Without Accessing Them</title>
+    <url>/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://rambleed.com/docs/20190603-rambleed-web.pdf" target="_blank" rel="noopener">RAMBleed Reading Bits in Memory Without Accessing Them</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">University of Michigan;Graz University of Technology;University of Adelaide and Data61</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">Rowhammer attack,Bit Flips</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">Microarchitecture attacks</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">本文利用DRAM中临位的比特反转(bit flips)所得到的信息，推断出内存中的数据项，并依次读取目标信息。</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">扩展信息</td>
+<td style="text-align:center"><a href="https://rambleed.com/" target="_blank" rel="noopener">RAMBleed</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Rowhammer-Attack"><a href="#Rowhammer-Attack" class="headerlink" title="Rowhammer Attack"></a>Rowhammer Attack</h3><p>  Rowhammer比特翻转攻击是指利用临近内存单元之间电子的互相影响，在足够多的访问次数后让某个单元的值从1变成0，反之亦然。这种攻击可以在不访问目标内存区域的前提下使其产生数据错误。 这次的攻击与操作系统和软件无关，纯粹是硬件上的漏洞导致的。</p>
+<p>  这是个特别针对Memory的攻击技术，但不是缓冲区破坏或溢出攻击。一般的计算机Memory介质中，每个存储单元（晶体管+电容器）存放1bit数据，这个比特位要么是0，要么是1——存储单元中充满电子表示1，清空表示0。内存就是由上亿这样的存储单元构成的，数据也因此得以存储。</p>
+<p>  不过电容器会泄露，一个电容器充满电子后，只需要几毫秒就会泄露殆尽。这就要求CPU（内存控制器）对电容进行充电，让“1”这个值能够保持住。整个过程是由内存控制器先读取电容器中的值，然后再把数据写回去。这种刷新操作，每秒会执行几千次。</p>
+<p>  内存容量正在大幅度上涨，所以存储比特位的电容器也就越来越小，排列越来越近。要防止相邻的电容之间相互干扰，难度也就变得更大。如果能够快速、反复访问一排电容，相邻行的电容更容易产生干扰错误和所谓的“比特位翻转”，也就是0变成1。</p>
+<p>  其实正常的数据读写一般是不会发生比特位翻转的，可是如果对某些行进行<strong>反复读写</strong>，问题就有可能产生。2014年卡内基梅陇大学的研究人员层发表过一篇论文，题为《无访问情况下的内存比特位翻转——DRAM干扰行错误的试验研究》，其本质是通过机器码指令CLFUSH或Cache Line Flush，强制进行这种比特位的读取和更新。据说利用这种方式，可引起大量比特位翻转。</p>
+<p>  利用比特位翻转，很多事情都可以做，比如说执行未经授权的代码。这就是所谓的Rowhammer。这是一种颠覆人类对安全认知的攻击技术，软件层面几乎解决无望。先前已经有研究人员演示，如何用Rowhammer来进行提权，以及打破安全沙盒。</p>
+<p>  不过看原理就知道，这种攻击实在有够理想化，存在诸多不确定性，因为攻击者根本无法精准控制比特位如何翻转。比如说，这种攻击对数据所在的内存位置首先就有要求，这样才能实施内存翻转：但敏感数据存储在这些位置的几率可能并不算高。</p>
+<h3 id="RAMBleed概况"><a href="#RAMBleed概况" class="headerlink" title="RAMBleed概况"></a>RAMBleed概况</h3><p>  该攻击<strong>基于位翻转漏洞Rowhammer</strong>，可绕过ECC机制，允许黑客使用普通用户权限从OpenSSH服务器中提取签名密钥。黑客通过观察Rowhammer引发的位翻转，<strong>可推断出附近DRAM行中的值，</strong>进而读取其它进程中的物理内存。</p>
+<h3 id="获取物理地址"><a href="#获取物理地址" class="headerlink" title="获取物理地址"></a>获取物理地址</h3><p>  该攻击的重点是获取到虚拟地址到物理地址之间的映射。</p>
+<h4 id="伙伴算法"><a href="#伙伴算法" class="headerlink" title="伙伴算法"></a>伙伴算法</h4><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/buddy-memory-allocation.jpg" width="500px" height="300px"></p>
+<p>首先我们假设我们一个内存块有1024K，当我们需要给A分配70K内存的时候，</p>
+<ol>
+<li>我们发现1024K的一半大于70K，然后我们就把1024K的内存分成两半，一半512K。</li>
+<li>然后我们发现512K的一半仍然大于70K，于是我们再把512K的内存再分成两半，一半是128K。</li>
+<li>此时，我们发现128K的一半小于70K，于是我们就分配为A分配128K的内存。</li>
+</ol>
+<p> 后面的，B，C，D都这样，而释放内存时，则会把相邻的块一步一步地合并起来（合并也必需按分裂的逆操作进行合并）。</p>
+<p>  论文<a href="http://export.arxiv.org/pdf/1511.08756" target="_blank" rel="noopener">DRAMA</a>中提到只要获得了物理上连续的$2MiB$空间，采用反向工程即可获取低22位物理空间地址。</p>
+<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片13.jpg" width="600px" height="450px"></p>
+<p>  基于Linux内存的伙伴分配算法，分配空间大小为$4KiB*2^N$，此处取$N = 10$,即分配$4MiB$空间，并将此 $4MiB$ 物理空间分裂为两个 $2MiB$ 的物理空间，通过$MMap$系统调用，消耗掉前面低于$2MiB$的存储空间，最后剩余的空间一定是一个连续的 $2MiB$ 的物理空间。</p>
+<h3 id="内存风水逆转"><a href="#内存风水逆转" class="headerlink" title="内存风水逆转"></a>内存风水逆转</h3><p>  针对Rowhammer的内存位置限制，有人开发出一种名为 <a href="https://www.usenix.org/system/files/conference/usenixsecurity16/sec16_paper_razavi.pdf" target="_blank" rel="noopener">Flip Feng Shui</a>（风水翻转）的攻击技术，这本质上也是Rowhammer。这种攻击就是篡改deduplication操作——deduplication在云端主机中应用得很常见，这种技术可让两个或者更多虚拟主机共享特定的数据块，起到节约内存资源的作用。</p>
+<p>  Flip Feng Shui在<strong>物理内存</strong>上做手脚，可致加密密钥和其他敏感数据存储到<strong>内存特定的位置</strong>——这些位置就很容易受Rowhammer的影响了。所以才叫风水翻转，就是让数据在内存中的“风水”位置变更好，Rowhammer攻击变得更可靠。</p>
+<h3 id="RAMBleed攻击"><a href="#RAMBleed攻击" class="headerlink" title="RAMBleed攻击"></a>RAMBleed攻击</h3><h4 id="比特翻转"><a href="#比特翻转" class="headerlink" title="比特翻转"></a>比特翻转</h4><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片11.jpg" width="600px" height="450px"></p>
+<p>  本文提到，在$Row1$与$Row3$加载相同的目标内容，并对其进行锤击操作，即Rowhammer攻击，则会使得$Row2$中对应的比特位发生比特翻转。经过试验证明，当$Row3-Row2-Row1$ 存储内容为$0-1-0$时，此时在Rowhammer攻击下很有可能发生比特翻转，而当$Row3-Row2-Row1$ 存储内容为$1-1-1$时，此时在Rowhammer攻击下发生比特翻转的可能性很小，因此，基于两种概率大小的不同，可以判断出目标信息中存储的绝大多数信息内容。其中$Row2$中存储的是已知内容。</p>
+<h4 id="Frame-Feng-Shui"><a href="#Frame-Feng-Shui" class="headerlink" title="Frame Feng Shui"></a>Frame Feng Shui</h4><p>  上文提到，Feng Shui可以将目标信息加载到指定的存储空间中。如下图所示，红色部分存储目标信息，$A0,A1,A2$ 存储攻击者内容，因此根据比特翻转是否发生，则<strong>很有可能</strong>推断出指定比特位存储的信息。</p>
+<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片17.jpg" width="600px" height="450px"></p>
+<h4 id="RAMBleed-on-ECC-Memory"><a href="#RAMBleed-on-ECC-Memory" class="headerlink" title="RAMBleed on ECC Memory"></a>RAMBleed on ECC Memory</h4><p>  ECC Memory指的是Error-Correcting Code Memory，DRAM的纠错机制。</p>
+<p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片21.jpg" width="600px" height="450px"></p>
+<p>  在<a href="https://www.computer.org/csdl/pds/api/csdl/proceedings/download-article/19skfwyNp5e/pdf?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJjc2RsX2FwaSIsImF1ZCI6ImNzZGxfYXBpX2Rvd25sb2FkX3Rva2VuIiwic3ViIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImVtYWlsIjoiYW5vbnltb3VzQGNvbXB1dGVyLm9yZyIsImV4cCI6MTU5MjMxODY5OX0.uN4RLcw4bjEbBeqINhfDoXY7dyJM2-GWgE90zZJt2y4" target="_blank" rel="noopener">ECCPloit</a>这篇论文中指出，比特纠错所产生的时间延迟是十分明显的，这种情况下可根据纠错产生的时间延迟判断是否发生了比特翻转。</p>
+<h3 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h3><p><img src="/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/幻灯片19.jpg" width="600px" height="450px"></p>
+<p>  相对来说，采用了ECC纠错的方式，获取到的结果更可信，而没有采取比特纠错方式获取的结果是在一定程度上可信的。本文通过实验测得，通过Feng Shui方式，成功将目标信息加载到指定存储位置也是有一定概率的，文中提到这个概率在83%， 通过Rowhammer攻击获取到比特翻转成功的概率为82%，因此，最终获取到目标信息的量在68%。由于此攻击针对的是秘钥信息，获取的秘钥信息量在27%以上，就可成功破解，因此，68%的信息量足以支持对秘钥的破译。综上，此方式是行得通的。</p>
+<p>  本文的目的，旨在阐述这种攻击方式的行之有效，因此并未对其产生的额外代价、时间成本考虑在内。</p>
+<p>  研究人员已向英特尔、AMD、OpenSSH、微软、苹果和红帽通报了调查结果，本论文发表在2020年5月举行的第41届IEEE安全和隐私研讨会。</p>
+<h3 id="References"><a href="#References" class="headerlink" title="References"></a>References</h3><p>[1] <a href="https://blog.csdn.net/wojiuguowei/article/details/79377228" target="_blank" rel="noopener">伙伴分配器的一个极简实现</a></p>
+<p>[2] <a href="https://www.freebuf.com/column/133871.html" target="_blank" rel="noopener">神乎其神的Rowhammer</a></p>
+]]></content>
+      <categories>
+        <category>Security and Privacy</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>System Security</tag>
+        <tag>Rowhammer attack</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>云虚拟化安全攻防实践</title>
+    <url>/2020/07/19/%E4%BA%91%E8%99%9A%E6%8B%9F%E5%8C%96%E5%AE%89%E5%85%A8%E6%94%BB%E9%98%B2%E5%AE%9E%E8%B7%B5/</url>
+    <content><![CDATA[<p>写在前面：此次阅读，目的是补充一下对虚拟化安全的了解，可能思考不是很透彻，在此记录一下，方便后面补充学习。</p>
+<h3 id="认识-Hypervisor"><a href="#认识-Hypervisor" class="headerlink" title="认识 Hypervisor"></a>认识 Hypervisor</h3><p><a href="https://zh.wikipedia.org/wiki/Hypervisor#类型_I：原生或裸机_hypervisor" target="_blank" rel="noopener">Hypervisor 分类</a></p>
+<h4 id="云计算起源"><a href="#云计算起源" class="headerlink" title="云计算起源"></a>云计算起源</h4><h4 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h4><h4 id="Hypervisor-分类"><a href="#Hypervisor-分类" class="headerlink" title="Hypervisor 分类"></a>Hypervisor 分类</h4><h4 id="虚拟化技术"><a href="#虚拟化技术" class="headerlink" title="虚拟化技术"></a>虚拟化技术</h4><h3 id="Docker-容器安全"><a href="#Docker-容器安全" class="headerlink" title="Docker 容器安全"></a>Docker 容器安全</h3><h3 id="QEMU-与-KVM-安全"><a href="#QEMU-与-KVM-安全" class="headerlink" title="QEMU 与 KVM 安全"></a>QEMU 与 KVM 安全</h3><h3 id="Xen-安全"><a href="#Xen-安全" class="headerlink" title="Xen 安全"></a>Xen 安全</h3><h3 id="Hyper-v-安全"><a href="#Hyper-v-安全" class="headerlink" title="Hyper-v 安全"></a>Hyper-v 安全</h3><h3 id="Hypervisor-漏洞防御技术"><a href="#Hypervisor-漏洞防御技术" class="headerlink" title="Hypervisor 漏洞防御技术"></a>Hypervisor 漏洞防御技术</h3>]]></content>
+      <tags>
+        <tag>TODO</tag>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>从硬件层认识计算机</title>
+    <url>/2020/11/23/%E4%BB%8E%E7%A1%AC%E4%BB%B6%E5%B1%82%E8%AE%A4%E8%AF%86%E8%AE%A1%E7%AE%97%E6%9C%BA/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>TODO</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>内嵌汇编学习</title>
+    <url>/2020/11/30/%E5%86%85%E5%B5%8C%E6%B1%87%E7%BC%96%E5%AD%A6%E4%B9%A0/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>TODO</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>博士学长有话说</title>
     <url>/2020/04/22/%E5%8D%9A%E5%A3%AB%E5%AD%A6%E9%95%BF%E6%9C%89%E8%AF%9D%E8%AF%B4/</url>
     <content><![CDATA[<h3 id="读博士的几点建议"><a href="#读博士的几点建议" class="headerlink" title="读博士的几点建议"></a>读博士的几点建议</h3><hr>
@@ -5405,22 +5678,6 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
 <h4 id="演讲一定要自信，自圆其说"><a href="#演讲一定要自信，自圆其说" class="headerlink" title="演讲一定要自信，自圆其说"></a>演讲一定要自信，自圆其说</h4><p>​       在制作完PPT给别人讲解的时候，千万不能发怵，别害怕，当你讲的很认真很严肃很自信的时候，下面的人就会自然觉得你很专业。记得高中毕业工作时遇到的一个公司老总给我们新人说，演讲的时候，别害怕，底下的人全是大白菜，自信的讲你自己的东西就ok。异曲同工啊。</p>
 <h4 id="学习效率不高怎么破"><a href="#学习效率不高怎么破" class="headerlink" title="学习效率不高怎么破"></a>学习效率不高怎么破</h4><p>​       因人而异，这位同学说，自己在实验室效率非常高，几乎没人能打扰到他，坐在那里，一坐下去，就非常投入。拿我个人反面案例来说，我感觉其实他这是一种闭环奖励机制，因为专心研究得到了能弥补个人孤独感、暂时的失落感的成就感，让自己更加愿意在科研上投入更多精力，同时自己投入的精力得到了更多的良性反馈，这是推动个人前进的不竭动力。期望自己能在未来科研的道路上端正态度，提高效率，稳步提升自我。</p>
 <p>​       上周末跟同学交流之后的收获差不多就这些了，记录下来，往后的日子里，朝着这个目标前进！</p>
-]]></content>
-      <tags>
-        <tag>essay</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>本科毕业游记</title>
-    <url>/2020/07/16/%E6%9C%AC%E7%A7%91%E6%AF%95%E4%B8%9A%E6%B8%B8%E8%AE%B0/</url>
-    <content><![CDATA[<p>当自己满怀负面情绪的时候，出去走走吧</p>
-<p>18年毕业季，对我来说，可能用诸事不顺形容更加贴切。这里不想再回顾那个至暗时刻了~略过500字</p>
-<p>在提交了本科毕业论文之后，跟舍友选择了去旅游，去闲逛。回忆起来，真的挺感谢那次远足。在游玩的时候，有时内心会有一种很强烈的声音在表达：世间如此美好，请继续相信并热爱美好的事情。其实当别人跟你在一起生活了很长时间之后，你的一举一动背后所掩盖的事实都会多多少少的被察觉吧，或悲或喜。非常感谢舍友们对自己的包容与尊重，如果当时真的在某些言语或行为上伤害过你们，真的很抱歉，记住一个人的好总好过记住一个人的坏。</p>
-<p>现在想想，那次旅行是自己成长最迅速的一段时光。懂得了很多，也体会了很多。初到上海时的激动掩盖了自己内心的伤楚，甚至创下了迄今为止单日步数记录。是初到上海的下里巴人，第一次感受到了什么叫繁华。交大与复旦的学子，让我感受到这个城市在文化上的包容与开放。深入灵隐感受那里的绝美景色，站在苏堤眺望西湖两岸，数次跨越钱塘江大桥，亲自挤一挤杭州的地铁也让自己对杭州有了深刻的印象。在绍兴的一间民宿鼓起勇气跟老外谈天侃地，这睡前的卧谈也给自己增加了不少自信心。英语说的烂，到底是谁遭罪？苏州、绍兴的旅途，亲身体会到了什么是江南水乡，那种只会出现在电视画面上的景色，竟然就在自己眼前，脚下，所泛小舟之旁。也许电子设备能够记录下景色，但无法转达自己身临其境的感受。最后一站，品过南京大排档后，跟高中同学去了当时梦寐以求的南京大学，涉足在南大的各个角落，跟南大学子一起篮球，仿佛获得一天的南大身份体验卡。夜幕降临，远去之时，梦也该醒了~</p>
-<p>这次的旅途过后，大家都在匆匆忙忙准备毕业的时候，我选择了再战名校。虽然这时显得跟整个学校的节奏不符，但比起之前浑浑噩噩的生活，这种逐梦并筑梦的日子更能让人铭记，更能拨动生命中响亮的音符。毕业论文答辩结束，导师惊讶的问我怎么没在考研光荣榜上看到我的名字，我不知道该如何面对这样一个始终对我抱有最大希望的老师；离校前一个月，准备租房子；离校前三周，准备6级考试；离校前两周，买下了全新备考资料，参加了6级考试，并见到了大三对我印象深刻（不听她讲课却能考近满分成绩的坏学生）的专业课老师，想对她说声对不起，老师，在你课上不是故意气你的；离校前一周，拿到了双证，见到了导员，真的很想对她说声谢谢，老师再见，但终未说出口。离校前3天，我花光了3个月的积蓄，算是买醉吧，那一段时间，是我四年里第一次跟这么多同学侃侃而谈，有的甚至是四年来第一次交流，原来那时的我在他们眼里还不算差，现在想想已经够欣慰了。6月24号，与母校彻底再见了~</p>
-<p>其实二战也没有想得那么复杂，干就完了。但真正难的是做出那个决定，鼓起勇气面对未知的挑战。</p>
-<p>我始终怀念并感激当年出去撒欢的自己</p>
-<p>2020年7月16日01:27:26 于济宁</p>
 ]]></content>
       <tags>
         <tag>essay</tag>
@@ -5482,6 +5739,22 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
 ]]></content>
       <tags>
         <tag>贝叶斯网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>本科毕业游记</title>
+    <url>/2020/07/16/%E6%9C%AC%E7%A7%91%E6%AF%95%E4%B8%9A%E6%B8%B8%E8%AE%B0/</url>
+    <content><![CDATA[<p>当自己满怀负面情绪的时候，出去走走吧</p>
+<p>18年毕业季，对我来说，可能用诸事不顺形容更加贴切。这里不想再回顾那个至暗时刻了~略过500字</p>
+<p>在提交了本科毕业论文之后，跟舍友选择了去旅游，去闲逛。回忆起来，真的挺感谢那次远足。在游玩的时候，有时内心会有一种很强烈的声音在表达：世间如此美好，请继续相信并热爱美好的事情。其实当别人跟你在一起生活了很长时间之后，你的一举一动背后所掩盖的事实都会多多少少的被察觉吧，或悲或喜。非常感谢舍友们对自己的包容与尊重，如果当时真的在某些言语或行为上伤害过你们，真的很抱歉，记住一个人的好总好过记住一个人的坏。</p>
+<p>现在想想，那次旅行是自己成长最迅速的一段时光。懂得了很多，也体会了很多。初到上海时的激动掩盖了自己内心的伤楚，甚至创下了迄今为止单日步数记录。是初到上海的下里巴人，第一次感受到了什么叫繁华。交大与复旦的学子，让我感受到这个城市在文化上的包容与开放。深入灵隐感受那里的绝美景色，站在苏堤眺望西湖两岸，数次跨越钱塘江大桥，亲自挤一挤杭州的地铁也让自己对杭州有了深刻的印象。在绍兴的一间民宿鼓起勇气跟老外谈天侃地，这睡前的卧谈也给自己增加了不少自信心。英语说的烂，到底是谁遭罪？苏州、绍兴的旅途，亲身体会到了什么是江南水乡，那种只会出现在电视画面上的景色，竟然就在自己眼前，脚下，所泛小舟之旁。也许电子设备能够记录下景色，但无法转达自己身临其境的感受。最后一站，品过南京大排档后，跟高中同学去了当时梦寐以求的南京大学，涉足在南大的各个角落，跟南大学子一起篮球，仿佛获得一天的南大身份体验卡。夜幕降临，远去之时，梦也该醒了~</p>
+<p>这次的旅途过后，大家都在匆匆忙忙准备毕业的时候，我选择了再战名校。虽然这时显得跟整个学校的节奏不符，但比起之前浑浑噩噩的生活，这种逐梦并筑梦的日子更能让人铭记，更能拨动生命中响亮的音符。毕业论文答辩结束，导师惊讶的问我怎么没在考研光荣榜上看到我的名字，我不知道该如何面对这样一个始终对我抱有最大希望的老师；离校前一个月，准备租房子；离校前三周，准备6级考试；离校前两周，买下了全新备考资料，参加了6级考试，并见到了大三对我印象深刻（不听她讲课却能考近满分成绩的坏学生）的专业课老师，想对她说声对不起，老师，在你课上不是故意气你的；离校前一周，拿到了双证，见到了导员，真的很想对她说声谢谢，老师再见，但终未说出口。离校前3天，我花光了3个月的积蓄，算是买醉吧，那一段时间，是我四年里第一次跟这么多同学侃侃而谈，有的甚至是四年来第一次交流，原来那时的我在他们眼里还不算差，现在想想已经够欣慰了。6月24号，与母校彻底再见了~</p>
+<p>其实二战也没有想得那么复杂，干就完了。但真正难的是做出那个决定，鼓起勇气面对未知的挑战。</p>
+<p>我始终怀念并感激当年出去撒欢的自己</p>
+<p>2020年7月16日01:27:26 于济宁</p>
+]]></content>
+      <tags>
+        <tag>essay</tag>
       </tags>
   </entry>
   <entry>

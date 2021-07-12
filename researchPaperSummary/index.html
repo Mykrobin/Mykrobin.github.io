@@ -120,12 +120,31 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/categories" class="waves-effect waves-light">
+    <a href="" class="waves-effect waves-light">
+
       
-      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
-      
-      <span>论文阅读</span>
+      <span>资料仓库</span>
+      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
     </a>
+    <ul class="sub-nav menus_item_child ">
+      
+      <li>
+        <a href="/categories">
+          
+          <i class="fas fa-bookmark" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>PaperRepository</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/SJT-OS">
+          
+          <span>OS</span>
+        </a>
+      </li>
+      
+    </ul>
     
   </li>
   
@@ -142,7 +161,7 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/" class="waves-effect waves-light">
+    <a href="/about" class="waves-effect waves-light">
 
       
       <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
@@ -153,9 +172,9 @@
     <ul class="sub-nav menus_item_child ">
       
       <li>
-        <a href="/about">
+        <a href="/aboutme">
           
-          <i class="fas fa-user-circle" style="margin-top: -20px; zoom: 0.6;"></i>
+          <i class="fas fa-user-graduate" style="margin-top: -20px; zoom: 0.6;"></i>
           
           <span>关于我</span>
         </a>
@@ -237,6 +256,15 @@
           <i class="fas fa-paperclip" style="margin-top: -20px; zoom: 0.6;"></i>
           
           <span>Papers</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/books">
+          
+          <i class="fas fa-book" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>Books</span>
         </a>
       </li>
       
@@ -327,12 +355,34 @@
         
         <li class="m-nav-item">
 	  
-		<a href="/categories" class="waves-effect waves-light">
+		<a href="javascript:;">
 			
-			    <i class="fa-fw fas fa-bookmark"></i>
+				<i class="fas fa-fw fa-link"></i>
 			
-			论文阅读
+			资料仓库
+			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
 		</a>
+            <ul  style="background:  ;" >
+              
+                <li>
+
+                  <a href="/categories " style="margin-left:75px">
+				  
+				   <i class="fa fas fa-bookmark" style="position: absolute;left:50px" ></i>
+			      
+		          <span>PaperRepository</span>
+                  </a>
+                </li>
+              
+                <li>
+
+                  <a href="/SJT-OS " style="margin-left:75px">
+				  
+		          <span>OS</span>
+                  </a>
+                </li>
+              
+            </ul>
           
         </li>
         
@@ -360,9 +410,9 @@
               
                 <li>
 
-                  <a href="/about " style="margin-left:75px">
+                  <a href="/aboutme " style="margin-left:75px">
 				  
-				   <i class="fa fas fa-user-circle" style="position: absolute;left:50px" ></i>
+				   <i class="fa fas fa-user-graduate" style="position: absolute;left:50px" ></i>
 			      
 		          <span>关于我</span>
                   </a>
@@ -450,6 +500,16 @@
 				   <i class="fa fas fa-paperclip" style="position: absolute;left:50px" ></i>
 			      
 		          <span>Papers</span>
+                  </a>
+                </li>
+              
+                <li>
+
+                  <a href="/books " style="margin-left:75px">
+				  
+				   <i class="fa fas fa-book" style="position: absolute;left:50px" ></i>
+			      
+		          <span>Books</span>
                   </a>
                 </li>
               
@@ -632,14 +692,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>Update Date:&nbsp;&nbsp;
-                    2021-07-06
+                    2021-07-12
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    6
+                    286
                 </div>
                 
 
@@ -674,9 +734,47 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="System-Security"><a href="#System-Security" class="headerlink" title="System Security"></a>System Security</h2><h3 id="TEE"><a href="#TEE" class="headerlink" title="TEE"></a>TEE</h3><hr>
-<h3 id="Micro-Architecture"><a href="#Micro-Architecture" class="headerlink" title="Micro Architecture"></a>Micro Architecture</h3><hr>
-<h2 id="Google-Technology"><a href="#Google-Technology" class="headerlink" title="Google Technology"></a>Google Technology</h2><h2 id="Virtualization"><a href="#Virtualization" class="headerlink" title="Virtualization"></a>Virtualization</h2>
+                <center>
+     <h1>Papers Summary</h1>
+ </center>
+
+<hr>
+<h3 id="TODO-summary"><a href="#TODO-summary" class="headerlink" title="TODO summary"></a>TODO summary</h3><ul>
+<li>[IEEE S&amp;P’08 Lares:An Architecture for Secure Active Monitoring Using Virtualization]</li>
+<li>[IEEE S&amp;P’15 SP’15 Last-Level Cache Side-Channel Attacks are Practical]</li>
+<li><a href="https://mykrobin.github.io/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/">IEEE S&amp;P’20 RAMBleed: Reading Bits in Memory Without Accessing Them</a></li>
+<li>[IEEE S&amp;P RADAR]</li>
+<li>[IEEE S&amp;P Attacks Directories, Not Caches]</li>
+<li><a href="http://mykrobin.github.io/2020/10/18/CloudVisor-D/">Security’20 (Mostly) Exitless VM Protection from Untrusted Hypervisor through Disaggregated Nested Virtualization</a></li>
+<li><a href="http://mykrobin.github.io/2020/09/14/CloudMon/"> TC’16 CloudMon: Monitoring Virtual Machines in Clouds</a></li>
+<li><a href="http://mykrobin.github.io/2020/10/12/Applying-TPM-to-Cloud/">S&amp;P’20 Applying TPM to Cloud</a></li>
+<li><a href="http://mykrobin.github.io/2021/05/24/CHANCEL/">NDSS’21 CHANCEL: Efficient Multi-client Isolation Under Adversarial Programs</a></li>
+<li>[NDSS’19 Establishing Software Root of Trust Unconditionally]</li>
+<li><a href="http://mykrobin.github.io/2021/03/23/CITM-attacks/">CCS’21 Cache-in-the-Middle (CITM) Attacks : Manipulating Sensitive Data in Isolated Execution Environments</a></li>
+<li><a href="http://mykrobin.github.io/2020/05/15/Amazon-Aurora-Design-Considerations-for-High Throughput Cloud-Native Relational Databases/">SIGMOD’17 Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</a></li>
+<li><a href="http://mykrobin.github.io/2021/06/11/LinnOS/">OSDI’20 LinnOS: Predictability on Unpredictable Flash Storage with a Light Neural Network</a></li>
+<li><a href="http://mykrobin.github.io/2021/01/08/DORY/">OSDI’20 DORY: An Encrypted Search System with Distributed Trust</a></li>
+<li>[OSDI Transient Execution Attacks]</li>
+<li><a href="http://mykrobin.github.io/2020/07/22/TimeCrypt/">NSDI’20 TimeCrypt: Encrypted Data Stream Processing at Scale with Cryptographic Access Control</a></li>
+<li><a href="http://mykrobin.github.io/2020/10/09/PrivateEye/">NSDI’20 PrivateEye: Scalable and Privacy-Preserving Compromise Detection in the Cloud</a></li>
+<li><a href="http://mykrobin.github.io/2020/11/23/Pioneer/">SOSP’05 Pioneer: Verifying Code Integrity and Enforcing Untampered Code Execution on Legacy Systems</a></li>
+<li>[SOSP’07 SecVisor: A Tiny Hypervisor to Provide Lifetime Kernel Code Integrity for Commodity OSes]</li>
+<li>[HPCA’18 Comprehensive VM Protection against Untrusted Hypervisor through Retrofitted AMD Memory Encryption]</li>
+<li><a href="http://mykrobin.github.io/2020/06/27/Dancing-with-Wolves/">VEE’17 Dancing with Wolves: Towards Practical Event-driven VMM Monitoring</a></li>
+<li><a href="http://mykrobin.github.io/2020/12/02/HIMA/">ACSAC’09 HIMA: A Hypervisor-Based Integrity Measurement Agent</a> [TODO:修正论文链接]</li>
+<li><a href="http://mykrobin.github.io/2020/12/01/HyperLock/">EuroSys’12 Isolating Commodity Hosted Hypervisors with HyperLock</a></li>
+<li>[JSAC Information theoretic framework]</li>
+<li>[Cryptographic Techniques FHEW: Bootstrapping Homomorphic Encryption in less than a second]</li>
+</ul>
+<h3 id="System-Security"><a href="#System-Security" class="headerlink" title="System Security"></a>System Security</h3><h4 id="TEE"><a href="#TEE" class="headerlink" title="TEE"></a>TEE</h4><hr>
+<h4 id="Micro-Architecture"><a href="#Micro-Architecture" class="headerlink" title="Micro Architecture"></a>Micro Architecture</h4><hr>
+<h3 id="Google-Technology"><a href="#Google-Technology" class="headerlink" title="Google Technology"></a>Google Technology</h3><h3 id="Virtualization"><a href="#Virtualization" class="headerlink" title="Virtualization"></a>Virtualization</h3><hr>
+ <center>
+     <h1>Labs</h1>
+ </center>
+
+<hr>
+<h3 id="IPADS"><a href="#IPADS" class="headerlink" title="IPADS"></a>IPADS</h3><h3 id="THU"><a href="#THU" class="headerlink" title="THU"></a>THU</h3><h3 id="CAS"><a href="#CAS" class="headerlink" title="CAS"></a>CAS</h3><h3 id="MIT"><a href="#MIT" class="headerlink" title="MIT"></a>MIT</h3><h3 id="CyLab"><a href="#CyLab" class="headerlink" title="CyLab"></a>CyLab</h3>
                 
             </div>
             <hr/>
@@ -1467,7 +1565,7 @@ new Valine({
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">81.2k</span>&nbsp;字
+                class="white-color">83.1k</span>&nbsp;字
             
             
             

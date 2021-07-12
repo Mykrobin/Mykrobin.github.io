@@ -120,12 +120,31 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/categories" class="waves-effect waves-light">
+    <a href="" class="waves-effect waves-light">
+
       
-      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
-      
-      <span>论文阅读</span>
+      <span>资料仓库</span>
+      <i class="fas fa-chevron-down" aria-hidden="true" style="zoom: 0.6;"></i>
     </a>
+    <ul class="sub-nav menus_item_child ">
+      
+      <li>
+        <a href="/categories">
+          
+          <i class="fas fa-bookmark" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>PaperRepository</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/SJT-OS">
+          
+          <span>OS</span>
+        </a>
+      </li>
+      
+    </ul>
     
   </li>
   
@@ -142,7 +161,7 @@
   
   <li class="hide-on-med-and-down nav-item">
     
-    <a href="/" class="waves-effect waves-light">
+    <a href="/about" class="waves-effect waves-light">
 
       
       <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
@@ -153,9 +172,9 @@
     <ul class="sub-nav menus_item_child ">
       
       <li>
-        <a href="/about">
+        <a href="/aboutme">
           
-          <i class="fas fa-user-circle" style="margin-top: -20px; zoom: 0.6;"></i>
+          <i class="fas fa-user-graduate" style="margin-top: -20px; zoom: 0.6;"></i>
           
           <span>关于我</span>
         </a>
@@ -237,6 +256,15 @@
           <i class="fas fa-paperclip" style="margin-top: -20px; zoom: 0.6;"></i>
           
           <span>Papers</span>
+        </a>
+      </li>
+      
+      <li>
+        <a href="/books">
+          
+          <i class="fas fa-book" style="margin-top: -20px; zoom: 0.6;"></i>
+          
+          <span>Books</span>
         </a>
       </li>
       
@@ -327,12 +355,34 @@
         
         <li class="m-nav-item">
 	  
-		<a href="/categories" class="waves-effect waves-light">
+		<a href="javascript:;">
 			
-			    <i class="fa-fw fas fa-bookmark"></i>
+				<i class="fas fa-fw fa-link"></i>
 			
-			论文阅读
+			资料仓库
+			<span class="m-icon"><i class="fas fa-chevron-right"></i></span>
 		</a>
+            <ul  style="background:  ;" >
+              
+                <li>
+
+                  <a href="/categories " style="margin-left:75px">
+				  
+				   <i class="fa fas fa-bookmark" style="position: absolute;left:50px" ></i>
+			      
+		          <span>PaperRepository</span>
+                  </a>
+                </li>
+              
+                <li>
+
+                  <a href="/SJT-OS " style="margin-left:75px">
+				  
+		          <span>OS</span>
+                  </a>
+                </li>
+              
+            </ul>
           
         </li>
         
@@ -360,9 +410,9 @@
               
                 <li>
 
-                  <a href="/about " style="margin-left:75px">
+                  <a href="/aboutme " style="margin-left:75px">
 				  
-				   <i class="fa fas fa-user-circle" style="position: absolute;left:50px" ></i>
+				   <i class="fa fas fa-user-graduate" style="position: absolute;left:50px" ></i>
 			      
 		          <span>关于我</span>
                   </a>
@@ -453,6 +503,16 @@
                   </a>
                 </li>
               
+                <li>
+
+                  <a href="/books " style="margin-left:75px">
+				  
+				   <i class="fa fas fa-book" style="position: absolute;left:50px" ></i>
+			      
+		          <span>Books</span>
+                  </a>
+                </li>
+              
             </ul>
           
         </li>
@@ -520,6 +580,249 @@
     <!-- 所有文章卡片 -->
     <article id="articles" class="container articles">
         <div class="row article-row">
+            
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2020/10/09/PrivateEye/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="https://cdn.jsdelivr.net/gh/LuckyZmj/imgbed@master/posts/20200928011708.jpg" class="responsive-img" alt="PrivateEye">
+                            
+                            <span class="card-title">PrivateEye</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                
+
+
+
+序号
+属性
+内容
+
+
+
+
+1
+原文PDF
+PrivateEye
+
+
+2
+作者信息
+
+
+
+3
+核心内容
+对部署在云上的虚拟机进行保护，而不是对hypervisor进行防护
+
+
+4
+研究领域
+保护云安全
+
+
+5
+全文总览
+通过对少数机器
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-10-09
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/NSDI/" class="post-category">
+                                    NSDI
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/Virtual-Machine/">
+                            <span class="chip bg-color">Virtual Machine</span>
+                        </a>
+                        
+                        <a href="/tags/Hypervisor/">
+                            <span class="chip bg-color">Hypervisor</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2020/09/14/CloudMon/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="https://cdn.jsdelivr.net/gh/LuckyZmj/imgbed@master/posts/20200928014458.jpg" class="responsive-img" alt="CloudMon">
+                            
+                            <span class="card-title">CloudMon</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                
+
+
+
+序号
+属性
+内容
+
+
+
+
+1
+原文PDF
+CloudMon
+
+
+2
+作者信息
+Cl.W
+
+
+3
+核心内容
+这篇文章信任hypervisor并在此基础上对guestVM进行保护，主要是从内存角度出发，针对rootkit攻击进行运行时检
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-09-14
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/TC/" class="post-category">
+                                    TC
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/">
+                            <span class="chip bg-color">论文解读</span>
+                        </a>
+                        
+                        <a href="/tags/Virtual-Machine/">
+                            <span class="chip bg-color">Virtual Machine</span>
+                        </a>
+                        
+                        <a href="/tags/System-Security/">
+                            <span class="chip bg-color">System Security</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2020/09/13/BatchCrypt/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="https://cdn.jsdelivr.net/gh/LuckyZmj/imgbed@master/posts/20200928020939.jpg" class="responsive-img" alt="BatchCrypt">
+                            
+                            <span class="card-title">BatchCrypt</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                
+
+
+
+序号
+属性
+内容
+
+
+
+
+1
+原文PDF
+Batchcrypt
+
+
+2
+作者信息
+Chengliang Zhang
+
+
+3
+核心内容
+利用同态加密技术实现FL的安全数据传输，通过改进系统模型，降低同态加密带来的加密与通讯代价。
+
+
+
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-09-13
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/ATC/" class="post-category">
+                                    ATC
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/">
+                            <span class="chip bg-color">论文解读</span>
+                        </a>
+                        
+                        <a href="/tags/Federal-Learning/">
+                            <span class="chip bg-color">Federal Learning</span>
+                        </a>
+                        
+                        <a href="/tags/Homomorphic/">
+                            <span class="chip bg-color">Homomorphic</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
             
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
@@ -1043,159 +1346,6 @@ SecVisor
                 </div>
             </div>
             
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/07/19/Xen-log-2-Add-a-new-Hypercall/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="https://cdn.jsdelivr.net/gh/LuckyZmj/imgbed@master/posts/20200928020939.jpg" class="responsive-img" alt="Xen log 2 Add a new Hypercall">
-                            
-                            <span class="card-title">Xen log 2 Add a new Hypercall</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                当前使用的xen版本为Xen-4.11
-修改Xen文件在Xen-4.11中，仅对hypercall.c hypercall.h文件进行修改即可实现用户添加hypercall
-当前xen源码的顶级目录为Xen
-修改xen.h目标文件位置
-Xe
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-19
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-user fa-fw"></i>
-                                Mykrobin
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/Virtualization/">
-                            <span class="chip bg-color">Virtualization</span>
-                        </a>
-                        
-                        <a href="/tags/Hypervisor/">
-                            <span class="chip bg-color">Hypervisor</span>
-                        </a>
-                        
-                        <a href="/tags/Xen-log/">
-                            <span class="chip bg-color">Xen log</span>
-                        </a>
-                        
-                        <a href="/tags/Linux/">
-                            <span class="chip bg-color">Linux</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/07/18/RADAR/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="https://cdn.jsdelivr.net/gh/LuckyZmj/imgbed@master/posts/20200928014929.jpg" class="responsive-img" alt="RADAR">
-                            
-                            <span class="card-title">RADAR</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-18
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/Security-and-Privacy/" class="post-category">
-                                    Security and Privacy
-                                </a>
-                                
-                                <a href="/categories/Security-and-Privacy/TODO/" class="post-category">
-                                    TODO
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB/">
-                            <span class="chip bg-color">论文解读</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/07/17/Operating-Systems/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="https://cdn.jsdelivr.net/gh/LuckyZmj/imgbed@master/posts/20200928014621.jpg" class="responsive-img" alt="Operating Systems">
-                            
-                            <span class="card-title">Operating Systems</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-17
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-user fa-fw"></i>
-                                Mykrobin
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/TODO/">
-                            <span class="chip bg-color">TODO</span>
-                        </a>
-                        
-                        <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">
-                            <span class="chip bg-color">读书笔记</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
         </div>
     </article>
 
@@ -1244,7 +1394,7 @@ Xe
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">81.2k</span>&nbsp;字
+                class="white-color">83.1k</span>&nbsp;字
             
             
             
