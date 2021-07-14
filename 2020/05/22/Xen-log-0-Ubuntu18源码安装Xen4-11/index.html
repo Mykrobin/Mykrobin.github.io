@@ -715,14 +715,14 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>Update Date:&nbsp;&nbsp;
-                    2021-06-22
+                    2021-07-14
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>Word Count:&nbsp;&nbsp;
-                    872
+                    993
                 </div>
                 
 
@@ -822,20 +822,22 @@ sudo make install-tools
 <p>解决完问题后，重复安装过程。</p>
 <h3 id="Post-Install"><a href="#Post-Install" class="headerlink" title="Post-Install"></a>Post-Install</h3><p><strong>Reload dynamic libraries:</strong></p>
 <pre><code>/sbin/ldconfig
-</code></pre><h3 id="Grube-Settings"><a href="#Grube-Settings" class="headerlink" title="Grube-Settings"></a>Grube-Settings</h3><pre><code>mkdir -p /etc/default/grub.d
-</code></pre><p><strong>Create /etc/default/grub.d/xen.cfg:</strong></p>
-<pre><code>gedit /etc/default/grub.d/xen.cfg
-</code></pre><p><strong>在打开的文本中添加下面内容</strong></p>
-<p>Be careful! The last settings depends on your system-language! </p>
-<pre><code>GRUB_DISABLE_OS_PROBER=true
-GRUB_CMDLINE_XEN_DEFAULT="dom0_mem=2560M,max:2560M"
-GRUB_DEFAULT="Ubuntu GNU/Linux, with Xen-Hypervisor"
-</code></pre><p><strong>Update grub:</strong></p>
+</code></pre><h3 id="Grube-Settings"><a href="#Grube-Settings" class="headerlink" title="Grube-Settings"></a>Grube-Settings</h3><p>在部署了Xen虚拟机管理器之后，我们需要<strong>切换开机启动顺序</strong>，一般在<code>Ubuntu18</code>或者<code>Debian9</code>上进行实验的话，默认原始系统顺序为0，部署了Xen之后的系统内核启动顺序为2.</p>
+<p>位置 <code>/etc/default/grub</code>,将默认的启动顺序设置为2即可 .</p>
+<pre><code class="lang-bash">GRUB_DEFAULT=2
+GRUB_TIMEOUT_STYLE=hidden
+GRUB_TIMEOUT=0
+GRUB_DISTRIBUTOR=`lsb_release -i -s 2&gt; /dev/null || echo Debian`
+GRUB_CMDLINE_LINUX_DEFAULT="debian-installer/custom-installation=/custom find_preseed=/preseed.cfg auto pr$
+GRUB_CMDLINE_LINUX=""
+</code></pre>
+<p><strong>Update grub:</strong></p>
 <pre><code>update-grub
 </code></pre><p><strong>删除xendomains</strong></p>
 <p>当前版本有一个小bug，需要删除一个xendomains文件</p>
 <pre><code>rm /etc/init.d/xendomains
-</code></pre><h3 id="安装-xen-tools"><a href="#安装-xen-tools" class="headerlink" title="安装 xen-tools"></a>安装 xen-tools</h3><pre><code>apt install lvm2 debootstrap libconfig-inifiles-perl libdata-validate-domain-perl libdata-validate-ip-perl libdata-validate-uri-perl libfile-slurp-perl libfile-which-perl libsort-versions-perl libterm-ui-perl libtext-template-perl openssh-client perl debian-archive-keyring rinse libtest-notabs-perl
+</code></pre><p>注意：此时可以跳过Xen-tools的安装步骤，直接开启Xen Services，如果在重启之后出现了安装成功的标志，则不需要进行Xen-tools的安装，否则需要在Ubuntu系统中按顺序进行下述操作。</p>
+<h3 id="安装-xen-tools"><a href="#安装-xen-tools" class="headerlink" title="安装 xen-tools"></a>安装 xen-tools</h3><pre><code>apt install lvm2 debootstrap libconfig-inifiles-perl libdata-validate-domain-perl libdata-validate-ip-perl libdata-validate-uri-perl libfile-slurp-perl libfile-which-perl libsort-versions-perl libterm-ui-perl libtext-template-perl openssh-client perl debian-archive-keyring rinse libtest-notabs-perl
 </code></pre><h4 id="Download-and-make"><a href="#Download-and-make" class="headerlink" title="Download and make"></a>Download and make</h4><p>(最好是放在Xen目录下)</p>
 <pre><code>git clone https://github.com/xen-tools/xen-tools.git
 cd xen-tools
@@ -1699,7 +1701,7 @@ new Valine({
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">83.1k</span>&nbsp;字
+                class="white-color">83.2k</span>&nbsp;字
             
             
             
@@ -1771,15 +1773,6 @@ new Valine({
             
         </div>
         <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/Mykrobin" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
-        <i class="fab fa-github"></i>
-    </a>
-
-
-
-    <a href="mailto:964766330@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
-        <i class="fas fa-envelope-open"></i>
-    </a>
 
 
 
@@ -1787,15 +1780,8 @@ new Valine({
 
 
 
-    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=964766330" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 964766330" data-position="top" data-delay="50">
-        <i class="fab fa-qq"></i>
-    </a>
 
 
-
-    <a href="https://weibo.com/u/3922414502" class="tooltipped" target="_blank" data-tooltip="关注我的微博: https://weibo.com/u/3922414502" data-position="top" data-delay="50">
-        <i class="fab fa-weibo"></i>
-    </a>
 
 
 
