@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>AOS-LEC-11-Scalable-Synchronization</title>
-    <url>/2021/07/06/AOS-LEC-11-Scalable-Synchronization/</url>
-    <content><![CDATA[<h2 id="多核VS对称多处理器"><a href="#多核VS对称多处理器" class="headerlink" title="多核VS对称多处理器"></a>多核VS对称多处理器</h2><p><img src="https://cdn.jsdelivr.net/gh/mykrobin/cdn/images/aos-slide-11-01-SMP.png" alt=""></p>
-<h2 id="NUMA架构"><a href="#NUMA架构" class="headerlink" title="NUMA架构"></a>NUMA架构</h2><p><img src="https://cdn.jsdelivr.net/gh/mykrobin/cdn/images/aos-slide-11-01-NUMA.png" alt=""></p>
-]]></content>
+    <title>A FULLY HOMOMORPHIC ENCRYPTION SCHEME</title>
+    <url>/2020/08/13/A-FULLY-HOMOMORPHIC-ENCRYPTION-SCHEME/</url>
+    <content><![CDATA[]]></content>
       <tags>
-        <tag>THU-AOS</tag>
+        <tag>TODO</tag>
       </tags>
   </entry>
   <entry>
@@ -53,114 +51,13 @@
       </tags>
   </entry>
   <entry>
-    <title>A FULLY HOMOMORPHIC ENCRYPTION SCHEME</title>
-    <url>/2020/08/13/A-FULLY-HOMOMORPHIC-ENCRYPTION-SCHEME/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>TODO</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
-    <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://dl.acm.org/doi/epdf/10.1145/3035918.3056101" target="_blank" rel="noopener">Aurora</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">Amazon</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">分布式数据库</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">数据库</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">致力于构建一个分布式数据库</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h3 id="0-研究背景-为什么出现Aurora？"><a href="#0-研究背景-为什么出现Aurora？" class="headerlink" title="0 研究背景 为什么出现Aurora？"></a>0 研究背景 为什么出现Aurora？</h3><p>    Aurora是亚马逊云服务AWS中的关系型数据库服务，主要面向OLTP场景。 <strong>Aurora</strong>基本设计理念是在云上环境下，数据库的最大瓶颈不再是计算或者存储资源，而是网络，因此基于一套存储计算分离架构，将日志处理下推到分布式存储层，通过架构上的优化来解决网络瓶颈。 </p>
-<p>    在云上环境下，存储计算分离作为解决系统弹性和伸缩性的方案越来越普遍。广义来说，任何数据库，底下文件系统挂一个分布式存储，即可以认为做到了存储计算分离。通过存储计算分离，可以透明添加存储节点，剔除故障节点，进行故障切换，扩展存储空间等。在这个背景下，IO不再成为数据库的瓶颈，因为IO压力可以打散在多个存储节点上，反而是<strong>网络成为瓶颈</strong>，因为数据库实例与所有存储节点的交互都需要通过网络，尤其是为了提升数据库性能，数据库实例与存储节点可能是并行交互的，这进一步加重了网络压力。</p>
-<p>    传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。比如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。另外一个我们熟悉场景是事务提交操作(IO写操作)，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。 <strong>传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的。</strong></p>
-<p>    本文介绍的Aurora是一个云上环境全新的数据库服务可以很好的解决上述传统数据库遇到的问题。 <strong>它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。</strong> Aurora体系下的数据库实例仍然包含了大部分核心功能，比如查询处理，事务，锁，缓存管理，访问接口和undo日志管理等；但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
-<h3 id="1-面临问题"><a href="#1-面临问题" class="headerlink" title="1 面临问题"></a>1 面临问题</h3><p>  在云环境中，将存储和计算分离已经成为解决系统弹性和可伸缩性的方案。实现存储计算分离，可以进行故障切换，扩展存储空间等。因此磁盘IO压力可以打散在多个存储节点上，所以IO不再成为数据库的瓶颈。存储和计算分离之后，数据库实例与所有存储节点的交互都需要通过网络，加重了网络带宽压力，从而网络成为瓶颈。</p>
-<h3 id="2-问题带来的挑战"><a href="#2-问题带来的挑战" class="headerlink" title="2 问题带来的挑战"></a>2 问题带来的挑战</h3><p>  在云环境中数据库的瓶颈不再是计算或者是资源存储，而是网络。基于此，Aurora设计了存储和计算分离的架构，与传统数据库相比较，这些问题带来的挑战如下。</p>
-<p>  传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。云环境中的IO操作与传统数据库中的操作是不同的，这带来了IO操作的挑战。</p>
-<p>  事务提交操作，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的，这又是一大挑战。</p>
-<h3 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3 解决方法"></a>3 解决方法</h3><p>  Aurora是一个云上环境全新的数据库服务可以很好的解决上述问题带来的挑战。它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。Aurora体系下的数据库实例仍然包含了大部分核心功能，但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
-<h5 id="3-1-数据存储"><a href="#3-1-数据存储" class="headerlink" title="3.1 数据存储"></a><strong>3.1</strong> <strong>数据存储</strong></h5><p>  Aurora存储层的复制基于Quorum协议，假设复制拓扑中有V个节点，每个节点有一个投票权，读或写必须拿到Vr 或 Vw个投票才能返回。为了满足一致性，需要满足两个条件，首先Vr + Vw &gt; V，这个保证了每次读都能读到拥有最新数据的节点；第二，Vw &gt; V/2，每次写都要保证能获取到上次写的最新数据，避免写冲突。</p>
-<p>  结合Quorum模型，V=6 ，Vw=4，Vr=3，Aurora可以容忍任何一个AZ出现故障，不会影响写服务；任何一个AZ出现故障，以及另外一个AZ中的一个节点出现故障，不会影响读服务且不会丢失数据。通过Quorum协议，Aurora可以保证只要AZ级别的故障(火灾，洪水，网络故障)和节点故障(磁盘故障，掉电，机器损坏)不同时发生，就不会破坏协议本身，数据库可用性和正确性就能得到保证。</p>
-<h5 id="3-2-日志即数据"><a href="#3-2-日志即数据" class="headerlink" title="3.2 日志即数据"></a><strong>3.2</strong> <strong>日志即数据</strong></h5><p>  以MySQL为例，考虑主备复制，如图1所示，AZ1和AZ2分别部署一个MySQL实例做同步镜像复制，底层存储采用EBS，并且每个EBS还有自己的一份镜像，另外部署S3进行redo日志和binlog日志归档，以支持基于时间点的恢复。每个步骤都需要传递5种类型的数据，包括redo，binlog，data-page，double-write和frm元数据。图中的1，3，5步骤是顺序的，要进行4次网络IO，且其中3次是同步串行的。从存储角度来看，数据在EBS上存了4份，需要4份都写成功才能返回。所以在这种架构下，无论是IO量还是串行化模型都会导致性能损耗。</p>
-<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/1.png" width="300px" height="300px"></p>
-<p>                     图1. Mirrored MySQL写操作流程</p>
-<p>  在Aurora中，所有的写类型只有一种，那就是redo日志。修改一个数据页，会同步产生对应的redo日志。事务提交时，需要事务对应的redo日志都落盘成功后才能返回。存储节点接收redo日志，基于旧版本数据页回放日志，可以得到新版本的数据页。为了避免每次都从头开始回放数据页变更产生的redo日志，存储节点会定期物化数据页版本。Aurora由跨AZ的一个主实例和多个副本实例组成，主实例与副本实例或者存储节点间只传递redo日志和元信息。主实例并发向6个存储节点和副本实例发送日志，当4/6的存储节点应答后，则认为日志已经持久化。传统数据库宕机重启后，恢复从最近的一个检查点开始，读取检查点后的所有redo日志进行回放，确保已经提交的事务对应的数据页得到更新。</p>
-<p>  在Aurora中，redo日志相关的功能下推到存储层，回放日志的工作可以一直在后台做。真正进行故障恢复时，需要做的事情很少，所以故障恢复的速度非常快。Aurora存储服务设计的一个关键原则是减少前台用户写的响应时间，因此将尽可能多的操作移到后台异步执行，并且存储节点会根据前台的请求压力，自适应分配资源做不同的工作。对于Aurora而言，分离的存储服务层使得后台线程推进检查点动作完全不影响数据库实例，并且是推进地越快，越有利于前台的磁盘IO读操作。Aurora写基于Quorum模型，存储分片后，按片达成多数即可返回，由于分布足够离散，少数的磁盘IO压力大也不会影响到整体的写性能。</p>
-<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/2.png" width="400px" height="300px"></p>
-<p>如上图所示，图中详细介绍了主要的写流程，</p>
-<p>1).存储节点接收数据库实例的日志，并追加到内存队列；</p>
-<p>2).将日志在本地持久化成功后，给实例应答；</p>
-<p>3).按分片归类日志，并确认丢失了哪些日志；</p>
-<p>4).与其它存储节点交互，填充丢失的日志；</p>
-<p>5).回放日志生成新的数据页；</p>
-<p>6).周期性地备份数据页和日志到S3系统；</p>
-<p>7).周期性地回收过期的数据页版本；</p>
-<p>8).周期性地对数据页进行CRC校验。</p>
-<p>  上述所有写相关的操作，只有第1)和第2)步是串行同步的，会直接影响前台请求的响应时间，其它操作都是异步的。</p>
-<h4 id="3-3-事务提交"><a href="#3-3-事务提交" class="headerlink" title="3.3 事务提交"></a><strong>3.3</strong> <strong>事务提交</strong></h4><p>  在Aurora中，数据库实例向存储节点传递redo日志，达成多数派后将事务标记为提交状态，然后推进VDL，使数据库进入一个新的一致状态。每个事务的每条redo日志都会分配一个唯一的LSN，这个LSN一定大于当前最新的VDL。由于底层存储按segment分片，每个分片管理一部分页面，当一个事务涉及的修改跨多个分片时，事务对应的日志被打散，每个分片只能看到这个事务的部分日志。为了确保各个分片日志的完整性，每条日志都记录前一条日志的链接，通过前向链接确保分片拥有了完整的日志。Segment Complete LSN(SCL)表示分片拥有完整日志的位点，存储节点相互间通过gossip协议来弥补本地日志空洞，推进SCL。</p>
-<p>  在Aurora中，事务提交是完全异步的。每个事务由若干个日志组成，并包含有一个唯一的“commit LSN”，工作线程处理事务提交请求时，将事务相关的日志提交到持久化队列并将事务挂起，并继续处理其它数据库请求。当VDL的位点大于事务的LSN时，表示这个事务redo日志都已经持久化，可以向客户端回包，通知事务已经成功执行。在Aurora中，有一个独立的线程处理事务成功执行的回包工作，因此，从整个提交流程来看，所有工作线程不会因为事务提交等待日志推进而堵塞，他们会继续处理新的请求，通过这种异步提交方式，大大提高了系统的吞吐。</p>
-<h4 id="3-4-故障恢复"><a href="#3-4-故障恢复" class="headerlink" title="3.4 故障恢复"></a><strong>3.4</strong> <strong>故障恢复</strong></h4><p>  大多数数据库系统通常会周期性地做检查点，并将检查点信息计入日志。故障时，数据页中同时可能包含了提交和未提交的数据，因此，在故障恢复时，系统首先需要从上一个检查点开始回放日志，将数据页恢复到故障时的状态，然后根据undo日志回滚未交事务。从故障恢复的过程来看，故障恢复是一个比较耗时的操作，并且与检查点操作频率强相关。通过提高检查点频率，可以减少故障恢复时间，但是这直接会影响系统处理前台请求吞吐，所以需要在检查点频率和故障恢复时间做一个权衡，而在Aurora中不需要做这种权衡。</p>
-<p>  Aurora将回放日志逻辑下推到存储节点，并且在数据库在线提供服务时在后台常态运行。因此，当出现故障重启时，存储服务能快速恢复。数据库实例宕机重启后，需要故障恢复来获得运行时的一致状态，实例与仲裁协议确定的N个存储节点通信，这样确保能读到最新的数据，并重新计算新的VDL，超过VDL部分的日志都可以被截断丢弃。在Aurora中，对于新分配的LSN范围做了限制，这个主要是为了避免数据库实例上堆积过多的未提交事务。</p>
-<h3 id="4-实验验证"><a href="#4-实验验证" class="headerlink" title="4 实验验证"></a>4 实验验证</h3><p>  本文的实验对Aurora的读写能力，吞吐量大小，以及部署后用户的使用数据对Aurora进行了分析。</p>
-<p>  从sysbench测试的数据来看，Aurora是基于镜像MySQL吞吐能力的35倍，每个事务的日志量比基于镜像MySQL日志量要少7.7倍。从用户的使用数据来看，某游戏公司使用后web应用响应时间明显降低，由之前的15ms降低到5.5ms,性能提高了近3倍，而且时间延迟明显降低。</p>
-<p>  基于实验验证，Aurora相对于传统数据库的优势如下：</p>
-<p>  第一，底层数据库存储是一个分布式存储服务，可以轻松应对故障；</p>
-<p>  第二，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；</p>
-<p>  第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
-<h3 id="5-相关工作"><a href="#5-相关工作" class="headerlink" title="5 相关工作"></a>5 相关工作</h3><p>  本文的相关工作主要是在分布式存储的将存储与计算解耦、分布式系统、并发控制、日志结构的存储与数据恢复等几个方面分别进行描述的。在描述的过程中，首先通过对Aurora面临的问题进行逐个层面的分析，并对相关工作进行总结，在分析之后，将已有工作与Aurora相结合，并通过Aurora与先有工作进行比较说明，进一步阐述Aurora的实现原理。</p>
-<p>  将存储与计算解耦：在此处本文提出与传统系统通常作为整体不同的数据库系统，介绍了有一些关于将内核分解为不同组件的数据库的研究。Deuteronomy 将提供并发控制和恢复的事务组件（TC）与提供LLAMA访问方法的数据组件（DC）分开，结构化缓存和存储管理器。Sinfonia和Hyder是在横向扩展服务上抽象事务访问方法的系统，并且可以使用这些抽象来实现数据库系统。Yesquel系统实现了多版本分布式平衡树，并将并发控制与查询处理器分离。在Aurora中，将查询处理、事务、并发、缓冲区高速缓存和访问方法与作为横向扩展服务实现的日志记录，存储和恢复分离。</p>
-<p>  分布式系统：首先指出已经证明过的Brewer CAP定理，指出高度可用的系统无法在存在网络分区的情况下提供“强”的一致性保证。这个结果激发了作者对一致性目标的追求。并对相关工作进行总结，Bailis等人研究了提供高可用事务（HATs）的问题，该事务既不会在分区期间遭受不可用，也不会导致高网络延迟。他们表明可串行性，快照隔离和可重复读取隔离不符合HAT的要求，而大多数其他隔离级别都可以通过高可用性实现。Aurora通过简化假设，即在任何时候只有一个写入器使用从单个有序域分配的LSN生成日志更新来提供所有这些隔离级别。Google的Spanner提供外部一致的读写操作，并在一个时间戳上跨数据库提供全局一致的读取信息。这些功能使Spanner支持一致的备份，一致的分布式查询处理以及原子模式更新，所有这些都是在全球范围内进行的，甚至在正在进行的事务存在的情况下也是如此。Spanner专门针对Google的繁重工作负载，并依靠两阶段提交和两阶段锁定来进行读/写事务。</p>
-<p>  并发控制：本文指出较弱的一致性和隔离模型在分布式数据库中是众所周知的，并导致了乐观的复制技术以及最终的一致性系统。集中式系统中的其他方法包括基于锁定的经典悲观方案，Hekaton中的多方案并发控制之类的乐观方案，VoltDB等分片方法和HyPer中的时间戳排序和Deuteronomy . Aurora的存储服务为数据库引擎提供了持久保留的本地磁盘的抽象，并允许引擎确定隔离和并发控制。</p>
-<p>  日志结构存储：先介绍日志结构的起源，日志结构的存储系统由LFS 在1992年引入。并对最近的日志结构存储的相关工作进行总结，Deuteronomy 以及LLAMA 和Bw-Tree 的相关工作在存储引擎堆栈中以多种方式使用日志结构化技术。最后对本文提出的Aurora与Deuteronomy 进行横向比较说明。Aurora，通过编写增量而不是整个页面来减少写放大，Deuteronomy 和Aurora都实现纯重做日志记录，并跟踪最高稳定的LSN以确认提交。</p>
-<p>  恢复：尽管传统数据库依赖于基于ARIES 的恢复协议，但是一些最近的系统已经选择了其他途径来提高性能。例如，Hekaton和VoltDB在崩溃后使用某种形式的更新日志来重建其内存状态。像Sinfonia这样的系统通过使用诸如进程对和状态机复制之类的技术来避免恢复。Graefe 描述了一种具有每页日志记录链的系统，该系统可以按需进行逐页重做，从而可以快速恢复。与Aurora一样，Deuteronomy 不需要重做恢复。这是因为Deuteronomy 会延迟事务，因此只有已提交的更新才会发布到持久存储中。结果，与Aurora不同，Deuteronomy 中的交易规模可能受到限制。</p>
-<h3 id="6-总结建议"><a href="#6-总结建议" class="headerlink" title="6 总结建议"></a>6 总结建议</h3><p>  在计算与存储分离的云基础设施之上，通过仅传输redo log，大幅减少跨网络的IO数据传输，将产生大量IO的数据页合并和持久化交由本地存储来解决，大幅减缓了网络延迟对数据库性能的影响。即使网络传输的速度不再是分布式数据库的瓶颈，这种“日志即数据“的思想也是有意义的，因为在分布式数据库中的计算，存储，网络中，网络通信的功耗是最大的。</p>
-<p>  Aurora诞生的原因是在弹性伸缩的云环境下，传统的高吞吐<strong>OLTP</strong>数据库既不能保证可用性，又不能保证持久性。 <strong>Aurora</strong>的关键点在于将传统数据库中的存储与计算分离，具体而言，将日志部分下推到一个独立的分布式存储服务层。由于这种分离架构下，所有IO操作都是通过网络，网络将成为最大的瓶颈，因此Aurora集中精力优化网络以便提高系统吞吐能力。Aurora依靠Quorum模型，在性能影响可控的前提下，解决云环境下的各种异常错误。在Aurora中，日志处理技术减少了I/O写放大，异步提交协议避免了同步等待，同时分离的存储服务层还避免了离线故障恢复和检查点操作。</p>
-<p>   Aurora相对于传统数据库有三大优势，首先，底层数据库存储是一个分布式存储服务，可以轻松应对故障；其次，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
-<p>  批评性建议：</p>
-<p>  1.在存储结构方面，论文中没有给出caching很明确的细节说明，Caching是位于了存储层内还是计算层内？读者只能靠猜测。如果在文中给出了具体的细节说明，可能对读者理解本文具有很大的帮助。</p>
-<p>  2.Amazon Aurora是基于开源MySQL的数据库，理论上修改GPL协议的开源软件再开发一个新软件是需要开源的，但它本身没有开放源代码，是一个闭源数据库。</p>
-<p>  3.为什么备机节点可以多达15个呢？是为了应对数据库的读负载还是作为故障转移的目标，需要这么多备机做备选？本文在15个备份节点的解释上不是很清楚，读后存有疑惑。</p>
-<p>下面引用两位专家对Aurora的评价：</p>
-<p>Percona Vadim Tkachenko: Aurora没有解决写拓展和分库分表的问题。（2017）</p>
-<p>Bill Karwin：Aurora不适合对具有二级索引的表进行大量写操作的场景。（2017）</p>
+    <title>AOS-LEC-11-Scalable-Synchronization</title>
+    <url>/2021/07/06/AOS-LEC-11-Scalable-Synchronization/</url>
+    <content><![CDATA[<h2 id="多核VS对称多处理器"><a href="#多核VS对称多处理器" class="headerlink" title="多核VS对称多处理器"></a>多核VS对称多处理器</h2><p><img src="https://cdn.jsdelivr.net/gh/mykrobin/cdn/images/aos-slide-11-01-SMP.png" alt=""></p>
+<h2 id="NUMA架构"><a href="#NUMA架构" class="headerlink" title="NUMA架构"></a>NUMA架构</h2><p><img src="https://cdn.jsdelivr.net/gh/mykrobin/cdn/images/aos-slide-11-01-NUMA.png" alt=""></p>
 ]]></content>
-      <categories>
-        <category>SIGMOD</category>
-      </categories>
       <tags>
-        <tag>论文解读</tag>
-        <tag>数据库</tag>
+        <tag>THU-AOS</tag>
       </tags>
   </entry>
   <entry>
@@ -386,6 +283,109 @@
         <tag>TODO</tag>
         <tag>论文解读</tag>
         <tag>side channel attack</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Amazon Aurora: Design Considerations for High Throughput Cloud-Native Relational Databases</title>
+    <url>/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://dl.acm.org/doi/epdf/10.1145/3035918.3056101" target="_blank" rel="noopener">Aurora</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">Amazon</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">分布式数据库</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">数据库</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">致力于构建一个分布式数据库</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="0-研究背景-为什么出现Aurora？"><a href="#0-研究背景-为什么出现Aurora？" class="headerlink" title="0 研究背景 为什么出现Aurora？"></a>0 研究背景 为什么出现Aurora？</h3><p>    Aurora是亚马逊云服务AWS中的关系型数据库服务，主要面向OLTP场景。 <strong>Aurora</strong>基本设计理念是在云上环境下，数据库的最大瓶颈不再是计算或者存储资源，而是网络，因此基于一套存储计算分离架构，将日志处理下推到分布式存储层，通过架构上的优化来解决网络瓶颈。 </p>
+<p>    在云上环境下，存储计算分离作为解决系统弹性和伸缩性的方案越来越普遍。广义来说，任何数据库，底下文件系统挂一个分布式存储，即可以认为做到了存储计算分离。通过存储计算分离，可以透明添加存储节点，剔除故障节点，进行故障切换，扩展存储空间等。在这个背景下，IO不再成为数据库的瓶颈，因为IO压力可以打散在多个存储节点上，反而是<strong>网络成为瓶颈</strong>，因为数据库实例与所有存储节点的交互都需要通过网络，尤其是为了提升数据库性能，数据库实例与存储节点可能是并行交互的，这进一步加重了网络压力。</p>
+<p>    传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。比如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。另外一个我们熟悉场景是事务提交操作(IO写操作)，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。 <strong>传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的。</strong></p>
+<p>    本文介绍的Aurora是一个云上环境全新的数据库服务可以很好的解决上述传统数据库遇到的问题。 <strong>它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。</strong> Aurora体系下的数据库实例仍然包含了大部分核心功能，比如查询处理，事务，锁，缓存管理，访问接口和undo日志管理等；但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
+<h3 id="1-面临问题"><a href="#1-面临问题" class="headerlink" title="1 面临问题"></a>1 面临问题</h3><p>  在云环境中，将存储和计算分离已经成为解决系统弹性和可伸缩性的方案。实现存储计算分离，可以进行故障切换，扩展存储空间等。因此磁盘IO压力可以打散在多个存储节点上，所以IO不再成为数据库的瓶颈。存储和计算分离之后，数据库实例与所有存储节点的交互都需要通过网络，加重了网络带宽压力，从而网络成为瓶颈。</p>
+<h3 id="2-问题带来的挑战"><a href="#2-问题带来的挑战" class="headerlink" title="2 问题带来的挑战"></a>2 问题带来的挑战</h3><p>  在云环境中数据库的瓶颈不再是计算或者是资源存储，而是网络。基于此，Aurora设计了存储和计算分离的架构，与传统数据库相比较，这些问题带来的挑战如下。</p>
+<p>  传统数据库中的IO操作是需要同步执行的，当需要进行IO等待时，这往往会导致线程上下文切换，影响数据库性能。如IO读操作，当需要访问一个数据页时，如果在缓冲池没有命中，则需要进行磁盘IO，那么读线程需要等待IO完成才能继续其它操作，同时这种动作可能会进一步引发刷脏页等。云环境中的IO操作与传统数据库中的操作是不同的，这带来了IO操作的挑战。</p>
+<p>  事务提交操作，事务提交成功返回前一定要等待事务对应日志刷盘才能返回，由于事务是串行提交，因此其它事务也必须同步等待这个事务提交。传统数据库中的两阶段事务尤其不适合与分布式云环境，因为二阶段提交协议对系统中参与的节点和网络要求很高，自身容错能力有限，这点与大规模分布式云环境中，软件和硬件故障是常态的特征是矛盾的，这又是一大挑战。</p>
+<h3 id="3-解决方法"><a href="#3-解决方法" class="headerlink" title="3 解决方法"></a>3 解决方法</h3><p>  Aurora是一个云上环境全新的数据库服务可以很好的解决上述问题带来的挑战。它基于存储计算分离的架构，并将回放日志部分下推到分布式存储层，存储节点与数据库实例(计算节点)松耦合，并包含部分计算功能。Aurora体系下的数据库实例仍然包含了大部分核心功能，但redo日志相关的功能已经下推到存储层，包括日志处理，故障恢复，备份还原等。</p>
+<h5 id="3-1-数据存储"><a href="#3-1-数据存储" class="headerlink" title="3.1 数据存储"></a><strong>3.1</strong> <strong>数据存储</strong></h5><p>  Aurora存储层的复制基于Quorum协议，假设复制拓扑中有V个节点，每个节点有一个投票权，读或写必须拿到Vr 或 Vw个投票才能返回。为了满足一致性，需要满足两个条件，首先Vr + Vw &gt; V，这个保证了每次读都能读到拥有最新数据的节点；第二，Vw &gt; V/2，每次写都要保证能获取到上次写的最新数据，避免写冲突。</p>
+<p>  结合Quorum模型，V=6 ，Vw=4，Vr=3，Aurora可以容忍任何一个AZ出现故障，不会影响写服务；任何一个AZ出现故障，以及另外一个AZ中的一个节点出现故障，不会影响读服务且不会丢失数据。通过Quorum协议，Aurora可以保证只要AZ级别的故障(火灾，洪水，网络故障)和节点故障(磁盘故障，掉电，机器损坏)不同时发生，就不会破坏协议本身，数据库可用性和正确性就能得到保证。</p>
+<h5 id="3-2-日志即数据"><a href="#3-2-日志即数据" class="headerlink" title="3.2 日志即数据"></a><strong>3.2</strong> <strong>日志即数据</strong></h5><p>  以MySQL为例，考虑主备复制，如图1所示，AZ1和AZ2分别部署一个MySQL实例做同步镜像复制，底层存储采用EBS，并且每个EBS还有自己的一份镜像，另外部署S3进行redo日志和binlog日志归档，以支持基于时间点的恢复。每个步骤都需要传递5种类型的数据，包括redo，binlog，data-page，double-write和frm元数据。图中的1，3，5步骤是顺序的，要进行4次网络IO，且其中3次是同步串行的。从存储角度来看，数据在EBS上存了4份，需要4份都写成功才能返回。所以在这种架构下，无论是IO量还是串行化模型都会导致性能损耗。</p>
+<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/1.png" width="300px" height="300px"></p>
+<p>                     图1. Mirrored MySQL写操作流程</p>
+<p>  在Aurora中，所有的写类型只有一种，那就是redo日志。修改一个数据页，会同步产生对应的redo日志。事务提交时，需要事务对应的redo日志都落盘成功后才能返回。存储节点接收redo日志，基于旧版本数据页回放日志，可以得到新版本的数据页。为了避免每次都从头开始回放数据页变更产生的redo日志，存储节点会定期物化数据页版本。Aurora由跨AZ的一个主实例和多个副本实例组成，主实例与副本实例或者存储节点间只传递redo日志和元信息。主实例并发向6个存储节点和副本实例发送日志，当4/6的存储节点应答后，则认为日志已经持久化。传统数据库宕机重启后，恢复从最近的一个检查点开始，读取检查点后的所有redo日志进行回放，确保已经提交的事务对应的数据页得到更新。</p>
+<p>  在Aurora中，redo日志相关的功能下推到存储层，回放日志的工作可以一直在后台做。真正进行故障恢复时，需要做的事情很少，所以故障恢复的速度非常快。Aurora存储服务设计的一个关键原则是减少前台用户写的响应时间，因此将尽可能多的操作移到后台异步执行，并且存储节点会根据前台的请求压力，自适应分配资源做不同的工作。对于Aurora而言，分离的存储服务层使得后台线程推进检查点动作完全不影响数据库实例，并且是推进地越快，越有利于前台的磁盘IO读操作。Aurora写基于Quorum模型，存储分片后，按片达成多数即可返回，由于分布足够离散，少数的磁盘IO压力大也不会影响到整体的写性能。</p>
+<p><img src="/2020/05/15/Amazon-Aurora-Design-Considerations-for-High%20Throughput%20Cloud-Native%20Relational%20Databases/2.png" width="400px" height="300px"></p>
+<p>如上图所示，图中详细介绍了主要的写流程，</p>
+<p>1).存储节点接收数据库实例的日志，并追加到内存队列；</p>
+<p>2).将日志在本地持久化成功后，给实例应答；</p>
+<p>3).按分片归类日志，并确认丢失了哪些日志；</p>
+<p>4).与其它存储节点交互，填充丢失的日志；</p>
+<p>5).回放日志生成新的数据页；</p>
+<p>6).周期性地备份数据页和日志到S3系统；</p>
+<p>7).周期性地回收过期的数据页版本；</p>
+<p>8).周期性地对数据页进行CRC校验。</p>
+<p>  上述所有写相关的操作，只有第1)和第2)步是串行同步的，会直接影响前台请求的响应时间，其它操作都是异步的。</p>
+<h4 id="3-3-事务提交"><a href="#3-3-事务提交" class="headerlink" title="3.3 事务提交"></a><strong>3.3</strong> <strong>事务提交</strong></h4><p>  在Aurora中，数据库实例向存储节点传递redo日志，达成多数派后将事务标记为提交状态，然后推进VDL，使数据库进入一个新的一致状态。每个事务的每条redo日志都会分配一个唯一的LSN，这个LSN一定大于当前最新的VDL。由于底层存储按segment分片，每个分片管理一部分页面，当一个事务涉及的修改跨多个分片时，事务对应的日志被打散，每个分片只能看到这个事务的部分日志。为了确保各个分片日志的完整性，每条日志都记录前一条日志的链接，通过前向链接确保分片拥有了完整的日志。Segment Complete LSN(SCL)表示分片拥有完整日志的位点，存储节点相互间通过gossip协议来弥补本地日志空洞，推进SCL。</p>
+<p>  在Aurora中，事务提交是完全异步的。每个事务由若干个日志组成，并包含有一个唯一的“commit LSN”，工作线程处理事务提交请求时，将事务相关的日志提交到持久化队列并将事务挂起，并继续处理其它数据库请求。当VDL的位点大于事务的LSN时，表示这个事务redo日志都已经持久化，可以向客户端回包，通知事务已经成功执行。在Aurora中，有一个独立的线程处理事务成功执行的回包工作，因此，从整个提交流程来看，所有工作线程不会因为事务提交等待日志推进而堵塞，他们会继续处理新的请求，通过这种异步提交方式，大大提高了系统的吞吐。</p>
+<h4 id="3-4-故障恢复"><a href="#3-4-故障恢复" class="headerlink" title="3.4 故障恢复"></a><strong>3.4</strong> <strong>故障恢复</strong></h4><p>  大多数数据库系统通常会周期性地做检查点，并将检查点信息计入日志。故障时，数据页中同时可能包含了提交和未提交的数据，因此，在故障恢复时，系统首先需要从上一个检查点开始回放日志，将数据页恢复到故障时的状态，然后根据undo日志回滚未交事务。从故障恢复的过程来看，故障恢复是一个比较耗时的操作，并且与检查点操作频率强相关。通过提高检查点频率，可以减少故障恢复时间，但是这直接会影响系统处理前台请求吞吐，所以需要在检查点频率和故障恢复时间做一个权衡，而在Aurora中不需要做这种权衡。</p>
+<p>  Aurora将回放日志逻辑下推到存储节点，并且在数据库在线提供服务时在后台常态运行。因此，当出现故障重启时，存储服务能快速恢复。数据库实例宕机重启后，需要故障恢复来获得运行时的一致状态，实例与仲裁协议确定的N个存储节点通信，这样确保能读到最新的数据，并重新计算新的VDL，超过VDL部分的日志都可以被截断丢弃。在Aurora中，对于新分配的LSN范围做了限制，这个主要是为了避免数据库实例上堆积过多的未提交事务。</p>
+<h3 id="4-实验验证"><a href="#4-实验验证" class="headerlink" title="4 实验验证"></a>4 实验验证</h3><p>  本文的实验对Aurora的读写能力，吞吐量大小，以及部署后用户的使用数据对Aurora进行了分析。</p>
+<p>  从sysbench测试的数据来看，Aurora是基于镜像MySQL吞吐能力的35倍，每个事务的日志量比基于镜像MySQL日志量要少7.7倍。从用户的使用数据来看，某游戏公司使用后web应用响应时间明显降低，由之前的15ms降低到5.5ms,性能提高了近3倍，而且时间延迟明显降低。</p>
+<p>  基于实验验证，Aurora相对于传统数据库的优势如下：</p>
+<p>  第一，底层数据库存储是一个分布式存储服务，可以轻松应对故障；</p>
+<p>  第二，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；</p>
+<p>  第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
+<h3 id="5-相关工作"><a href="#5-相关工作" class="headerlink" title="5 相关工作"></a>5 相关工作</h3><p>  本文的相关工作主要是在分布式存储的将存储与计算解耦、分布式系统、并发控制、日志结构的存储与数据恢复等几个方面分别进行描述的。在描述的过程中，首先通过对Aurora面临的问题进行逐个层面的分析，并对相关工作进行总结，在分析之后，将已有工作与Aurora相结合，并通过Aurora与先有工作进行比较说明，进一步阐述Aurora的实现原理。</p>
+<p>  将存储与计算解耦：在此处本文提出与传统系统通常作为整体不同的数据库系统，介绍了有一些关于将内核分解为不同组件的数据库的研究。Deuteronomy 将提供并发控制和恢复的事务组件（TC）与提供LLAMA访问方法的数据组件（DC）分开，结构化缓存和存储管理器。Sinfonia和Hyder是在横向扩展服务上抽象事务访问方法的系统，并且可以使用这些抽象来实现数据库系统。Yesquel系统实现了多版本分布式平衡树，并将并发控制与查询处理器分离。在Aurora中，将查询处理、事务、并发、缓冲区高速缓存和访问方法与作为横向扩展服务实现的日志记录，存储和恢复分离。</p>
+<p>  分布式系统：首先指出已经证明过的Brewer CAP定理，指出高度可用的系统无法在存在网络分区的情况下提供“强”的一致性保证。这个结果激发了作者对一致性目标的追求。并对相关工作进行总结，Bailis等人研究了提供高可用事务（HATs）的问题，该事务既不会在分区期间遭受不可用，也不会导致高网络延迟。他们表明可串行性，快照隔离和可重复读取隔离不符合HAT的要求，而大多数其他隔离级别都可以通过高可用性实现。Aurora通过简化假设，即在任何时候只有一个写入器使用从单个有序域分配的LSN生成日志更新来提供所有这些隔离级别。Google的Spanner提供外部一致的读写操作，并在一个时间戳上跨数据库提供全局一致的读取信息。这些功能使Spanner支持一致的备份，一致的分布式查询处理以及原子模式更新，所有这些都是在全球范围内进行的，甚至在正在进行的事务存在的情况下也是如此。Spanner专门针对Google的繁重工作负载，并依靠两阶段提交和两阶段锁定来进行读/写事务。</p>
+<p>  并发控制：本文指出较弱的一致性和隔离模型在分布式数据库中是众所周知的，并导致了乐观的复制技术以及最终的一致性系统。集中式系统中的其他方法包括基于锁定的经典悲观方案，Hekaton中的多方案并发控制之类的乐观方案，VoltDB等分片方法和HyPer中的时间戳排序和Deuteronomy . Aurora的存储服务为数据库引擎提供了持久保留的本地磁盘的抽象，并允许引擎确定隔离和并发控制。</p>
+<p>  日志结构存储：先介绍日志结构的起源，日志结构的存储系统由LFS 在1992年引入。并对最近的日志结构存储的相关工作进行总结，Deuteronomy 以及LLAMA 和Bw-Tree 的相关工作在存储引擎堆栈中以多种方式使用日志结构化技术。最后对本文提出的Aurora与Deuteronomy 进行横向比较说明。Aurora，通过编写增量而不是整个页面来减少写放大，Deuteronomy 和Aurora都实现纯重做日志记录，并跟踪最高稳定的LSN以确认提交。</p>
+<p>  恢复：尽管传统数据库依赖于基于ARIES 的恢复协议，但是一些最近的系统已经选择了其他途径来提高性能。例如，Hekaton和VoltDB在崩溃后使用某种形式的更新日志来重建其内存状态。像Sinfonia这样的系统通过使用诸如进程对和状态机复制之类的技术来避免恢复。Graefe 描述了一种具有每页日志记录链的系统，该系统可以按需进行逐页重做，从而可以快速恢复。与Aurora一样，Deuteronomy 不需要重做恢复。这是因为Deuteronomy 会延迟事务，因此只有已提交的更新才会发布到持久存储中。结果，与Aurora不同，Deuteronomy 中的交易规模可能受到限制。</p>
+<h3 id="6-总结建议"><a href="#6-总结建议" class="headerlink" title="6 总结建议"></a>6 总结建议</h3><p>  在计算与存储分离的云基础设施之上，通过仅传输redo log，大幅减少跨网络的IO数据传输，将产生大量IO的数据页合并和持久化交由本地存储来解决，大幅减缓了网络延迟对数据库性能的影响。即使网络传输的速度不再是分布式数据库的瓶颈，这种“日志即数据“的思想也是有意义的，因为在分布式数据库中的计算，存储，网络中，网络通信的功耗是最大的。</p>
+<p>  Aurora诞生的原因是在弹性伸缩的云环境下，传统的高吞吐<strong>OLTP</strong>数据库既不能保证可用性，又不能保证持久性。 <strong>Aurora</strong>的关键点在于将传统数据库中的存储与计算分离，具体而言，将日志部分下推到一个独立的分布式存储服务层。由于这种分离架构下，所有IO操作都是通过网络，网络将成为最大的瓶颈，因此Aurora集中精力优化网络以便提高系统吞吐能力。Aurora依靠Quorum模型，在性能影响可控的前提下，解决云环境下的各种异常错误。在Aurora中，日志处理技术减少了I/O写放大，异步提交协议避免了同步等待，同时分离的存储服务层还避免了离线故障恢复和检查点操作。</p>
+<p>   Aurora相对于传统数据库有三大优势，首先，底层数据库存储是一个分布式存储服务，可以轻松应对故障；其次，数据库实例往底层存储层只写redo日志，因此数据库实例与存储节点之间的网络压力大大减小，这为提升数据库性能提供了保障；第三，将部分核心功能(故障恢复，备份还原)下推到存储层，这些任务可以在后台不间歇地异步执行，并且不影响前台用户任务。</p>
+<p>  批评性建议：</p>
+<p>  1.在存储结构方面，论文中没有给出caching很明确的细节说明，Caching是位于了存储层内还是计算层内？读者只能靠猜测。如果在文中给出了具体的细节说明，可能对读者理解本文具有很大的帮助。</p>
+<p>  2.Amazon Aurora是基于开源MySQL的数据库，理论上修改GPL协议的开源软件再开发一个新软件是需要开源的，但它本身没有开放源代码，是一个闭源数据库。</p>
+<p>  3.为什么备机节点可以多达15个呢？是为了应对数据库的读负载还是作为故障转移的目标，需要这么多备机做备选？本文在15个备份节点的解释上不是很清楚，读后存有疑惑。</p>
+<p>下面引用两位专家对Aurora的评价：</p>
+<p>Percona Vadim Tkachenko: Aurora没有解决写拓展和分库分表的问题。（2017）</p>
+<p>Bill Karwin：Aurora不适合对具有二级索引的表进行大量写操作的场景。（2017）</p>
+]]></content>
+      <categories>
+        <category>SIGMOD</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>数据库</tag>
       </tags>
   </entry>
   <entry>
@@ -832,170 +832,6 @@ after  modify ips =&gt;19&amp;.168.0.2&lt;
         <tag>TODO</tag>
         <tag>C语言</tag>
         <tag>字符串</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>CHANCEL</title>
-    <url>/2021/05/24/CHANCEL/</url>
-    <content><![CDATA[<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:left">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:left">原文PDF</td>
-<td style="text-align:center"><a href="https://lifeasageek.github.io/papers/ahmad-chancel.pdf" target="_blank" rel="noopener">paper</a> <a href="https://lifeasageek.github.io/papers/ahmad-chancel-slides.pdf" target="_blank" rel="noopener">slides</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:left">作者信息</td>
-<td style="text-align:center"><a href="https://web.ics.purdue.edu/~ahmad37/" target="_blank" rel="noopener">https://web.ics.purdue.edu/~ahmad37/</a> <a href="https://www.cs.purdue.edu/homes/pfonseca/" target="_blank" rel="noopener">https://www.cs.purdue.edu/homes/pfonseca/</a> <a href="https://lifeasageek.github.io/" target="_blank" rel="noopener">https://lifeasageek.github.io/</a></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:left">核心内容</td>
-<td style="text-align:center">在飞地中为多个用户提供隔离保障</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:left">研究领域</td>
-<td style="text-align:center">TEE 可信计算环境</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:left">全文总览</td>
-<td style="text-align:center">在飞地中为多个用户提供隔离保障，从而避免用户执行代码的漏洞导致的隐私数据泄露，在提供安全保证的同时，与多进程沙盒对比，有着明显的性能提升。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<h2 id="研究动机"><a href="#研究动机" class="headerlink" title="研究动机"></a>研究动机</h2><p>SGX 能够在非可信的云端为用户保护隐私数据，但是应用的程序可能会包含很多漏洞，这些漏洞可能会泄露隐私数据。很多的研究为了解决这个问题，但是没有考虑在同一个飞地中多客户的隔离问题。因此本文的工作是在飞地中为多个用户提供隔离保障。本文提出CHANCEL，其允许程序的线程在处理请求时访问每个线程的内存区以及共享的只读内存区。每个线程一次处理一个客户端的请求，并且客户端之间是利用软件故障隔离方案相互隔离的。</p>
-<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><h3 id="SGX-总览"><a href="#SGX-总览" class="headerlink" title="SGX 总览"></a>SGX 总览</h3><p>SGX（software guard extensions）[1]</p>
-<p>SGX 是指<a href="https://software.intel.com/en-us/sgx" target="_blank" rel="noopener">英特尔® Software Guard Extensions</a>（英特尔® SGX）。这是一组指令，应用程序可以使用这些指令为选择的代码和数据留出受保护区域，以防止对执行代码或存储在内存中的数据进行直接攻击。SGX 允许应用程序实例化一个受保护的容器，称为 enclave，它可以防止外部软件访问，包括特权恶意软件。</p>
-<p>安全性是云计算中一项极为重要的需求,然而如何保护云计算中关键应用程序和数据的安全、防止云平台管理员泄露用户隐私,仍然是目前没有解决的难题.2013 年,Intel 公司提出了新的处理器安全技术 SGX,能够在计算平台上提供一个可信的隔离空间,保障用户关键代码和数据的机密性和完整性.作为系统安全领域的重大研究进展,SGX 对系统安全,尤其是云计算安全保护方面具有非常重要的意义.</p>
-<p>2013 年,Intel 推出 SGX(software guard extensions)指令集扩展,旨在以硬件安全为强制性保障,<strong>不依赖</strong>于<strong>固件和软件</strong>的安全状态,提供用户空间的可信执行环境,通过一组新的指令集扩展与访问控制机制,实现不同程序间的隔离运行,保障用户<strong>关键代码和数据的机密性与完整性</strong>不受恶意软件的破坏.不同于其他安全技术,SGX 的可信计算基(trusted computing base,简称 TCB)<strong>仅包括硬件</strong>,避免了基于软件的 TCB 自身存在软件安全漏洞与威胁的缺陷,极大地提升了系统安全保障;此外,SGX 可保障运行时的可信执行环境,恶意代码<strong>无法访问与篡改其他程序运行时的保护内容</strong>,进一步增强了系统的安全性;基于<strong>指令集的扩展</strong>与<strong>独立的认证</strong>方式,使得应用程序可以灵活调用这一安全功能并进行验证.</p>
-<p>SGX 的实现需要处理器、内存管理部件、BIOS、驱动程序、运行时环境等软硬件协同完成.SGX提供的功能大多数是在微指令中实现，但是保护内存不受物理攻击主要是由CPU中的MEE（memory encryption engine）硬件单元提供，这个硬件通过对保护内存读写的解密加密，保证了数据只有在CPU中的enclave内存中才是明文.</p>
-<p><strong>功能：</strong>内存隔离/保护安全属性/远程认证/密封.</p>
-<h3 id="SGX-架构"><a href="#SGX-架构" class="headerlink" title="SGX 架构"></a>SGX 架构</h3><p><img src="/2021/05/24/CHANCEL/sgx-architecture-1.png" width="600px"></p>
-<h3 id="enclave"><a href="#enclave" class="headerlink" title="enclave"></a>enclave</h3><p>地理学上的解释</p>
-<blockquote>
-<p>外飞地(Exclave)：某国家拥有一块与该国分离开来的领土，该领土被其他国家隔开，则该领土称为某国的外飞地。</p>
-<p>内飞地(Enclave): 某国家国境之内有块地区的主权属于别的国家，则该地区是这国家的内飞地，也同时是握有主权国家的外飞地。</p>
-</blockquote>
-<p>SGX允许应用程序实现一个被称为 enclave 的容器,在应用程序的地址空间中划分出一块被保护的区域,为容器内的代码和数据提供机密性和完整性的保护,免受拥有特殊权限的恶意软件的破坏.</p>
-<p>enclave 是一个被保护的容器，存放应用程序敏感数据和代码，SGX允许应用程序指定需要保护的代码和数据，创建enclave之前，不必对其进行分析，加载到enclave之后，必须被完整度量，且之后SGX保证其不能被外部软件所访问.  enclave都驻留在EPC（enclave page cache）中，这是系统内被保护的物理内存，用于存放enclave和SGX数据结构.以支持SGX的一种架构为例，如果在加密保护的DRAM (dynamic random access memory) 中实现EPC，那么他也支持BIOS保留一段PRM（processor reserved memory）的内存.</p>
-<p><strong>enclave 特征：</strong></p>
-<blockquote>
-<p>有自己的代码和数据/机密性保护/完整性保护/可控的入口点/支持多线程/内存具有最高访问权限.</p>
-<p>TCS (thread control structure) 保存着进入或者退出enclave时的线程信息, 每一个enclave中的线程都和一个TCS关联, 需要4K对齐.</p>
-</blockquote>
-<p><strong>enclave 架构图：</strong></p>
-<p><img src="/2021/05/24/CHANCEL/sgx-prm-enclave.png" width="800"></p>
-<p><img src="/2021/05/24/CHANCEL/enclave-layout.png" width="500"></p>
-<p><img src="/2021/05/24/CHANCEL/enclave-privileged.png" width="500"></p>
-<p><strong>远端验证：</strong> enclave 可以向远端认证者证明自己的身份，访问该enclave的用户也持有独立的访问秘钥.</p>
-<p><strong>Physical Memory Organization:</strong> （下文详细介绍）</p>
-<p><img src="/2021/05/24/CHANCEL/enclave-physical-mem-1.png" width="800"></p>
-<p><img src="/2021/05/24/CHANCEL/enclave-mem-map-1.png" width="800"></p>
-<p><strong>SGX memory control:</strong></p>
-<p><img src="/2021/05/24/CHANCEL/SGX-mem-control.png" width="500"></p>
-<p><strong>enclave 保护机制：</strong> 1. enclave内存访问语义变化, 2. 应用程序地址映射关系保护</p>
-<p><strong>1. 内存访问语义</strong></p>
-<blockquote>
-<p>系统分配一块被保护的物理内存区域EPC，用于存放enclave和SGX数据结构，该段区域对于外部请求透明（不存在的内存访问）</p>
-<p>Fig.4 中的内存保护机制中，系统在SGX调用前处于保护模式，支持分页. SGX提供的内存保护机制，在保护模式提供的段保护、页保护机制基础上增加了进一步的保护机制：</p>
-<p>(1). enclave之外应用访问PRM外部内存，按照保护模式进行访问；</p>
-<p>(2). enclave之外应用访问EPC内部内存，该内存区域不存在（透明）；</p>
-<p>(3). enclave内部程序访问EPC内部内存，该内存区域不存在（透明）；</p>
-<p>(4). enclave内部程序访问PRM外部内存，按照保护模式进行访问；</p>
-<p>(5). enclave内部程序访问PRM内部内存，硬件阻止访问。</p>
-<p>简言之：enclave外部不能访问，内部只能访问属于自己的内存，PRM之外的内存按照系统的保护机制进行访问。</p>
-</blockquote>
-<p><strong>EPCM （Enclave Page Cache Map）逻辑结构：</strong></p>
-<p><img src="/2021/05/24/CHANCEL/EPCM-structure.png" width="500"></p>
-<p><strong>2. 内存地址映射保护</strong></p>
-<p>EPC内存以页为单位进行管理，页的控制信息保存在EPCM中，类似于OS中的页表，功能是在CPU地址映射过程中执行enclave页面的访问控制，通过PMH(page miss handler)硬件模块访问，在保护模式的段、页保护机制上增加了一层安全的访问控制.</p>
-<p><strong>enclave 机密性和完整性保护：</strong></p>
-<blockquote>
-<p>(1). 由应用程序申请创建一个enclave, 页面分配，复制程序代码、数据并进行度量，度量结果保存在enclave的控制结构中；</p>
-<p>(2). 创建好之后，SGX通过初始化指令将结果与enclave所有者签名证书的完整性值进行比较，匹配的话，则进行绑定，否则创建失败；</p>
-<p>(3). 成功之后，指定用户可以访问对应的enclave, SGX提供内存保护以及地址映射保护，从而保证enclave的机密性与完整性，远端认证者可以通过enclave的完整性度量结果以及身份，确保其enclave正确创建.</p>
-</blockquote>
-<h3 id="SGX-漏洞"><a href="#SGX-漏洞" class="headerlink" title="SGX 漏洞"></a>SGX 漏洞</h3><p><strong>1.侧信道攻击</strong></p>
-<p>侧信道攻击主要目标是攻击 enclave 数据的机密性.</p>
-<p>攻击者来自 non-enclave 部分,包括应用程序和系统软件.系统软件包括 OS,hypervisor,SMM(system management mode),BIOS 等特权级软件.</p>
-<p><strong>三个假设：</strong></p>
-<blockquote>
-<p>1.侧信道攻击者指导enclave初始化的代码和数据，知道内存布局；</p>
-<p>2.攻击者知道enclave的输入数据，可以反复多次触发enclave，记录并观察结果；</p>
-<p>3.攻击者知道运行enclave平台的配置(CPU、TLB、Cache、DRAM、页表、中断以及异常等)</p>
-</blockquote>
-<p><strong>enclave运行使用的物理资源及攻击方式总览：</strong></p>
-<blockquote>
-<p>CPU: 间接访问pipeline/BPB(branch prediction buffer)，可以泄露enclave的控制流或者数据流；</p>
-<p>TLB : TLB包括 iTLB,dTLB和 L2 TLB.如果Hyper-Threading打开,两个逻辑核共享一个物理核,这时会大大增加侧信道攻击的可能;</p>
-<p>Cache: Cache 包括 L1 instruction Cache,L1 data Cache,L2 Cache 和 L3 Cache(又叫 LLC Cache);</p>
-<p>DRAM：DRAM 包括 channels,DIMMs(dual inline memory module),ranks,banks.每个 banks 又包括 rows, columns 和 row buffer;</p>
-<p>页表：页表可以通过权限控制来触发缺页异常,也可以通过页表的状态位来表明 CPU 的某些操作.</p>
-</blockquote>
-<p><img src="/2021/05/24/CHANCEL/SGX-side-channel-attack-surface.png" width="600"></p>
-<p><strong>2. SGX 多线程同步</strong></p>
-<p>[4] 指出在使用SGX后以往被视为无害的同步漏洞可能会变为严重的安全漏洞。通过在enclave代码中利用UAF(use-after-free)和TOCTTOU(time-of-check-to-time-of-use)漏洞，一个攻击者可以劫持它的控制流或者绕过访问控制。</p>
-<p><strong>Native Client</strong> </p>
-<p>Native client[5] 是一个用于执行不可信x86主机代码的沙箱，利用沙盒技术防止外来机器代码影响系统安全，限制程序读写的存储器范围，为基于浏览器的应用程序提供本地应用程序的计算性能，而不会影响安全性。09年提出。</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>sgx 的设计是每个用户是一个单独进程，每个进程绑定一个enclave，enclave之间是相互隔离开的，不涉及数据共享，则会浪费内存空间，因此设计目标是在保证数据共享节约内存空间基础上实现用户的隔离。</p>
-<p><img src="/2021/05/24/CHANCEL/sgx-non-share.png" width="600"></p>
-<p>在实现多用户间隔离时，chancel保证共享数据的多个用户处于同一个进程空间中，每个用户是一个线程，实现线程级别隔离。</p>
-<p><img src="/2021/05/24/CHANCEL/mulit-client-SFI.png" width="600"></p>
-<p><img src="/2021/05/24/CHANCEL/chancel-design.png" width="600"></p>
-<h2 id="实验结论"><a href="#实验结论" class="headerlink" title="实验结论"></a>实验结论</h2><p>与多进程沙盒作对比，在保证安全的同时提升了4-53倍的性能</p>
-<p><img src="/2021/05/24/CHANCEL/benefit.png" width="600"></p>
-<h2 id="阅读问题记录"><a href="#阅读问题记录" class="headerlink" title="阅读问题记录"></a>阅读问题记录</h2><ol>
-<li><p>本文的核心是什么？多线程并发隔离？</p>
-</li>
-<li><p><strong>Section V:</strong>本文与原始SGX对比有哪些改动？原始的SGX提供了什么？</p>
-</li>
-<li><p>SGX与enclave的关系？enclave是一个用户一个还是多用户共享？</p>
-<blockquote>
-<p>Enclave是SGX提供给用户的一个隔离的执行环境，初始化时建立对应的enclave</p>
-</blockquote>
-</li>
-<li><p>Section V: 文中提到的SecureLayer是什么？MCSFI是本文构建的吗？</p>
-</li>
-<li><p>r14,15寄存器作用？</p>
-<blockquote>
-<p>本文r14指向单独线程的私有空间地址，r15指向该进程的共享数据空间。</p>
-</blockquote>
-</li>
-<li><p>native sgx 与 native client 指的是什么？</p>
-<blockquote>
-<p>sgx 只内存中开辟的空间，nacl指的是挂载到该空间的客户</p>
-</blockquote>
-</li>
-<li><p>SGX 真实的使用中代码的大小有多少？64MB？</p>
-</li>
-</ol>
-<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>说明：本文的一些截图来自于以下论文或者网站，图片序号没有标注，其中sgx101[2]是一个不错的sgx学习网站.</p>
-<p>[1] 王鹃, 樊成阳, 程越强, 赵波, 韦韬, 严飞, 张焕国,&amp; 马婧. (2018). SGX 技术的分析和研究. <em>软件学报</em>, <em>29</em>(9), 2778-2798.</p>
-<p>[2] <a href="https://sslab-gatech.github.io/sgx101/pages/enclave.html" target="_blank" rel="noopener">https://sslab-gatech.github.io/sgx101/pages/enclave.html</a></p>
-<p>[3] Costan, V., &amp; Devadas, S. (2016). Intel SGX Explained. <em>IACR</em> <em>Cryptol**.</em> <em>ePrint</em> <em>Arch.</em>, <em>2016</em>(86), 1-118. <a href="https://eprint.iacr.org/2016/086.pdf" target="_blank" rel="noopener">https://eprint.iacr.org/2016/086.pdf</a></p>
-<p>[4] Weichbrodt N, Kurmus A, Pietzuch P, Kapitza R. AsyncShock: Exploiting synchronisation bugs in Intel SGX enclaves. In: Proc. of the Computer Security (ESORICS 2016). 2016. 440−457. </p>
-<p>[5] Yee, B., Sehr, D., Dardyk, G., Chen, J. B., Muth, R., Ormandy, T., &amp; Fullagar, N. (2009, May). Native client: A sandbox for portable, untrusted x86 native code. In <em>2009 30th IEEE Symposium on Security and Privacy</em> (pp. 79-93). IEEE.</p>
-<p>[6] <a href="https://zhuanlan.zhihu.com/p/50894009" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/50894009</a></p>
-<p>[7] Xing, B. C., Shanahan, M., &amp; Leslie-Hurd, R. (2016). Intel® Software Guard Extensions (Intel® SGX) software support for dynamic memory allocation inside an enclave. In <em>Proceedings of the Hardware and Architectural Support for Security and Privacy 2016</em> (pp. 1-9).</p>
-]]></content>
-      <categories>
-        <category>NDSS</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>TEE</tag>
       </tags>
   </entry>
   <entry>
@@ -1755,6 +1591,170 @@ after  modify ips =&gt;19&amp;.168.0.2&lt;
       </tags>
   </entry>
   <entry>
+    <title>CHANCEL</title>
+    <url>/2021/05/24/CHANCEL/</url>
+    <content><![CDATA[<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:left">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:left">原文PDF</td>
+<td style="text-align:center"><a href="https://lifeasageek.github.io/papers/ahmad-chancel.pdf" target="_blank" rel="noopener">paper</a> <a href="https://lifeasageek.github.io/papers/ahmad-chancel-slides.pdf" target="_blank" rel="noopener">slides</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:left">作者信息</td>
+<td style="text-align:center"><a href="https://web.ics.purdue.edu/~ahmad37/" target="_blank" rel="noopener">https://web.ics.purdue.edu/~ahmad37/</a> <a href="https://www.cs.purdue.edu/homes/pfonseca/" target="_blank" rel="noopener">https://www.cs.purdue.edu/homes/pfonseca/</a> <a href="https://lifeasageek.github.io/" target="_blank" rel="noopener">https://lifeasageek.github.io/</a></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:left">核心内容</td>
+<td style="text-align:center">在飞地中为多个用户提供隔离保障</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:left">研究领域</td>
+<td style="text-align:center">TEE 可信计算环境</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:left">全文总览</td>
+<td style="text-align:center">在飞地中为多个用户提供隔离保障，从而避免用户执行代码的漏洞导致的隐私数据泄露，在提供安全保证的同时，与多进程沙盒对比，有着明显的性能提升。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="研究动机"><a href="#研究动机" class="headerlink" title="研究动机"></a>研究动机</h2><p>SGX 能够在非可信的云端为用户保护隐私数据，但是应用的程序可能会包含很多漏洞，这些漏洞可能会泄露隐私数据。很多的研究为了解决这个问题，但是没有考虑在同一个飞地中多客户的隔离问题。因此本文的工作是在飞地中为多个用户提供隔离保障。本文提出CHANCEL，其允许程序的线程在处理请求时访问每个线程的内存区以及共享的只读内存区。每个线程一次处理一个客户端的请求，并且客户端之间是利用软件故障隔离方案相互隔离的。</p>
+<h2 id="背景知识"><a href="#背景知识" class="headerlink" title="背景知识"></a>背景知识</h2><h3 id="SGX-总览"><a href="#SGX-总览" class="headerlink" title="SGX 总览"></a>SGX 总览</h3><p>SGX（software guard extensions）[1]</p>
+<p>SGX 是指<a href="https://software.intel.com/en-us/sgx" target="_blank" rel="noopener">英特尔® Software Guard Extensions</a>（英特尔® SGX）。这是一组指令，应用程序可以使用这些指令为选择的代码和数据留出受保护区域，以防止对执行代码或存储在内存中的数据进行直接攻击。SGX 允许应用程序实例化一个受保护的容器，称为 enclave，它可以防止外部软件访问，包括特权恶意软件。</p>
+<p>安全性是云计算中一项极为重要的需求,然而如何保护云计算中关键应用程序和数据的安全、防止云平台管理员泄露用户隐私,仍然是目前没有解决的难题.2013 年,Intel 公司提出了新的处理器安全技术 SGX,能够在计算平台上提供一个可信的隔离空间,保障用户关键代码和数据的机密性和完整性.作为系统安全领域的重大研究进展,SGX 对系统安全,尤其是云计算安全保护方面具有非常重要的意义.</p>
+<p>2013 年,Intel 推出 SGX(software guard extensions)指令集扩展,旨在以硬件安全为强制性保障,<strong>不依赖</strong>于<strong>固件和软件</strong>的安全状态,提供用户空间的可信执行环境,通过一组新的指令集扩展与访问控制机制,实现不同程序间的隔离运行,保障用户<strong>关键代码和数据的机密性与完整性</strong>不受恶意软件的破坏.不同于其他安全技术,SGX 的可信计算基(trusted computing base,简称 TCB)<strong>仅包括硬件</strong>,避免了基于软件的 TCB 自身存在软件安全漏洞与威胁的缺陷,极大地提升了系统安全保障;此外,SGX 可保障运行时的可信执行环境,恶意代码<strong>无法访问与篡改其他程序运行时的保护内容</strong>,进一步增强了系统的安全性;基于<strong>指令集的扩展</strong>与<strong>独立的认证</strong>方式,使得应用程序可以灵活调用这一安全功能并进行验证.</p>
+<p>SGX 的实现需要处理器、内存管理部件、BIOS、驱动程序、运行时环境等软硬件协同完成.SGX提供的功能大多数是在微指令中实现，但是保护内存不受物理攻击主要是由CPU中的MEE（memory encryption engine）硬件单元提供，这个硬件通过对保护内存读写的解密加密，保证了数据只有在CPU中的enclave内存中才是明文.</p>
+<p><strong>功能：</strong>内存隔离/保护安全属性/远程认证/密封.</p>
+<h3 id="SGX-架构"><a href="#SGX-架构" class="headerlink" title="SGX 架构"></a>SGX 架构</h3><p><img src="/2021/05/24/CHANCEL/sgx-architecture-1.png" width="600px"></p>
+<h3 id="enclave"><a href="#enclave" class="headerlink" title="enclave"></a>enclave</h3><p>地理学上的解释</p>
+<blockquote>
+<p>外飞地(Exclave)：某国家拥有一块与该国分离开来的领土，该领土被其他国家隔开，则该领土称为某国的外飞地。</p>
+<p>内飞地(Enclave): 某国家国境之内有块地区的主权属于别的国家，则该地区是这国家的内飞地，也同时是握有主权国家的外飞地。</p>
+</blockquote>
+<p>SGX允许应用程序实现一个被称为 enclave 的容器,在应用程序的地址空间中划分出一块被保护的区域,为容器内的代码和数据提供机密性和完整性的保护,免受拥有特殊权限的恶意软件的破坏.</p>
+<p>enclave 是一个被保护的容器，存放应用程序敏感数据和代码，SGX允许应用程序指定需要保护的代码和数据，创建enclave之前，不必对其进行分析，加载到enclave之后，必须被完整度量，且之后SGX保证其不能被外部软件所访问.  enclave都驻留在EPC（enclave page cache）中，这是系统内被保护的物理内存，用于存放enclave和SGX数据结构.以支持SGX的一种架构为例，如果在加密保护的DRAM (dynamic random access memory) 中实现EPC，那么他也支持BIOS保留一段PRM（processor reserved memory）的内存.</p>
+<p><strong>enclave 特征：</strong></p>
+<blockquote>
+<p>有自己的代码和数据/机密性保护/完整性保护/可控的入口点/支持多线程/内存具有最高访问权限.</p>
+<p>TCS (thread control structure) 保存着进入或者退出enclave时的线程信息, 每一个enclave中的线程都和一个TCS关联, 需要4K对齐.</p>
+</blockquote>
+<p><strong>enclave 架构图：</strong></p>
+<p><img src="/2021/05/24/CHANCEL/sgx-prm-enclave.png" width="800"></p>
+<p><img src="/2021/05/24/CHANCEL/enclave-layout.png" width="500"></p>
+<p><img src="/2021/05/24/CHANCEL/enclave-privileged.png" width="500"></p>
+<p><strong>远端验证：</strong> enclave 可以向远端认证者证明自己的身份，访问该enclave的用户也持有独立的访问秘钥.</p>
+<p><strong>Physical Memory Organization:</strong> （下文详细介绍）</p>
+<p><img src="/2021/05/24/CHANCEL/enclave-physical-mem-1.png" width="800"></p>
+<p><img src="/2021/05/24/CHANCEL/enclave-mem-map-1.png" width="800"></p>
+<p><strong>SGX memory control:</strong></p>
+<p><img src="/2021/05/24/CHANCEL/SGX-mem-control.png" width="500"></p>
+<p><strong>enclave 保护机制：</strong> 1. enclave内存访问语义变化, 2. 应用程序地址映射关系保护</p>
+<p><strong>1. 内存访问语义</strong></p>
+<blockquote>
+<p>系统分配一块被保护的物理内存区域EPC，用于存放enclave和SGX数据结构，该段区域对于外部请求透明（不存在的内存访问）</p>
+<p>Fig.4 中的内存保护机制中，系统在SGX调用前处于保护模式，支持分页. SGX提供的内存保护机制，在保护模式提供的段保护、页保护机制基础上增加了进一步的保护机制：</p>
+<p>(1). enclave之外应用访问PRM外部内存，按照保护模式进行访问；</p>
+<p>(2). enclave之外应用访问EPC内部内存，该内存区域不存在（透明）；</p>
+<p>(3). enclave内部程序访问EPC内部内存，该内存区域不存在（透明）；</p>
+<p>(4). enclave内部程序访问PRM外部内存，按照保护模式进行访问；</p>
+<p>(5). enclave内部程序访问PRM内部内存，硬件阻止访问。</p>
+<p>简言之：enclave外部不能访问，内部只能访问属于自己的内存，PRM之外的内存按照系统的保护机制进行访问。</p>
+</blockquote>
+<p><strong>EPCM （Enclave Page Cache Map）逻辑结构：</strong></p>
+<p><img src="/2021/05/24/CHANCEL/EPCM-structure.png" width="500"></p>
+<p><strong>2. 内存地址映射保护</strong></p>
+<p>EPC内存以页为单位进行管理，页的控制信息保存在EPCM中，类似于OS中的页表，功能是在CPU地址映射过程中执行enclave页面的访问控制，通过PMH(page miss handler)硬件模块访问，在保护模式的段、页保护机制上增加了一层安全的访问控制.</p>
+<p><strong>enclave 机密性和完整性保护：</strong></p>
+<blockquote>
+<p>(1). 由应用程序申请创建一个enclave, 页面分配，复制程序代码、数据并进行度量，度量结果保存在enclave的控制结构中；</p>
+<p>(2). 创建好之后，SGX通过初始化指令将结果与enclave所有者签名证书的完整性值进行比较，匹配的话，则进行绑定，否则创建失败；</p>
+<p>(3). 成功之后，指定用户可以访问对应的enclave, SGX提供内存保护以及地址映射保护，从而保证enclave的机密性与完整性，远端认证者可以通过enclave的完整性度量结果以及身份，确保其enclave正确创建.</p>
+</blockquote>
+<h3 id="SGX-漏洞"><a href="#SGX-漏洞" class="headerlink" title="SGX 漏洞"></a>SGX 漏洞</h3><p><strong>1.侧信道攻击</strong></p>
+<p>侧信道攻击主要目标是攻击 enclave 数据的机密性.</p>
+<p>攻击者来自 non-enclave 部分,包括应用程序和系统软件.系统软件包括 OS,hypervisor,SMM(system management mode),BIOS 等特权级软件.</p>
+<p><strong>三个假设：</strong></p>
+<blockquote>
+<p>1.侧信道攻击者指导enclave初始化的代码和数据，知道内存布局；</p>
+<p>2.攻击者知道enclave的输入数据，可以反复多次触发enclave，记录并观察结果；</p>
+<p>3.攻击者知道运行enclave平台的配置(CPU、TLB、Cache、DRAM、页表、中断以及异常等)</p>
+</blockquote>
+<p><strong>enclave运行使用的物理资源及攻击方式总览：</strong></p>
+<blockquote>
+<p>CPU: 间接访问pipeline/BPB(branch prediction buffer)，可以泄露enclave的控制流或者数据流；</p>
+<p>TLB : TLB包括 iTLB,dTLB和 L2 TLB.如果Hyper-Threading打开,两个逻辑核共享一个物理核,这时会大大增加侧信道攻击的可能;</p>
+<p>Cache: Cache 包括 L1 instruction Cache,L1 data Cache,L2 Cache 和 L3 Cache(又叫 LLC Cache);</p>
+<p>DRAM：DRAM 包括 channels,DIMMs(dual inline memory module),ranks,banks.每个 banks 又包括 rows, columns 和 row buffer;</p>
+<p>页表：页表可以通过权限控制来触发缺页异常,也可以通过页表的状态位来表明 CPU 的某些操作.</p>
+</blockquote>
+<p><img src="/2021/05/24/CHANCEL/SGX-side-channel-attack-surface.png" width="600"></p>
+<p><strong>2. SGX 多线程同步</strong></p>
+<p>[4] 指出在使用SGX后以往被视为无害的同步漏洞可能会变为严重的安全漏洞。通过在enclave代码中利用UAF(use-after-free)和TOCTTOU(time-of-check-to-time-of-use)漏洞，一个攻击者可以劫持它的控制流或者绕过访问控制。</p>
+<p><strong>Native Client</strong> </p>
+<p>Native client[5] 是一个用于执行不可信x86主机代码的沙箱，利用沙盒技术防止外来机器代码影响系统安全，限制程序读写的存储器范围，为基于浏览器的应用程序提供本地应用程序的计算性能，而不会影响安全性。09年提出。</p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>sgx 的设计是每个用户是一个单独进程，每个进程绑定一个enclave，enclave之间是相互隔离开的，不涉及数据共享，则会浪费内存空间，因此设计目标是在保证数据共享节约内存空间基础上实现用户的隔离。</p>
+<p><img src="/2021/05/24/CHANCEL/sgx-non-share.png" width="600"></p>
+<p>在实现多用户间隔离时，chancel保证共享数据的多个用户处于同一个进程空间中，每个用户是一个线程，实现线程级别隔离。</p>
+<p><img src="/2021/05/24/CHANCEL/mulit-client-SFI.png" width="600"></p>
+<p><img src="/2021/05/24/CHANCEL/chancel-design.png" width="600"></p>
+<h2 id="实验结论"><a href="#实验结论" class="headerlink" title="实验结论"></a>实验结论</h2><p>与多进程沙盒作对比，在保证安全的同时提升了4-53倍的性能</p>
+<p><img src="/2021/05/24/CHANCEL/benefit.png" width="600"></p>
+<h2 id="阅读问题记录"><a href="#阅读问题记录" class="headerlink" title="阅读问题记录"></a>阅读问题记录</h2><ol>
+<li><p>本文的核心是什么？多线程并发隔离？</p>
+</li>
+<li><p><strong>Section V:</strong>本文与原始SGX对比有哪些改动？原始的SGX提供了什么？</p>
+</li>
+<li><p>SGX与enclave的关系？enclave是一个用户一个还是多用户共享？</p>
+<blockquote>
+<p>Enclave是SGX提供给用户的一个隔离的执行环境，初始化时建立对应的enclave</p>
+</blockquote>
+</li>
+<li><p>Section V: 文中提到的SecureLayer是什么？MCSFI是本文构建的吗？</p>
+</li>
+<li><p>r14,15寄存器作用？</p>
+<blockquote>
+<p>本文r14指向单独线程的私有空间地址，r15指向该进程的共享数据空间。</p>
+</blockquote>
+</li>
+<li><p>native sgx 与 native client 指的是什么？</p>
+<blockquote>
+<p>sgx 只内存中开辟的空间，nacl指的是挂载到该空间的客户</p>
+</blockquote>
+</li>
+<li><p>SGX 真实的使用中代码的大小有多少？64MB？</p>
+</li>
+</ol>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>说明：本文的一些截图来自于以下论文或者网站，图片序号没有标注，其中sgx101[2]是一个不错的sgx学习网站.</p>
+<p>[1] 王鹃, 樊成阳, 程越强, 赵波, 韦韬, 严飞, 张焕国,&amp; 马婧. (2018). SGX 技术的分析和研究. <em>软件学报</em>, <em>29</em>(9), 2778-2798.</p>
+<p>[2] <a href="https://sslab-gatech.github.io/sgx101/pages/enclave.html" target="_blank" rel="noopener">https://sslab-gatech.github.io/sgx101/pages/enclave.html</a></p>
+<p>[3] Costan, V., &amp; Devadas, S. (2016). Intel SGX Explained. <em>IACR</em> <em>Cryptol**.</em> <em>ePrint</em> <em>Arch.</em>, <em>2016</em>(86), 1-118. <a href="https://eprint.iacr.org/2016/086.pdf" target="_blank" rel="noopener">https://eprint.iacr.org/2016/086.pdf</a></p>
+<p>[4] Weichbrodt N, Kurmus A, Pietzuch P, Kapitza R. AsyncShock: Exploiting synchronisation bugs in Intel SGX enclaves. In: Proc. of the Computer Security (ESORICS 2016). 2016. 440−457. </p>
+<p>[5] Yee, B., Sehr, D., Dardyk, G., Chen, J. B., Muth, R., Ormandy, T., &amp; Fullagar, N. (2009, May). Native client: A sandbox for portable, untrusted x86 native code. In <em>2009 30th IEEE Symposium on Security and Privacy</em> (pp. 79-93). IEEE.</p>
+<p>[6] <a href="https://zhuanlan.zhihu.com/p/50894009" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/50894009</a></p>
+<p>[7] Xing, B. C., Shanahan, M., &amp; Leslie-Hurd, R. (2016). Intel® Software Guard Extensions (Intel® SGX) software support for dynamic memory allocation inside an enclave. In <em>Proceedings of the Hardware and Architectural Support for Security and Privacy 2016</em> (pp. 1-9).</p>
+]]></content>
+      <categories>
+        <category>NDSS</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>TEE</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Google Technology</title>
     <url>/2020/11/23/Google-Technology/</url>
     <content><![CDATA[<div class="table-container">
@@ -1959,6 +1959,19 @@ after  modify ips =&gt;19&amp;.168.0.2&lt;
         <tag>论文解读</tag>
         <tag>Detection</tag>
         <tag>Isolation</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Information theoretic framework</title>
+    <url>/2021/03/15/Information-theoretic-framework/</url>
+    <content><![CDATA[<h2 id="四条公理"><a href="#四条公理" class="headerlink" title="四条公理"></a>四条公理</h2><h2 id="两种模型"><a href="#两种模型" class="headerlink" title="两种模型"></a>两种模型</h2>]]></content>
+      <categories>
+        <category>JSAC</category>
+      </categories>
+      <tags>
+        <tag>TODO</tag>
+        <tag>论文解读</tag>
+        <tag>Protocol</tag>
       </tags>
   </entry>
   <entry>
@@ -2268,41 +2281,6 @@ func main()  {
       </tags>
   </entry>
   <entry>
-    <title>Information theoretic framework</title>
-    <url>/2021/03/15/Information-theoretic-framework/</url>
-    <content><![CDATA[<h2 id="四条公理"><a href="#四条公理" class="headerlink" title="四条公理"></a>四条公理</h2><h2 id="两种模型"><a href="#两种模型" class="headerlink" title="两种模型"></a>两种模型</h2>]]></content>
-      <categories>
-        <category>JSAC</category>
-      </categories>
-      <tags>
-        <tag>TODO</tag>
-        <tag>论文解读</tag>
-        <tag>Protocol</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
-    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
-    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
-<ul>
-<li><strong>Active Monitoring（Synchronous）</strong></li>
-</ul>
-<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
-<ul>
-<li><strong>Passive Monitoring （Asynchronous）</strong></li>
-</ul>
-<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
-]]></content>
-      <categories>
-        <category>Security and Privacy</category>
-        <category>TODO</category>
-      </categories>
-      <tags>
-        <tag>论文解读</tag>
-        <tag>虚拟化安全</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>LinnOS</title>
     <url>/2021/06/11/LinnOS/</url>
     <content><![CDATA[<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><div class="table-container">
@@ -2437,6 +2415,28 @@ git branch --all
       <tags>
         <tag>MIT6.S081</tag>
         <tag>OS</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Lares:An Architecture for Secure Active Monitoring Using Virtualization</title>
+    <url>/2020/05/03/Lares-An-Architecture-for-Secure-Active-Monitoring-Using-Virtualization/</url>
+    <content><![CDATA[<h3 id="Prevention-VS-Detection"><a href="#Prevention-VS-Detection" class="headerlink" title="Prevention VS Detection"></a>Prevention VS Detection</h3><p>Prevention侧重于阻止，即在攻击前拦截攻击，如阻止一个恶意驱动的加载。Detection侧重于检测，即在攻击成功后，检测是否发生过攻击。Prevention类的虚拟机监控又称Active Monitoring（主动监控），典型的有Lares。Detection类的虚拟机监控又称Passive Monitoring（被动监控），典型的有VICTOR。</p>
+<ul>
+<li><strong>Active Monitoring（Synchronous）</strong></li>
+</ul>
+<p>主动监控一般采用同步机制，即事件发生时进行拦截。所以主动监控适合于监控发生频率较低的事件，如进程的创建。对发生频率较高的事件进行拦截，如拦截线程的切换，则会带来较大的性能损耗，尤其是当这类事件会引起陷入hypervisor的时候。</p>
+<ul>
+<li><strong>Passive Monitoring （Asynchronous）</strong></li>
+</ul>
+<p>被动监控一般采用异步机制，即事件发生后进行检测，如周期性的扫描内存。发生频率较高的事件可通过这种方式进行检测。然而这种方法需要权衡性能和风险，确定一个合适的检测周期。过于频繁的检测会带来较大的性能损耗，而周期间隔较大又可能遗漏攻击行为（攻击行为发生在两次检测之间）。</p>
+]]></content>
+      <categories>
+        <category>Security and Privacy</category>
+        <category>TODO</category>
+      </categories>
+      <tags>
+        <tag>论文解读</tag>
+        <tag>虚拟化安全</tag>
       </tags>
   </entry>
   <entry>
@@ -2847,6 +2847,53 @@ in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
       </tags>
   </entry>
   <entry>
+    <title>PUBG JNG</title>
+    <url>/2020/04/18/PUBG-JNG/</url>
+    <content><![CDATA[<h3 id="JNG战队发展历程回顾"><a href="#JNG战队发展历程回顾" class="headerlink" title="JNG战队发展历程回顾"></a>JNG战队发展历程回顾</h3><h4 id="JNG初次相遇"><a href="#JNG初次相遇" class="headerlink" title="JNG初次相遇"></a>JNG初次相遇</h4><p>很久很久以前，这支战队的几个骚年游荡在这样一个空旷的平原上</p>
+<p><img src="/2020/04/18/PUBG-JNG/1.jpg" alt="IMG_0814"></p>
+<p>这个寒假的某一天，他们在飞机上相遇，并开启了他们相识到并肩作战的征程</p>
+<p><img src="/2020/04/18/PUBG-JNG/2.jpg" alt="IMG_0815"></p>
+<h4 id="睡衣战队红极一时"><a href="#睡衣战队红极一时" class="headerlink" title="睡衣战队红极一时"></a>睡衣战队红极一时</h4><p>在他们相遇不久，便迎来了队伍的第一次胜利</p>
+<p><img src="/2020/04/18/PUBG-JNG/3.jpg" alt="IMG_0823"></p>
+<p>当时他们采取的是著名的车轮战，即3辆装甲车并驾齐驱，纵横四海的战术</p>
+<p><img src="/2020/04/18/PUBG-JNG/4.jpg" alt="IMG_0822"></p>
+<h4 id="各种模式吃鸡常态化"><a href="#各种模式吃鸡常态化" class="headerlink" title="各种模式吃鸡常态化"></a>各种模式吃鸡常态化</h4><p>在经历了短短几天的磨合后，这几个小伙子已经将吃鸡常态化</p>
+<p>普通模式</p>
+<p><img src="/2020/04/18/PUBG-JNG/5.jpg" alt="IMG_0863"></p>
+<p><img src="/2020/04/18/PUBG-JNG/20.jpg" alt=""></p>
+<p>特种兵模式</p>
+<p><img src="/2020/04/18/PUBG-JNG/6.jpg" alt="IMG_0833"></p>
+<p>一日两鸡已是正常</p>
+<p><img src="/2020/04/18/PUBG-JNG/7.jpg" alt="IMG_0838"></p>
+<p><img src="/2020/04/18/PUBG-JNG/8.jpg" alt="IMG_0852"></p>
+<h4 id="雪地扔雷，对手一片哀嚎"><a href="#雪地扔雷，对手一片哀嚎" class="headerlink" title="雪地扔雷，对手一片哀嚎"></a>雪地扔雷，对手一片哀嚎</h4><p><img src="/2020/04/18/PUBG-JNG/9.jpg" alt="IMG_0858"></p>
+<p><img src="/2020/04/18/PUBG-JNG/10.jpg" alt="IMG_0869"></p>
+<p><img src="/2020/04/18/PUBG-JNG/11.jpg" alt="IMG_0871"></p>
+<p><img src="/2020/04/18/PUBG-JNG/12.jpg" alt="IMG_0903"></p>
+<h4 id="最后一次征战雪地"><a href="#最后一次征战雪地" class="headerlink" title="最后一次征战雪地"></a>最后一次征战雪地</h4><p>在一次极寒模式对决中，几个小伙子竟然连锅端掉了一个满编RMB玩家。在这之后，光子工作室终于对他们下手了，出于人道主义，并不能直接限制玩家们参与游戏，于是乎，默默地移除了他们最擅长的极寒模式，他们再也不用落地寻找暖宝宝了，再也听不到系统提示：“暴风雪还有60秒到达，打开背包，利用打火机生火取暖”。但系统为了其余玩家的游戏体验，只能如此。</p>
+<p><img src="/2020/04/18/PUBG-JNG/13.jpg" alt="IMG_0909"></p>
+<h4 id="插曲"><a href="#插曲" class="headerlink" title="插曲"></a>插曲</h4><p>性感小wei在线比心</p>
+<p><img src="/2020/04/18/PUBG-JNG/14.jpg" alt="IMG_0834"></p>
+<h3 id="JNG-建队"><a href="#JNG-建队" class="headerlink" title="JNG 建队"></a>JNG 建队</h3><p>终于，在2020年4月17日，这支战队正式成立了</p>
+<p><img src="/2020/04/18/PUBG-JNG/15.jpg" alt="IMG_0855"></p>
+<p>属于JNG（Jining Gaming）的时刻已经来临</p>
+<p><img src="/2020/04/18/PUBG-JNG/16.jpg" alt=""></p>
+<p>今晚，请锁定和平精英，关注这支战队！</p>
+<p><img src="/2020/04/18/PUBG-JNG/21.jpg" alt=""></p>
+<p>建队首鸡</p>
+<p><img src="/2020/04/18/PUBG-JNG/18.jpg" alt=""></p>
+<p><img src="/2020/04/18/PUBG-JNG/19.jpg" alt=""></p>
+<p>一支穿云箭，千军万马来相见</p>
+<p><img src="/2020/04/18/PUBG-JNG/22.jpg" alt=""></p>
+<p>雪地彩蛋</p>
+<p><img src="/2020/04/18/PUBG-JNG/23.jpg" alt=""></p>
+]]></content>
+      <tags>
+        <tag>game-for-peace</tag>
+        <tag>JNG</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PengLai-Enclave</title>
     <url>/2021/07/07/PengLai-Enclave/</url>
     <content><![CDATA[<h2 id="导读"><a href="#导读" class="headerlink" title="导读"></a>导读</h2><div class="table-container">
@@ -2895,53 +2942,6 @@ in PortAddress,%al  #把端口地址为PortAddress的端口值读到al寄存器
         <tag>TODO</tag>
         <tag>论文解读</tag>
         <tag>TEE</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PUBG JNG</title>
-    <url>/2020/04/18/PUBG-JNG/</url>
-    <content><![CDATA[<h3 id="JNG战队发展历程回顾"><a href="#JNG战队发展历程回顾" class="headerlink" title="JNG战队发展历程回顾"></a>JNG战队发展历程回顾</h3><h4 id="JNG初次相遇"><a href="#JNG初次相遇" class="headerlink" title="JNG初次相遇"></a>JNG初次相遇</h4><p>很久很久以前，这支战队的几个骚年游荡在这样一个空旷的平原上</p>
-<p><img src="/2020/04/18/PUBG-JNG/1.jpg" alt="IMG_0814"></p>
-<p>这个寒假的某一天，他们在飞机上相遇，并开启了他们相识到并肩作战的征程</p>
-<p><img src="/2020/04/18/PUBG-JNG/2.jpg" alt="IMG_0815"></p>
-<h4 id="睡衣战队红极一时"><a href="#睡衣战队红极一时" class="headerlink" title="睡衣战队红极一时"></a>睡衣战队红极一时</h4><p>在他们相遇不久，便迎来了队伍的第一次胜利</p>
-<p><img src="/2020/04/18/PUBG-JNG/3.jpg" alt="IMG_0823"></p>
-<p>当时他们采取的是著名的车轮战，即3辆装甲车并驾齐驱，纵横四海的战术</p>
-<p><img src="/2020/04/18/PUBG-JNG/4.jpg" alt="IMG_0822"></p>
-<h4 id="各种模式吃鸡常态化"><a href="#各种模式吃鸡常态化" class="headerlink" title="各种模式吃鸡常态化"></a>各种模式吃鸡常态化</h4><p>在经历了短短几天的磨合后，这几个小伙子已经将吃鸡常态化</p>
-<p>普通模式</p>
-<p><img src="/2020/04/18/PUBG-JNG/5.jpg" alt="IMG_0863"></p>
-<p><img src="/2020/04/18/PUBG-JNG/20.jpg" alt=""></p>
-<p>特种兵模式</p>
-<p><img src="/2020/04/18/PUBG-JNG/6.jpg" alt="IMG_0833"></p>
-<p>一日两鸡已是正常</p>
-<p><img src="/2020/04/18/PUBG-JNG/7.jpg" alt="IMG_0838"></p>
-<p><img src="/2020/04/18/PUBG-JNG/8.jpg" alt="IMG_0852"></p>
-<h4 id="雪地扔雷，对手一片哀嚎"><a href="#雪地扔雷，对手一片哀嚎" class="headerlink" title="雪地扔雷，对手一片哀嚎"></a>雪地扔雷，对手一片哀嚎</h4><p><img src="/2020/04/18/PUBG-JNG/9.jpg" alt="IMG_0858"></p>
-<p><img src="/2020/04/18/PUBG-JNG/10.jpg" alt="IMG_0869"></p>
-<p><img src="/2020/04/18/PUBG-JNG/11.jpg" alt="IMG_0871"></p>
-<p><img src="/2020/04/18/PUBG-JNG/12.jpg" alt="IMG_0903"></p>
-<h4 id="最后一次征战雪地"><a href="#最后一次征战雪地" class="headerlink" title="最后一次征战雪地"></a>最后一次征战雪地</h4><p>在一次极寒模式对决中，几个小伙子竟然连锅端掉了一个满编RMB玩家。在这之后，光子工作室终于对他们下手了，出于人道主义，并不能直接限制玩家们参与游戏，于是乎，默默地移除了他们最擅长的极寒模式，他们再也不用落地寻找暖宝宝了，再也听不到系统提示：“暴风雪还有60秒到达，打开背包，利用打火机生火取暖”。但系统为了其余玩家的游戏体验，只能如此。</p>
-<p><img src="/2020/04/18/PUBG-JNG/13.jpg" alt="IMG_0909"></p>
-<h4 id="插曲"><a href="#插曲" class="headerlink" title="插曲"></a>插曲</h4><p>性感小wei在线比心</p>
-<p><img src="/2020/04/18/PUBG-JNG/14.jpg" alt="IMG_0834"></p>
-<h3 id="JNG-建队"><a href="#JNG-建队" class="headerlink" title="JNG 建队"></a>JNG 建队</h3><p>终于，在2020年4月17日，这支战队正式成立了</p>
-<p><img src="/2020/04/18/PUBG-JNG/15.jpg" alt="IMG_0855"></p>
-<p>属于JNG（Jining Gaming）的时刻已经来临</p>
-<p><img src="/2020/04/18/PUBG-JNG/16.jpg" alt=""></p>
-<p>今晚，请锁定和平精英，关注这支战队！</p>
-<p><img src="/2020/04/18/PUBG-JNG/21.jpg" alt=""></p>
-<p>建队首鸡</p>
-<p><img src="/2020/04/18/PUBG-JNG/18.jpg" alt=""></p>
-<p><img src="/2020/04/18/PUBG-JNG/19.jpg" alt=""></p>
-<p>一支穿云箭，千军万马来相见</p>
-<p><img src="/2020/04/18/PUBG-JNG/22.jpg" alt=""></p>
-<p>雪地彩蛋</p>
-<p><img src="/2020/04/18/PUBG-JNG/23.jpg" alt=""></p>
-]]></content>
-      <tags>
-        <tag>game-for-peace</tag>
-        <tag>JNG</tag>
       </tags>
   </entry>
   <entry>
@@ -3487,6 +3487,55 @@ func main()  {
       </tags>
   </entry>
   <entry>
+    <title>Software ROT</title>
+    <url>/2020/12/02/Software-ROT/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.cylab.cmu.edu/_files/pdfs/tech_reports/CMUCyLab18003.pdf" target="_blank" rel="noopener">Software ROT</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">CMU/CyLab</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">Pioneer 工作的延续</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>NDSS</category>
+      </categories>
+      <tags>
+        <tag>TODO</tag>
+        <tag>论文解读</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Socket编程基础总结</title>
     <url>/2020/10/19/Socket%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<p>Socket编程基础总结</p>
@@ -3860,55 +3909,6 @@ int main(void)
       </tags>
   </entry>
   <entry>
-    <title>Software ROT</title>
-    <url>/2020/12/02/Software-ROT/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.cylab.cmu.edu/_files/pdfs/tech_reports/CMUCyLab18003.pdf" target="_blank" rel="noopener">Software ROT</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">CMU/CyLab</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">Pioneer 工作的延续</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>NDSS</category>
-      </categories>
-      <tags>
-        <tag>TODO</tag>
-        <tag>论文解读</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>SystemInfo</title>
     <url>/2021/07/10/SystemInfo/</url>
     <content><![CDATA[<h2 id="Linux-实时显示资源利用率"><a href="#Linux-实时显示资源利用率" class="headerlink" title="Linux 实时显示资源利用率"></a>Linux 实时显示资源利用率</h2><ol>
@@ -4146,21 +4146,6 @@ root          53  0.1 2500592    6132 ?             Nov18   00:02  configd
       </tags>
   </entry>
   <entry>
-    <title>The first blog</title>
-    <url>/2020/04/18/The-first-blog/</url>
-    <content><![CDATA[<h3 id="The-first-bolg"><a href="#The-first-bolg" class="headerlink" title="The first bolg"></a>The first bolg</h3><p>Hello，this is my first bolg of github.io.</p>
-<p>I tried for about 12 hours to set up this simple website, right now, the author(me) still feel awsome.</p>
-<p>I have written some technology blogs in <a href="https://www.cnblogs.com/Robin5/" target="_blank" rel="noopener">Robin5</a>.</p>
-<p>Seize the time and face the bright future！</p>
-<p>I will work harder and harder!</p>
-<p>Witness me in github.io</p>
-]]></content>
-      <tags>
-        <tag>essay</tag>
-        <tag>英文</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>The moment</title>
     <url>/2020/07/14/The-moment/</url>
     <content><![CDATA[<p>  此时此刻，在家里敲代码+编辑文本，就在这一刻，我感觉电脑自带的键盘手感好棒，这种美妙的触感，爱了。</p>
@@ -4331,57 +4316,6 @@ root          53  0.1 2500592    6132 ?             Nov18   00:02  configd
     <content><![CDATA[]]></content>
   </entry>
   <entry>
-    <title>Transient Execution Attacks</title>
-    <url>/2020/12/30/Transient-Execution-Attacks/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:center">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:center">原文PDF</td>
-<td style="text-align:center"><a href="https://www.cs.princeton.edu/courses/archive/spr06/cos592/bib/pioneer-seshadri-sosp05.pdf" target="_blank" rel="noopener">Pioneer</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:center">作者信息</td>
-<td style="text-align:center">CMU/CyLab</td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:center">核心内容</td>
-<td style="text-align:center">one-on-one 方式检测内存信息是否有差别</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:center">研究领域</td>
-<td style="text-align:center">安全检测</td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:center">全文总览</td>
-<td style="text-align:center">通过one-on-one 的方法对非可信主机进行检测，从而构造出一个可信的执行环境。</td>
-</tr>
-</tbody>
-</table>
-</div>
-<p>瞬时攻击</p>
-]]></content>
-      <categories>
-        <category>OSDI</category>
-      </categories>
-      <tags>
-        <tag>TODO</tag>
-        <tag>论文解读</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Untrusted Hypervisor AMD Memory Encryption</title>
     <url>/2021/01/11/Untrusted-Hypervisor-AMD-Memory-Encryption/</url>
     <content><![CDATA[<div class="table-container">
@@ -4431,6 +4365,21 @@ root          53  0.1 2500592    6132 ?             Nov18   00:02  configd
         <tag>论文解读</tag>
         <tag>Untrusted Hypervisor</tag>
         <tag>Virtualization</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>The first blog</title>
+    <url>/2020/04/18/The-first-blog/</url>
+    <content><![CDATA[<h3 id="The-first-bolg"><a href="#The-first-bolg" class="headerlink" title="The first bolg"></a>The first bolg</h3><p>Hello，this is my first bolg of github.io.</p>
+<p>I tried for about 12 hours to set up this simple website, right now, the author(me) still feel awsome.</p>
+<p>I have written some technology blogs in <a href="https://www.cnblogs.com/Robin5/" target="_blank" rel="noopener">Robin5</a>.</p>
+<p>Seize the time and face the bright future！</p>
+<p>I will work harder and harder!</p>
+<p>Witness me in github.io</p>
+]]></content>
+      <tags>
+        <tag>essay</tag>
+        <tag>英文</tag>
       </tags>
   </entry>
   <entry>
@@ -4637,122 +4586,6 @@ reboot
       </tags>
   </entry>
   <entry>
-    <title>Xen log 2 Add a new Hypercall</title>
-    <url>/2020/07/19/Xen-log-2-Add-a-new-Hypercall/</url>
-    <content><![CDATA[<p>当前使用的xen版本为Xen-4.11</p>
-<h2 id="修改Xen文件"><a href="#修改Xen文件" class="headerlink" title="修改Xen文件"></a>修改Xen文件</h2><p>在Xen-4.11中，仅对hypercall.c hypercall.h文件进行修改即可实现用户添加hypercall</p>
-<p>当前xen源码的顶级目录为Xen</p>
-<h3 id="修改xen-h"><a href="#修改xen-h" class="headerlink" title="修改xen.h"></a>修改xen.h</h3><p>目标文件位置</p>
-<pre><code class="lang-bash">Xen/xen/include/public/xen.h
-</code></pre>
-<p>39号调用是给用户预留的，可以使用自己的hypercall替换掉预定义hypercall</p>
-<pre><code class="lang-bash">  #define __HYPERVISOR_tmem_op                 38
-+ #define __HYPERVISOR_Alice_op                39
-</code></pre>
-<h3 id="修改hypercall-h"><a href="#修改hypercall-h" class="headerlink" title="修改hypercall.h"></a>修改hypercall.h</h3><p>目标文件位置</p>
-<pre><code class="lang-bash">Xen/xen/include/xen/hypercall.h
-</code></pre>
-<p>添加内容</p>
-<pre><code class="lang-bash">+ extern int
-  do_Alice_op(void);
-</code></pre>
-<h3 id="修改hypercall-c"><a href="#修改hypercall-c" class="headerlink" title="修改hypercall.c"></a>修改hypercall.c</h3><p>目标文件位置</p>
-<pre><code class="lang-bash">Xen/xen/arch/x86/pv/hypercall.c
-</code></pre>
-<p>添加内容</p>
-<pre><code class="lang-bash">  COMPAT_CALL(callback_op),
-+ HYPERCALL(Alice_op),
-</code></pre>
-<p>目标文件位置</p>
-<pre><code class="lang-bash">Xen/xen/arch/x86/hypercall.c
-</code></pre>
-<p>添加内容</p>
-<pre><code class="lang-bash">  ARGS(arcg_1, 1),
-+ ARGS(Alice_op, 0), // 这里0 对应do_Alice_op(void) 函数中参数个数
-</code></pre>
-<h2 id="函数实现"><a href="#函数实现" class="headerlink" title="函数实现"></a>函数实现</h2><p>hypercal如果是共用功能的话，可以放在 Xen/xen/common 下的函数中实现</p>
-<p>为了打印输出方便，测试函数放在了mm.c中实现</p>
-<p>目标文件位置</p>
-<pre><code class="lang-bash">Xen/xen/arch/x86/mm.c
-</code></pre>
-<p>添加内容</p>
-<pre><code class="lang-c">+ int do_Alice_op(void)
-  {
-      printk("Alice Hypercall!\n");
-    return 0;
-  }
-</code></pre>
-<h2 id="重新编译xen"><a href="#重新编译xen" class="headerlink" title="重新编译xen"></a>重新编译xen</h2><pre><code class="lang-bash">make xen -j8
-make tools -j8
-make install-xen
-make install-tools
-update-grub
-reboot
-</code></pre>
-<p>重启之后测试下添加的hypercall能不能正常被调用</p>
-<p>采用privcmd工具实现</p>
-<pre><code class="lang-c">#include &lt;stdio.h&gt;
-#include &lt;stdlib.h&gt; 
-#include &lt;errno.h&gt;
-#include &lt;sys/ioctl.h&gt;
-#include &lt;linux/types.h&gt;
-#include &lt;fcntl.h&gt;
-#include &lt;xenctrl.h&gt;
-#include &lt;xen/sys/privcmd.h&gt;
-#include &lt;string.h&gt;
-
-int main(void)
-{
-        int fd, ret;
-        char * message;
-        privcmd_hypercall_t alice_op={
-                __HYPERVISOR_Alice_op,
-                {0,0,0,0,0}
-        };
-        fd = open("/proc/xen/privcmd", O_RDWR);
-        if(fd&lt;0){
-                perror("can't open /proc/xen/privcmd");
-                exit(1);
-        } else {
-                printf("privcmd's fd = %d\n", fd);
-        }
-        ret = ioctl(fd, IOCTL_PRIVCMD_HYPERCALL, &amp;alice_op);
-        printf("ret = %d\n", ret);
-        return 0;
-}
-</code></pre>
-<p> 若代码显示不全，参见下图</p>
-<p><img src="/2020/07/19/Xen-log-2-Add-a-new-Hypercall/privcmd.jpg"></p>
-<p>编译</p>
-<pre><code class="lang-bash">gcc -o test privcmd.c
-</code></pre>
-<p>执行</p>
-<pre><code class="lang-bash">./test
-</code></pre>
-<p>输出结果</p>
-<pre><code class="lang-bash">privcmd's fd = 3
-ret = 0
-</code></pre>
-<p>注：如果ioctl()函数返回值为-1，说明出错</p>
-<p>查看日志信息</p>
-<p>命令</p>
-<pre><code class="lang-bash">xl dm
-</code></pre>
-<p>输出</p>
-<pre><code class="lang-bash">(XEN) Bogus DMIBAR 0xfed18001 on 0000:00:00.0
-(XEN) Alice Hypercall!
-</code></pre>
-<p>当看到自定义输出的信息时，说明此hypercall调用正常！</p>
-<p>现在，按照此方法就可以调用hypecall了~</p>
-]]></content>
-      <tags>
-        <tag>Virtualization</tag>
-        <tag>Hypervisor</tag>
-        <tag>Xen log</tag>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Xen log 3 Using Serial Debug Xen</title>
     <url>/2020/10/09/Xen-log-3-Using-Serial-Debug-Xen/</url>
     <content><![CDATA[<p>注：本文的配置是在<a href="https://wiki.xenproject.org/wiki/Xen_Serial_Console" target="_blank" rel="noopener">官网</a>指导下进行的，因为在配置过程中遇到一点问题，记录下配置过程。</p>
@@ -4954,6 +4787,57 @@ runspec -c config.cfg -i ref -l fp
       <tags>
         <tag>Xen log</tag>
         <tag>SPECCPU2006</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Transient Execution Attacks</title>
+    <url>/2020/12/30/Transient-Execution-Attacks/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:center">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">原文PDF</td>
+<td style="text-align:center"><a href="https://www.cs.princeton.edu/courses/archive/spr06/cos592/bib/pioneer-seshadri-sosp05.pdf" target="_blank" rel="noopener">Pioneer</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">作者信息</td>
+<td style="text-align:center">CMU/CyLab</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">核心内容</td>
+<td style="text-align:center">one-on-one 方式检测内存信息是否有差别</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">研究领域</td>
+<td style="text-align:center">安全检测</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">全文总览</td>
+<td style="text-align:center">通过one-on-one 的方法对非可信主机进行检测，从而构造出一个可信的执行环境。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>瞬时攻击</p>
+]]></content>
+      <categories>
+        <category>OSDI</category>
+      </categories>
+      <tags>
+        <tag>TODO</tag>
+        <tag>论文解读</tag>
       </tags>
   </entry>
   <entry>
@@ -5206,12 +5090,54 @@ grub2-editenv list # 查看默认启动顺序
       </tags>
   </entry>
   <entry>
-    <title>Xen虚拟化技术完全导读</title>
-    <url>/2020/07/19/Xen%E8%99%9A%E6%8B%9F%E5%8C%96%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E5%AF%BC%E8%AF%BB/</url>
-    <content><![CDATA[]]></content>
+    <title>hypersafe</title>
+    <url>/2021/07/02/hypersafe/</url>
+    <content><![CDATA[<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">序号</th>
+<th style="text-align:left">属性</th>
+<th style="text-align:center">内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:left">原文PDF</td>
+<td style="text-align:center"><a href="https://www.cs.fsu.edu/~zwang/files/oakland10.pdf" target="_blank" rel="noopener">Paper</a></td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:left">作者信息</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:left">核心内容</td>
+<td style="text-align:center">Hypervisor code integrity</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:left">研究领域</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:left">全文总览</td>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+</div>
+]]></content>
+      <categories>
+        <category>Security and Privacy</category>
+      </categories>
       <tags>
         <tag>TODO</tag>
-        <tag>读书笔记</tag>
+        <tag>论文解读</tag>
+        <tag>Storage</tag>
       </tags>
   </entry>
   <entry>
@@ -5334,57 +5260,6 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       <tags>
         <tag>算法</tag>
         <tag>dp</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>hypersafe</title>
-    <url>/2021/07/02/hypersafe/</url>
-    <content><![CDATA[<div class="table-container">
-<table>
-<thead>
-<tr>
-<th style="text-align:center">序号</th>
-<th style="text-align:left">属性</th>
-<th style="text-align:center">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">1</td>
-<td style="text-align:left">原文PDF</td>
-<td style="text-align:center"><a href="https://www.cs.fsu.edu/~zwang/files/oakland10.pdf" target="_blank" rel="noopener">Paper</a></td>
-</tr>
-<tr>
-<td style="text-align:center">2</td>
-<td style="text-align:left">作者信息</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">3</td>
-<td style="text-align:left">核心内容</td>
-<td style="text-align:center">Hypervisor code integrity</td>
-</tr>
-<tr>
-<td style="text-align:center">4</td>
-<td style="text-align:left">研究领域</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center">5</td>
-<td style="text-align:left">全文总览</td>
-<td style="text-align:center"></td>
-</tr>
-</tbody>
-</table>
-</div>
-]]></content>
-      <categories>
-        <category>Security and Privacy</category>
-      </categories>
-      <tags>
-        <tag>TODO</tag>
-        <tag>论文解读</tag>
-        <tag>Storage</tag>
       </tags>
   </entry>
   <entry>
@@ -5546,6 +5421,15 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
+    <title>Xen虚拟化技术完全导读</title>
+    <url>/2020/07/19/Xen%E8%99%9A%E6%8B%9F%E5%8C%96%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E5%AF%BC%E8%AF%BB/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>TODO</tag>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>RAMBleed Reading Bits in Memory Without Accessing Them</title>
     <url>/2020/06/15/%C2%96%C2%96RAMBleed-Reading-Bits-in-Memory-Without-Accessing-Them/</url>
     <content><![CDATA[<div class="table-container">
@@ -5704,6 +5588,122 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
+    <title>Xen log 2 Add a new Hypercall</title>
+    <url>/2020/07/19/Xen-log-2-Add-a-new-Hypercall/</url>
+    <content><![CDATA[<p>当前使用的xen版本为Xen-4.11</p>
+<h2 id="修改Xen文件"><a href="#修改Xen文件" class="headerlink" title="修改Xen文件"></a>修改Xen文件</h2><p>在Xen-4.11中，仅对hypercall.c hypercall.h文件进行修改即可实现用户添加hypercall</p>
+<p>当前xen源码的顶级目录为Xen</p>
+<h3 id="修改xen-h"><a href="#修改xen-h" class="headerlink" title="修改xen.h"></a>修改xen.h</h3><p>目标文件位置</p>
+<pre><code class="lang-bash">Xen/xen/include/public/xen.h
+</code></pre>
+<p>39号调用是给用户预留的，可以使用自己的hypercall替换掉预定义hypercall</p>
+<pre><code class="lang-bash">  #define __HYPERVISOR_tmem_op                 38
++ #define __HYPERVISOR_Alice_op                39
+</code></pre>
+<h3 id="修改hypercall-h"><a href="#修改hypercall-h" class="headerlink" title="修改hypercall.h"></a>修改hypercall.h</h3><p>目标文件位置</p>
+<pre><code class="lang-bash">Xen/xen/include/xen/hypercall.h
+</code></pre>
+<p>添加内容</p>
+<pre><code class="lang-bash">+ extern int
+  do_Alice_op(void);
+</code></pre>
+<h3 id="修改hypercall-c"><a href="#修改hypercall-c" class="headerlink" title="修改hypercall.c"></a>修改hypercall.c</h3><p>目标文件位置</p>
+<pre><code class="lang-bash">Xen/xen/arch/x86/pv/hypercall.c
+</code></pre>
+<p>添加内容</p>
+<pre><code class="lang-bash">  COMPAT_CALL(callback_op),
++ HYPERCALL(Alice_op),
+</code></pre>
+<p>目标文件位置</p>
+<pre><code class="lang-bash">Xen/xen/arch/x86/hypercall.c
+</code></pre>
+<p>添加内容</p>
+<pre><code class="lang-bash">  ARGS(arcg_1, 1),
++ ARGS(Alice_op, 0), // 这里0 对应do_Alice_op(void) 函数中参数个数
+</code></pre>
+<h2 id="函数实现"><a href="#函数实现" class="headerlink" title="函数实现"></a>函数实现</h2><p>hypercal如果是共用功能的话，可以放在 Xen/xen/common 下的函数中实现</p>
+<p>为了打印输出方便，测试函数放在了mm.c中实现</p>
+<p>目标文件位置</p>
+<pre><code class="lang-bash">Xen/xen/arch/x86/mm.c
+</code></pre>
+<p>添加内容</p>
+<pre><code class="lang-c">+ int do_Alice_op(void)
+  {
+      printk("Alice Hypercall!\n");
+    return 0;
+  }
+</code></pre>
+<h2 id="重新编译xen"><a href="#重新编译xen" class="headerlink" title="重新编译xen"></a>重新编译xen</h2><pre><code class="lang-bash">make xen -j8
+make tools -j8
+make install-xen
+make install-tools
+update-grub
+reboot
+</code></pre>
+<p>重启之后测试下添加的hypercall能不能正常被调用</p>
+<p>采用privcmd工具实现</p>
+<pre><code class="lang-c">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt; 
+#include &lt;errno.h&gt;
+#include &lt;sys/ioctl.h&gt;
+#include &lt;linux/types.h&gt;
+#include &lt;fcntl.h&gt;
+#include &lt;xenctrl.h&gt;
+#include &lt;xen/sys/privcmd.h&gt;
+#include &lt;string.h&gt;
+
+int main(void)
+{
+        int fd, ret;
+        char * message;
+        privcmd_hypercall_t alice_op={
+                __HYPERVISOR_Alice_op,
+                {0,0,0,0,0}
+        };
+        fd = open("/proc/xen/privcmd", O_RDWR);
+        if(fd&lt;0){
+                perror("can't open /proc/xen/privcmd");
+                exit(1);
+        } else {
+                printf("privcmd's fd = %d\n", fd);
+        }
+        ret = ioctl(fd, IOCTL_PRIVCMD_HYPERCALL, &amp;alice_op);
+        printf("ret = %d\n", ret);
+        return 0;
+}
+</code></pre>
+<p> 若代码显示不全，参见下图</p>
+<p><img src="/2020/07/19/Xen-log-2-Add-a-new-Hypercall/privcmd.jpg"></p>
+<p>编译</p>
+<pre><code class="lang-bash">gcc -o test privcmd.c
+</code></pre>
+<p>执行</p>
+<pre><code class="lang-bash">./test
+</code></pre>
+<p>输出结果</p>
+<pre><code class="lang-bash">privcmd's fd = 3
+ret = 0
+</code></pre>
+<p>注：如果ioctl()函数返回值为-1，说明出错</p>
+<p>查看日志信息</p>
+<p>命令</p>
+<pre><code class="lang-bash">xl dm
+</code></pre>
+<p>输出</p>
+<pre><code class="lang-bash">(XEN) Bogus DMIBAR 0xfed18001 on 0000:00:00.0
+(XEN) Alice Hypercall!
+</code></pre>
+<p>当看到自定义输出的信息时，说明此hypercall调用正常！</p>
+<p>现在，按照此方法就可以调用hypecall了~</p>
+]]></content>
+      <tags>
+        <tag>Virtualization</tag>
+        <tag>Hypervisor</tag>
+        <tag>Xen log</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>本科毕业游记</title>
     <url>/2020/07/16/%E6%9C%AC%E7%A7%91%E6%AF%95%E4%B8%9A%E6%B8%B8%E8%AE%B0/</url>
     <content><![CDATA[<p>当自己满怀负面情绪的时候，出去走走吧</p>
@@ -5760,21 +5760,6 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
-    <title>泉城济南</title>
-    <url>/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/</url>
-    <content><![CDATA[<h3 id="泉城济南"><a href="#泉城济南" class="headerlink" title="泉城济南"></a>泉城济南</h3><p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-7.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-8.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-2.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-3.jpg" width="500px" height="350px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-4.jpg" width="500px" height="390px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-5.jpg" width="500px" height="400px"></p>
-<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-6.jpg" width="500px" height="400px"></p>
-]]></content>
-      <tags>
-        <tag>picture</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>疫情期间小确幸</title>
     <url>/2020/07/14/%E7%96%AB%E6%83%85%E6%9C%9F%E9%97%B4%E5%B0%8F%E7%A1%AE%E5%B9%B8/</url>
     <content><![CDATA[<p>  与不完美的自己和解，事情正在变得越来越好。</p>
@@ -5823,28 +5808,25 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
       </tags>
   </entry>
   <entry>
+    <title>泉城济南</title>
+    <url>/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/</url>
+    <content><![CDATA[<h3 id="泉城济南"><a href="#泉城济南" class="headerlink" title="泉城济南"></a>泉城济南</h3><p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-7.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-8.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-2.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-3.jpg" width="500px" height="350px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-4.jpg" width="500px" height="390px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-5.jpg" width="500px" height="400px"></p>
+<p><img src="/2020/04/22/%E6%B3%89%E5%9F%8E%E6%B5%8E%E5%8D%97/济南-6.jpg" width="500px" height="400px"></p>
+]]></content>
+      <tags>
+        <tag>picture</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>虚拟化平台内存管理</title>
     <url>/2021/06/13/%E8%99%9A%E6%8B%9F%E5%8C%96%E5%B9%B3%E5%8F%B0%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
     <content><![CDATA[]]></content>
       <tags>
-        <tag>TODO</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>虚拟机 系统与进程的通用平台</title>
-    <url>/2020/07/17/%E8%99%9A%E6%8B%9F%E6%9C%BA-%E7%B3%BB%E7%BB%9F%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E9%80%9A%E7%94%A8%E5%B9%B3%E5%8F%B0/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>TODO</tag>
-        <tag>读书笔记</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>辣椒与中国美食</title>
-    <url>/2021/06/21/%E8%BE%A3%E6%A4%92%E4%B8%8E%E4%B8%AD%E5%9B%BD%E7%BE%8E%E9%A3%9F/</url>
-    <content><![CDATA[]]></content>
-      <tags>
-        <tag>essay</tag>
         <tag>TODO</tag>
       </tags>
   </entry>
@@ -5861,6 +5843,24 @@ void choose_order(int f[M][N], int w[Maxsize], int v[Maxsize])  // 选择物品�
 </div>
 <script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">]]></content>
       <tags>
+        <tag>essay</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>虚拟机 系统与进程的通用平台</title>
+    <url>/2020/07/17/%E8%99%9A%E6%8B%9F%E6%9C%BA-%E7%B3%BB%E7%BB%9F%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%9A%84%E9%80%9A%E7%94%A8%E5%B9%B3%E5%8F%B0/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>TODO</tag>
+        <tag>读书笔记</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>辣椒与中国美食</title>
+    <url>/2021/06/21/%E8%BE%A3%E6%A4%92%E4%B8%8E%E4%B8%AD%E5%9B%BD%E7%BE%8E%E9%A3%9F/</url>
+    <content><![CDATA[]]></content>
+      <tags>
+        <tag>TODO</tag>
         <tag>essay</tag>
       </tags>
   </entry>
